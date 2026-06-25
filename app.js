@@ -6043,3 +6043,91 @@ window.closeInstagramPostModal = function(event) {
     }
   };
 })();
+
+// ============================================
+// ADMIN CLIENTS PANEL
+// ============================================
+(function() {
+  window.renderAdminClients = function() {
+    const tbody = document.getElementById('admin-clients-tbody');
+    const countEl = document.getElementById('admin-clients-count');
+    if (!tbody) return;
+
+    let users = [];
+    try { users = JSON.parse(localStorage.getItem('nova_users')) || []; }
+    catch(e) { users = []; }
+
+    if (countEl) countEl.textContent = users.length + ' client' + (users.length !== 1 ? 's' : '');
+
+    if (users.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:var(--color-medium-gray); padding:40px 20px; font-size:0.85rem;">No registered clients yet.</td></tr>';
+      return;
+    }
+
+    // Sort newest first
+    const sorted = [...users].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+    tbody.innerHTML = sorted.map((user, idx) => {
+      const date = user.createdAt ? new Date(user.createdAt) : new Date();
+      const dateStr = date.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+      const timeStr = date.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+
+      return `
+        <tr>
+          <td style="color:var(--color-medium-gray);">${idx + 1}</td>
+          <td>
+            <div style="display:flex; align-items:center; gap:10px;">
+              <div style="width:32px; height:32px; border-radius:50%; background:var(--color-sage); color:white; display:flex; align-items:center; justify-content:center; font-size:0.7rem; font-weight:600; flex-shrink:0;">
+                ${user.firstName ? user.firstName[0].toUpperCase() : ''}${user.lastName ? user.lastName[0].toUpperCase() : ''}
+              </div>
+              <div>
+                <div style="font-weight:500;">${user.firstName || ''} ${user.lastName || ''}</div>
+              </div>
+            </div>
+          </td>
+          <td style="color:var(--color-medium-gray);">${user.email || ''}</td>
+          <td>
+            <div style="font-size:0.75rem;">${dateStr}</div>
+            <div style="font-size:0.65rem; color:var(--color-medium-gray);">${timeStr}</div>
+          </td>
+          <td>
+            <button onclick="deleteClient('${user.id}')" style="background:none; border:1px solid var(--color-border); border-radius:4px; padding:4px 8px; cursor:pointer; color:var(--color-medium-gray); font-size:0.7rem; transition:all 0.2s;" onmouseover="this.style.color='#C0392B'; this.style.borderColor='#E6B0AA'" onmouseout="this.style.color='var(--color-medium-gray)'; this.style.borderColor='var(--color-border)'">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width:14px; height:14px;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+            </button>
+          </td>
+        </tr>
+      `;
+    }).join('');
+  };
+
+  window.deleteClient = function(userId) {
+    if (!confirm('Remove this client?')) return;
+    let users = [];
+    try { users = JSON.parse(localStorage.getItem('nova_users')) || []; }
+    catch(e) { users = []; }
+    users = users.filter(u => u.id !== userId);
+    localStorage.setItem('nova_users', JSON.stringify(users));
+    renderAdminClients();
+    showToast('CLIENT REMOVED.');
+  };
+
+  // Auto-render when switching to clients tab
+  const origSwitchTab = window.switchAdminTab;
+  if (origSwitchTab) {
+    const _origSwitch = origSwitchTab;
+    window.switchAdminTab = function(tabId) {
+      _origSwitch(tabId);
+      if (tabId === 'clients') {
+        renderAdminClients();
+      }
+    };
+  }
+
+  // Also hook into admin tab click events
+  document.addEventListener('click', function(e) {
+    const navItem = e.target.closest('[data-admin-tab="clients"]');
+    if (navItem) {
+      setTimeout(renderAdminClients, 50);
+    }
+  });
+})();

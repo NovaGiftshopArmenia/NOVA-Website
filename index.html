@@ -835,6 +835,12 @@
                 </svg>
                 <span data-trans="admin_nav_dev">Developer Settings</span>
               </div>
+              <div class="admin-nav-item" data-admin-tab="clients">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width:16px; height:16px;">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+                <span>Clients</span>
+              </div>
               <div class="admin-nav-item" data-admin-tab="logs">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width:16px; height:16px;">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -1042,6 +1048,37 @@
                         </tr>
                       </thead>
                       <tbody id="admin-audit-logs-tbody">
+                        <!-- Populated dynamically via JS -->
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+
+              <!-- F. CLIENTS TAB PANEL -->
+              <div id="admin-sec-clients" class="admin-panel-sub hidden">
+                <div class="admin-card">
+                  <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom: 24px; flex-wrap:wrap; gap:16px;">
+                    <div>
+                      <h3 class="serif-title" style="font-size: 1.5rem; margin-bottom: 8px;">Registered Clients</h3>
+                      <p style="font-size:0.85rem; color:var(--color-medium-gray); margin:0;">All users who have created an account on the website.</p>
+                    </div>
+                    <div style="display:flex; gap:8px; align-items:center;">
+                      <span id="admin-clients-count" style="font-size:0.8rem; color:var(--color-medium-gray);">0 clients</span>
+                    </div>
+                  </div>
+                  <div class="admin-table-wrap" style="max-height: 520px; overflow-y: auto;">
+                    <table class="admin-table text-left" style="font-size:0.8rem;">
+                      <thead>
+                        <tr>
+                          <th>#</th>
+                          <th>Name</th>
+                          <th>Email</th>
+                          <th>Registered</th>
+                          <th>Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody id="admin-clients-tbody">
                         <!-- Populated dynamically via JS -->
                       </tbody>
                     </table>
