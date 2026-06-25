@@ -2560,6 +2560,27 @@ header.header-scrolled .lang-btn.active::after {
   font-weight: 600;
 }
 
+@media (max-width: 768px) {
+  .review-card {
+    flex: 0 0 260px;
+    padding: var(--spacing-md);
+    gap: var(--spacing-sm);
+  }
+
+  .review-stars {
+    font-size: 0.9rem;
+  }
+
+  .review-text {
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+
+  .review-author {
+    font-size: 0.7rem;
+  }
+}
+
 /* --- INSTAGRAM SECTION --- */
 .instagram-section {
   padding: var(--spacing-xxl) 0;
