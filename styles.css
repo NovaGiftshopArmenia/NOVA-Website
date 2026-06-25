@@ -5989,6 +5989,7 @@ header.header-scrolled .mobile-menu-icon-btn {
 
 .auth-form-row .auth-form-group {
   flex: 1;
+  min-width: 0;
 }
 
 .auth-form-group {
@@ -6013,6 +6014,8 @@ header.header-scrolled .mobile-menu-icon-btn {
   background: var(--color-white);
   transition: var(--transition-fast);
   font-family: var(--font-body);
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .auth-input:focus {
