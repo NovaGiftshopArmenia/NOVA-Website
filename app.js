@@ -1,4 +1,4 @@
-﻿// LOCALIZATION DICTIONARIES
+// LOCALIZATION DICTIONARIES
 const TRANSLATIONS = {
   am: {
     nav_about: "Մեր Մասին",
@@ -6023,9 +6023,10 @@ window.closeInstagramPostModal = function(event) {
   // Handle Logout
   window.handleLogout = function() {
     clearSession();
+    sessionStorage.removeItem('nova_admin_session');
     updateAuthUI(null);
+    if (typeof updateAdminVisibility === 'function') updateAdminVisibility();
     showToast('LOGGED OUT SUCCESSFULLY.');
-    // Navigate to home
     if (typeof navigateTo === 'function') {
       setTimeout(() => navigateTo('home'), 100);
     }
