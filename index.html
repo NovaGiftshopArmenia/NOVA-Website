@@ -256,14 +256,12 @@
         <div class="bg-outlined-text hero-bg-text">NOVA</div>
         <div class="container">
           <div class="hero-content">
-            <span class="hero-subtitle" data-trans="maison_de_parfum">Maison de Parfum</span>
             <h1 class="hero-title serif-title" data-trans="hero_title">Քո բույրը քեզ է սպասում</h1>
             <p class="hero-description" data-trans="hero_desc">
               Օծանելիք, նվերներ, գեղեցիկ փաթեթավորում
             </p>
             <div style="display: flex; gap: 16px; flex-wrap: wrap;">
               <a href="#/shop" class="btn-primary" data-trans="explore_fragrances">Explore Fragrances</a>
-              <a href="#/admin" class="btn-secondary" data-trans="view_admin_demo">View Admin Demo</a>
             </div>
           </div>
         </div>
@@ -365,7 +363,7 @@
 
       <!-- === BEST SELLERS SLIDER === -->
       <section class="horizontal-slider-section">
-        <div class="bg-outlined-text bestsellers-bg-text" data-trans="nav_bestsellers">Best Sellers</div>
+
         <div class="container relative-container">
           <div class="slider-header">
             <h2 class="serif-title" style="font-size: 2.2rem; letter-spacing: 0.1em; text-transform: uppercase;" data-trans="nav_bestsellers">Best Sellers</h2>
@@ -390,7 +388,7 @@
 
       <!-- === NEW ARRIVALS SLIDER === -->
       <section class="horizontal-slider-section new-arrivals-slider" style="background-color: var(--color-light-gray);">
-        <div class="bg-outlined-text newarrivals-bg-text" data-trans="nav_new">New Arrivals</div>
+
         <div class="container relative-container">
           <div class="slider-header">
             <h2 class="serif-title" style="font-size: 2.2rem; letter-spacing: 0.1em; text-transform: uppercase;" data-trans="nav_new">New Arrivals</h2>
@@ -485,11 +483,10 @@
 
 
       <!-- Featured Perfumes -->
-      <div class="shop-view" style="position: relative; overflow: hidden;">
-        <div class="bg-outlined-text collection-bg-text" data-trans="collections_title">COLLECTION</div>
+      <div class="shop-view">
+
         <div class="container">
           <div class="text-center" style="margin-bottom: 48px; position: relative; z-index: 1;">
-            <span class="hero-subtitle" data-trans="featured_subtitle" data-trans="featured_subtitle">Selected Creations</span>
             <h2 class="serif-title" style="font-size: 2.5rem; margin-top: 8px;" data-trans="featured_title" data-trans="featured_title">The Fragrance Collective</h2>
           </div>
           <div id="featured-products-grid" class="products-grid" style="position: relative; z-index: 1;">
@@ -588,24 +585,29 @@
         </div>
       </section>
 
-      <!-- Instagram Section -->
-      <section class="instagram-section">
-        <div class="bg-outlined-text media-bg-text" data-trans="bg_media">MEDIA</div>
+
+      <!-- Live Instagram Feed Section -->
+      <section class="instagram-section instagram-live-section">
+
         <div class="container">
           <div class="text-center">
-            <h2 class="serif-title" style="font-size: 2.2rem;" data-trans="home_instagram_title">Follow Us @NovaFragrances</h2>
+            <h2 class="serif-title" style="font-size: 2.2rem;">@nova_giftshop</h2>
+            <p style="color: var(--color-medium-gray); font-size: 0.95rem; margin-top: 8px; font-weight: 300;">Latest from our Instagram</p>
           </div>
           
-          <div class="instagram-grid" id="home-instagram-grid">
-            <!-- Dynamically populated via app.js -->
+          <div class="instagram-live-grid" id="instagram-live-feed">
+            <div class="instagram-live-loading" style="grid-column: 1 / -1; text-align: center; padding: 60px 20px;">
+              <div class="ig-spinner"></div>
+              <p style="color: var(--color-medium-gray); font-size: 0.85rem; margin-top: 16px; font-weight: 300;">Loading Instagram feed...</p>
+            </div>
           </div>
         </div>
       </section>
     </section>
 
     <!-- === 2. SHOP CATALOG VIEW === -->
-    <section id="view-shop" class="route-view shop-view hidden" style="position: relative; overflow: hidden;">
-      <div class="bg-outlined-text catalog-bg-text">NOVA</div>
+    <section id="view-shop" class="route-view shop-view hidden">
+
       <div class="container" style="position: relative; z-index: 1;">
         <!-- Shop Header & Filters -->
         <div class="shop-header">
@@ -670,8 +672,8 @@
     </div>
 
     <!-- === 3. CHECKOUT VIEW === -->
-    <section id="view-checkout" class="route-view checkout-view hidden" style="position: relative; overflow: hidden;">
-      <div class="bg-outlined-text" style="font-size: 14vw; top: 15%; right: -5%;">CHECKOUT</div>
+    <section id="view-checkout" class="route-view checkout-view hidden">
+
       <div class="container" style="position: relative; z-index: 1;">
         <div class="checkout-grid">
           <!-- Billing Details Form -->
@@ -763,14 +765,13 @@
     </section>
 
     <!-- === 4. WOOCOMMERCE DASHBOARD VIEW === -->
-    <section id="view-admin" class="route-view admin-view hidden" style="position: relative; overflow: hidden; padding-top: 120px;">
-      <div class="bg-outlined-text" style="font-size: 11vw; bottom: 10%; left: -2%;">DASHBOARD</div>
+    <section id="view-admin" class="route-view admin-view hidden" style="position: relative; overflow: hidden; padding-top: 130px;">
+
       
       <!-- 1. ADMIN LOGIN GATEWAY -->
       <div id="admin-login-wrapper" class="admin-login-wrapper">
         <div class="login-card">
           <div class="login-card-header text-center">
-            <span class="hero-subtitle" style="letter-spacing:0.15em;" data-trans="admin_secure_portal">SECURE PORTAL</span>
             <h3 class="serif-title" style="font-size: 2rem; margin-top: 6px;" data-trans="admin_login_title">WooCommerce Login</h3>
           </div>
           
@@ -823,12 +824,6 @@
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
                 </svg>
                 <span data-trans="admin_nav_inventory">Inventory Tracker</span>
-              </div>
-              <div class="admin-nav-item" data-admin-tab="instagram">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width:16px; height:16px;">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                </svg>
-                <span data-trans="admin_nav_instagram">Instagram Manager</span>
               </div>
               <div class="admin-nav-item" data-admin-tab="developer" id="admin-nav-item-dev">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width:16px; height:16px;">
@@ -945,38 +940,6 @@
                 </div>
               </div>
 
-              <!-- E. INSTAGRAM TAB PANEL -->
-              <div id="admin-sec-instagram" class="admin-panel-sub hidden">
-                <div class="admin-card">
-                  <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px; flex-wrap: wrap; gap: 16px;">
-                    <div>
-                      <h3 class="serif-title" style="font-size: 1.5rem; margin-bottom: 8px;" data-trans="admin_insta_title">Instagram Feed Manager</h3>
-                      <p style="font-size:0.85rem; color:var(--color-medium-gray); margin:0;" data-trans="admin_insta_desc">Add new posts to the front page Instagram feed, edit details, or delete existing posts.</p>
-                    </div>
-                    <button type="button" class="btn-primary" onclick="openInstagramPostModal()" style="padding: 10px 20px;" data-trans="admin_btn_add_new">Add New</button>
-                  </div>
-                  
-                  <div>
-                    <h4 class="serif-title" style="font-size: 1.2rem; margin-bottom: 16px;" data-trans="admin_insta_active_posts">Active Posts Feed</h4>
-                    <div class="admin-table-wrap" style="max-height: 520px; overflow-y: auto;">
-                      <table class="admin-table text-left" style="font-size:0.75rem;">
-                        <thead>
-                          <tr>
-                            <th data-trans="admin_th_thumbnail">Thumbnail</th>
-                            <th data-trans="admin_th_location">Location</th>
-                            <th data-trans="admin_th_caption">Caption</th>
-                            <th data-trans="admin_th_date">Date</th>
-                            <th data-trans="admin_th_actions">Actions</th>
-                          </tr>
-                        </thead>
-                        <tbody id="admin-insta-tbody">
-                          <!-- Populated dynamically via JS -->
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-                </div>
-              </div>
 
               <!-- C. DEVELOPER SETTINGS PANEL (Restricted for Shop Managers) -->
               <div id="admin-sec-developer" class="admin-panel-sub hidden">
@@ -1209,39 +1172,6 @@
       </div>
 
       <!-- Instagram Add Post Modal (Popup) -->
-      <div id="admin-instagram-modal-overlay" class="admin-modal-overlay hidden" onclick="closeInstagramPostModal(event)">
-        <div class="admin-modal-card" onclick="event.stopPropagation()" style="max-width: 500px;">
-          <div class="admin-modal-header" style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--color-border); padding-bottom:12px; margin-bottom:20px;">
-            <h3 class="serif-title" style="font-size:1.4rem; margin:0;" data-trans="admin_insta_add_post">Add New Post</h3>
-            <button type="button" class="admin-modal-close" onclick="closeInstagramPostModal(event)" style="background:none; border:none; font-size:1.8rem; cursor:pointer; color:var(--color-medium-gray); line-height:1;">&times;</button>
-          </div>
-          <div class="admin-modal-body">
-            <form id="admin-add-insta-post-form">
-              <div class="form-group" style="margin-bottom: 14px;">
-                <label for="insta-post-location" style="font-size: 0.8rem; text-transform: uppercase; color: var(--color-medium-gray); display: block; margin-bottom: 4px;" data-trans="admin_insta_location">Location / Place *</label>
-                <input type="text" id="insta-post-location" placeholder="e.g. Grasse, France" data-trans-placeholder="admin_insta_location_placeholder" required class="admin-input" style="width: 100%; border: 1px solid var(--color-border); border-radius: 4px; padding: 10px; background-color: var(--color-white);">
-              </div>
-              <div class="form-group" style="margin-bottom: 14px;">
-                <label for="insta-post-caption" style="font-size: 0.8rem; text-transform: uppercase; color: var(--color-medium-gray); display: block; margin-bottom: 4px;" data-trans="admin_insta_caption">Caption / Description *</label>
-                <textarea id="insta-post-caption" placeholder="Scent notes, details, etc." data-trans-placeholder="admin_insta_caption_placeholder" required class="admin-input" style="width: 100%; border: 1px solid var(--color-border); border-radius: 4px; padding: 10px; height: 80px; resize: vertical; background-color: var(--color-white);"></textarea>
-              </div>
-              <div class="form-group" style="margin-bottom: 14px;">
-                <label for="insta-post-date" style="font-size: 0.8rem; text-transform: uppercase; color: var(--color-medium-gray); display: block; margin-bottom: 4px;" data-trans="admin_insta_date">Post Date *</label>
-                <input type="date" id="insta-post-date" required class="admin-input" style="width: 100%; border: 1px solid var(--color-border); border-radius: 4px; padding: 10px; background-color: var(--color-white);">
-              </div>
-              <div class="form-group" style="margin-bottom: 14px;">
-                <label for="insta-post-images" style="font-size: 0.8rem; text-transform: uppercase; color: var(--color-medium-gray); display: block; margin-bottom: 4px;" data-trans="admin_insta_images">Images (multiple allowed) *</label>
-                <input type="file" id="insta-post-images" multiple accept="image/*" required class="admin-input" style="width: 100%; border: 1px solid var(--color-border); border-radius: 4px; padding: 10px; background-color: var(--color-white);">
-              </div>
-              <div id="insta-post-img-preview" style="display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap;"></div>
-              <div class="modal-form-actions" style="margin-top: 24px; display: flex; justify-content: flex-end; gap: 12px; border-top:1px solid var(--color-border); padding-top:16px;">
-                <button type="button" class="btn-secondary" onclick="closeInstagramPostModal(event)" style="padding: 8px 16px; font-size:0.8rem;" data-trans="modal_btn_cancel">Cancel</button>
-                <button type="submit" class="btn-primary" style="padding: 8px 20px; font-size:0.8rem;" data-trans="admin_btn_add_post">Add Post</button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
     </section>
 
 
@@ -1255,12 +1185,11 @@
     <!-- 2. Our Story -->
         <!-- 2. Our Story (Hero Full-Width Style) -->
     <section class="about-story-hero">
-      <div class="bg-outlined-text about-bg-text-1">ABOUT US</div>
+
       <div class="container">
         <div class="about-hero-grid">
           <!-- Text column -->
           <div class="about-story-hero-content">
-            <span class="about-hero-eyebrow" data-trans="about_eyebrow">THE ART OF DISTILLATION — EST. 2026</span>
             <h1 class="serif-title about-first-heading" data-trans="about_story_title">Our Origin & Philosophy</h1>
             <p class="body-text about-lead" data-trans="about_lead">An architectural study of pure botanical scents, handcrafted for the modern aesthetic enthusiast.</p>
             <p class="body-text" data-trans="about_story_desc">NOVA was born from a singular obsession: the desire to find uncompromising, transparent, and breathtaking fragrances in a market flooded with generic designer scents. What started as a private collection of botanical extracts has evolved into a sanctuary for those who appreciate the poetry of perfume. We believe that scent is the most intimate form of memory.</p>
@@ -1299,7 +1228,6 @@
             <div class="gallery-img-wrapper img-wrapper-small">
               <img src="assets/fleur.png" alt="Botanical Ingredients" class="gallery-img">
             </div>
-            <!-- Floating architectural elements -->
             <div class="floating-accent-box">
               <span class="accent-title">NOVA</span>
               <span class="accent-subtitle" style="font-size:0.6rem; letter-spacing:0.1em;">MAISON DE PARFUM</span>
@@ -1311,7 +1239,7 @@
 
     <!-- 3. The Pillars of Trust -->
     <section class="about-pillars" style="position:relative; overflow:hidden;">
-      <div class="bg-outlined-text about-bg-text-2">TRUST</div>
+
       <div class="container">
         <h2 class="serif-title text-center" style="margin-bottom: 3rem;" data-trans="about_pillars_title">The Pillars of Trust</h2>
         <div class="pillars-grid">
@@ -1342,7 +1270,7 @@
 
     <!-- Quote Section -->
     <section class="about-quote-section text-center" style="position:relative; overflow:hidden;">
-      <div class="bg-outlined-text about-bg-text-3">ORIGIN</div>
+
       <div class="container">
         <blockquote class="about-quote">
           <p data-trans="about_hook_desc">We curate rare, niche fragrances and raw, clean ingredients for the modern aesthete. Our mission is to elevate your signature scent from an afterthought to a masterpiece.</p>
@@ -1416,16 +1344,14 @@
         </div>
       </section>
 
-    <!-- Instagram from Home -->
-    <section class="instagram-section">
+    <!-- Live Instagram Feed -->
+    <section class="instagram-section instagram-live-section">
         <div class="container">
           <div class="text-center">
-            <h2 class="serif-title" style="font-size: 2.2rem;" data-trans="home_instagram_title" data-trans="home_instagram_title">Follow Us @NovaFragrances</h2>
+            <h2 class="serif-title" style="font-size: 2.2rem;">@nova_giftshop</h2>
+            <p style="color: var(--color-medium-gray); font-size: 0.95rem; margin-top: 8px; font-weight: 300;">Latest from our Instagram</p>
           </div>
-          
-          <div class="instagram-grid" id="about-instagram-grid">
-            <!-- Dynamically populated via app.js -->
-          </div>
+          <div class="instagram-live-grid" id="instagram-live-feed-about"></div>
         </div>
       </section>
 
@@ -1440,17 +1366,16 @@
 
   <!-- --- 5. CONTACT VIEW --- -->
   <div id="view-contact" class="route-view contact-view hidden">
-    <div class="bg-outlined-text contact-bg-text" data-trans="contact_header_title">CONTACT</div>
+
     <div class="container" style="position: relative; z-index: 2;">
       <div class="text-center" style="margin-bottom: var(--spacing-xl);">
-        <span class="hero-subtitle" data-trans="contact_subtitle">GET IN TOUCH</span>
-        <h2 class="serif-title" style="font-size: 2.5rem; margin-top: 8px;" data-trans="contact_desc">We would love to hear from you</h2>
+        <h1 class="serif-title" style="font-size: 2.5rem;" data-trans="contact_subtitle">Get in touch</h1>
       </div>
       
       <div class="contact-grid">
         <!-- Left Panel: Concierge Info -->
         <div class="contact-info">
-          <h3 class="serif-title contact-info-title" data-trans="maison_de_parfum">Maison de Parfum</h3>
+          <!-- Maison de Parfum title removed -->
           
           <div class="contact-card">
             <div class="contact-card-icon">
@@ -1461,7 +1386,7 @@
             </div>
             <div class="contact-card-content">
               <span class="contact-card-label" data-trans="contact_address_label">Address</span>
-              <span class="contact-card-value">37 Tumanyan St, Yerevan, Armenia</span>
+              <span class="contact-card-value" data-trans="contact_address_value">C. Vedi, Armenia</span>
             </div>
           </div>
 
@@ -1473,53 +1398,54 @@
             </div>
             <div class="contact-card-content">
               <span class="contact-card-label" data-trans="contact_phone_label">Phone</span>
-              <span class="contact-card-value">+374 10 555-555</span>
+              <span class="contact-card-value">098 019 250</span>
             </div>
           </div>
 
           <div class="contact-card">
             <div class="contact-card-icon">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2-2V5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
               </svg>
             </div>
             <div class="contact-card-content">
               <span class="contact-card-label" data-trans="contact_email_label">Email</span>
-              <span class="contact-card-value">concierge@novafragrances.com</span>
+              <span class="contact-card-value">novagiftshoparmenia@gmail.com</span>
             </div>
           </div>
 
           <div class="contact-card">
             <div class="contact-card-icon">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0" />
               </svg>
             </div>
             <div class="contact-card-content">
-              <span class="contact-card-label" data-trans="contact_hours_label">Hours</span>
-              <span class="contact-card-value">Monday - Sunday: 11:00 AM - 9:00 PM</span>
+              <span class="contact-card-label" data-trans="contact_delivery_label">Delivery</span>
+              <span class="contact-card-value" data-trans="contact_delivery_value">Delivery across all of Armenia</span>
             </div>
           </div>
         </div>
+
         
         <!-- Right Panel: Message Form -->
         <div class="contact-form-container">
           <form id="contact-us-form" class="contact-form">
             <div class="form-group">
               <label for="contact-name" data-trans="contact_form_name">Name *</label>
-              <input type="text" id="contact-name" required placeholder="Emma Watson">
+              <input type="text" id="contact-name" required placeholder="Emma Watson" data-trans-placeholder="contact_form_name_placeholder">
             </div>
             <div class="form-group">
               <label for="contact-email" data-trans="contact_form_email">Email *</label>
-              <input type="email" id="contact-email" required placeholder="emma@example.com">
+              <input type="email" id="contact-email" required placeholder="emma@example.com" data-trans-placeholder="contact_form_email_placeholder">
             </div>
             <div class="form-group">
               <label for="contact-subject" data-trans="contact_form_subject">Subject *</label>
-              <input type="text" id="contact-subject" required placeholder="Fragrance consultation request">
+              <input type="text" id="contact-subject" required placeholder="Fragrance consultation request" data-trans-placeholder="contact_form_subject_placeholder">
             </div>
             <div class="form-group">
               <label for="contact-message" data-trans="contact_form_message">Message *</label>
-              <textarea id="contact-message" rows="5" required placeholder="Write your message here..."></textarea>
+              <textarea id="contact-message" rows="5" required placeholder="Write your message here..." data-trans-placeholder="contact_form_message_placeholder"></textarea>
             </div>
             <button type="submit" class="btn-primary" style="width: 100%; border-radius: 8px; padding: 14px;" data-trans="contact_form_submit">Send Message</button>
           </form>
@@ -1530,10 +1456,9 @@
 
   <!-- --- 6. SHIPPING & RETURNS POLICY VIEW --- -->
   <div id="view-policy-shipping" class="route-view contact-view hidden">
-    <div class="bg-outlined-text contact-bg-text" data-trans="policy_shipping_header_title">SHIPPING</div>
+
     <div class="container" style="position: relative; z-index: 2;">
       <div class="text-center" style="margin-bottom: var(--spacing-xl);">
-        <span class="hero-subtitle" data-trans="policy_shipping_subtitle">CUSTOMER SUPPORT</span>
         <h2 class="serif-title" style="font-size: 2.5rem; margin-top: 8px;" data-trans="policy_shipping_title">Shipping & Returns Policy</h2>
       </div>
       
@@ -1554,10 +1479,9 @@
 
   <!-- --- 7. PRIVACY POLICY & TERMS OF SERVICE VIEW --- -->
   <div id="view-policy-privacy" class="route-view contact-view hidden">
-    <div class="bg-outlined-text contact-bg-text" data-trans="policy_privacy_header_title">PRIVACY</div>
+
     <div class="container" style="position: relative; z-index: 2;">
       <div class="text-center" style="margin-bottom: var(--spacing-xl);">
-        <span class="hero-subtitle" data-trans="policy_privacy_subtitle">LEGAL STATEMENT</span>
         <h2 class="serif-title" style="font-size: 2.5rem; margin-top: 8px;" data-trans="policy_privacy_title">Privacy Policy & Terms of Service</h2>
       </div>
       
@@ -1576,10 +1500,9 @@
 
   <!-- --- 8. WISHLIST VIEW --- -->
   <div id="view-wishlist" class="route-view contact-view hidden">
-    <div class="bg-outlined-text contact-bg-text" data-trans="wishlist_header_title">WISHLIST</div>
+
     <div class="container" style="position: relative; z-index: 2;">
       <div class="text-center" style="margin-bottom: var(--spacing-xl);">
-        <span class="hero-subtitle" data-trans="wishlist_subtitle">MY FAVORITES</span>
         <h2 class="serif-title" style="font-size: 2.5rem; margin-top: 8px;" data-trans="wishlist_title">My Wishlist</h2>
       </div>
       
@@ -1590,11 +1513,10 @@
   </div>
 
   <!-- --- 9. MY ACCOUNT VIEW --- -->
-  <section id="view-my-account" class="route-view hidden" style="position: relative; overflow: hidden; padding-top: 120px;">
-    <div class="bg-outlined-text" style="font-size: 11vw; bottom: 10%; right: -2%;">PORTAL</div>
+  <section id="view-my-account" class="route-view hidden" style="position: relative; overflow: hidden; padding-top: 130px;">
+
     <div class="container" style="position: relative; z-index: 2; min-height: 600px;">
       <div class="text-center" style="margin-bottom: var(--spacing-xl);">
-        <span class="hero-subtitle" id="my-account-subtitle" data-trans="my_account_subtitle">CLIENT PORTAL</span>
         <h2 class="serif-title" style="font-size: 2.5rem; margin-top: 8px;" id="my-account-title" data-trans="my_account_title">My Account</h2>
       </div>
 

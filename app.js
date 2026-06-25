@@ -131,6 +131,7 @@ const TRANSLATIONS = {
     footer_tagline: "ԷԼԵԳԱՆՏՈՒԹՅՈՒՆ &bull; ՄԻՆԻՄԱԼԻԶՄ &bull; ՄԱՔՐՈՒԹՅՈՒՆ",
     home_reviews_title: "Հաճախորդների Կարծիքներ",
     home_instagram_title: "Հետևեք մեզ Instagram-ում",
+    home_instagram_shortcode_title: "Ինստագրամ Լրահոս (Shortcode)",
     scroll_text: "Սահեցնել &rarr;",
     brand_nova: "NOVA",
     brand_le_labo: "Le Labo",
@@ -211,6 +212,12 @@ const TRANSLATIONS = {
     contact_address_label: "Հասցե",
     contact_phone_label: "Հեռախոս",
     contact_email_label: "Էլ. Հասցե",
+    contact_delivery_label: "Առաքում",
+    contact_delivery_value: "Առաքում Հայաստանի ողջ տարածքով",
+    contact_form_name_placeholder: "Անի Անուն",
+    contact_form_email_placeholder: "anun@example.com",
+    contact_form_subject_placeholder: "Բույրի խորհրդատվություն",
+    contact_form_message_placeholder: "Գրեք ձեր հաղորդագրությունը այստեղ...",
     contact_hours_label: "Ժամեր",
     contact_form_name: "Անուն *",
     contact_form_email: "Էլ. Փոստ *",
@@ -536,6 +543,7 @@ const TRANSLATIONS = {
     footer_tagline: "ЭЛЕГАНТНОСТЬ &bull; МИНИМАЛИЗМ &bull; ЧИСТОТА",
     home_reviews_title: "Отзывы Клиентов",
     home_instagram_title: "Следите за нами в Instagram",
+    home_instagram_shortcode_title: "Лента Instagram (Шорткод)",
     scroll_text: "ПРОКРУТКА &rarr;",
     brand_nova: "NOVA",
     brand_le_labo: "Le Labo",
@@ -616,6 +624,12 @@ const TRANSLATIONS = {
     contact_address_label: "Адрес",
     contact_phone_label: "Телефон",
     contact_email_label: "Эл. почта",
+    contact_delivery_label: "Доставка",
+    contact_delivery_value: "Доставка по всей Армении",
+    contact_form_name_placeholder: "Анна Иванова",
+    contact_form_email_placeholder: "anna@example.com",
+    contact_form_subject_placeholder: "Консультация по ароматам",
+    contact_form_message_placeholder: "Напишите ваше сообщение здесь...",
     contact_hours_label: "Часы работы",
     contact_form_name: "Имя *",
     contact_form_email: "Эл. почта *",
@@ -941,6 +955,7 @@ const TRANSLATIONS = {
     footer_tagline: "ELEGANCE &bull; MINIMALISM &bull; PURITY",
     home_reviews_title: "What Our Clients Say",
     home_instagram_title: "Follow Us @NovaFragrances",
+    home_instagram_shortcode_title: "Instagram Feed (Shortcode)",
     scroll_text: "SCROLL &rarr;",
     brand_nova: "NOVA",
     brand_le_labo: "Le Labo",
@@ -1019,14 +1034,20 @@ const TRANSLATIONS = {
     contact_subtitle: "Get In Touch",
     contact_desc: "Have questions or want to request a bespoke fragrance consultation? Our concierge is here to assist you.",
     contact_address_label: "Address",
+    contact_address_value: "C. Vedi, Armenia",
     contact_phone_label: "Phone",
     contact_email_label: "Email",
-    contact_hours_label: "Hours",
+    contact_delivery_label: "Delivery",
+    contact_delivery_value: "Delivery across all of Armenia",
     contact_form_name: "Name *",
     contact_form_email: "Email *",
     contact_form_subject: "Subject *",
     contact_form_message: "Message *",
     contact_form_submit: "Send Message",
+    contact_form_name_placeholder: "Emma Watson",
+    contact_form_email_placeholder: "emma@example.com",
+    contact_form_subject_placeholder: "Fragrance consultation request",
+    contact_form_message_placeholder: "Write your message here...",
     footer_policy_shipping: "Shipping & Returns",
     footer_policy_privacy: "Privacy & Terms",
     policy_shipping_header_title: "SHIPPING",
@@ -1435,6 +1456,90 @@ const PRODUCT_TRANSLATIONS = {
     }
   }
 };
+// DEFAULT MOCK INSTAGRAM FEED SEED DATA
+const DEFAULT_INSTAGRAM_POSTS = [
+  {
+    id: "insta-post-1",
+    username: "nova_giftshop",
+    avatar: "assets/logo-favicon.png",
+    location: "Grasse, France",
+    caption: "Santal N°01 captures the raw elegance of the Australian outback. Distilled in copper columns. ✨",
+    date: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+    images: ["assets/insta_1.png"],
+    likes: 420
+  },
+  {
+    id: "insta-post-2",
+    username: "nova_giftshop",
+    avatar: "assets/logo-favicon.png",
+    location: "Kyoto, Japan",
+    caption: "A delicate dance of cherry blossom and soft cashmere musk. Fleur de Cerisier is Kyoto in springtime. 🌸",
+    date: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+    images: ["assets/insta_2.png"],
+    likes: 315
+  },
+  {
+    id: "insta-post-3",
+    username: "nova_giftshop",
+    avatar: "assets/logo-favicon.png",
+    location: "Amalfi, Italy",
+    caption: "A sun-drenched explosion of Sicilian bergamot and salted sea air. Agrumes Frais in hand. 🍋",
+    date: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+    images: ["assets/insta_3.png"],
+    likes: 512
+  },
+  {
+    id: "insta-post-4",
+    username: "nova_giftshop",
+    avatar: "assets/logo-favicon.png",
+    location: "Paris, France",
+    caption: "Give the gift of olfactory poetry. Our signature discovery set wrapped in sustainable linen. 🎁",
+    date: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+    images: ["assets/insta_4.png"],
+    likes: 289
+  },
+  {
+    id: "insta-post-5",
+    username: "nova_giftshop",
+    avatar: "assets/logo-favicon.png",
+    location: "London, United Kingdom",
+    caption: "Pure botanical ingredients gathered from sustainable sources worldwide. Raw luxury. 🌿",
+    date: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+    images: ["assets/insta_5.png"],
+    likes: 340
+  },
+  {
+    id: "insta-post-6",
+    username: "nova_giftshop",
+    avatar: "assets/logo-favicon.png",
+    location: "Santorini, Greece",
+    caption: "An opulent, velvet blanket of golden amber and toasted spices at the golden hour. 🌅",
+    date: new Date(Date.now() - 8 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+    images: ["assets/insta_6.png"],
+    likes: 476
+  },
+  {
+    id: "insta-post-7",
+    username: "nova_giftshop",
+    avatar: "assets/logo-favicon.png",
+    location: "Milan, Italy",
+    caption: "Every spray is a living composition that evolves on the skin over several hours. 💫",
+    date: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+    images: ["assets/insta_7.png"],
+    likes: 612
+  },
+  {
+    id: "insta-post-8",
+    username: "nova_giftshop",
+    avatar: "assets/logo-favicon.png",
+    location: "St. Tropez, France",
+    caption: "Bracingly fresh Vétiver Blanc. The olfactive equivalent of a tailored white shirt. 🌊",
+    date: new Date(Date.now() - 12 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+    images: ["assets/insta_8.png"],
+    likes: 395
+  }
+];
+
 // APP STATE
 const AppState = {
   products: (() => {
@@ -1471,10 +1576,12 @@ const AppState = {
   wishlist: [], // Wishlist product IDs
   instagramPosts: (() => {
     try {
-      return JSON.parse(localStorage.getItem('nova_instagram_posts')) || [];
-    } catch (e) {
-      return [];
-    }
+      const saved = JSON.parse(localStorage.getItem('nova_instagram_posts'));
+      if (saved && saved.length > 0) return saved;
+    } catch (e) {}
+    // Seed default posts if empty
+    localStorage.setItem('nova_instagram_posts', JSON.stringify(DEFAULT_INSTAGRAM_POSTS));
+    return [...DEFAULT_INSTAGRAM_POSTS];
   })(),
   currentRoute: 'home', // 'home', 'shop', 'checkout', 'admin', 'my-account'
   language: localStorage.getItem('nova_lang_choice') || 'am', // Default language is Armenian ('am')
@@ -2257,7 +2364,6 @@ function createSliderProductCard(product, badgeText) {
       </button>
 
       <div class="product-card-actions">
-        <button class="btn-primary product-card-action-btn" onclick="openProductModal('${product.id}')">${exploreLabel}</button>
         <button class="btn-secondary product-card-action-btn" onclick="event.stopPropagation(); quickAddToCart('${product.id}')" ${product.stock <= 0 ? 'disabled' : ''}>
           ${cartLabel}
         </button>
@@ -2902,7 +3008,6 @@ function createProductCard(product) {
       </button>
 
       <div class="product-card-actions">
-        <button class="btn-primary product-card-action-btn" onclick="openProductModal('${product.id}')">${exploreLabel}</button>
         <button class="btn-secondary product-card-action-btn" onclick="event.stopPropagation(); quickAddToCart('${product.id}')" ${product.stock <= 0 ? 'disabled' : ''}>
           ${cartLabel}
         </button>
@@ -5094,145 +5199,11 @@ function formatInstagramDate(dateStr, lang) {
 }
 
 function renderInstagramFeed() {
-  const homeGrid = document.getElementById('home-instagram-grid');
-  const aboutGrid = document.getElementById('about-instagram-grid');
-  const posts = AppState.instagramPosts || [];
-  const lang = AppState.language;
-  
-  // 1. Render Home feed
-  if (homeGrid) {
-    homeGrid.innerHTML = '';
-    if (posts.length === 0) {
-      const msg = TRANSLATIONS[lang]['insta_feed_empty'] || "No posts yet. Add posts from the WooCommerce Control Panel.";
-      homeGrid.innerHTML = `<div style="grid-column: 1 / -1; text-align: center; color: var(--color-medium-gray); padding: 40px 20px; font-size: 0.9rem; font-weight: 300;">${msg}</div>`;
-    } else {
-      posts.forEach(post => {
-        const formattedDate = formatInstagramDate(post.date, lang);
-        const card = document.createElement('div');
-        card.className = 'insta-post-card';
-        card.setAttribute('id', `insta-card-${post.id}`);
+  // Old manual IG grids removed. Live feed handled by IIFE at bottom of file.
+}
 
-        // Image slider and pagination
-        const firstImg = post.images && post.images.length > 0 ? post.images[0] : 'assets/insta_1.png';
-        const hasCarousel = post.images && post.images.length > 1;
-
-        let sliderHTML = '';
-        if (hasCarousel) {
-          sliderHTML = `
-            <div class="insta-post-images-slider">
-              ${post.images.map((img, idx) => `
-                <img src="${img}" alt="Instagram Post" class="insta-post-img ${idx === 0 ? 'active' : ''}" data-index="${idx}">
-              `).join('')}
-            </div>
-            <button class="carousel-arrow prev" onclick="window.navigateCarousel('${post.id}', -1, event)">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
-            </button>
-            <button class="carousel-arrow next" onclick="window.navigateCarousel('${post.id}', 1, event)">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
-            </button>
-            <div class="carousel-dots">
-              ${post.images.map((_, idx) => `
-                <span class="carousel-dot ${idx === 0 ? 'active' : ''}" onclick="window.switchCarouselImage('${post.id}', ${idx}, event)"></span>
-              `).join('')}
-            </div>
-          `;
-        } else {
-          sliderHTML = `<img src="${firstImg}" alt="Instagram Post" class="insta-post-img">`;
-        }
-
-        // Likes label
-        const likesLabel = TRANSLATIONS[lang]['insta_likes'] || 'likes';
-        const commentCount = Math.floor(post.likes * 0.01) + 2;
-
-        card.innerHTML = `
-          <div class="insta-post-header">
-            <div class="insta-post-user">
-              <img src="${post.avatar}" alt="NOVA" class="insta-post-avatar">
-              <div class="insta-post-user-info">
-                <span class="insta-post-username">${post.username}</span>
-                <span class="insta-post-location">${post.location}</span>
-              </div>
-            </div>
-            <button class="insta-post-menu-btn" aria-label="More options" onclick="showToast('POST ACTIONS DEMO')">
-              <svg viewBox="0 0 24 24" fill="currentColor">
-                <circle cx="12" cy="5" r="2" />
-                <circle cx="12" cy="12" r="2" />
-                <circle cx="12" cy="19" r="2" />
-              </svg>
-            </button>
-          </div>
-          <div class="insta-post-image-wrap" data-post-id="${post.id}" data-current-index="0">
-            ${sliderHTML}
-          </div>
-          <div class="insta-post-actions-row">
-            <div class="insta-post-actions-left">
-              <button class="insta-action-btn like-btn" onclick="window.toggleInstaLike(this, '${post.id}')" aria-label="Like">
-                <svg class="insta-action-icon heart-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                </svg>
-              </button>
-              <button class="insta-action-btn comment-btn" aria-label="Comment" onclick="showToast('COMMENTS AREA SIMULATION')">
-                <svg class="insta-action-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                </svg>
-              </button>
-              <button class="insta-action-btn share-btn" aria-label="Share on Telegram" onclick="window.open('https://t.me/share/url?url=' + encodeURIComponent(window.location.href), '_blank')">
-                <svg class="insta-action-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M21 3L2 11.5l7.5 3L12 21l3-5.5L19 19 21 3z" />
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M9.5 14.5L16 8.5" />
-                </svg>
-              </button>
-            </div>
-            <div class="insta-post-actions-row-right">
-              <button class="insta-action-btn save-btn" onclick="window.toggleInstaSave(this)" aria-label="Save">
-                <svg class="insta-action-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
-                </svg>
-              </button>
-            </div>
-          </div>
-          <div class="insta-post-details">
-            <div class="insta-post-likes">
-              <strong>${post.likes.toLocaleString('en-US')}</strong> <span>${likesLabel}</span>
-            </div>
-            <div class="insta-post-caption">
-              <strong>${post.username}</strong> <span>${post.caption}</span>
-            </div>
-            <div class="insta-post-comments-link" onclick="showToast('COMMENTS AREA SIMULATION')">
-              ${lang === 'am' ? `Դիտել բոլոր ${commentCount} մեկնաբանությունները` : lang === 'ru' ? `Посмотреть все ${commentCount} комментариев` : `View all ${commentCount} comments`}
-            </div>
-            <div class="insta-post-time">
-              ${formattedDate}
-            </div>
-          </div>
-        `;
-        homeGrid.appendChild(card);
-      });
-    }
-  }
-
-  // 2. Render About feed
-  if (aboutGrid) {
-    aboutGrid.innerHTML = '';
-    if (posts.length === 0) {
-      const msg = TRANSLATIONS[lang]['insta_feed_empty'] || "No posts yet.";
-      aboutGrid.innerHTML = `<div style="grid-column: 1 / -1; text-align: center; color: var(--color-medium-gray); padding: 40px 20px; font-size: 0.9rem; font-weight: 300;">${msg}</div>`;
-    } else {
-      posts.forEach(post => {
-        const firstImg = post.images && post.images.length > 0 ? post.images[0] : 'assets/insta_1.png';
-        const card = document.createElement('a');
-        card.href = '#/home';
-        card.className = 'instagram-card';
-        card.innerHTML = `
-          <img src="${firstImg}" alt="Instagram Post" class="instagram-img">
-          <div class="instagram-overlay">
-            <svg class="insta-icon" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-          </div>
-        `;
-        aboutGrid.appendChild(card);
-      });
-    }
-  }
+function parseAndRenderShortcodes() {
+  // Old shortcode parser removed. No longer needed.
 }
 
 window.switchCarouselImage = function(postId, index, event) {
@@ -5643,3 +5614,185 @@ window.closeInstagramPostModal = function(event) {
   }
 };
 
+
+// ============================================
+// LIVE INSTAGRAM FEED - @nova_giftshop
+// Uses Instagram Basic Display API
+// ============================================
+(function() {
+  // Instagram Basic Display API access token
+  // To get your token:
+  // 1. Go to https://developers.facebook.com and create an app
+  // 2. Add "Instagram Basic Display" product
+  // 3. Generate a User Token for @nova_giftshop
+  // 4. Paste the long-lived token below
+  const INSTAGRAM_ACCESS_TOKEN = localStorage.getItem('nova_ig_token') || '';
+  const INSTAGRAM_USERNAME = 'nova_giftshop';
+  const FEED_COUNT = 6;
+
+  function initLiveInstagramFeed() {
+    const grids = [
+      document.getElementById('instagram-live-feed'),
+      document.getElementById('instagram-live-feed-about')
+    ].filter(Boolean);
+    if (grids.length === 0) return;
+
+    if (INSTAGRAM_ACCESS_TOKEN) {
+      fetchInstagramPosts(grids);
+    } else {
+      // No token - use a proxy approach via RSS/scraping service
+      fetchViaProxy(grids);
+    }
+  }
+
+  // Method 1: Direct API call with token
+  async function fetchInstagramPosts(grids) {
+    try {
+      const url = `https://graph.instagram.com/me/media?fields=id,caption,media_type,media_url,thumbnail_url,permalink,timestamp&limit=${FEED_COUNT}&access_token=${INSTAGRAM_ACCESS_TOKEN}`;
+      const res = await fetch(url);
+      if (!res.ok) throw new Error('API error');
+      const data = await res.json();
+      grids.forEach(g => renderFeed(g, data.data));
+    } catch (e) {
+      console.warn('Instagram API failed, trying proxy...', e);
+      fetchViaProxy(grids);
+    }
+  }
+
+  // Method 2: Proxy approach (no auth needed)
+  async function fetchViaProxy(grids) {
+    try {
+      // Try multiple proxy endpoints
+      const proxyUrls = [
+        `https://www.instagram.com/${INSTAGRAM_USERNAME}/?__a=1&__d=dis`,
+        `https://instagram-media-api.herokuapp.com/user/${INSTAGRAM_USERNAME}`,
+      ];
+
+      let posts = null;
+
+      // Try fetching via Instagram's public JSON endpoint
+      try {
+        const res = await fetch(`https://www.instagram.com/${INSTAGRAM_USERNAME}/?__a=1`, {
+          headers: { 'User-Agent': 'Mozilla/5.0' }
+        });
+        if (res.ok) {
+          const data = await res.json();
+          const edges = data?.graphql?.user?.edge_owner_to_timeline_media?.edges;
+          if (edges) {
+            posts = edges.slice(0, FEED_COUNT).map(e => ({
+              id: e.node.id,
+              media_url: e.node.display_url,
+              thumbnail_url: e.node.thumbnail_src,
+              permalink: `https://www.instagram.com/p/${e.node.shortcode}/`,
+              caption: e.node.edge_media_to_caption?.edges?.[0]?.node?.text || '',
+              media_type: e.node.is_video ? 'VIDEO' : 'IMAGE',
+              likes: e.node.edge_liked_by?.count || 0,
+              comments: e.node.edge_media_to_comment?.count || 0,
+            }));
+          }
+        }
+      } catch(e) { /* silent */ }
+
+      if (posts && posts.length > 0) {
+        grids.forEach(g => renderFeed(g, posts));
+      } else {
+        // Fallback: render placeholder cards with link to profile
+        grids.forEach(g => renderFallback(g));
+      }
+    } catch (e) {
+      grids.forEach(g => renderFallback(g));
+    }
+  }
+
+  function renderFeed(grid, posts) {
+    grid.innerHTML = '';
+    
+    posts.forEach(post => {
+      const imgUrl = post.media_type === 'VIDEO' ? (post.thumbnail_url || post.media_url) : post.media_url;
+      const caption = post.caption ? post.caption.substring(0, 80) + (post.caption.length > 80 ? '...' : '') : '';
+      
+      const card = document.createElement('a');
+      card.href = post.permalink || `https://www.instagram.com/${INSTAGRAM_USERNAME}/`;
+      card.target = '_blank';
+      card.rel = 'noopener noreferrer';
+      card.className = 'ig-live-card';
+      
+      card.innerHTML = `
+        <img src="${imgUrl}" alt="${caption}" loading="lazy">
+        <div class="ig-live-overlay">
+          ${post.media_type === 'VIDEO' ? `
+            <div class="ig-stat">
+              <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            </div>
+          ` : `
+            <div class="ig-stat">
+              <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+            </div>
+          `}
+        </div>
+      `;
+      
+      grid.appendChild(card);
+    });
+  }
+
+  function renderFallback(grid) {
+    grid.innerHTML = '';
+    
+    // Use existing site instagram posts as fallback, or show placeholder
+    const existingPosts = (window.AppState && window.AppState.instagramPosts) || [];
+    
+    if (existingPosts.length > 0) {
+      const postsToShow = existingPosts.slice(0, FEED_COUNT);
+      postsToShow.forEach(post => {
+        const imgUrl = post.images && post.images.length > 0 ? post.images[0] : 'assets/insta_1.png';
+        const card = document.createElement('a');
+        card.href = `https://www.instagram.com/${INSTAGRAM_USERNAME}/`;
+        card.target = '_blank';
+        card.rel = 'noopener noreferrer';
+        card.className = 'ig-live-card';
+        card.innerHTML = `
+          <img src="${imgUrl}" alt="@${INSTAGRAM_USERNAME}" loading="lazy">
+          <div class="ig-live-overlay">
+            <div class="ig-stat">
+              <svg viewBox="0 0 24 24"><path d="M7.8 2h8.4C19.4 2 22 4.6 22 7.8v8.4a5.8 5.8 0 0 1-5.8 5.8H7.8C4.6 22 2 19.4 2 16.2V7.8A5.8 5.8 0 0 1 7.8 2m-.2 2A3.6 3.6 0 0 0 4 7.6v8.8C4 18.39 5.61 20 7.6 20h8.8a3.6 3.6 0 0 0 3.6-3.6V7.6C20 5.61 18.39 4 16.4 4H7.6m9.65 1.5a1.25 1.25 0 0 1 1.25 1.25A1.25 1.25 0 0 1 17.25 8 1.25 1.25 0 0 1 16 6.75a1.25 1.25 0 0 1 1.25-1.25M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3z"/></svg>
+              <span>View</span>
+            </div>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    } else {
+      // Show "follow us" placeholder
+      grid.innerHTML = `
+        <div class="ig-live-error" style="grid-column: 1 / -1;">
+          <a href="https://www.instagram.com/${INSTAGRAM_USERNAME}/" target="_blank" rel="noopener noreferrer" style="text-decoration: none; color: inherit;">
+            <svg style="width: 48px; height: 48px; margin-bottom: 12px; color: var(--color-sage);" fill="currentColor" viewBox="0 0 24 24"><path d="M7.8 2h8.4C19.4 2 22 4.6 22 7.8v8.4a5.8 5.8 0 0 1-5.8 5.8H7.8C4.6 22 2 19.4 2 16.2V7.8A5.8 5.8 0 0 1 7.8 2m-.2 2A3.6 3.6 0 0 0 4 7.6v8.8C4 18.39 5.61 20 7.6 20h8.8a3.6 3.6 0 0 0 3.6-3.6V7.6C20 5.61 18.39 4 16.4 4H7.6m9.65 1.5a1.25 1.25 0 0 1 1.25 1.25A1.25 1.25 0 0 1 17.25 8 1.25 1.25 0 0 1 16 6.75a1.25 1.25 0 0 1 1.25-1.25M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3z"/></svg>
+            <p style="font-size: 1rem;">Follow us <strong>@${INSTAGRAM_USERNAME}</strong></p>
+            <p style="font-size: 0.8rem; margin-top: 6px; opacity: 0.7;">View our latest posts on Instagram</p>
+          </a>
+        </div>
+      `;
+    }
+  }
+
+  // Initialize when DOM is ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function() {
+      setTimeout(initLiveInstagramFeed, 500);
+    });
+  } else {
+    setTimeout(initLiveInstagramFeed, 500);
+  }
+
+  // Also re-render when navigating to home
+  const originalNavigate = window.navigateTo;
+  if (originalNavigate) {
+    window.navigateTo = function(route) {
+      originalNavigate(route);
+      if (route === 'home' || route === '' || route === 'about') {
+        setTimeout(initLiveInstagramFeed, 300);
+      }
+    };
+  }
+})();

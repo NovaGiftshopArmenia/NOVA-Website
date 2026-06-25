@@ -1169,6 +1169,13 @@ header.header-scrolled .mega-product-thumb {
   transform: translate(-50%, -50%);
 }
 
+.contact-bg-text {
+  font-size: 13vw;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
 /* --- LANGUAGE SELECTOR --- */
 .lang-selector {
   display: flex;
@@ -1387,7 +1394,7 @@ header.header-scrolled .lang-btn.active::after {
 
 /* --- CATALOG SHOP VIEW --- */
 .shop-view {
-  padding: var(--spacing-xxl) 0;
+  padding: 130px 0 var(--spacing-xxl) 0;
 }
 
 .shop-header {
@@ -2076,7 +2083,7 @@ header.header-scrolled .lang-btn.active::after {
 
 /* --- CHECKOUT VIEW --- */
 .checkout-view {
-  padding: var(--spacing-xxl) 0;
+  padding: 130px 0 var(--spacing-xxl) 0;
 }
 
 .checkout-grid {
@@ -2182,7 +2189,7 @@ header.header-scrolled .lang-btn.active::after {
 
 /* --- WOOCOMMERCE DASHBOARD --- */
 .admin-view {
-  padding: var(--spacing-xxl) 0;
+  padding: 130px 0 var(--spacing-xxl) 0;
   background-color: var(--color-light-gray);
   min-height: calc(100vh - 80px);
 }
@@ -2559,6 +2566,107 @@ header.header-scrolled .lang-btn.active::after {
   background-color: var(--color-white);
   position: relative;
   overflow: hidden;
+}
+
+/* --- LIVE INSTAGRAM FEED --- */
+.instagram-live-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: var(--spacing-xl);
+}
+
+@media (max-width: 1024px) {
+  .instagram-live-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+}
+
+@media (max-width: 768px) {
+  .instagram-live-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+}
+
+.ig-live-card {
+  position: relative;
+  aspect-ratio: 1/1;
+  overflow: hidden;
+  border-radius: 4px;
+  background: var(--color-light-gray);
+  cursor: pointer;
+  display: block;
+  text-decoration: none;
+}
+
+.ig-live-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.ig-live-card:hover img {
+  transform: scale(1.05);
+}
+
+.ig-live-card .ig-live-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(37, 37, 37, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  color: var(--color-white);
+}
+
+.ig-live-card:hover .ig-live-overlay {
+  opacity: 1;
+}
+
+.ig-live-overlay .ig-stat {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.ig-live-overlay .ig-stat svg {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+}
+
+.ig-spinner {
+  width: 32px;
+  height: 32px;
+  border: 2px solid var(--color-border);
+  border-top-color: var(--color-sage);
+  border-radius: 50%;
+  animation: ig-spin 0.8s linear infinite;
+  margin: 0 auto;
+}
+
+@keyframes ig-spin {
+  to { transform: rotate(360deg); }
+}
+
+.ig-live-error {
+  text-align: center;
+  padding: 40px 20px;
+  grid-column: 1 / -1;
+  color: var(--color-medium-gray);
+  font-size: 0.9rem;
+  font-weight: 300;
 }
 
 .instagram-grid {
@@ -3136,7 +3244,7 @@ textarea,
 /* --- ABOUT STORY HERO GRID LAYOUT --- */
 .about-story-hero {
   position: relative;
-  padding: 140px 0 100px 0;
+  padding: 130px 0 100px 0;
   background: radial-gradient(circle at 10% 20%, rgba(247, 245, 240, 0.4) 0%, rgba(255, 255, 255, 1) 90%);
   overflow: hidden;
 }
@@ -3325,7 +3433,6 @@ textarea,
   flex-direction: column;
   gap: 4px;
   z-index: 4;
-  animation: floatAccent 6s ease-in-out infinite;
 }
 
 .floating-accent-box .accent-title {
@@ -3702,7 +3809,7 @@ header.header-scrolled .mobile-menu-icon-btn {
 .contact-view {
   position: relative;
   overflow: hidden;
-  padding: 160px 0 var(--spacing-xxl) 0;
+  padding: 130px 0 var(--spacing-xxl) 0;
 }
 
 .contact-bg-text {
@@ -3847,7 +3954,7 @@ header.header-scrolled .mobile-menu-icon-btn {
 
 @media (max-width: 768px) {
   .contact-view {
-    padding: 130px 0 var(--spacing-lg) 0;
+    padding: 105px 0 var(--spacing-lg) 0;
   }
 
   .contact-bg-text {
@@ -4438,8 +4545,10 @@ header.header-scrolled .mobile-menu-icon-btn {
   /* First sections on mobile views need to clear the header while maintaining 20px bottom spacing */
   .shop-view,
   .about-story-hero,
-  .contact-view {
-    padding-top: 110px !important;
+  .contact-view,
+  .checkout-view,
+  .admin-view {
+    padding-top: 105px !important;
     padding-bottom: 20px !important;
     margin-top: 0 !important;
     margin-bottom: 0 !important;
