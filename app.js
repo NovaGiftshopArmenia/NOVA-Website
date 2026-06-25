@@ -1,4 +1,4 @@
-// LOCALIZATION DICTIONARIES
+﻿// LOCALIZATION DICTIONARIES
 const TRANSLATIONS = {
   am: {
     nav_about: "Մեր Մասին",
@@ -5062,18 +5062,41 @@ window.refreshAdminDashboard = function() {
 };
 
 window.checkAdminSession = function() {
-  const session = sessionStorage.getItem('nova_admin_session');
   const loginWrapper = document.getElementById('admin-login-wrapper');
   const dashboardWrapper = document.getElementById('admin-dashboard-wrapper');
   
-  if (session) {
+  // Already has admin session
+  const adminSession = sessionStorage.getItem('nova_admin_session');
+  if (adminSession) {
     if (loginWrapper) loginWrapper.classList.add('hidden');
     if (dashboardWrapper) dashboardWrapper.classList.remove('hidden');
     refreshAdminDashboard();
-  } else {
-    if (loginWrapper) loginWrapper.classList.remove('hidden');
-    if (dashboardWrapper) dashboardWrapper.classList.add('hidden');
+    return;
   }
+
+  // Auto-login if current auth session is an admin email
+  try {
+    const authSession = JSON.parse(localStorage.getItem('nova_session'));
+    if (authSession && typeof isAdminEmail === 'function' && isAdminEmail(authSession.email)) {
+      const profile = {
+        username: authSession.email,
+        name: (authSession.firstName || '') + ' ' + (authSession.lastName || ''),
+        role: authSession.email === 'norayrnajaryann@gmail.com' ? 'Super Admin' : 'Shop Manager'
+      };
+      sessionStorage.setItem('nova_admin_session', JSON.stringify(profile));
+      if (loginWrapper) loginWrapper.classList.add('hidden');
+      if (dashboardWrapper) dashboardWrapper.classList.remove('hidden');
+      if (typeof logAdminActivity === 'function') {
+        logAdminActivity(profile.name.trim(), 'Auto-authenticated as ' + profile.role);
+      }
+      refreshAdminDashboard();
+      return;
+    }
+  } catch(e) {}
+
+  // Not admin — show login form
+  if (loginWrapper) loginWrapper.classList.remove('hidden');
+  if (dashboardWrapper) dashboardWrapper.classList.add('hidden');
 };
 
 function initAdminNavigation() {
