@@ -1,4 +1,4 @@
-﻿// LOCALIZATION DICTIONARIES
+// LOCALIZATION DICTIONARIES
 const TRANSLATIONS = {
   am: {
     nav_about: "Մեր Մասին",
@@ -5960,6 +5960,7 @@ window.closeInstagramPostModal = function(event) {
 
     showToast('ACCOUNT CREATED SUCCESSFULLY!');
     if (typeof renderMyAccount === 'function') renderMyAccount();
+    if (typeof updateAdminVisibility === 'function') updateAdminVisibility();
   };
 
   // Handle Sign In
@@ -5993,6 +5994,7 @@ window.closeInstagramPostModal = function(event) {
 
     showToast('WELCOME BACK, ' + user.firstName.toUpperCase() + '!');
     if (typeof renderMyAccount === 'function') renderMyAccount();
+    if (typeof updateAdminVisibility === 'function') updateAdminVisibility();
   };
 
   // Handle Logout
