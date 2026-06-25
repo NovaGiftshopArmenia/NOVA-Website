@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -229,11 +229,15 @@
             </svg>
           </button>
           <ul class="submenu account-submenu">
-            <li class="submenu-header" data-trans="hello_user">Ողջույն, Էմմա</li>
-            <li><a href="#/my-account" data-trans="my_account_title">My Account</a></li>
-            <li><a href="#/admin" data-trans="nav_admin">WooCommerce Կառավարում</a></li>
-            <li><a href="#/home" onclick="showToast('DEMO SESSION LOGGED OUT')" data-trans="nav_logout">Դուրս գալ</a></li>
-          </ul>
+                      <!-- Logged in state -->
+                      <li class="submenu-header auth-logged-in" id="header-greeting">Hello</li>
+                      <li class="auth-logged-in"><a href="#/my-account" data-trans="my_account_title">My Account</a></li>
+                      <li class="auth-logged-in"><a href="#/admin" data-trans="nav_admin">WooCommerce</a></li>
+                      <li class="auth-logged-in"><a href="#/home" onclick="handleLogout()" data-trans="nav_logout">Log Out</a></li>
+                      <!-- Guest state -->
+                      <li class="auth-guest"><a href="#/my-account" onclick="switchAuthTab('signin')">Sign In</a></li>
+                      <li class="auth-guest"><a href="#/my-account" onclick="switchAuthTab('signup')">Create Account</a></li>
+                    </ul>
         </div>
         
         <!-- Mobile Menu Toggle Button -->
@@ -1268,16 +1272,7 @@
       </div>
     </section>
 
-    <!-- Quote Section -->
-    <section class="about-quote-section text-center" style="position:relative; overflow:hidden;">
 
-      <div class="container">
-        <blockquote class="about-quote">
-          <p data-trans="about_hook_desc">We curate rare, niche fragrances and raw, clean ingredients for the modern aesthete. Our mission is to elevate your signature scent from an afterthought to a masterpiece.</p>
-        </blockquote>
-      </div>
-    </section>
-    
     <!-- Reviews from Home -->
     <section class="reviews-section">
         <div class="container">
@@ -1519,6 +1514,59 @@
       <div class="text-center" style="margin-bottom: var(--spacing-xl);">
         <h2 class="serif-title" style="font-size: 2.5rem; margin-top: 8px;" id="my-account-title" data-trans="my_account_title">My Account</h2>
       </div>
+
+      <!-- Auth Gate: Login / Register -->
+      <div id="auth-gate" class="auth-gate">
+        <div class="auth-card">
+          <div class="auth-tabs">
+            <button class="auth-tab active" onclick="switchAuthTab('signin')" id="auth-tab-signin">Sign In</button>
+            <button class="auth-tab" onclick="switchAuthTab('signup')" id="auth-tab-signup">Create Account</button>
+          </div>
+
+          <!-- Sign In Form -->
+          <form id="auth-signin-form" class="auth-form" onsubmit="handleSignIn(event)">
+            <div class="auth-form-group">
+              <label for="signin-email">Email Address</label>
+              <input type="email" id="signin-email" placeholder="your@email.com" required class="auth-input">
+            </div>
+            <div class="auth-form-group">
+              <label for="signin-password">Password</label>
+              <input type="password" id="signin-password" placeholder="Enter password" required minlength="6" class="auth-input">
+            </div>
+            <button type="submit" class="btn-primary auth-submit-btn">Sign In</button>
+            <p class="auth-error hidden" id="signin-error"></p>
+          </form>
+
+          <!-- Sign Up Form -->
+          <form id="auth-signup-form" class="auth-form hidden" onsubmit="handleSignUp(event)">
+            <div class="auth-form-row">
+              <div class="auth-form-group">
+                <label for="signup-first-name">First Name</label>
+                <input type="text" id="signup-first-name" placeholder="First name" required class="auth-input">
+              </div>
+              <div class="auth-form-group">
+                <label for="signup-last-name">Last Name</label>
+                <input type="text" id="signup-last-name" placeholder="Last name" required class="auth-input">
+              </div>
+            </div>
+            <div class="auth-form-group">
+              <label for="signup-email">Email Address</label>
+              <input type="email" id="signup-email" placeholder="your@email.com" required class="auth-input">
+            </div>
+            <div class="auth-form-group">
+              <label for="signup-password">Password</label>
+              <input type="password" id="signup-password" placeholder="Min 6 characters" required minlength="6" class="auth-input">
+            </div>
+            <div class="auth-form-group">
+              <label for="signup-password-confirm">Confirm Password</label>
+              <input type="password" id="signup-password-confirm" placeholder="Repeat password" required minlength="6" class="auth-input">
+            </div>
+            <button type="submit" class="btn-primary auth-submit-btn">Create Account</button>
+            <p class="auth-error hidden" id="signup-error"></p>
+          </form>
+        </div>
+      </div>
+
 
       <div class="my-account-layout">
         <!-- Sidebar Navigation -->

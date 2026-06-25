@@ -1,4 +1,4 @@
-// LOCALIZATION DICTIONARIES
+﻿// LOCALIZATION DICTIONARIES
 const TRANSLATIONS = {
   am: {
     nav_about: "Մեր Մասին",
@@ -5795,4 +5795,251 @@ window.closeInstagramPostModal = function(event) {
       }
     };
   }
+})();
+
+
+// ============================================
+// LOCAL AUTH SYSTEM
+// ============================================
+(function() {
+  const USERS_KEY = 'nova_users';
+  const SESSION_KEY = 'nova_session';
+
+  // Get all registered users
+  function getUsers() {
+    try { return JSON.parse(localStorage.getItem(USERS_KEY)) || []; }
+    catch(e) { return []; }
+  }
+
+  // Save users array
+  function saveUsers(users) {
+    localStorage.setItem(USERS_KEY, JSON.stringify(users));
+  }
+
+  // Get current session
+  function getSession() {
+    try { return JSON.parse(localStorage.getItem(SESSION_KEY)); }
+    catch(e) { return null; }
+  }
+
+  // Save session
+  function saveSession(user) {
+    localStorage.setItem(SESSION_KEY, JSON.stringify(user));
+  }
+
+  // Clear session
+  function clearSession() {
+    localStorage.removeItem(SESSION_KEY);
+  }
+
+  // Hash password (simple hash for localStorage - NOT production-secure)
+  function hashPassword(password) {
+    let hash = 0;
+    for (let i = 0; i < password.length; i++) {
+      const char = password.charCodeAt(i);
+      hash = ((hash << 5) - hash) + char;
+      hash = hash & hash;
+    }
+    return 'h_' + Math.abs(hash).toString(36);
+  }
+
+  // Update UI based on auth state
+  function updateAuthUI(user) {
+    if (user) {
+      document.body.classList.add('user-logged-in');
+
+      // Update header greeting
+      const greetingEl = document.getElementById('header-greeting');
+      if (greetingEl) {
+        const lang = AppState.language;
+        greetingEl.innerText = lang === 'am' ? `\u0555\u0572\u057b\u0578\u0582\u0575\u0576, ${user.firstName}` :
+                               lang === 'ru' ? `\u041f\u0440\u0438\u0432\u0435\u0442, ${user.firstName}` :
+                               `Hello, ${user.firstName}`;
+      }
+
+      // Update AppState customer
+      AppState.customer.firstName = user.firstName;
+      AppState.customer.lastName = user.lastName;
+      AppState.customer.email = user.email;
+
+      // Update dashboard greeting
+      const dashGreeting = document.getElementById('customer-welcome-greeting');
+      if (dashGreeting) {
+        const lang = AppState.language;
+        dashGreeting.innerText = lang === 'am' ? `\u0555\u0572\u057b\u0578\u0582\u0575\u0576, ${user.firstName}` :
+                                 lang === 'ru' ? `\u041f\u0440\u0438\u0432\u0435\u0442, ${user.firstName}` :
+                                 `Hello, ${user.firstName}`;
+      }
+
+      // Update account details form
+      const fnInput = document.getElementById('acc-first-name');
+      const lnInput = document.getElementById('acc-last-name');
+      const emailInput = document.getElementById('acc-email');
+      if (fnInput) fnInput.value = user.firstName;
+      if (lnInput) lnInput.value = user.lastName;
+      if (emailInput) emailInput.value = user.email;
+
+    } else {
+      document.body.classList.remove('user-logged-in');
+    }
+  }
+
+  // Switch between sign-in and sign-up tabs
+  window.switchAuthTab = function(tab) {
+    const signinForm = document.getElementById('auth-signin-form');
+    const signupForm = document.getElementById('auth-signup-form');
+    const signinTab = document.getElementById('auth-tab-signin');
+    const signupTab = document.getElementById('auth-tab-signup');
+
+    if (tab === 'signin') {
+      if (signinForm) signinForm.classList.remove('hidden');
+      if (signupForm) signupForm.classList.add('hidden');
+      if (signinTab) signinTab.classList.add('active');
+      if (signupTab) signupTab.classList.remove('active');
+    } else {
+      if (signinForm) signinForm.classList.add('hidden');
+      if (signupForm) signupForm.classList.remove('hidden');
+      if (signinTab) signinTab.classList.remove('active');
+      if (signupTab) signupTab.classList.add('active');
+    }
+
+    // Clear errors
+    document.querySelectorAll('.auth-error').forEach(el => el.classList.add('hidden'));
+  };
+
+  // Handle Sign Up
+  window.handleSignUp = function(event) {
+    event.preventDefault();
+    const firstName = document.getElementById('signup-first-name').value.trim();
+    const lastName = document.getElementById('signup-last-name').value.trim();
+    const email = document.getElementById('signup-email').value.trim().toLowerCase();
+    const password = document.getElementById('signup-password').value;
+    const confirmPassword = document.getElementById('signup-password-confirm').value;
+    const errorEl = document.getElementById('signup-error');
+
+    // Validate
+    if (password !== confirmPassword) {
+      errorEl.textContent = 'Passwords do not match.';
+      errorEl.classList.remove('hidden');
+      return;
+    }
+
+    if (password.length < 6) {
+      errorEl.textContent = 'Password must be at least 6 characters.';
+      errorEl.classList.remove('hidden');
+      return;
+    }
+
+    // Check if email already exists
+    const users = getUsers();
+    if (users.find(u => u.email === email)) {
+      errorEl.textContent = 'An account with this email already exists.';
+      errorEl.classList.remove('hidden');
+      return;
+    }
+
+    // Create user
+    const newUser = {
+      id: Date.now().toString(36),
+      firstName,
+      lastName,
+      email,
+      passwordHash: hashPassword(password),
+      createdAt: new Date().toISOString(),
+      billing: { street: '', city: '', zip: '' }
+    };
+
+    users.push(newUser);
+    saveUsers(users);
+    saveSession(newUser);
+    updateAuthUI(newUser);
+
+    // Clear form
+    event.target.reset();
+    errorEl.classList.add('hidden');
+
+    showToast('ACCOUNT CREATED SUCCESSFULLY!');
+    if (typeof renderMyAccount === 'function') renderMyAccount();
+  };
+
+  // Handle Sign In
+  window.handleSignIn = function(event) {
+    event.preventDefault();
+    const email = document.getElementById('signin-email').value.trim().toLowerCase();
+    const password = document.getElementById('signin-password').value;
+    const errorEl = document.getElementById('signin-error');
+
+    const users = getUsers();
+    const user = users.find(u => u.email === email);
+
+    if (!user) {
+      errorEl.textContent = 'No account found with this email.';
+      errorEl.classList.remove('hidden');
+      return;
+    }
+
+    if (user.passwordHash !== hashPassword(password)) {
+      errorEl.textContent = 'Incorrect password. Please try again.';
+      errorEl.classList.remove('hidden');
+      return;
+    }
+
+    saveSession(user);
+    updateAuthUI(user);
+
+    // Clear form
+    event.target.reset();
+    errorEl.classList.add('hidden');
+
+    showToast('WELCOME BACK, ' + user.firstName.toUpperCase() + '!');
+    if (typeof renderMyAccount === 'function') renderMyAccount();
+  };
+
+  // Handle Logout
+  window.handleLogout = function() {
+    clearSession();
+    updateAuthUI(null);
+    showToast('LOGGED OUT SUCCESSFULLY.');
+    // Navigate to home
+    if (typeof navigateTo === 'function') {
+      setTimeout(() => navigateTo('home'), 100);
+    }
+  };
+
+  // Initialize on page load
+  function initAuth() {
+    const session = getSession();
+    if (session) {
+      updateAuthUI(session);
+    } else {
+      updateAuthUI(null);
+    }
+  }
+
+  // Run on DOM ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initAuth);
+  } else {
+    initAuth();
+  }
+
+  // Also update when saving account details
+  const origSave = window.saveCustomerDetails;
+  window.saveCustomerDetails = function(event) {
+    if (origSave) origSave(event);
+    // Sync changes back to stored user
+    const session = getSession();
+    if (session) {
+      const users = getUsers();
+      const idx = users.findIndex(u => u.email === session.email);
+      if (idx > -1) {
+        users[idx].firstName = AppState.customer.firstName;
+        users[idx].lastName = AppState.customer.lastName;
+        users[idx].billing = AppState.customer.billing;
+        saveUsers(users);
+        saveSession(users[idx]);
+        updateAuthUI(users[idx]);
+      }
+    }
+  };
 })();

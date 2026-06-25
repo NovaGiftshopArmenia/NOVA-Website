@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600;700&display=swap');
+﻿@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600;700&display=swap');
 
 /* --- DESIGN SYSTEM TOKENS --- */
 :root {
@@ -3579,13 +3579,14 @@ textarea,
 
 @media (max-width: 768px) {
   .about-quote {
-    font-size: 1.5rem;
+    font-size: 1rem;
+    line-height: 1.5;
   }
 
   .about-quote::before {
-    font-size: 4rem;
-    top: -2rem;
-    left: -1rem;
+    font-size: 3rem;
+    top: -1.5rem;
+    left: -0.5rem;
   }
 }
 
@@ -4138,7 +4139,40 @@ header.header-scrolled .mobile-menu-icon-btn {
 
 @media (max-width: 576px) {
   .wishlist-page-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .wishlist-page-details {
+    padding: 10px;
+    gap: 6px;
+  }
+
+  .wishlist-page-meta {
+    font-size: 0.6rem;
+  }
+
+  .wishlist-page-name {
+    font-size: 0.85rem;
+  }
+
+  .wishlist-page-price {
+    font-size: 0.85rem;
+  }
+
+  .wishlist-page-add-btn {
+    padding: 7px;
+    font-size: 0.65rem;
+  }
+
+  .wishlist-page-remove-btn {
+    width: 30px;
+    height: 30px;
+  }
+
+  .wishlist-page-remove-btn svg {
+    width: 14px;
+    height: 14px;
   }
 }
 
@@ -5888,5 +5922,158 @@ header.header-scrolled .mobile-menu-icon-btn {
   }
   .video-showcase-text {
     font-size: 0.85rem;
+  }
+}
+
+/* --- AUTH GATE STYLES --- */
+.auth-gate {
+  max-width: 460px;
+  margin: 0 auto;
+}
+
+.auth-gate.hidden {
+  display: none;
+}
+
+.auth-card {
+  background: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.auth-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.auth-tab {
+  flex: 1;
+  padding: 16px;
+  border: none;
+  background: var(--color-light-gray);
+  font-family: var(--font-serif);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: var(--transition-fast);
+  color: var(--color-medium-gray);
+  letter-spacing: 0.02em;
+}
+
+.auth-tab.active {
+  background: var(--color-white);
+  color: var(--color-black);
+  font-weight: 500;
+}
+
+.auth-tab:hover:not(.active) {
+  background: #f0efed;
+}
+
+.auth-form {
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.auth-form.hidden {
+  display: none;
+}
+
+.auth-form-row {
+  display: flex;
+  gap: 16px;
+}
+
+.auth-form-row .auth-form-group {
+  flex: 1;
+}
+
+.auth-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.auth-form-group label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-medium-gray);
+  font-weight: 500;
+}
+
+.auth-input {
+  padding: 12px 14px;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  font-size: 0.95rem;
+  background: var(--color-white);
+  transition: var(--transition-fast);
+  font-family: var(--font-body);
+}
+
+.auth-input:focus {
+  outline: none;
+  border-color: var(--color-sage);
+  box-shadow: 0 0 0 3px rgba(163, 163, 130, 0.1);
+}
+
+.auth-submit-btn {
+  width: 100%;
+  padding: 14px;
+  font-size: 0.85rem;
+  margin-top: 4px;
+}
+
+.auth-error {
+  color: #C0392B;
+  font-size: 0.8rem;
+  text-align: center;
+  margin: 0;
+  padding: 8px 12px;
+  background: #FDEDEC;
+  border-radius: 4px;
+}
+
+.auth-error.hidden {
+  display: none;
+}
+
+/* Auth visibility toggles */
+.auth-logged-in {
+  display: none;
+}
+
+.auth-guest {
+  display: block;
+}
+
+body.user-logged-in .auth-logged-in {
+  display: block;
+}
+
+body.user-logged-in .auth-guest {
+  display: none !important;
+}
+
+body.user-logged-in .auth-gate {
+  display: none;
+}
+
+body:not(.user-logged-in) .my-account-layout {
+  display: none;
+}
+
+@media (max-width: 576px) {
+  .auth-form {
+    padding: 20px;
+    gap: 14px;
+  }
+
+  .auth-form-row {
+    flex-direction: column;
+    gap: 14px;
   }
 }
