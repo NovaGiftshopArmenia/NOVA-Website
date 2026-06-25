@@ -4621,7 +4621,7 @@ function initStaffProfiles() {
       username: 'norayrnajaryann@gmail.com',
       name: 'Norayr Najaryan',
       role: 'Super Admin',
-      password: 'K9$v!p2WbX'
+      password: 'Ananan05021998!'
     };
     parsed['sarah@example.com'] = {
       username: 'sarah@example.com',
@@ -6128,6 +6128,292 @@ window.closeInstagramPostModal = function(event) {
     const navItem = e.target.closest('[data-admin-tab="clients"]');
     if (navItem) {
       setTimeout(renderAdminClients, 50);
+    }
+  });
+})();
+
+// ============================================
+// ADMIN ACCESS CONTROL SYSTEM
+// ============================================
+(function() {
+  const ADMIN_EMAILS_KEY = 'nova_admin_emails';
+  const SUPER_ADMIN = 'norayrnajaryann@gmail.com';
+
+  // Initialize admin emails list
+  function getAdminEmails() {
+    try {
+      const saved = JSON.parse(localStorage.getItem(ADMIN_EMAILS_KEY));
+      if (Array.isArray(saved)) return saved;
+    } catch(e) {}
+    // Default: only super admin
+    const defaults = [SUPER_ADMIN];
+    localStorage.setItem(ADMIN_EMAILS_KEY, JSON.stringify(defaults));
+    return defaults;
+  }
+
+  function saveAdminEmails(emails) {
+    localStorage.setItem(ADMIN_EMAILS_KEY, JSON.stringify(emails));
+  }
+
+  // Check if an email has admin access
+  window.isAdminEmail = function(email) {
+    if (!email) return false;
+    return getAdminEmails().includes(email.toLowerCase());
+  };
+
+  // Check if current session is admin
+  window.isCurrentUserAdmin = function() {
+    try {
+      const session = JSON.parse(localStorage.getItem('nova_session'));
+      return session && isAdminEmail(session.email);
+    } catch(e) { return false; }
+  };
+
+  // Check if current user is super admin
+  window.isSuperAdmin = function() {
+    try {
+      const session = JSON.parse(localStorage.getItem('nova_session'));
+      return session && session.email.toLowerCase() === SUPER_ADMIN;
+    } catch(e) { return false; }
+  };
+
+  // Update admin UI visibility
+  window.updateAdminVisibility = function() {
+    const isAdmin = isCurrentUserAdmin();
+    const isLoggedIn = !!localStorage.getItem('nova_session');
+
+    // Show/hide WooCommerce link in dropdown
+    document.querySelectorAll('.admin-only-link').forEach(el => {
+      el.style.display = isAdmin && isLoggedIn ? 'block' : 'none';
+    });
+
+    // If on admin page and not admin, redirect to home
+    if (AppState.currentRoute === 'admin' && !isAdmin) {
+      // They can still see the login form, but check after login
+    }
+  };
+
+  // Override the admin login to check auth session first
+  const origSubmitAdmin = window.submitAdminCredentials;
+  window.submitAdminCredentials = function(event) {
+    event.preventDefault();
+    
+    const emailInput = document.getElementById('admin-email-input');
+    const passInput = document.getElementById('admin-pass-input');
+    const email = emailInput ? emailInput.value.trim().toLowerCase() : '';
+    const password = passInput ? passInput.value : '';
+
+    if (!email || !password) {
+      showToast("PLEASE FILL IN ALL FIELDS.");
+      return;
+    }
+
+    // Check staff profiles (existing system)
+    const staff = JSON.parse(localStorage.getItem('nova_staff_profiles') || '{}');
+    const profile = staff[email];
+
+    if (!profile || profile.password !== password) {
+      showToast("INVALID EMAIL OR PASSWORD.");
+      return;
+    }
+
+    // Check if this email has admin access
+    if (!isAdminEmail(email)) {
+      showToast("ACCESS DENIED. THIS ACCOUNT DOES NOT HAVE ADMIN PRIVILEGES.");
+      return;
+    }
+
+    // Also sign into the main auth system if not already
+    let session = null;
+    try { session = JSON.parse(localStorage.getItem('nova_session')); } catch(e) {}
+    
+    if (!session || session.email !== email) {
+      // Create/update session
+      const authUser = {
+        id: Date.now().toString(36),
+        firstName: profile.name.split(' ')[0] || profile.name,
+        lastName: profile.name.split(' ').slice(1).join(' ') || '',
+        email: email,
+        createdAt: new Date().toISOString(),
+        billing: { street: '', city: '', zip: '' }
+      };
+      localStorage.setItem('nova_session', JSON.stringify(authUser));
+      document.body.classList.add('user-logged-in');
+      
+      // Update header greeting
+      const greetingEl = document.getElementById('header-greeting');
+      if (greetingEl) greetingEl.innerText = 'Hello, ' + authUser.firstName;
+    }
+
+    // Successful admin login
+    sessionStorage.setItem('nova_admin_session', JSON.stringify(profile));
+    showToast('WELCOME BACK, ' + profile.name.toUpperCase() + '.');
+
+    if (typeof logAdminActivity === 'function') {
+      logAdminActivity(profile.name, 'Logged in successfully as ' + profile.role);
+    }
+
+    document.getElementById('admin-login-wrapper').classList.add('hidden');
+    document.getElementById('admin-dashboard-wrapper').classList.remove('hidden');
+
+    if (emailInput) emailInput.value = '';
+    if (passInput) passInput.value = '';
+
+    updateAdminVisibility();
+    if (typeof refreshAdminDashboard === 'function') refreshAdminDashboard();
+  };
+
+  // Also ensure auto-login to admin if session is admin and navigating to admin page
+  const origNavigate = window.navigateTo;
+  if (origNavigate) {
+    const _nav = origNavigate;
+    window.navigateTo = function(route) {
+      _nav(route);
+      
+      if (route === 'admin') {
+        // If the current session is an admin, auto-authenticate
+        if (isCurrentUserAdmin()) {
+          const session = JSON.parse(localStorage.getItem('nova_session'));
+          const adminSession = sessionStorage.getItem('nova_admin_session');
+          
+          if (!adminSession && session) {
+            // Auto-login to admin
+            const staff = JSON.parse(localStorage.getItem('nova_staff_profiles') || '{}');
+            const profile = staff[session.email];
+            if (profile) {
+              sessionStorage.setItem('nova_admin_session', JSON.stringify(profile));
+              setTimeout(() => {
+                document.getElementById('admin-login-wrapper')?.classList.add('hidden');
+                document.getElementById('admin-dashboard-wrapper')?.classList.remove('hidden');
+                if (typeof refreshAdminDashboard === 'function') refreshAdminDashboard();
+              }, 100);
+            }
+          }
+        }
+      }
+      
+      // Re-check visibility on every nav
+      setTimeout(updateAdminVisibility, 100);
+    };
+  }
+
+  // Grant admin access (super admin only)
+  window.grantAdminAccess = function(email) {
+    if (!isSuperAdmin()) {
+      showToast("ONLY THE SUPER ADMIN CAN GRANT ACCESS.");
+      return;
+    }
+    email = email.trim().toLowerCase();
+    if (!email) return;
+
+    const emails = getAdminEmails();
+    if (emails.includes(email)) {
+      showToast("THIS EMAIL ALREADY HAS ADMIN ACCESS.");
+      return;
+    }
+
+    emails.push(email);
+    saveAdminEmails(emails);
+
+    // Also add to staff profiles if not there
+    const staff = JSON.parse(localStorage.getItem('nova_staff_profiles') || '{}');
+    if (!staff[email]) {
+      staff[email] = {
+        username: email,
+        name: email.split('@')[0],
+        role: 'Shop Manager',
+        password: 'temp_' + Math.random().toString(36).substr(2, 6)
+      };
+      localStorage.setItem('nova_staff_profiles', JSON.stringify(staff));
+    }
+
+    showToast('ADMIN ACCESS GRANTED TO ' + email.toUpperCase());
+    renderAdminAccessList();
+    if (typeof renderStaffTable === 'function') renderStaffTable();
+  };
+
+  // Revoke admin access
+  window.revokeAdminAccess = function(email) {
+    if (!isSuperAdmin()) {
+      showToast("ONLY THE SUPER ADMIN CAN REVOKE ACCESS.");
+      return;
+    }
+    if (email === SUPER_ADMIN) {
+      showToast("CANNOT REVOKE SUPER ADMIN ACCESS.");
+      return;
+    }
+
+    let emails = getAdminEmails();
+    emails = emails.filter(e => e !== email);
+    saveAdminEmails(emails);
+    showToast('ADMIN ACCESS REVOKED FOR ' + email.toUpperCase());
+    renderAdminAccessList();
+  };
+
+  // Render admin access list in developer section
+  window.renderAdminAccessList = function() {
+    const container = document.getElementById('admin-access-list');
+    if (!container) return;
+
+    const emails = getAdminEmails();
+    container.innerHTML = emails.map(email => {
+      const isSA = email === SUPER_ADMIN;
+      return '<div style="display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid var(--color-light-gray); font-size:0.8rem;">' +
+        '<div style="display:flex; align-items:center; gap:8px;">' +
+          '<span style="width:28px; height:28px; border-radius:50%; background:' + (isSA ? 'var(--color-black)' : 'var(--color-sage)') + '; color:white; display:flex; align-items:center; justify-content:center; font-size:0.6rem; font-weight:600;">' + (isSA ? 'SA' : 'A') + '</span>' +
+          '<span>' + email + '</span>' +
+          (isSA ? '<span style="font-size:0.6rem; background:var(--color-black); color:white; padding:2px 6px; border-radius:3px; text-transform:uppercase; letter-spacing:0.05em;">Super Admin</span>' : '') +
+        '</div>' +
+        (isSA ? '' : '<button onclick="revokeAdminAccess(\'' + email + '\')" style="background:none; border:1px solid var(--color-border); border-radius:4px; padding:3px 8px; cursor:pointer; color:var(--color-medium-gray); font-size:0.65rem;" onmouseover="this.style.color=\'#C0392B\'" onmouseout="this.style.color=\'var(--color-medium-gray)\'">Revoke</button>') +
+      '</div>';
+    }).join('');
+  };
+
+  // Initialize on load
+  function initAdminAccess() {
+    // Ensure super admin user account exists in auth system
+    let users = [];
+    try { users = JSON.parse(localStorage.getItem('nova_users')) || []; } catch(e) {}
+    if (!users.find(u => u.email === SUPER_ADMIN)) {
+      users.push({
+        id: 'superadmin',
+        firstName: 'Norayr',
+        lastName: 'Najaryan',
+        email: SUPER_ADMIN,
+        passwordHash: hashPwd('Ananan05021998!'),
+        createdAt: new Date().toISOString(),
+        billing: { street: '', city: '', zip: '' }
+      });
+      localStorage.setItem('nova_users', JSON.stringify(users));
+    }
+
+    // Ensure admin emails list exists
+    getAdminEmails();
+    updateAdminVisibility();
+  }
+
+  // Simple hash (must match the one in auth system)
+  function hashPwd(password) {
+    let hash = 0;
+    for (let i = 0; i < password.length; i++) {
+      const char = password.charCodeAt(i);
+      hash = ((hash << 5) - hash) + char;
+      hash = hash & hash;
+    }
+    return 'h_' + Math.abs(hash).toString(36);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initAdminAccess);
+  } else {
+    initAdminAccess();
+  }
+
+  // Hook into admin tab switch to render access list
+  document.addEventListener('click', function(e) {
+    const navItem = e.target.closest('[data-admin-tab="developer"]');
+    if (navItem) {
+      setTimeout(renderAdminAccessList, 50);
     }
   });
 })();
