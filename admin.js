@@ -78,9 +78,9 @@ const WooCommerceAdmin = {
     const metrics = this.getMetrics(productsList);
     
     // Fill text indicators
-    document.getElementById('admin-revenue-val').innerText = `$${metrics.revenue.toLocaleString()}`;
+    document.getElementById('admin-revenue-val').innerText = `֏${metrics.revenue.toLocaleString()}`;
     document.getElementById('admin-orders-val').innerText = metrics.orderCount;
-    document.getElementById('admin-aov-val').innerText = `$${metrics.aov}`;
+    document.getElementById('admin-aov-val').innerText = `֏${metrics.aov}`;
     document.getElementById('admin-stock-val').innerText = metrics.stockCount;
 
     // Render sales chart by category
@@ -111,7 +111,7 @@ const WooCommerceAdmin = {
       
       if (barElement && valElement) {
         barElement.style.height = `${pct}%`;
-        valElement.innerText = `$${val}`;
+        valElement.innerText = `֏${val}`;
       }
     });
 
@@ -156,7 +156,7 @@ const WooCommerceAdmin = {
           <div style="font-size: 0.75rem; color: var(--color-medium-gray);">${order.email}</div>
         </td>
         <td style="max-width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${itemsList}">${itemsList}</td>
-        <td><strong>$${order.total}</strong></td>
+        <td><strong>֏${order.total}</strong></td>
         <td>
           <span class="admin-status-badge badge-${order.status}">${statusLabel}</span>
         </td>

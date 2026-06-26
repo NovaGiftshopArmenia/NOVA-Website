@@ -289,7 +289,7 @@ const TRANSLATIONS = {
     acc_discovery_title: "Փորձանմուշների Հետևում",
     acc_promo_tag: "Discovery Խումբ",
     acc_promo_title: "Կիրառեք Փորձանմուշի Կրեդիտը Լիարժեք Շշի Համար",
-    acc_promo_desc: "Հավանեցի՞ք նմուշները: Կիրառեք ձեր 4,000 AMD ($10) Discovery կրեդիտը ցանկացած լիարժեք (100մլ) շշի համար:",
+    acc_promo_desc: "Հավանեցի՞ք նմուշները: Կիրառեք ձեր 4,000 AMD Discovery կրեդիտը ցանկացած լիարժեք (100մլ) շշի համար:",
     acc_promo_code_lbl: "ՁԵՐ ԵԶԱԿԻ ԿՈԴԸ:",
     admin_secure_portal: "ԱՊԱՀՈՎ ՄՈՒՏՔ",
     admin_login_title: "WooCommerce Մուտք",
@@ -704,7 +704,7 @@ const TRANSLATIONS = {
     acc_discovery_title: "Отслеживание пробников",
     acc_promo_tag: "КЛУБ DISCOVERY",
     acc_promo_title: "Обменяйте пробник на флакон",
-    acc_promo_desc: "Понравились пробники? Примените скидку 4,000 AMD ($10) при покупке любого полноразмерного (100мл) флакона!",
+    acc_promo_desc: "Понравились пробники? Примените скидку 4,000 AMD при покупке любого полноразмерного (100мл) флакона!",
     acc_promo_code_lbl: "ВАШ УНИКАЛЬНЫЙ КОД СКИДКИ:",
     admin_secure_portal: "БЕЗОПАСНЫЙ ПОРТАЛ",
     admin_login_title: "Вход в WooCommerce",
@@ -1119,7 +1119,7 @@ const TRANSLATIONS = {
     acc_discovery_title: "Discovery & Sample Tracking",
     acc_promo_tag: "DISCOVERY CLUB",
     acc_promo_title: "Convert Sample to Full-Bottle",
-    acc_promo_desc: "Loved your samples? Apply your 4,000 AMD ($10) discovery credit toward any full-sized (100ml) bottle!",
+    acc_promo_desc: "Loved your samples? Apply your 4,000 AMD discovery credit toward any full-sized (100ml) bottle!",
     acc_promo_code_lbl: "YOUR UNIQUE CREDIT CODE:",
     admin_secure_portal: "SECURE PORTAL",
     admin_login_title: "WooCommerce Login",
@@ -2444,7 +2444,7 @@ function createSliderProductCard(product, badgeText) {
     <h3 class="product-card-name serif-title">${product.name}</h3>
     <p class="product-card-tagline">${tagline}</p>
     <div class="product-card-footer">
-      <span class="product-card-price">$${product.price}</span>
+      <span class="product-card-price">֏${product.price}</span>
       <div class="product-card-rating">
         <span class="rating-star">★</span>
         <span>${product.rating}</span>
@@ -3088,7 +3088,7 @@ function createProductCard(product) {
     <h3 class="product-card-name serif-title">${product.name}</h3>
     <p class="product-card-tagline">${tagline}</p>
     <div class="product-card-footer">
-      <span class="product-card-price">$${product.price}</span>
+      <span class="product-card-price">֏${product.price}</span>
       <div class="product-card-rating">
         <span class="rating-star">★</span>
         <span>${product.rating}</span>
@@ -3382,7 +3382,7 @@ function updateCartUI() {
         <button class="btn-primary" onclick="closeCartDrawer(); window.location.hash='#/shop';">${goShopBtnText}</button>
       </div>
     `;
-    DOM.cartSubtotal.innerText = '$0';
+    DOM.cartSubtotal.innerText = '֏0';
     return;
   }
 
@@ -3409,7 +3409,7 @@ function updateCartUI() {
             <input type="text" class="cart-item-qty-input" value="${item.quantity}" readonly>
             <button class="cart-item-qty-btn" onclick="updateCartQty(${index}, 1)">+</button>
           </div>
-          <span class="cart-item-price">$${itemTotal}</span>
+          <span class="cart-item-price">֏${itemTotal}</span>
         </div>
       </div>
       <button class="cart-item-remove" onclick="removeCartItem(${index})">
@@ -3421,7 +3421,7 @@ function updateCartUI() {
     DOM.cartItemsContainer.appendChild(itemDiv);
   });
 
-  DOM.cartSubtotal.innerText = `$${subtotal}`;
+  DOM.cartSubtotal.innerText = `֏${subtotal}`;
 }
 
 window.updateCartQty = function (index, change) {
@@ -3593,7 +3593,7 @@ function updateWishlistUI() {
         <h4 class="cart-item-name">${prod.name}</h4>
         <div class="cart-item-meta">${translatedCategory} &bull; ${prod.brand}</div>
         <div class="cart-item-row" style="margin-top: 10px;">
-          <span class="cart-item-price">$${prod.price}</span>
+          <span class="cart-item-price">֏${prod.price}</span>
           <button class="btn-primary" style="font-size:0.7rem; padding: 6px 12px;" onclick="closeWishlistDrawer(); quickAddToCart('${prod.id}')" ${prod.stock <= 0 ? 'disabled' : ''}>
             ${addBtnLabel}
           </button>
@@ -3711,7 +3711,7 @@ window.renderWishlistPage = function () {
       <div class="wishlist-page-details">
         <div class="wishlist-page-meta">${translatedCategory} &bull; ${prod.brand}</div>
         <h4 class="wishlist-page-name" style="cursor: pointer;" onclick="openProductModal('${prod.id}')">${prod.name}</h4>
-        <div class="wishlist-page-price">$${prod.price}</div>
+        <div class="wishlist-page-price">֏${prod.price}</div>
         <div class="wishlist-page-actions">
           <button class="btn-primary wishlist-page-add-btn" onclick="quickAddToCart('${prod.id}')" ${prod.stock <= 0 ? 'disabled' : ''}>
             ${addBtnLabel}
@@ -3950,7 +3950,7 @@ function renderSizeSelectors(product) {
 function updateModalPrice(product) {
   const sizeObj = product.sizes.find(s => s.size === AppState.selectedSize);
   const price = sizeObj ? sizeObj.price : product.price;
-  document.getElementById('pp-price').innerText = `$${price}`;
+  document.getElementById('pp-price').innerText = `֏${price}`;
 }
 
 // CHECKOUT LOGIC
@@ -3974,7 +3974,7 @@ function renderCheckoutPage() {
     div.className = 'order-summary-item';
     div.innerHTML = `
       <span>${item.product.name} (x${item.quantity}) - ${item.size}</span>
-      <strong>$${item.price * item.quantity}</strong>
+      <strong>֏${item.price * item.quantity}</strong>
     `;
     summaryContainer.appendChild(div);
   });
@@ -3989,9 +3989,9 @@ function updateCheckoutTotals() {
   const shippingCost = shippingSelect ? parseInt(shippingSelect.value) : 0;
   const total = subtotal + shippingCost;
 
-  document.getElementById('checkout-subtotal-val').innerText = `$${subtotal}`;
-  document.getElementById('checkout-shipping-val').innerText = shippingCost === 0 ? 'Free' : `$${shippingCost}`;
-  document.getElementById('checkout-total-val').innerText = `$${total}`;
+  document.getElementById('checkout-subtotal-val').innerText = `֏${subtotal}`;
+  document.getElementById('checkout-shipping-val').innerText = shippingCost === 0 ? 'Free' : `֏${shippingCost}`;
+  document.getElementById('checkout-total-val').innerText = `֏${total}`;
 }
 
 function processCheckout() {
@@ -4053,7 +4053,7 @@ function processCheckout() {
           <div style="font-size: 0.85rem; display: flex; flex-direction: column; gap: 8px;">
             <div style="display:flex; justify-content:space-between;"><span>${orderDateLabel}</span><span>${order.date}</span></div>
             <div style="display:flex; justify-content:space-between;"><span>${orderShipToLabel}</span><span>${customerData.address}, ${customerData.city}</span></div>
-            <div style="display:flex; justify-content:space-between; font-weight: 600;"><span>${orderTotalPaidLabel}</span><span>$${order.total}</span></div>
+            <div style="display:flex; justify-content:space-between; font-weight: 600;"><span>${orderTotalPaidLabel}</span><span>֏${order.total}</span></div>
           </div>
         </div>
         <button class="btn-primary" onclick="restoreCheckoutPage(); window.location.hash='#/shop';">${continueShoppingBtnText}</button>
@@ -4104,7 +4104,7 @@ window.restoreCheckoutPage = function () {
               <label for="shipping-method">Shipping *</label>
               <select id="shipping-method" style="display: none;">
                 <option value="0">Standard Shipping (Free)</option>
-                <option value="15">Express Delivery ($15)</option>
+                <option value="15">Express Delivery (֏15)</option>
               </select>
               <div class="custom-dropdown" id="checkout-shipping-dropdown">
                 <button type="button" class="dropdown-trigger" id="checkout-shipping-trigger">
@@ -4113,7 +4113,7 @@ window.restoreCheckoutPage = function () {
                 </button>
                 <ul class="dropdown-menu" id="checkout-shipping-menu">
                   <li class="dropdown-item active" data-value="0">Standard Shipping (Free)</li>
-                  <li class="dropdown-item" data-value="15">Express Delivery ($15)</li>
+                  <li class="dropdown-item" data-value="15">Express Delivery (֏15)</li>
                 </ul>
               </div>
             </div>
@@ -4137,7 +4137,7 @@ window.restoreCheckoutPage = function () {
           <div style="font-size: 0.9rem; display: flex; flex-direction: column; gap: 8px;">
             <div style="display:flex; justify-content:space-between;">
               <span>Subtotal:</span>
-              <strong id="checkout-subtotal-val">$0</strong>
+              <strong id="checkout-subtotal-val">֏0</strong>
             </div>
             <div style="display:flex; justify-content:space-between;">
               <span>Shipping:</span>
@@ -4145,7 +4145,7 @@ window.restoreCheckoutPage = function () {
             </div>
             <div class="order-summary-total-row">
               <span>Total:</span>
-              <strong id="checkout-total-val" style="font-size: 1.3rem;">$0</strong>
+              <strong id="checkout-total-val" style="font-size: 1.3rem;">֏0</strong>
             </div>
           </div>
         </div>
@@ -4211,7 +4211,7 @@ window.saveProductInventory = function (productId) {
     // Log admin activity
     const session = JSON.parse(sessionStorage.getItem('nova_admin_session'));
     if (session) {
-      logAdminActivity(session.name, `Updated inventory for ${product.name}: Price=$${newPrice}, Stock=${newStock}`);
+      logAdminActivity(session.name, `Updated inventory for ${product.name}: Price=֏${newPrice}, Stock=${newStock}`);
     }
 
     showToast(`UPDATED ${product.name.toUpperCase()} STOCK AND PRICE.`);
@@ -4374,7 +4374,7 @@ function renderSearchDropdown(query, dropdown) {
           <span class="search-result-name">${prod.name}</span>
           <span class="search-result-tagline">${prod.tagline}</span>
         </div>
-        <span class="search-result-price">$${prod.price}</span>
+        <span class="search-result-price">֏${prod.price}</span>
       `;
       dropdown.appendChild(item);
     });
@@ -4640,7 +4640,7 @@ window.renderMyAccount = function() {
               <h4 class="serif-title" style="font-size: 1.1rem;">${prod.name}</h4>
               <p style="font-size: 0.75rem; color: var(--color-medium-gray);">${prod.tagline}</p>
               <div style="display:flex; justify-content:space-between; align-items:center; margin-top:8px;">
-                <strong>$${prod.price}</strong>
+                <strong>֏${prod.price}</strong>
                 ${prod.stock > 0 ? 
                   `<button class="btn-primary" onclick="buyAgain('${prod.id}')" style="font-size:0.65rem; padding: 4px 8px;">Add to Bag</button>` :
                   `<button class="${notifyBtnClass}" onclick="toggleOutofStockNotification('${prod.id}')" style="font-size:0.65rem; padding: 4px 8px;">${notifyBtnText}</button>`
@@ -4861,9 +4861,9 @@ window.renderAuditLogsTable = function() {
         const name = match[1];
         const price = match[2];
         const stock = match[3];
-        actionText = lang === 'am' ? `Թարմացրել է ${name}-ի պաշարը՝ Գին=$${price}, Քանակ=${stock}` :
-                     lang === 'ru' ? `Обновил запасы для ${name}: Цена=$${price}, Количество=${stock}` :
-                     `Updated inventory for ${name}: Price=$${price}, Stock=${stock}`;
+        actionText = lang === 'am' ? `Թարմացրել է ${name}-ի պաշարը՝ Գին=֏${price}, Քանակ=${stock}` :
+                     lang === 'ru' ? `Обновил запасы для ${name}: Цена=֏${price}, Количество=${stock}` :
+                     `Updated inventory for ${name}: Price=֏${price}, Stock=${stock}`;
       }
     } else if (log.action.startsWith("Updated order status of ")) {
       const match = log.action.match(/Updated order status of (.+?) to (.+)/);
