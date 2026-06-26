@@ -3969,6 +3969,31 @@ function renderCheckoutPage() {
   });
 
   updateCheckoutTotals();
+  prefillCheckoutForm();
+}
+
+// Pre-fill checkout form from saved billing info or logged-in user
+function prefillCheckoutForm() {
+  const saved = JSON.parse(localStorage.getItem('nova_billing_info') || 'null');
+  const firstNameEl = document.getElementById('billing-first-name');
+  const lastNameEl = document.getElementById('billing-last-name');
+  const emailEl = document.getElementById('billing-email');
+  const addressEl = document.getElementById('billing-address');
+  const cityEl = document.getElementById('billing-city');
+  const zipEl = document.getElementById('billing-zip');
+
+  if (saved) {
+    if (firstNameEl) firstNameEl.value = saved.firstName || '';
+    if (lastNameEl) lastNameEl.value = saved.lastName || '';
+    if (emailEl) emailEl.value = saved.email || '';
+    if (addressEl) addressEl.value = saved.address || '';
+    if (cityEl) cityEl.value = saved.city || '';
+    if (zipEl) zipEl.value = saved.zip || '';
+  } else if (AppState.customer && AppState.customer.firstName) {
+    if (firstNameEl) firstNameEl.value = AppState.customer.firstName || '';
+    if (lastNameEl) lastNameEl.value = AppState.customer.lastName || '';
+    if (emailEl) emailEl.value = AppState.customer.email || '';
+  }
 }
 
 function updateCheckoutTotals() {
@@ -3997,6 +4022,9 @@ function processCheckout() {
     city: document.getElementById('billing-city').value,
     zip: document.getElementById('billing-zip').value
   };
+
+  // Save billing info to localStorage for next time
+  localStorage.setItem('nova_billing_info', JSON.stringify(customerData));
 
   // Deduct products stocks
   AppState.cart.forEach(item => {
@@ -4091,16 +4119,16 @@ window.restoreCheckoutPage = function () {
             <div class="form-row">
               <div class="form-group">
                 <label for="billing-first-name">First Name *</label>
-                <input type="text" id="billing-first-name" required value="Emma">
+                <input type="text" id="billing-first-name" required placeholder="John">
               </div>
               <div class="form-group">
                 <label for="billing-last-name">Last Name *</label>
-                <input type="text" id="billing-last-name" required value="Watson">
+                <input type="text" id="billing-last-name" required placeholder="Doe">
               </div>
             </div>
             <div class="form-group">
               <label for="billing-email">Email Address *</label>
-              <input type="email" id="billing-email" required value="emma.w@example.com">
+              <input type="email" id="billing-email" required placeholder="john@example.com">
             </div>
             <div class="form-group">
               <label for="billing-address">Street Address *</label>
@@ -4109,11 +4137,11 @@ window.restoreCheckoutPage = function () {
             <div class="form-row">
               <div class="form-group">
                 <label for="billing-city">City *</label>
-                <input type="text" id="billing-city" required value="London">
+                <input type="text" id="billing-city" required placeholder="Yerevan">
               </div>
               <div class="form-group">
                 <label for="billing-zip">ZIP / Postal Code *</label>
-                <input type="text" id="billing-zip" required value="NW1 6XE">
+                <input type="text" id="billing-zip" required placeholder="0000">
               </div>
             </div>
             <div class="form-group">
