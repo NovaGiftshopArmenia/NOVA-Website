@@ -4052,15 +4052,28 @@ function processCheckout() {
 
   // Send purchase confirmation email to customer
   if (typeof emailjs !== 'undefined') {
-    const orderItems = order.items.map(i => `${i.name} (${i.size}) x${i.qty}`).join(', ');
+    const shippingSelect = document.getElementById('shipping-method');
+    const shippingVal = shippingSelect ? parseInt(shippingSelect.value) : 0;
+    const ordersList = order.items.map(i => {
+      const prod = AppState.products.find(p => p.name === i.name);
+      const itemPrice = prod ? prod.price : 0;
+      return {
+        name: i.name,
+        price: `֏${itemPrice}`,
+        qty: i.qty,
+        bunch: i.qty
+      };
+    });
+
     emailjs.send('service_58z9fml', 'template_zpv3fet', {
-      to_email: customerData.email,
-      from_name: `${customerData.firstName} ${customerData.lastName}`,
+      email: customerData.email,
       order_id: order.id,
-      order_date: order.date,
-      order_items: orderItems,
-      order_total: `֏${order.total}`,
-      shipping_address: `${customerData.address}, ${customerData.city}, ${customerData.zip}`
+      orders: ordersList,
+      cost: {
+        shipping: shippingVal === 0 ? 'Free' : `֏${shippingVal}`,
+        tax: '֏0',
+        total: `֏${order.total}`
+      }
     }).catch(err => console.error('Order confirmation email error:', err));
   }
 }
