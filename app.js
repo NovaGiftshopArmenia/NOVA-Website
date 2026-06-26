@@ -1470,9 +1470,9 @@ const PRODUCT_TRANSLATIONS = {
   const contactForm = document.getElementById('contact-us-form');
   if (contactForm) {
     // *** EMAILJS CONFIG — Replace these with your actual EmailJS credentials ***
-    const EMAILJS_PUBLIC_KEY = 'YOUR_PUBLIC_KEY';      // From EmailJS → Account → API Keys
-    const EMAILJS_SERVICE_ID = 'YOUR_SERVICE_ID';      // From EmailJS → Email Services
-    const EMAILJS_TEMPLATE_ID = 'YOUR_TEMPLATE_ID';    // From EmailJS → Email Templates
+    const EMAILJS_PUBLIC_KEY = 'bYE8lSm0rcSBnWLKb';
+    const EMAILJS_SERVICE_ID = 'service_58z9fml';
+    const EMAILJS_TEMPLATE_ID = 'template_0ej17sd';
 
     // Initialize EmailJS
     if (typeof emailjs !== 'undefined') {
