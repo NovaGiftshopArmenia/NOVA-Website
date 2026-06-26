@@ -1501,12 +1501,22 @@ const PRODUCT_TRANSLATIONS = {
           throw new Error('EmailJS not loaded');
         }
 
+        // Send contact email to NOVA
         await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
           from_name: name,
           from_email: email,
           subject: subject,
           message: message,
           to_email: 'novagiftshoparmenia@gmail.com'
+        });
+
+        // Send auto-reply confirmation to the user
+        await emailjs.send(EMAILJS_SERVICE_ID, 'template_2m07amf', {
+          from_name: name,
+          from_email: email,
+          subject: subject,
+          message: message,
+          to_email: email
         });
 
         // Success
