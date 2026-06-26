@@ -1549,7 +1549,7 @@ const DEFAULT_INSTAGRAM_POSTS = [
   {
     id: "insta-post-1",
     username: "nova_giftshop",
-    avatar: "assets/logo-favicon.png",
+    avatar: "assets/Favicon.svg",
     location: "Grasse, France",
     caption: "Santal N°01 captures the raw elegance of the Australian outback. Distilled in copper columns. ✨",
     date: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
@@ -1559,7 +1559,7 @@ const DEFAULT_INSTAGRAM_POSTS = [
   {
     id: "insta-post-2",
     username: "nova_giftshop",
-    avatar: "assets/logo-favicon.png",
+    avatar: "assets/Favicon.svg",
     location: "Kyoto, Japan",
     caption: "A delicate dance of cherry blossom and soft cashmere musk. Fleur de Cerisier is Kyoto in springtime. 🌸",
     date: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
@@ -1569,7 +1569,7 @@ const DEFAULT_INSTAGRAM_POSTS = [
   {
     id: "insta-post-3",
     username: "nova_giftshop",
-    avatar: "assets/logo-favicon.png",
+    avatar: "assets/Favicon.svg",
     location: "Amalfi, Italy",
     caption: "A sun-drenched explosion of Sicilian bergamot and salted sea air. Agrumes Frais in hand. 🍋",
     date: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
@@ -1579,7 +1579,7 @@ const DEFAULT_INSTAGRAM_POSTS = [
   {
     id: "insta-post-4",
     username: "nova_giftshop",
-    avatar: "assets/logo-favicon.png",
+    avatar: "assets/Favicon.svg",
     location: "Paris, France",
     caption: "Give the gift of olfactory poetry. Our signature discovery set wrapped in sustainable linen. 🎁",
     date: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
@@ -1589,7 +1589,7 @@ const DEFAULT_INSTAGRAM_POSTS = [
   {
     id: "insta-post-5",
     username: "nova_giftshop",
-    avatar: "assets/logo-favicon.png",
+    avatar: "assets/Favicon.svg",
     location: "London, United Kingdom",
     caption: "Pure botanical ingredients gathered from sustainable sources worldwide. Raw luxury. 🌿",
     date: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
@@ -1599,7 +1599,7 @@ const DEFAULT_INSTAGRAM_POSTS = [
   {
     id: "insta-post-6",
     username: "nova_giftshop",
-    avatar: "assets/logo-favicon.png",
+    avatar: "assets/Favicon.svg",
     location: "Santorini, Greece",
     caption: "An opulent, velvet blanket of golden amber and toasted spices at the golden hour. 🌅",
     date: new Date(Date.now() - 8 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
@@ -1609,7 +1609,7 @@ const DEFAULT_INSTAGRAM_POSTS = [
   {
     id: "insta-post-7",
     username: "nova_giftshop",
-    avatar: "assets/logo-favicon.png",
+    avatar: "assets/Favicon.svg",
     location: "Milan, Italy",
     caption: "Every spray is a living composition that evolves on the skin over several hours. 💫",
     date: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
@@ -1619,7 +1619,7 @@ const DEFAULT_INSTAGRAM_POSTS = [
   {
     id: "insta-post-8",
     username: "nova_giftshop",
-    avatar: "assets/logo-favicon.png",
+    avatar: "assets/Favicon.svg",
     location: "St. Tropez, France",
     caption: "Bracingly fresh Vétiver Blanc. The olfactive equivalent of a tailored white shirt. 🌊",
     date: new Date(Date.now() - 12 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
