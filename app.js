@@ -1510,15 +1510,6 @@ const PRODUCT_TRANSLATIONS = {
           to_email: 'novagiftshoparmenia@gmail.com'
         });
 
-        // Send auto-reply confirmation to the user
-        await emailjs.send(EMAILJS_SERVICE_ID, 'template_2m07amf', {
-          from_name: name,
-          from_email: email,
-          subject: subject,
-          message: message,
-          to_email: email
-        });
-
         // Success
         let successMsg = 'THANK YOU FOR CONTACTING NOVA. OUR CONCIERGE WILL REPLY WITHIN 24 HOURS.';
         if (AppState.language === 'am') {
