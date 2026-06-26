@@ -1466,18 +1466,16 @@ const PRODUCT_TRANSLATIONS = {
   }
 };
 
+// EmailJS Global Init
+if (typeof emailjs !== 'undefined') {
+  emailjs.init('bYE8lSm0rcSBnWLKb');
+}
+
 // Contact form submission via EmailJS
   const contactForm = document.getElementById('contact-us-form');
   if (contactForm) {
-    // *** EMAILJS CONFIG — Replace these with your actual EmailJS credentials ***
-    const EMAILJS_PUBLIC_KEY = 'bYE8lSm0rcSBnWLKb';
     const EMAILJS_SERVICE_ID = 'service_58z9fml';
     const EMAILJS_TEMPLATE_ID = 'template_0ej17sd';
-
-    // Initialize EmailJS
-    if (typeof emailjs !== 'undefined') {
-      emailjs.init(EMAILJS_PUBLIC_KEY);
-    }
 
     contactForm.addEventListener('submit', async (e) => {
       e.preventDefault();
