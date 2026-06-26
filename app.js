@@ -126,6 +126,8 @@ const TRANSLATIONS = {
     footer_nav_title: "Նավարկություն",
     footer_shop_link: "Խանութ",
     footer_families_title: "Բույրերի Ընտանիքներ",
+    footer_pages_title: "Էջեր",
+    footer_follow_title: "Հետևեք Մեզ",
     footer_newsletter_title: "Լրատու",
     footer_newsletter_desc: "Բաժանորդագրվեք՝ նոր սեզոնային թորումների մասին տեղեկություններ ստանալու համար:",
     footer_rights: "&copy; 2026 NOVA Inc. Բոլոր իրավունքները պաշտպանված են:",
@@ -539,6 +541,8 @@ const TRANSLATIONS = {
     footer_nav_title: "Навигация",
     footer_shop_link: "Каталог",
     footer_families_title: "Семейства Ароматов",
+    footer_pages_title: "Страницы",
+    footer_follow_title: "Подписывайтесь",
     footer_newsletter_title: "Подписка",
     footer_newsletter_desc: "Подпишитесь, чтобы получать уведомления о новых сезонных выпусках.",
     footer_rights: "&copy; 2026 NOVA Inc. Все права защищены.",
@@ -952,6 +956,8 @@ const TRANSLATIONS = {
     footer_nav_title: "Navigation",
     footer_shop_link: "Shop Collection",
     footer_families_title: "Olfactory Families",
+    footer_pages_title: "Pages",
+    footer_follow_title: "Follow Us",
     footer_newsletter_title: "Newsletter",
     footer_newsletter_desc: "Subscribe to receive previews of new seasonal distillations.",
     footer_rights: "&copy; 2026 NOVA Inc. All rights reserved.",
@@ -1459,6 +1465,75 @@ const PRODUCT_TRANSLATIONS = {
     }
   }
 };
+
+// Contact form submission via EmailJS
+  const contactForm = document.getElementById('contact-us-form');
+  if (contactForm) {
+    // *** EMAILJS CONFIG — Replace these with your actual EmailJS credentials ***
+    const EMAILJS_PUBLIC_KEY = 'YOUR_PUBLIC_KEY';      // From EmailJS → Account → API Keys
+    const EMAILJS_SERVICE_ID = 'YOUR_SERVICE_ID';      // From EmailJS → Email Services
+    const EMAILJS_TEMPLATE_ID = 'YOUR_TEMPLATE_ID';    // From EmailJS → Email Templates
+
+    // Initialize EmailJS
+    if (typeof emailjs !== 'undefined') {
+      emailjs.init(EMAILJS_PUBLIC_KEY);
+    }
+
+    contactForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const submitBtn = contactForm.querySelector('button[type="submit"]');
+      const originalText = submitBtn.innerText;
+
+      // Get form values
+      const name = document.getElementById('contact-name').value.trim();
+      const email = document.getElementById('contact-email').value.trim();
+      const subject = document.getElementById('contact-subject').value.trim();
+      const message = document.getElementById('contact-message').value.trim();
+
+      // Show loading state
+      submitBtn.disabled = true;
+      submitBtn.innerText = AppState.language === 'am' ? '\u0548\u0552\u0542\u0531\u054C\u053F\u054E\u0548\u0552\u0544 \u0537...' :
+                            AppState.language === 'ru' ? '\u041E\u0422\u041F\u0420\u0410\u0412\u041A\u0410...' : 'SENDING...';
+
+      try {
+        if (typeof emailjs === 'undefined') {
+          throw new Error('EmailJS not loaded');
+        }
+
+        await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+          from_name: name,
+          from_email: email,
+          subject: subject,
+          message: message,
+          to_email: 'novagiftshoparmenia@gmail.com'
+        });
+
+        // Success
+        let successMsg = 'THANK YOU FOR CONTACTING NOVA. OUR CONCIERGE WILL REPLY WITHIN 24 HOURS.';
+        if (AppState.language === 'am') {
+          successMsg = '\u0547\u0546\u0548\u054c\u0540\u0531\u053f\u0531\u053c\u0548\u0552\u0539\u0545\u0548\u0552\u0546 NOVA-\u053b\u0546 \u0534\u053b\u0544\u0535\u053c\u0548\u0552 \u0540\u0531\u0544\u0531\u0550\u0589 \u0544\u0535\u054c \u053f\u0548\u0546\u054d\u0545\u0535\u054c\u053e\u0538 \u053f\u054a\u0531\u054f\u0531\u054d\u053d\u0531\u0546\u053b 24 \u053a\u0531\u0544\u054e\u0531 \u0538\u0546\u0539\u0531\u0551\u0554\u0548\u0552\u0544\u0589';
+        } else if (AppState.language === 'ru') {
+          successMsg = '\u0421\u041f\u0410\u0421\u0418\u0411\u041e \u0417\u0410 \u041e\u0411\u0420\u0410\u0429\u0415\u041d\u0418\u0415 \u0412 NOVA. \u041d\u0410\u0428 \u041a\u041e\u041d\u0421\u042c\u0415\u0420\u0416 \u041e\u0422\u0412\u0415\u0422\u0418\u0422 \u0412 \u0422\u0415\u0427\u0415\u041d\u0418\u0415 24 \u0427\u0410\u0421\u041e\u0412.';
+        }
+        showToast(successMsg);
+        contactForm.reset();
+      } catch (error) {
+        console.error('EmailJS Error:', error);
+        let errorMsg = 'SORRY, SOMETHING WENT WRONG. PLEASE TRY AGAIN OR EMAIL US DIRECTLY.';
+        if (AppState.language === 'am') {
+          errorMsg = '\u0546\u0535\u054c\u0548\u0542\u0548\u0552\u0539\u0545\u0548\u0552\u0546 \u0540\u0531\u0545\u0531\u054c\u0589 \u053d\u0546\u0534\u054c\u0565\u056c \u0553\u0578\u0580\u0571\u0565\u056c \u056f\u0580\u056f\u056b\u0576\u0589';
+        } else if (AppState.language === 'ru') {
+          errorMsg = '\u0418\u0417\u0412\u0418\u041d\u0418\u0422\u0415, \u041f\u0420\u041e\u0418\u0417\u041e\u0428\u041b\u0410 \u041e\u0428\u0418\u0411\u041a\u0410. \u041f\u041e\u041f\u0420\u041e\u0411\u0423\u0419\u0422\u0415 \u0415\u0429\u0401 \u0420\u0410\u0417.';
+        }
+        showToast(errorMsg);
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerText = originalText;
+      }
+    });
+  }
+
 // DEFAULT MOCK INSTAGRAM FEED SEED DATA
 const DEFAULT_INSTAGRAM_POSTS = [
   {
@@ -2279,23 +2354,6 @@ function initEventListeners() {
     });
   }
 
-  // Contact form submission listener
-  const contactForm = document.getElementById('contact-us-form');
-  if (contactForm) {
-    contactForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-
-      let successMsg = "THANK YOU FOR CONTACTING NOVA. OUR CONCIERGE WILL REPLY WITHIN 24 HOURS.";
-      if (AppState.language === 'am') {
-        successMsg = "ՇՆՈՐՀԱԿԱԼՈՒԹՅՈՒՆ NOVA-ԻՆ ԴԻՄԵԼՈՒ ՀԱՄԱՐ։ ՄԵՐ ԿՈՆՍՅԵՐԺԸ ԿՊԱՏԱՍԽԱՆԻ 24 ԺԱՄՎԱ ԸՆԹԱՑՔՈՒՄ։";
-      } else if (AppState.language === 'ru') {
-        successMsg = "СПАСИБО ЗА ОБРАЩЕНИЕ В NOVA. НАШ КОНСЬЕРЖ ОТВЕТИТ В ТЕЧЕНИЕ 24 ЧАСОВ.";
-      }
-
-      showToast(successMsg);
-      contactForm.reset();
-    });
-  }
 }
 
 // RENDER FEATURED PRODUCTS ON HOME PAGE
