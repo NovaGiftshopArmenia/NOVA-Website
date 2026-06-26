@@ -4051,6 +4051,20 @@ function processCheckout() {
       </div>
     </div>
   `;
+
+  // Send purchase confirmation email to customer
+  if (typeof emailjs !== 'undefined') {
+    const orderItems = order.items.map(i => `${i.name} (${i.size}) x${i.qty}`).join(', ');
+    emailjs.send('service_58z9fml', 'template_zpv3fet', {
+      to_email: customerData.email,
+      from_name: `${customerData.firstName} ${customerData.lastName}`,
+      order_id: order.id,
+      order_date: order.date,
+      order_items: orderItems,
+      order_total: `֏${order.total}`,
+      shipping_address: `${customerData.address}, ${customerData.city}, ${customerData.zip}`
+    }).catch(err => console.error('Order confirmation email error:', err));
+  }
 }
 
 // Restore default checkout page format after success screen
