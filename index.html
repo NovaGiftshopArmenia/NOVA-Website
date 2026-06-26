@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>NOVA | Elegant Minimalist Perfumery WooCommerce Demo</title>
   <meta name="description" content="Explore NOVA, an elegant and minimalist luxury perfumery. Experience high-end olfactory creations and seamless WooCommerce-style shopping.">
-  <link rel="stylesheet" href="styles.css?v=28">
+  <link rel="stylesheet" href="styles.css?v=29">
   <link rel="icon" type="image/png" href="assets/logo-favicon.png?v=4">
 </head>
 <body>
@@ -270,9 +270,9 @@
           </div>
         </div>
         <div class="hero-image-container">
-          <img src="assets/hero.png" alt="Slide 1" class="hero-image">
-          <img src="assets/santal.png" alt="Slide 2" class="hero-image">
-          <img src="assets/fleur.png" alt="Slide 3" class="hero-image">
+          <img src="assets/hero.webp" alt="Slide 1" class="hero-image">
+          <img src="assets/santal.webp" alt="Slide 2" class="hero-image">
+          <img src="assets/fleur.webp" alt="Slide 3" class="hero-image">
         </div>
         
         <div class="hero-favicon-circle">
@@ -345,22 +345,22 @@
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
             </svg>
-            <h3 class="promise-title" data-trans="promise_title_1" data-trans="promise_title_1">Small Batch Distilled</h3>
-            <p class="promise-desc" data-trans="promise_desc_1" data-trans="promise_desc_1">Carefully brewed and aged in copper columns to preserve botanical integrity.</p>
+            <h3 class="promise-title" data-trans="promise_title_1">Exclusively Curated Collections</h3>
+            <p class="promise-desc" data-trans="promise_desc_1">Expertly curated selection of the world's most prestigious, rare, and authentic designer perfumes in Armenia.</p>
           </div>
           <div class="promise-item">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
             </svg>
-            <h3 class="promise-title" data-trans="promise_title_2" data-trans="promise_title_2">Vegan & Cruelty Free</h3>
-            <p class="promise-desc" data-trans="promise_desc_2" data-trans="promise_desc_2">Formulated entirely without animal derivatives. Never tested on animals.</p>
+            <h3 class="promise-title" data-trans="promise_title_2">Long-Lasting Signature Scents</h3>
+            <p class="promise-desc" data-trans="promise_desc_2">Hand-selected niche fragrance collections with masterful oil concentrations, ensuring a breathtaking, long-lasting signature scent.</p>
           </div>
           <div class="promise-item">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
             </svg>
-            <h3 class="promise-title" data-trans="promise_title_3" data-trans="promise_title_3">Sustainable Linens</h3>
-            <p class="promise-desc" data-trans="promise_desc_3" data-trans="promise_desc_3">100% biodegradable FSC certified packaging, cotton labels and recyclable glass bottles.</p>
+            <h3 class="promise-title" data-trans="promise_title_3">Sustainable Packaging</h3>
+            <p class="promise-desc" data-trans="promise_desc_3">Eco-friendly perfume packaging featuring 100% biodegradable FSC boxes, cotton labels, and recyclable glass bottles.</p>
           </div>
         </div>
       </div>
@@ -421,7 +421,7 @@
           <div class="icon-categories-grid">
             
             <!-- Men -->
-            <a href="#/shop" onclick="AppState.filters.gender='Men'; renderShop();" class="icon-category-card">
+            <a href="#/shop" onclick="event.preventDefault(); applyPresetFilter('gender', 'men');" class="icon-category-card">
               <div class="icon-wrapper">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M10 14a5 5 0 100-10 5 5 0 000 10zm0 0l9 9m0 0v-5m0 5h-5" />
@@ -431,7 +431,7 @@
             </a>
 
             <!-- Women -->
-            <a href="#/shop" onclick="AppState.filters.gender='Women'; renderShop();" class="icon-category-card">
+            <a href="#/shop" onclick="event.preventDefault(); applyPresetFilter('gender', 'women');" class="icon-category-card">
               <div class="icon-wrapper">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M12 15a5 5 0 100-10 5 5 0 000 10zm0 0v7m-3-3h6" />
@@ -441,7 +441,7 @@
             </a>
 
             <!-- Gifts -->
-            <a href="#/shop" onclick="AppState.filters.tag='Gift'; renderShop();" class="icon-category-card">
+            <a href="#/shop" onclick="event.preventDefault(); applyPresetFilter('tag', 'Gift');" class="icon-category-card">
               <div class="icon-wrapper">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7" />
@@ -451,7 +451,7 @@
             </a>
 
             <!-- Best Sellers -->
-            <a href="#/shop" onclick="AppState.filters.tag='Best Seller'; renderShop();" class="icon-category-card">
+            <a href="#/shop" onclick="event.preventDefault(); applyPresetFilter('tag', 'Best Seller');" class="icon-category-card">
               <div class="icon-wrapper">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
@@ -460,18 +460,18 @@
               <span class="icon-category-title" data-trans="cat_bestsellers">Best Sellers</span>
             </a>
 
-            <!-- New Products -->
-            <a href="#/shop" onclick="AppState.filters.tag='New'; renderShop();" class="icon-category-card">
+            <!-- New Arrivals -->
+            <a href="#/shop" onclick="event.preventDefault(); applyPresetFilter('tag', 'New');" class="icon-category-card">
               <div class="icon-wrapper">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
                 </svg>
               </div>
-              <span class="icon-category-title" data-trans="cat_new">New Products</span>
+              <span class="icon-category-title" data-trans="cat_new">New Arrivals</span>
             </a>
 
             <!-- For Home -->
-            <a href="#/shop" onclick="AppState.filters.category='Home'; renderShop();" class="icon-category-card">
+            <a href="#/shop" onclick="event.preventDefault(); applyPresetFilter('tag', 'Home');" class="icon-category-card">
               <div class="icon-wrapper">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
@@ -581,8 +581,8 @@
             </div>
             <!-- Right side: Content -->
             <div class="video-showcase-right">
-              <h2 class="serif-title video-showcase-title" data-trans="home_video_title">The Art of Slow Distillation</h2>
-              <p class="video-showcase-text" data-trans="home_video_paragraph">Every drop of NOVA is a result of a meticulous small-batch distillation process. We source the finest hand-picked botanicals and mature them in traditional copper columns to preserve their organic integrity, creating an evolving sensory journey on your skin.</p>
+              <h2 class="serif-title video-showcase-title" data-trans="home_video_title">The Art of Rare Curation</h2>
+              <p class="video-showcase-text" data-trans="home_video_paragraph">Every drop of <strong>Nova</strong> is a masterpiece of precision and luxury. We source the world's finest premium ingredients, seamlessly blending rare elements to create an evolving sensory journey on your skin. As a premier niche fragrance brand in Armenia, Nova doesn't just offer a scent—it crafts an unforgettable identity that lingers beautifully.</p>
               <a href="#/about" class="btn btn-primary video-showcase-btn" data-trans="home_video_cta">Learn More</a>
             </div>
           </div>
@@ -833,7 +833,7 @@
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width:16px; height:16px;">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><circle cx="12" cy="12" r="3"/>
                 </svg>
-                <span data-trans="admin_nav_dev">Developer Settings</span>
+                <span>Settings</span>
               </div>
               <div class="admin-nav-item" data-admin-tab="clients">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width:16px; height:16px;">
@@ -928,8 +928,19 @@
               <!-- B. INVENTORY TAB PANEL -->
               <div id="admin-sec-inventory" class="admin-panel-sub hidden">
                 <div class="admin-card">
-                  <h3 class="admin-card-title" data-trans="admin_inventory_title">WooCommerce Inventory & Price Control</h3>
-                  <p style="font-size:0.8rem; color:var(--color-medium-gray); margin-bottom:16px;" data-trans="admin_inventory_desc">Edit prices and quantity stock levels. Click "Update" to apply to storefront immediately.</p>
+                  <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom: 16px; flex-wrap:wrap; gap:12px;">
+                    <div>
+                      <h3 class="admin-card-title" style="margin-bottom:4px;" data-trans="admin_inventory_title">WooCommerce Inventory & Price Control</h3>
+                      <p style="font-size:0.8rem; color:var(--color-medium-gray); margin:0;" data-trans="admin_inventory_desc">Edit prices and quantity stock levels. Click "Update" to apply to storefront immediately.</p>
+                    </div>
+                    <button class="btn-primary" onclick="openNewProductModal()" style="padding:8px 18px; font-size:0.75rem; white-space:nowrap; display:flex; align-items:center; gap:6px;">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width:14px; height:14px;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                      Add New Product
+                    </button>
+                  </div>
+                  <div style="margin-bottom:16px;">
+                    <input type="text" id="admin-inventory-search" placeholder="Search products by name or brand..." class="admin-input" style="width:100%; max-width:360px; border:1px solid var(--color-border); border-radius:4px; padding:8px 12px; font-size:0.8rem; background-color: var(--color-white);" oninput="filterInventoryTable(this.value)">
+                  </div>
                   <div class="admin-table-wrap">
                     <table class="admin-table text-left">
                       <thead>
@@ -954,97 +965,28 @@
               <!-- C. DEVELOPER SETTINGS PANEL (Restricted for Shop Managers) -->
               <div id="admin-sec-developer" class="admin-panel-sub hidden">
                 <div class="admin-card">
-                  <h3 class="serif-title" style="font-size: 1.5rem; margin-bottom: 8px;" data-trans="admin_dev_title">Developer & System Settings</h3>
-                  <p style="font-size: 0.85rem; color: var(--color-medium-gray); margin-bottom: 24px;" data-trans="admin_dev_desc">Manage platform configurations, core extensions, payment gateways, and staff security credentials.</p>
+                  <h3 class="serif-title" style="font-size: 1.5rem; margin-bottom: 8px;">Admin Access Management</h3>
+                  <p style="font-size: 0.85rem; color: var(--color-medium-gray); margin-bottom: 24px;">Grant or revoke WooCommerce admin panel access by email. Only the super admin can manage access.</p>
                   
-                  <div class="admin-developer-grid">
-                    <!-- Plugins and Payment Gateways -->
-                    <div style="display: flex; flex-direction: column; gap: 24px;">
-                      <!-- Core Plugins Installer -->
-                      <div class="admin-subcard" style="border: 1px solid var(--color-border); padding: 18px; border-radius: 6px; background-color: var(--color-white);">
-                        <h4 class="serif-title" style="font-size: 1.15rem; margin-bottom: 12px;" data-trans="admin_dev_plugins">Core Extensions & Plugins</h4>
-                        <div style="display: flex; flex-direction: column; gap: 12px;" id="admin-plugins-container">
-                          <!-- Simulated plugin updates -->
-                          <div style="display:flex; justify-content:space-between; align-items:center; font-size:0.8rem;">
-                            <span data-trans="plugin_pdf_label">WooCommerce PDF Invoices (v2.1)</span>
-                            <button id="plugin-btn-pdf" class="btn-primary" onclick="simulatePluginInstall('pdf')" style="font-size:0.65rem; padding: 6px 12px;" data-trans="admin_btn_install">Install</button>
-                          </div>
-                          <div style="display:flex; justify-content:space-between; align-items:center; font-size:0.8rem; border-top:1px solid var(--color-light-gray); padding-top:10px;">
-                            <span data-trans="plugin_subs_label">WooCommerce Subscriptions (v4.0)</span>
-                            <button id="plugin-btn-subs" class="btn-primary" onclick="simulatePluginInstall('subs')" style="font-size:0.65rem; padding: 6px 12px;" data-trans="admin_btn_install">Install</button>
-                          </div>
-                        </div>
-                      </div>
 
-                      <!-- Payment Gateways Configuration -->
-                      <div class="admin-subcard" style="border: 1px solid var(--color-border); padding: 18px; border-radius: 6px; background-color: var(--color-white);">
-                        <h4 class="serif-title" style="font-size: 1.15rem; margin-bottom: 12px;" data-trans="admin_dev_gateways">Payment Gateways</h4>
-                        <div style="display: flex; flex-direction: column; gap: 12px;">
-                          <div style="display:flex; justify-content:space-between; align-items:center; font-size:0.8rem;">
-                            <span data-trans="gateway_stripe_label">Stripe Checkout Integration</span>
-                            <input type="checkbox" id="gateway-stripe" checked onchange="togglePaymentGateway('Stripe', this.checked)">
-                          </div>
-                          <div style="display:flex; justify-content:space-between; align-items:center; font-size:0.8rem; border-top:1px solid var(--color-light-gray); padding-top:10px;">
-                            <span data-trans="gateway_paypal_label">PayPal Standard Express</span>
-                            <input type="checkbox" id="gateway-paypal" checked onchange="togglePaymentGateway('PayPal', this.checked)">
-                          </div>
-                          <div style="display:flex; justify-content:space-between; align-items:center; font-size:0.8rem; border-top:1px solid var(--color-light-gray); padding-top:10px;">
-                            <span data-trans="gateway_cod_label">Cash on Delivery (COD)</span>
-                            <input type="checkbox" id="gateway-cod" checked onchange="togglePaymentGateway('Cash on Delivery', this.checked)">
-                          </div>
-                        </div>
+                  <!-- Grant Admin Access by Email -->
+                  <div class="admin-subcard" style="border: 1px solid var(--color-border); padding: 18px; border-radius: 6px; background-color: var(--color-white);">
+                    <h4 class="serif-title" style="font-size: 1.15rem; margin-bottom: 12px;">Grant Admin Access</h4>
+                    <form onsubmit="event.preventDefault(); const input = document.getElementById('grant-admin-email'); grantAdminAccess(input.value); input.value = '';" style="margin-bottom: 16px;">
+                      <div style="display: flex; gap: 8px;">
+                        <input type="email" id="grant-admin-email" placeholder="Enter email to grant admin access" required class="admin-input" style="flex:1; border:1px solid var(--color-border); border-radius:4px; padding:8px; font-size:0.8rem; background-color: var(--color-white);">
+                        <button type="submit" class="btn-primary" style="padding:8px 16px; font-size:0.7rem; white-space:nowrap;">Grant Access</button>
                       </div>
+                    </form>
+
+                    <div id="admin-access-list">
+                      <!-- Populated dynamically -->
                     </div>
-
-                    <!-- Staff Profiles Manager -->
-                    <div class="admin-subcard" style="border: 1px solid var(--color-border); padding: 18px; border-radius: 6px; background-color: var(--color-white);">
-                      <h4 class="serif-title" style="font-size: 1.15rem; margin-bottom: 12px;" data-trans="admin_dev_staff_manager">Staff Profiles Manager</h4>
-                      <p style="font-size:0.75rem; color:var(--color-medium-gray); margin-bottom:12px;" data-trans="admin_dev_staff_desc">Register or revoke backend access credentials for staff managers.</p>
-                      
-                      <!-- Add Staff Profile form -->
-                      <form id="admin-create-staff-form" onsubmit="handleCreateStaffProfile(event)" style="margin-bottom: 16px;">
-                        <div style="display: flex; gap: 8px;">
-                          <input type="text" id="new-staff-name" placeholder="Name (e.g. Elena)" required class="admin-input" style="flex:1; border:1px solid var(--color-border); border-radius:4px; padding:8px; font-size:0.8rem; background-color: var(--color-white);">
-                          <button type="submit" class="btn-primary" style="padding:8px 16px; font-size:0.7rem;" data-trans="admin_btn_create_profile">Create Profile</button>
-                        </div>
-                      </form>
-
-                      <div class="admin-table-wrap" style="max-height: 200px; overflow-y: auto;">
-                        <table class="admin-table text-left" style="font-size:0.75rem;">
-                          <thead>
-                            <tr>
-                              <th data-trans="admin_th_staff_name">Staff Name</th>
-                              <th data-trans="admin_th_role">Role</th>
-                              <th data-trans="admin_th_actions">Actions</th>
-                            </tr>
-                          </thead>
-                          <tbody id="admin-staff-tbody">
-                            <!-- Populated dynamically via JS -->
-                          </tbody>
-                        </table>
-                      </div>
-                    </div>
-
-                    <!-- Admin Access Management -->
-                    <div class="admin-subcard" style="border: 1px solid var(--color-border); padding: 18px; border-radius: 6px; background-color: var(--color-white); grid-column: 1 / -1;">
-                      <h4 class="serif-title" style="font-size: 1.15rem; margin-bottom: 4px;">Admin Access Management</h4>
-                      <p style="font-size:0.75rem; color:var(--color-medium-gray); margin-bottom:16px;">Grant or revoke WooCommerce admin panel access to registered users. Only the super admin can manage this.</p>
-                      
-                      <form onsubmit="event.preventDefault(); const input = document.getElementById('grant-admin-email'); grantAdminAccess(input.value); input.value = '';" style="margin-bottom: 16px;">
-                        <div style="display: flex; gap: 8px;">
-                          <input type="email" id="grant-admin-email" placeholder="Enter email to grant admin access" required class="admin-input" style="flex:1; border:1px solid var(--color-border); border-radius:4px; padding:8px; font-size:0.8rem; background-color: var(--color-white);">
-                          <button type="submit" class="btn-primary" style="padding:8px 16px; font-size:0.7rem; white-space:nowrap;">Grant Access</button>
-                        </div>
-                      </form>
-
-                      <div id="admin-access-list">
-                        <!-- Populated dynamically -->
-                      </div>
-                    </div>
-
                   </div>
+
                 </div>
               </div>
+
 
               <!-- D. ACTIVITY LOGS PANEL -->
               <div id="admin-sec-logs" class="admin-panel-sub hidden">
@@ -1221,6 +1163,43 @@
                 </div>
               </div>
               
+              <!-- Tags, Vibes, Rating, Featured — full-width below the two columns -->
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 14px;">
+                <div class="form-group">
+                  <label style="font-size:0.7rem; text-transform:uppercase; color:var(--color-medium-gray); display:block; margin-bottom:6px;">Tags</label>
+                  <div style="display:flex; flex-wrap:wrap; gap:10px;">
+                    <label style="font-size:0.75rem; display:flex; align-items:center; gap:4px; cursor:pointer;"><input type="checkbox" id="modal-tag-bestseller" value="Best Seller"> Best Seller</label>
+                    <label style="font-size:0.75rem; display:flex; align-items:center; gap:4px; cursor:pointer;"><input type="checkbox" id="modal-tag-new" value="New"> New</label>
+                    <label style="font-size:0.75rem; display:flex; align-items:center; gap:4px; cursor:pointer;"><input type="checkbox" id="modal-tag-gift" value="Gift"> Gift</label>
+                    <label style="font-size:0.75rem; display:flex; align-items:center; gap:4px; cursor:pointer;"><input type="checkbox" id="modal-tag-home" value="Home"> Home</label>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label style="font-size:0.7rem; text-transform:uppercase; color:var(--color-medium-gray); display:block; margin-bottom:6px;">Vibes</label>
+                  <div style="display:flex; flex-wrap:wrap; gap:10px;">
+                    <label style="font-size:0.75rem; display:flex; align-items:center; gap:4px; cursor:pointer;"><input type="checkbox" id="modal-vibe-romantic" value="romantic"> Romantic</label>
+                    <label style="font-size:0.75rem; display:flex; align-items:center; gap:4px; cursor:pointer;"><input type="checkbox" id="modal-vibe-daily" value="daily"> Daily</label>
+                    <label style="font-size:0.75rem; display:flex; align-items:center; gap:4px; cursor:pointer;"><input type="checkbox" id="modal-vibe-professional" value="professional"> Business</label>
+                    <label style="font-size:0.75rem; display:flex; align-items:center; gap:4px; cursor:pointer;"><input type="checkbox" id="modal-vibe-cozy" value="cozy"> Cozy</label>
+                    <label style="font-size:0.75rem; display:flex; align-items:center; gap:4px; cursor:pointer;"><input type="checkbox" id="modal-vibe-mysterious" value="mysterious"> Mysterious</label>
+                  </div>
+                </div>
+              </div>
+              <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 10px;">
+                <div class="form-group">
+                  <label for="modal-product-rating" style="font-size:0.7rem; text-transform:uppercase; color:var(--color-medium-gray); display:block; margin-bottom:4px;">Rating (0-5)</label>
+                  <input type="number" id="modal-product-rating" min="0" max="5" step="0.1" class="admin-input" style="width:100%; border:1px solid var(--color-border); padding:8px; border-radius:4px; background:var(--color-white);">
+                </div>
+                <div class="form-group">
+                  <label for="modal-product-reviews" style="font-size:0.7rem; text-transform:uppercase; color:var(--color-medium-gray); display:block; margin-bottom:4px;">Reviews Count</label>
+                  <input type="number" id="modal-product-reviews" min="0" class="admin-input" style="width:100%; border:1px solid var(--color-border); padding:8px; border-radius:4px; background:var(--color-white);">
+                </div>
+                <div class="form-group" style="display:flex; align-items:center; gap:8px; padding-top:18px;">
+                  <input type="checkbox" id="modal-product-featured">
+                  <label for="modal-product-featured" style="font-size:0.75rem; cursor:pointer;">Featured Product</label>
+                </div>
+              </div>
+              
               <div class="modal-form-actions" style="margin-top: 24px; display: flex; justify-content: flex-end; gap: 12px; border-top:1px solid var(--color-border); padding-top:16px;">
                 <button type="button" class="btn-secondary" onclick="closeDetailedProductModal(event)" style="padding: 8px 16px; font-size:0.8rem;" data-trans="modal_btn_cancel">Cancel</button>
                 <button type="submit" class="btn-primary" style="padding: 8px 20px; font-size:0.8rem;" data-trans="modal_btn_save">Save Changes</button>
@@ -1249,25 +1228,9 @@
         <div class="about-hero-grid">
           <!-- Text column -->
           <div class="about-story-hero-content">
-            <h1 class="serif-title about-first-heading" data-trans="about_story_title">Our Origin & Philosophy</h1>
-            <p class="body-text about-lead" data-trans="about_lead">An architectural study of pure botanical scents, handcrafted for the modern aesthetic enthusiast.</p>
-            <p class="body-text" data-trans="about_story_desc">NOVA was born from a singular obsession: the desire to find uncompromising, transparent, and breathtaking fragrances in a market flooded with generic designer scents. What started as a private collection of botanical extracts has evolved into a sanctuary for those who appreciate the poetry of perfume. We believe that scent is the most intimate form of memory.</p>
-            
-            <!-- Mini Pillars Grid inside Hero -->
-            <div class="about-hero-stats">
-              <div class="stat-item">
-                <span class="stat-number">100%</span>
-                <span class="stat-label" data-trans="stat_botanical">Pure Botanical</span>
-              </div>
-              <div class="stat-item">
-                <span class="stat-number">Copper</span>
-                <span class="stat-label" data-trans="stat_batch">Batch Distilled</span>
-              </div>
-              <div class="stat-item">
-                <span class="stat-number">Zero</span>
-                <span class="stat-label" data-trans="stat_synthetic">Synthetics</span>
-              </div>
-            </div>
+            <h1 class="serif-title about-first-heading" data-trans="about_story_title">Our Beginning</h1>
+            <p class="body-text" data-trans="about_story_desc">NOVA was born from a singular obsession: to discover uncompromising, rare, and breathtaking scents in a market flooded with mass-produced options. What started as a private curation of the world's finest global fragrances has evolved into a premier sanctuary for those who appreciate the true artistry of niche perfumery.</p>
+
 
             <div class="about-hero-actions">
               <a href="#/shop" class="btn btn-primary" data-trans="explore_fragrances">Explore Fragrances</a>
@@ -1279,13 +1242,13 @@
           <div class="about-hero-gallery">
             <div class="gallery-bg-glow"></div>
             <div class="gallery-img-wrapper img-wrapper-large">
-              <img src="assets/hero.png" alt="Olfactory Distillation" class="gallery-img">
+              <img src="assets/hero.webp" alt="Olfactory Distillation" class="gallery-img">
             </div>
             <div class="gallery-img-wrapper img-wrapper-medium">
-              <img src="assets/santal.png" alt="Santal Distillation" class="gallery-img">
+              <img src="assets/santal.webp" alt="Santal Distillation" class="gallery-img">
             </div>
             <div class="gallery-img-wrapper img-wrapper-small">
-              <img src="assets/fleur.png" alt="Botanical Ingredients" class="gallery-img">
+              <img src="assets/fleur.webp" alt="Botanical Ingredients" class="gallery-img">
             </div>
             <div class="floating-accent-box">
               <span class="accent-title">NOVA</span>
@@ -1306,22 +1269,22 @@
             <div class="pillar-icon">
               <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
             </div>
-            <h3 data-trans="about_guarantee_title">100% Authenticity</h3>
-            <p data-trans="about_guarantee_desc">We source directly from authorized distributors and the perfume houses themselves. No grey market, no compromises.</p>
+            <h3 data-trans="about_guarantee_title">100% Authenticity Guaranteed</h3>
+            <p data-trans="about_guarantee_desc">We source every luxury fragrance directly from authorized distributors and the original perfume houses themselves. When you buy original perfume in Armenia from us, you get absolute purity—no grey markets, no compromises.</p>
           </div>
           <div class="pillar-card">
             <div class="pillar-icon">
               <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
             </div>
-            <h3 data-trans="about_scent_match_title">The Scent Match Promise</h3>
-            <p data-trans="about_scent_match_desc">Finding your scent online is hard. That's why we offer detailed note breakdowns and risk-free returns on unopened boxes.</p>
+            <h3 data-trans="about_scent_match_title">The Perfect Scent Promise</h3>
+            <p data-trans="about_scent_match_desc">Finding a fragrance at an online perfume shop in Yerevan can be challenging. That is why we provide deep scent profiles and worry-free returns on all unopened boxes, making it easy to buy perfume online with total confidence.</p>
           </div>
           <div class="pillar-card">
             <div class="pillar-icon">
               <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
             </div>
-            <h3 data-trans="about_storage_title">Pristine Storage</h3>
-            <p data-trans="about_storage_desc">Every bottle is kept in our climate and light-controlled vaults to preserve the delicate integrity of its essential oils.</p>
+            <h3 data-trans="about_storage_title">Impeccable Storage Conditions</h3>
+            <p data-trans="about_storage_desc">Every bottle is kept in our climate- and light-controlled vaults, protecting the delicate molecular integrity of the precious essential oils and ensuring your premium perfume boutique purchase retains its full, long-lasting power.</p>
           </div>
         </div>
       </div>
@@ -2000,8 +1963,8 @@
   </footer>
 
   <!-- --- APPLICATION SCRIPTS --- -->
-  <script src="products.js?v=9"></script>
-  <script src="admin.js?v=9"></script>
-  <script src="app.js?v=13"></script>
+  <script src="products.js?v=10"></script>
+  <script src="admin.js?v=10"></script>
+  <script src="app.js?v=17"></script>
 </body>
 </html>

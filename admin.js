@@ -125,6 +125,12 @@ const WooCommerceAdmin = {
     if (!tbody) return;
 
     tbody.innerHTML = '';
+    
+    if (this.orders.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; color:var(--color-medium-gray); padding: 40px 20px; font-size:0.85rem;">No orders yet. Orders will appear here when customers make purchases.</td></tr>`;
+      return;
+    }
+    
     this.orders.forEach(order => {
       const tr = document.createElement('tr');
       
@@ -155,12 +161,17 @@ const WooCommerceAdmin = {
           <span class="admin-status-badge badge-${order.status}">${statusLabel}</span>
         </td>
         <td>
-          <select class="admin-input" style="width: 110px;" onchange="updateOrderState('${order.id}', this.value)">
-            <option value="pending" ${order.status === 'pending' ? 'selected' : ''}>${statusPending}</option>
-            <option value="processing" ${order.status === 'processing' ? 'selected' : ''}>${statusProcessing}</option>
-            <option value="completed" ${order.status === 'completed' ? 'selected' : ''}>${statusCompleted}</option>
-            <option value="failed" ${order.status === 'failed' ? 'selected' : ''}>${statusFailed}</option>
-          </select>
+          <div style="display:flex; gap:6px; align-items:center;">
+            <select class="admin-input" style="width: 110px;" onchange="updateOrderState('${order.id}', this.value)">
+              <option value="pending" ${order.status === 'pending' ? 'selected' : ''}>${statusPending}</option>
+              <option value="processing" ${order.status === 'processing' ? 'selected' : ''}>${statusProcessing}</option>
+              <option value="completed" ${order.status === 'completed' ? 'selected' : ''}>${statusCompleted}</option>
+              <option value="failed" ${order.status === 'failed' ? 'selected' : ''}>${statusFailed}</option>
+            </select>
+            <button onclick="deleteOrder('${order.id}')" style="background:none; border:1px solid var(--color-border); border-radius:4px; padding:4px 6px; cursor:pointer; color:var(--color-medium-gray); transition:all 0.2s;" onmouseover="this.style.borderColor='#C65911'; this.style.color='#C65911';" onmouseout="this.style.borderColor='var(--color-border)'; this.style.color='var(--color-medium-gray)';" title="Delete order">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width:14px; height:14px;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+            </button>
+          </div>
         </td>
       `;
       tbody.appendChild(tr);
@@ -183,12 +194,13 @@ const WooCommerceAdmin = {
       const tr = document.createElement('tr');
       const stockBadgeClass = product.stock > 0 ? 'badge-instock' : 'badge-outofstock';
       const stockStatusLabel = product.stock > 0 ? stockIn : stockOut;
+      const isFeatured = !!product.featured;
 
       tr.innerHTML = `
         <td style="cursor: pointer;" onclick="openDetailedProductModal('${product.id}')"><img src="${product.image}" alt="${product.name}" style="width: 40px; height: 50px; object-fit: cover; border: 1px solid var(--color-border);"></td>
         <td style="cursor: pointer;" onclick="openDetailedProductModal('${product.id}')">
           <div style="font-weight: 500;">${product.name}</div>
-          <div style="font-size: 0.75rem; color: var(--color-medium-gray);">${product.category}</div>
+          <div style="font-size: 0.7rem; color: var(--color-medium-gray);">${product.brand || ''} · ${product.category}</div>
         </td>
         <td>
           <div style="display:flex; align-items:center; gap: 4px;">
@@ -203,7 +215,13 @@ const WooCommerceAdmin = {
           <span class="admin-status-badge ${stockBadgeClass}" id="inv-badge-${product.id}">${stockStatusLabel}</span>
         </td>
         <td>
-          <button class="admin-action-btn" onclick="saveProductInventory('${product.id}')">${updateBtnLabel}</button>
+          <div style="display:flex; gap:6px; align-items:center;">
+            <button class="admin-action-btn" onclick="saveProductInventory('${product.id}')" title="Save changes">${updateBtnLabel}</button>
+            <button onclick="toggleProductFeatured('${product.id}')" style="background:none; border:none; cursor:pointer; font-size:1.1rem; padding:2px; color:${isFeatured ? '#D4A017' : 'var(--color-border)'}; transition:color 0.2s;" title="${isFeatured ? 'Remove from featured' : 'Mark as featured'}">★</button>
+            <button onclick="deleteProduct('${product.id}')" style="background:none; border:1px solid var(--color-border); border-radius:4px; padding:4px 6px; cursor:pointer; color:var(--color-medium-gray); transition:all 0.2s;" onmouseover="this.style.borderColor='#C65911'; this.style.color='#C65911';" onmouseout="this.style.borderColor='var(--color-border)'; this.style.color='var(--color-medium-gray)';" title="Delete product">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width:14px; height:14px;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+            </button>
+          </div>
         </td>
       `;
       tbody.appendChild(tr);

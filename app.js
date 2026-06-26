@@ -5,20 +5,21 @@ const TRANSLATIONS = {
     about_hook_title: "Օլֆակտոր Արվեստի Արարողներ",
     about_hook_desc: "Մենք հավաքագրում ենք հազվագյուտ, նիշային բույրեր և մաքուր բաղադրիչներ ժամանակակից էսթետների համար: Մեր առաքելությունն է ձեր բույրը վերածել գլուխգործոցի:",
     about_story_title: "Մեր Սկիզբը",
-    about_story_desc: "NOVA-ն ծնվել է մեկ մոլուցքից՝ գտնել անզիջում, թափանցիկ և շնչակտուր անող բույրեր մի շուկայում, որը ողողված է սովորական դիզայներական օծանելիքներով: Այն, ինչ սկսվեց որպես բուսական էքստրակտների մասնավոր հավաքածու, վերածվեց սրբավայրի նրանց համար, ովքեր գնահատում են օծանելիքի պոեզիան:",
+    about_story_desc: "NOVA-ն ծնվել է մեկ մոլուցքից՝ գտնել անզիջում, հազվագյուտ և շնչակտուր անող բույրեր մի շուկայում, որը ողողված է սովորական, մասսայական տարբերակներով: Այն, ինչ սկսվեց որպես համաշխարհային էլիտար բույրերի մասնավոր հավաքածու, վերածվեց սրբավայրի նրանց համար, ովքեր գնահատում են նիշային պարֆյումերիայի իսկական արվեստը:",
     about_eyebrow: "ԹՈՐՄԱՆ ԱՐՎԵՍՏԸ — ՀԻՄՆԱԴՐՎԱԾ Է 2026",
     about_lead: "Օլֆակտոր մաքուր բույրերի ճարտարապետական ​​ուսումնասիրություն՝ ձեռագործ ժամանակակից էսթետիկայի սիրահարների համար:",
-    stat_botanical: "Մաքուր Բուսական",
-    stat_batch: "Թորված Պղնձում",
-    stat_synthetic: "Առանց Սինթետիկայի",
+    stat_botanical: "Օրիգինալ և Վավերական",
+    stat_batch: "Համաշխարհային Բրենդներ",
+    stat_batch_number: "Էլիտար",
+    stat_synthetic: "Զրո Մասսայական Տարբերակներ",
     contact_us: "Կապնվել Մեզ հետ",
     about_pillars_title: "Վստահության Հիմքերը",
-    about_guarantee_title: "100% Իսկություն",
-    about_guarantee_desc: "Մենք ապրանքները ձեռք ենք բերում անմիջապես լիազորված դիստրիբյուտորներից և հենց օծանելիքի տներից: Ոչ մի ստվերային շուկա, ոչ մի զիջում:",
+    about_guarantee_title: "100% Իսկության Երաշխիք",
+    about_guarantee_desc: "Մենք բոլոր շքեղ բույրերը ձեռք ենք բերում անմիջապես պաշտոնական դիստրիբյուտորներից և հենց օծանելիքի տներից: Գնելով օրիգինալ օծանելիք Հայաստանում մեր սրահից՝ դուք ստանում եք բացարձակ որակ՝ առանց ստվերային շուկայի և զիջումների:",
     about_scent_match_title: "Իդեալական Բույրի Խոստում",
-    about_scent_match_desc: "Առցանց բույր գտնելը դժվար է: Այդ իսկ պատճառով մենք առաջարկում ենք նոտաների մանրամասն նկարագրություն և անվտանգ վերադարձ չբացված տուփերի համար:",
-    about_storage_title: "Անթերի Պահպանում",
-    about_storage_desc: "Յուրաքանչյուր շիշ պահվում է մեր կլիմայով և լույսով վերահսկվող պահեստներում՝ պահպանելով եթերայուղերի նուրբ ամբողջականությունը:",
+    about_scent_match_desc: "Օնլայն օծանելիքի խանութից բույր ընտրելը կարող է դժվար լինել: Այդ իսկ պատճառով մենք առաջարկում ենք նոտաների մանրամասն նկարագրություն և անվտանգ վերադարձ չբացված տուփերի համար, որպեսզի ձեր գնումը լինի անթերի:",
+    about_storage_title: "Անթերի Պահպանման Պայմաններ",
+    about_storage_desc: "Յուրաքանչյուր շիշ պահվում է մեր հատուկ կլիմայով և լույսով վերահսկվող պահեստներում: Սա պահպանում է նիշային պարֆյումերիայի եթերայուղերի նուրբ ամբողջականությունը՝ ապահովելով բրենդային օծանելիքի կատարյալ հնչողությունը Երևանում:",
     about_cta_title: "Պատրա՞ստ եք գտնել ձեր բույրը:",
     about_cta_btn: "Բացահայտել Հավաքածուն",
     nav_home: "Գլխավոր",
@@ -52,12 +53,12 @@ const TRANSLATIONS = {
     hero_desc: "Օծանելիք, նվերներ, գեղեցիկ փաթեթավորում",
     explore_fragrances: "Բացահայտել Բույրերը",
     view_admin_demo: "Դեմո Կառավարում",
-    promise_title_1: "Փոքր խմբաքանակով թորված",
-    promise_desc_1: "Խնամքով պատրաստված և հնեցված պղնձե սյուներում՝ բուսական ամբողջականությունը պահպանելու համար:",
-    promise_title_2: "Վեգան և առանց դաժանության",
-    promise_desc_2: "Ձևակերպված է բացառապես առանց կենդանական ածանցյալների: Երբեք չի փորձարկվել կենդանիների վրա:",
-    promise_title_3: "Կայուն փաթեթավորում",
-    promise_desc_3: "100% կենսաքայքայվող FSC սերտիֆիկացված փաթեթավորում, բամբակյա պիտակներ և վերամշակվող ապակյա շշեր:",
+    promise_title_1: "Բացառիկ և Ընտրված Հավաքածու",
+    promise_desc_1: "Աշխարհի ամենահեղինակավոր, հազվագյուտ և օրիգինալ օծանելիքների խնամքով ընտրված հավաքածու Հայաստանում՝ պարֆյումերիայի գիտակների համար:",
+    promise_title_2: "Երկարակյաց և Անկրկնելի Բույրեր",
+    promise_desc_2: "Բարձր կայունությամբ և յուրահատուկ շլեյֆով ընտրված էլիտար պարֆյումերիա՝ ապահովելով երկարակյաց օծանելիքի առկայություն:",
+    promise_title_3: "Կայուն էկո-փաթեթավորում",
+    promise_desc_3: "Էկոլոգիապես մաքուր փաթեթավորմամբ օծանելիք՝ 100% կենսաքայքայվող FSC տուփերով, բամբակյա պիտակներով և վերամշակվող շշերով:",
     collections_title: "ՕԾԱՆԵԼԻՔՆԵՐ",
     gender_unisex: "ՈՒՆԻՍԵՔՍ",
     gender_men: "ՏՂԱՄԱՐԴՈՒ",
@@ -408,29 +409,30 @@ const TRANSLATIONS = {
     modal_lbl_notes_base: "Հիմնային Նոտաներ *",
     modal_btn_cancel: "Չեղարկել",
     modal_btn_save: "Պահպանել",
-    home_video_title: "Դանդաղ թորման արվեստը",
-    home_video_paragraph: "NOVA-ի յուրաքանչյուր կաթիլը փոքր խմբաքանակով մանրակրկիտ թորման արդյունք է։ Մենք հավաքում ենք լավագույն բուսական բաղադրիչները և հնեցնում դրանք ավանդական պղնձե տարաներում՝ պահպանելով բնական մաքրությունը, ստեղծելով զարգացող զգայական ճանապարհորդություն ձեր մաշկի վրա։",
+    home_video_title: "Բացառիկ Բույրերի Արվեստը",
+    home_video_paragraph: "NOVA-ի յուրաքանչյուր կաթիլը կատարելության և շքեղության արտացոլումն է։ Մենք ընտրում ենք աշխարհի լավագույն ու հազվագյուտ բաղադրիչները՝ ստեղծելով զարգացող զգայական ճանապարհորդություն ձեր մաշկի վրա։ Լինելով էլիտար պարֆյումերիայի առաջատարը Հայաստանում՝ NOVA-ն առաջարկում է ոչ թե պարզապես բույր, այլ անմոռանալի շլեյֆ, որն ընդգծում է ձեր անհատականությունը:",
     home_video_cta: "Իմանալ Ավելին"
   },
   ru: {
     nav_about: "О нас",
     about_hook_title: "Создатели Ольфакторного Искусства",
     about_hook_desc: "Мы отбираем редкие нишевые ароматы и чистые ингредиенты для современных эстетов. Наша миссия — превратить ваш фирменный аромат из второстепенного в шедевр.",
-    about_story_title: "Наша История",
-    about_story_desc: "NOVA родилась из одной одержимости: желания найти бескомпромиссные, прозрачные и захватывающие дух ароматы на рынке, переполненном типичным дизайнерским парфюмом. То, что начиналось как частная коллекция растительных экстрактов, превратилось в убежище для тех, кто ценит поэзию парфюма.",
+    about_story_title: "Наше Начало",
+    about_story_desc: "NOVA родилась из одной страсти: находить бескомпромиссные, редкие и захватывающие дух ароматы на рынке, переполненном масс-маркетом. То, что начиналось как частная коллекция лучших мировых шедевров, превратилось в премиальный бутик для тех, кто ценит истинное искусство нишевой парфюмерии.",
     about_eyebrow: "ИСКУССТВО ДИСТИЛЛЯЦИИ — ОСН. В 2026",
     about_lead: "Архитектурное исследование чистых ботанических ароматов, созданных вручную для ценителей современной эстетики.",
-    stat_botanical: "Чистая Ботаника",
-    stat_batch: "Медная Дистилляция",
-    stat_synthetic: "Без Синтетики",
+    stat_botanical: "Подлинность и Качество",
+    stat_batch: "Элитные Мировые Бренды",
+    stat_batch_number: "Элитные",
+    stat_synthetic: "Ноль Дешевых Аналогов",
     contact_us: "Связаться с нами",
     about_pillars_title: "Основы Доверия",
-    about_guarantee_title: "100% Подлинность",
-    about_guarantee_desc: "Мы закупаем напрямую у авторизованных дистрибьюторов и самих парфюмерных домов. Никакого серого рынка, никаких компромиссов.",
+    about_guarantee_title: "100% Гарантия Подлинности",
+    about_guarantee_desc: "Мы закупаем все товары напрямую у официальных дистрибьюторов и мировых парфюмерных домов. Желание купить оригинальные духи в Армении у нас — это гарантия чистейшего качества: никакого серого импорта и никаких компромиссов.",
     about_scent_match_title: "Обещание Идеального Аромата",
-    about_scent_match_desc: "Найти свой аромат онлайн сложно. Вот почему мы предлагаем подробную разбивку нот и безрисковый возврат нераспечатанных коробок.",
-    about_storage_title: "Идеальное Хранение",
-    about_storage_desc: "Каждый флакон хранится в наших хранилищах с климат- и светоконтролем, чтобы сохранить тонкую целостность эфирных масел.",
+    about_scent_match_desc: "Выбрать нишевые ароматы в интернет-магазине парфюмерии в Ереване бывает непросто. Поэтому мы предлагаем детальное описание ольфакторных нот и легкий возврат нераспечатанных флаконов для вашего полного спокойствия.",
+    about_storage_title: "Безупречное Хранение",
+    about_storage_desc: "Каждый флакон хранится в нашей специализированной климатической галерее с контролем света и температуры. Это защищает эфирные масла от разрушения, сохраняя элитный парфюм в его первозданном, глубоком звучании.",
     about_cta_title: "Готовы найти свой идеальный аромат?",
     about_cta_btn: "Исследовать Коллекцию",
     nav_home: "Главная",
@@ -464,12 +466,12 @@ const TRANSLATIONS = {
     hero_desc: "Парфюмерия, подарки, красивая упаковка",
     explore_fragrances: "Исследовать Ароматы",
     view_admin_demo: "Демо Управление",
-    promise_title_1: "Дистилляция малыми партиями",
-    promise_desc_1: "Тщательно сварено и выдержано в медных колоннах для сохранения полезных свойств.",
-    promise_title_2: "Веганский и без жестокости",
-    promise_desc_2: "Создано полностью без животных компонентов. Никогда не тестировалось на животных.",
-    promise_title_3: "Экологичная упаковка",
-    promise_desc_3: "100% биоразлагаемая FSC сертифицированная упаковка, хлопковые этикетки и флаконы из перерабатываемого стекла.",
+    promise_title_1: "Эксклюзивные Коллекции Ароматов",
+    promise_desc_1: "Тщательно отобранная коллекция редких и оригинальных духов в Армении от лучших мировых брендов.",
+    promise_title_2: "Стойкие и Шлейфовые Духи",
+    promise_desc_2: "Элитная брендовая парфюмерия с высокой концентрацией масел, гарантирующая исключительную стойкость шлейфовых духов.",
+    promise_title_3: "Экологичная Упаковка",
+    promise_desc_3: "Экологичная упаковка духов: 100% биоразлагаемые коробки FSC, натуральные хлопковые этикетки и перерабатываемые флаконы.",
     collections_title: "ПАРФЮМЕРИЯ",
     gender_unisex: "УНИСЕКС",
     gender_men: "МУЖСКОЙ",
@@ -820,29 +822,30 @@ const TRANSLATIONS = {
     modal_lbl_notes_base: "Базовые Ноты *",
     modal_btn_cancel: "Отмена",
     modal_btn_save: "Сохранить Изменения",
-    home_video_title: "Искусство медленной дистилляции",
-    home_video_paragraph: "Каждая капля NOVA — результат тщательного процесса дистилляции небольшими партиями. Мы собираем лучшие ботанические ингредиенты вручную и выдерживаем их в медных колоннах для сохранения природной чистоты, создавая развивающееся ольфакторное путешествие на вашей коже.",
+    home_video_title: "Искусство Изысканного Выбора",
+    home_video_paragraph: "Каждая капля парфюма Nova — это манифест роскоши и безупречного вкуса. Мы отбираем самые редкие и ценные парфюмерные компоненты со всего мира, создавая многогранную, раскрывающуюся историю на вашей коже. Nova — это ведущий бренд нишевой парфюмерии в Армении, создающий стойкие шлейфовые ароматы, которые заявляют о вашем присутствии без единого слова.",
     home_video_cta: "Подробнее"
   },
   en: {
     nav_about: "About Us",
     about_hook_title: "Purveyors of Olfactive Art",
     about_hook_desc: "We curate rare, niche fragrances and raw, clean ingredients for the modern aesthete. Our mission is to elevate your signature scent from an afterthought to a masterpiece.",
-    about_story_title: "Our Origin",
-    about_story_desc: "NOVA was born from a singular obsession: the desire to find uncompromising, transparent, and breathtaking fragrances in a market flooded with generic designer scents. What started as a private collection of botanical extracts has evolved into a sanctuary for those who appreciate the poetry of perfume. We believe that scent is the most intimate form of memory.",
+    about_story_title: "Our Beginning",
+    about_story_desc: "NOVA was born from a singular obsession: to discover uncompromising, rare, and breathtaking scents in a market flooded with mass-produced options. What started as a private curation of the world’s finest global fragrances has evolved into a premier sanctuary for those who appreciate the true artistry of niche perfumery.",
     about_eyebrow: "THE ART OF DISTILLATION — EST. 2026",
     about_lead: "An architectural study of pure botanical scents, handcrafted for the modern aesthetic enthusiast.",
-    stat_botanical: "Pure Botanical",
-    stat_batch: "Copper Column Distilled",
-    stat_synthetic: "Zero Synthetics",
+    stat_botanical: "Authentic Curation",
+    stat_batch: "Global Brands",
+    stat_batch_number: "Elite",
+    stat_synthetic: "Mass-Produced Fluff",
     contact_us: "Get In Touch",
     about_pillars_title: "The Pillars of Trust",
-    about_guarantee_title: "100% Authenticity",
-    about_guarantee_desc: "We source directly from authorized distributors and the perfume houses themselves. No grey market, no compromises.",
-    about_scent_match_title: "The Scent Match Promise",
-    about_scent_match_desc: "Finding your scent online is hard. That's why we offer detailed note breakdowns and risk-free returns on unopened boxes.",
-    about_storage_title: "Pristine Storage",
-    about_storage_desc: "Every bottle is kept in our climate and light-controlled vaults to preserve the delicate integrity of its essential oils.",
+    about_guarantee_title: "100% Authenticity Guaranteed",
+    about_guarantee_desc: "We source every luxury fragrance directly from authorized distributors and the original perfume houses themselves. When you buy original perfume in Armenia from us, you get absolute purity—no grey markets, no compromises.",
+    about_scent_match_title: "The Perfect Scent Promise",
+    about_scent_match_desc: "Finding a fragrance at an online perfume shop in Yerevan can be challenging. That is why we provide deep scent profiles and worry-free returns on all unopened boxes, making it easy to buy perfume online with total confidence.",
+    about_storage_title: "Impeccable Storage Conditions",
+    about_storage_desc: "Every bottle is kept in our climate- and light-controlled vaults, protecting the delicate molecular integrity of the precious essential oils and ensuring your premium perfume boutique purchase retains its full, long-lasting power.",
     about_cta_title: "Ready to find your signature scent?",
     about_cta_btn: "Explore the Collection",
     nav_home: "Home",
@@ -876,12 +879,12 @@ const TRANSLATIONS = {
     hero_desc: "Perfumes, gifts, beautiful packaging",
     explore_fragrances: "Explore Fragrances",
     view_admin_demo: "View Admin Demo",
-    promise_title_1: "Small Batch Distilled",
-    promise_desc_1: "Carefully brewed and aged in copper columns to preserve botanical integrity.",
-    promise_title_2: "Vegan & Cruelty Free",
-    promise_desc_2: "Formulated entirely without animal derivatives. Never tested on animals.",
-    promise_title_3: "Sustainable Linens",
-    promise_desc_3: "100% biodegradable FSC certified packaging, cotton labels and recyclable glass bottles.",
+    promise_title_1: "Exclusively Curated Collections",
+    promise_desc_1: "Expertly curated selection of the world's most prestigious, rare, and authentic designer perfumes in Armenia.",
+    promise_title_2: "Long-Lasting Signature Scents",
+    promise_desc_2: "Hand-selected niche fragrance collections with masterful oil concentrations, ensuring a breathtaking, long-lasting signature scent.",
+    promise_title_3: "Sustainable Packaging",
+    promise_desc_3: "Eco-friendly perfume packaging featuring 100% biodegradable FSC boxes, cotton labels, and recyclable glass bottles.",
     collections_title: "PERFUMES",
     gender_unisex: "UNISEX",
     gender_men: "FOR MEN",
@@ -1232,8 +1235,8 @@ const TRANSLATIONS = {
     modal_lbl_notes_base: "Base Notes *",
     modal_btn_cancel: "Cancel",
     modal_btn_save: "Save Changes",
-    home_video_title: "The Art of Slow Distillation",
-    home_video_paragraph: "Every drop of NOVA is a result of a meticulous small-batch distillation process. We source the finest hand-picked botanicals and mature them in traditional copper columns to preserve their organic integrity, creating an evolving sensory journey on your skin.",
+    home_video_title: "The Art of Rare Curation",
+    home_video_paragraph: "Every drop of Nova is a masterpiece of precision and luxury. We source the world’s finest premium ingredients, seamlessly blending rare elements to create an evolving sensory journey on your skin. As a premier niche fragrance brand in Armenia, Nova doesn’t just offer a scent—it crafts an unforgettable identity that lingers beautifully.",
     home_video_cta: "Learn More"
   }
 };
@@ -1465,7 +1468,7 @@ const DEFAULT_INSTAGRAM_POSTS = [
     location: "Grasse, France",
     caption: "Santal N°01 captures the raw elegance of the Australian outback. Distilled in copper columns. ✨",
     date: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-    images: ["assets/insta_1.png"],
+    images: ["assets/insta_1.webp"],
     likes: 420
   },
   {
@@ -1475,7 +1478,7 @@ const DEFAULT_INSTAGRAM_POSTS = [
     location: "Kyoto, Japan",
     caption: "A delicate dance of cherry blossom and soft cashmere musk. Fleur de Cerisier is Kyoto in springtime. 🌸",
     date: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-    images: ["assets/insta_2.png"],
+    images: ["assets/insta_2.webp"],
     likes: 315
   },
   {
@@ -1485,7 +1488,7 @@ const DEFAULT_INSTAGRAM_POSTS = [
     location: "Amalfi, Italy",
     caption: "A sun-drenched explosion of Sicilian bergamot and salted sea air. Agrumes Frais in hand. 🍋",
     date: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-    images: ["assets/insta_3.png"],
+    images: ["assets/insta_3.webp"],
     likes: 512
   },
   {
@@ -1495,7 +1498,7 @@ const DEFAULT_INSTAGRAM_POSTS = [
     location: "Paris, France",
     caption: "Give the gift of olfactory poetry. Our signature discovery set wrapped in sustainable linen. 🎁",
     date: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-    images: ["assets/insta_4.png"],
+    images: ["assets/insta_4.webp"],
     likes: 289
   },
   {
@@ -1505,7 +1508,7 @@ const DEFAULT_INSTAGRAM_POSTS = [
     location: "London, United Kingdom",
     caption: "Pure botanical ingredients gathered from sustainable sources worldwide. Raw luxury. 🌿",
     date: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-    images: ["assets/insta_5.png"],
+    images: ["assets/insta_5.webp"],
     likes: 340
   },
   {
@@ -1515,7 +1518,7 @@ const DEFAULT_INSTAGRAM_POSTS = [
     location: "Santorini, Greece",
     caption: "An opulent, velvet blanket of golden amber and toasted spices at the golden hour. 🌅",
     date: new Date(Date.now() - 8 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-    images: ["assets/insta_6.png"],
+    images: ["assets/insta_6.webp"],
     likes: 476
   },
   {
@@ -1525,7 +1528,7 @@ const DEFAULT_INSTAGRAM_POSTS = [
     location: "Milan, Italy",
     caption: "Every spray is a living composition that evolves on the skin over several hours. 💫",
     date: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-    images: ["assets/insta_7.png"],
+    images: ["assets/insta_7.webp"],
     likes: 612
   },
   {
@@ -1535,7 +1538,7 @@ const DEFAULT_INSTAGRAM_POSTS = [
     location: "St. Tropez, France",
     caption: "Bracingly fresh Vétiver Blanc. The olfactive equivalent of a tailored white shirt. 🌊",
     date: new Date(Date.now() - 12 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-    images: ["assets/insta_8.png"],
+    images: ["assets/insta_8.webp"],
     likes: 395
   }
 ];
@@ -3676,16 +3679,16 @@ window.initProductPage = function () {
 };
 
 const PRODUCT_THUMBNAILS = {
-  "santal-01": ["assets/santal.png", "assets/insta_1.png", "assets/insta_2.png", "assets/insta_3.png", "assets/insta_4.png"],
-  "fleur-cerisier": ["assets/fleur.png", "assets/insta_5.png", "assets/insta_6.png", "assets/insta_7.png", "assets/insta_8.png"],
-  "agrumes-frais": ["assets/agrumes.png", "assets/insta_1.png", "assets/insta_3.png", "assets/insta_5.png", "assets/insta_7.png"],
-  "ambre-chaud": ["assets/ambre.png", "assets/insta_2.png", "assets/insta_4.png", "assets/insta_6.png", "assets/insta_8.png"],
-  "figue-noire": ["assets/figue.png", "assets/insta_3.png", "assets/insta_4.png", "assets/insta_5.png", "assets/insta_6.png"],
-  "vetiver-blanc": ["assets/agrumes.png", "assets/insta_7.png", "assets/insta_8.png", "assets/insta_1.png", "assets/insta_2.png"],
-  "rose-epicee": ["assets/rose.png", "assets/insta_4.png", "assets/insta_5.png", "assets/insta_6.png", "assets/insta_7.png"],
-  "musc-invisible": ["assets/vanille.png", "assets/insta_1.png", "assets/insta_2.png", "assets/insta_3.png", "assets/insta_4.png"],
-  "oud-absolu": ["assets/oud.png", "assets/insta_5.png", "assets/insta_6.png", "assets/insta_7.png", "assets/insta_8.png"],
-  "neroli-portofino": ["assets/agrumes.png", "assets/insta_2.png", "assets/insta_3.png", "assets/insta_4.png", "assets/insta_5.png"]
+  "santal-01": ["assets/santal.webp", "assets/insta_1.webp", "assets/insta_2.webp", "assets/insta_3.webp", "assets/insta_4.webp"],
+  "fleur-cerisier": ["assets/fleur.webp", "assets/insta_5.webp", "assets/insta_6.webp", "assets/insta_7.webp", "assets/insta_8.webp"],
+  "agrumes-frais": ["assets/agrumes.webp", "assets/insta_1.webp", "assets/insta_3.webp", "assets/insta_5.webp", "assets/insta_7.webp"],
+  "ambre-chaud": ["assets/ambre.webp", "assets/insta_2.webp", "assets/insta_4.webp", "assets/insta_6.webp", "assets/insta_8.webp"],
+  "figue-noire": ["assets/figue.webp", "assets/insta_3.webp", "assets/insta_4.webp", "assets/insta_5.webp", "assets/insta_6.webp"],
+  "vetiver-blanc": ["assets/agrumes.webp", "assets/insta_7.webp", "assets/insta_8.webp", "assets/insta_1.webp", "assets/insta_2.webp"],
+  "rose-epicee": ["assets/rose.webp", "assets/insta_4.webp", "assets/insta_5.webp", "assets/insta_6.webp", "assets/insta_7.webp"],
+  "musc-invisible": ["assets/vanille.webp", "assets/insta_1.webp", "assets/insta_2.webp", "assets/insta_3.webp", "assets/insta_4.webp"],
+  "oud-absolu": ["assets/oud.webp", "assets/insta_5.webp", "assets/insta_6.webp", "assets/insta_7.webp", "assets/insta_8.webp"],
+  "neroli-portofino": ["assets/agrumes.webp", "assets/insta_2.webp", "assets/insta_3.webp", "assets/insta_4.webp", "assets/insta_5.webp"]
 };
 
 function initProductInteractiveFeatures() {
@@ -3759,7 +3762,7 @@ function renderProductPage(productId) {
   document.getElementById('pp-rating-val').innerText = `${product.rating} (${product.reviewsCount} ${reviewsText})`;
 
   // Render secondary thumbnails
-  const thumbs = PRODUCT_THUMBNAILS[productId] || [product.image, "assets/insta_1.png", "assets/insta_2.png", "assets/insta_3.png", "assets/insta_4.png"];
+  const thumbs = PRODUCT_THUMBNAILS[productId] || [product.image, "assets/insta_1.webp", "assets/insta_2.webp", "assets/insta_3.webp", "assets/insta_4.webp"];
   const thumbGrid = document.getElementById('pp-thumbnails');
   if (thumbGrid) {
     thumbGrid.innerHTML = '';
@@ -4086,10 +4089,7 @@ window.restoreCheckoutPage = function () {
 };
 
 // BRIDGE FUNCTIONS FOR WOOCOMMERCE DASHBOARD
-function refreshAdminDashboard() {
-  WooCommerceAdmin.renderDashboard(AppState.products);
-  WooCommerceAdmin.renderInventoryTable(AppState.products);
-}
+// (refreshAdminDashboard defined below with full implementation)
 
 // Global scope hooks for Admin edits
 window.saveProductInventory = function (productId) {
@@ -4648,44 +4648,7 @@ function saveStaffProfiles(profiles) {
   localStorage.setItem('nova_staff_profiles', JSON.stringify(profiles));
 }
 
-window.submitAdminCredentials = function(event) {
-  event.preventDefault();
-  
-  const emailInput = document.getElementById('admin-email-input');
-  const passInput = document.getElementById('admin-pass-input');
-  
-  const email = emailInput ? emailInput.value.trim().toLowerCase() : '';
-  const password = passInput ? passInput.value : '';
-  
-  if (!email || !password) {
-    showToast("PLEASE FILL IN ALL FIELDS.");
-    return;
-  }
-  
-  const staff = getStaffProfiles();
-  const profile = staff[email];
-  
-  if (!profile || profile.password !== password) {
-    showToast("INVALID EMAIL OR PASSWORD.");
-    return;
-  }
-  
-  // Successful Login - DIRECTLY authenticated, NO 2FA!
-  sessionStorage.setItem('nova_admin_session', JSON.stringify(profile));
-  showToast(`WELCOME BACK, ${profile.name.toUpperCase()}.`);
-  
-  logAdminActivity(profile.name, `Logged in successfully as ${profile.role}`);
-  
-  // Hide login container, show dashboard
-  document.getElementById('admin-login-wrapper').classList.add('hidden');
-  document.getElementById('admin-dashboard-wrapper').classList.remove('hidden');
-  
-  // Clean inputs
-  if (emailInput) emailInput.value = '';
-  if (passInput) passInput.value = '';
-  
-  refreshAdminDashboard();
-};
+// submitAdminCredentials is defined in the Admin Access Control System section below
 
 window.handleAdminLogout = function() {
   const currentSession = JSON.parse(sessionStorage.getItem('nova_admin_session'));
@@ -4738,114 +4701,7 @@ window.switchAdminTab = function(tabId) {
   }
 };
 
-window.simulatePluginInstall = function(pluginId) {
-  const session = JSON.parse(sessionStorage.getItem('nova_admin_session'));
-  if (!session) return;
-  
-  const btn = document.getElementById(`plugin-btn-${pluginId}`);
-  if (btn) {
-    if (btn.innerText === "Install" || btn.innerText === "Տեղադրել" || btn.innerText === "Установить") {
-      btn.innerText = AppState.language === 'am' ? "Ապատեղադրել" : AppState.language === 'ru' ? "Удалить" : "Uninstall";
-      btn.classList.replace('btn-primary', 'btn-secondary');
-      logAdminActivity(session.name, `Installed plugin: ${pluginId}`);
-      showToast(`PLUGIN ${pluginId.toUpperCase()} INSTALLED.`);
-    } else {
-      btn.innerText = AppState.language === 'am' ? "Տեղադրել" : AppState.language === 'ru' ? "Установить" : "Install";
-      btn.classList.replace('btn-secondary', 'btn-primary');
-      logAdminActivity(session.name, `Uninstalled plugin: ${pluginId}`);
-      showToast(`PLUGIN ${pluginId.toUpperCase()} UNINSTALLED.`);
-    }
-  }
-};
 
-window.togglePaymentGateway = function(name, isChecked) {
-  const session = JSON.parse(sessionStorage.getItem('nova_admin_session'));
-  if (!session) return;
-  
-  logAdminActivity(session.name, `Toggled payment gateway ${name} to ${isChecked ? 'Enabled' : 'Disabled'}`);
-  showToast(`PAYMENT GATEWAY ${name.toUpperCase()} ${isChecked ? 'ENABLED' : 'DISABLED'}.`);
-};
-
-window.handleCreateStaffProfile = function(event) {
-  event.preventDefault();
-  const session = JSON.parse(sessionStorage.getItem('nova_admin_session'));
-  if (!session) return;
-  
-  const nameInput = document.getElementById('new-staff-name');
-  const name = nameInput ? nameInput.value.trim() : '';
-  if (!name) return;
-  
-  const username = name.toLowerCase() + '@example.com';
-  const staff = getStaffProfiles();
-  
-  if (staff[username]) {
-    showToast("PROFILE ALREADY EXISTS.");
-    return;
-  }
-  
-  // Create profile
-  staff[username] = {
-    username: username,
-    name: name + ' Vance',
-    role: 'Shop Manager',
-    password: name.toLowerCase() + '123'
-  };
-  
-  saveStaffProfiles(staff);
-  logAdminActivity(session.name, `Created new staff profile for ${name}`);
-  showToast(`STAFF PROFILE FOR ${name.toUpperCase()} CREATED.`);
-  
-  if (nameInput) nameInput.value = '';
-  renderStaffList();
-};
-
-window.handleDeleteStaffProfile = function(username) {
-  const session = JSON.parse(sessionStorage.getItem('nova_admin_session'));
-  if (!session) return;
-  
-  if (username === 'norayrnajaryann@gmail.com') {
-    showToast("CANNOT DELETE SUPER ADMIN ACCOUNT.");
-    return;
-  }
-  
-  const staff = getStaffProfiles();
-  if (staff[username]) {
-    const name = staff[username].name;
-    delete staff[username];
-    saveStaffProfiles(staff);
-    
-    logAdminActivity(session.name, `Deleted staff profile for ${name}`);
-    showToast(`STAFF PROFILE FOR ${name.toUpperCase()} DELETED.`);
-    renderStaffList();
-  }
-};
-
-function renderStaffList() {
-  const tbody = document.getElementById('admin-staff-tbody');
-  if (!tbody) return;
-  tbody.innerHTML = '';
-  
-  const staff = getStaffProfiles();
-  const lang = AppState.language;
-  const deleteBtnText = TRANSLATIONS[lang]['admin_btn_delete'] || 'Delete';
-  const lockedText = TRANSLATIONS[lang]['admin_staff_locked'] || 'Locked';
-  const transRole = (r) => r === "Super Admin" ? (lang === 'am' ? "Սուպեր Ադմին" : lang === 'ru' ? "Супер Администратор" : "Super Admin") : (lang === 'am' ? "Խանութի Մենեջեր" : lang === 'ru' ? "Менеджер магазина" : "Shop Manager");
-
-  Object.values(staff).forEach(member => {
-    const tr = document.createElement('tr');
-    tr.innerHTML = `
-      <td><strong>${member.name}</strong><br><small style="color:var(--color-medium-gray);">${member.username}</small></td>
-      <td>${transRole(member.role)}</td>
-      <td>
-        ${member.username !== 'norayrnajaryann@gmail.com' ? 
-          `<button class="btn-secondary" style="font-size:0.65rem; padding: 4px 8px;" onclick="handleDeleteStaffProfile('${member.username}')">${deleteBtnText}</button>` : 
-          `<span style="color: var(--color-medium-gray);">${lockedText}</span>`
-        }
-      </td>
-    `;
-    tbody.appendChild(tr);
-  });
-}
 
 window.logAdminActivity = function(actor, action) {
   let logs = [];
@@ -4931,49 +4787,6 @@ window.renderAuditLogsTable = function() {
                    lang === 'ru' ? "Вышел из системы" :
                    "Logged out";
     } else if (log.action.startsWith("Installed plugin: ")) {
-      const plugin = log.action.replace("Installed plugin: ", "");
-      actionText = lang === 'am' ? `Տեղադրել է փլագինը՝ ${plugin}` :
-                   lang === 'ru' ? `Установил плагин: ${plugin}` :
-                   `Installed plugin: ${plugin}`;
-    } else if (log.action.startsWith("Uninstalled plugin: ")) {
-      const plugin = log.action.replace("Uninstalled plugin: ", "");
-      actionText = lang === 'am' ? `Ապատեղադրել է փլագինը՝ ${plugin}` :
-                   lang === 'ru' ? `Удалил плагин: ${plugin}` :
-                   `Uninstalled plugin: ${plugin}`;
-    } else if (log.action.startsWith("Toggled payment gateway ")) {
-      const match = log.action.match(/Toggled payment gateway (.+?) to (.+)/);
-      if (match) {
-        const gw = match[1];
-        const status = match[2];
-        const transStatus = status === "Enabled" ? (lang === 'am' ? "Ակտիվացված" : lang === 'ru' ? "Включено" : "Enabled") : (lang === 'am' ? "Ապաակտիվացված" : lang === 'ru' ? "Отключено" : "Disabled");
-        actionText = lang === 'am' ? `Փոխել է ${gw} վճարային դարպասի կարգավիճակը՝ ${transStatus}` :
-                     lang === 'ru' ? `Переключил платежный шлюз ${gw} на ${transStatus}` :
-                     `Toggled payment gateway ${gw} to ${status}`;
-      }
-    } else if (log.action.startsWith("Created new staff profile for ")) {
-      const name = log.action.replace("Created new staff profile for ", "");
-      actionText = lang === 'am' ? `Ստեղծել է նոր աշխատակցի պրոֆիլ ${name}-ի համար` :
-                   lang === 'ru' ? `Создал новый профиль сотрудника для ${name}` :
-                   `Created new staff profile for ${name}`;
-    } else if (log.action.startsWith("Deleted staff profile for ")) {
-      const name = log.action.replace("Deleted staff profile for ", "");
-      actionText = lang === 'am' ? `Ջնջել է ${name}-ի աշխատակցի պրոֆիլը` :
-                   lang === 'ru' ? `Удалил профиль сотрудника ${name}` :
-                   `Deleted staff profile for ${name}`;
-    } else if (log.action.startsWith("Created Instagram post: ")) {
-      const match = log.action.match(/Created Instagram post: Location="(.+?)", Images count=(.+)/);
-      if (match) {
-        const loc = match[1];
-        const count = match[2];
-        actionText = lang === 'am' ? `Ստեղծել է Instagram-ի գրառում՝ Վայր="${loc}", Նկարների քանակ=${count}` :
-                     lang === 'ru' ? `Создал пост в Instagram: Место="${loc}", Кол-во изображений=${count}` :
-                     `Created Instagram post: Location="${loc}", Images count=${count}`;
-      }
-    } else if (log.action.startsWith("Deleted Instagram post for location: ")) {
-      const loc = log.action.replace('Deleted Instagram post for location: ', '');
-      actionText = lang === 'am' ? `Ջնջել է Instagram-ի գրառումը ${loc} վայրի համար` :
-                   lang === 'ru' ? `Удалил пост в Instagram для места: ${loc}` :
-                   `Deleted Instagram post for location: ${loc}`;
     } else if (log.action.startsWith("Updated inventory for ")) {
       const match = log.action.match(/Updated inventory for (.+?): Price=\$(.+?), Stock=(.+)/);
       if (match) {
@@ -5054,10 +4867,9 @@ window.refreshAdminDashboard = function() {
     WooCommerceAdmin.renderDashboard(AppState.products);
     WooCommerceAdmin.renderInventoryTable(AppState.products);
   }
-  renderStaffList();
   renderAuditLogsTable();
-  if (typeof renderAdminInstagramPosts === 'function') {
-    renderAdminInstagramPosts();
+  if (typeof renderAdminAccessList === 'function') {
+    renderAdminAccessList();
   }
 };
 
@@ -5117,7 +4929,6 @@ function initAdminNavigation() {
 initStaffProfiles();
 initMyAccountNavigation();
 initAdminNavigation();
-initInstagramAdmin(); // Initialize Instagram panel bindings
 
 // INSTAGRAM POST FEED INTERACTIONS
 window.toggleInstaLike = function(btn, postId) {
@@ -5282,185 +5093,38 @@ window.navigateCarousel = function(postId, direction, event) {
   window.switchCarouselImage(postId, newIndex, event);
 };
 
-// ADMIN INSTAGRAM MANAGEMENT ACTIONS
-function initInstagramAdmin() {
-  const imagesInput = document.getElementById('insta-post-images');
-  const form = document.getElementById('admin-add-insta-post-form');
-  const dateInput = document.getElementById('insta-post-date');
 
-  // Set default date to today
-  if (dateInput) {
-    const today = new Date();
-    const yyyy = today.getFullYear();
-    const mm = String(today.getMonth() + 1).padStart(2, '0');
-    const dd = String(today.getDate()).padStart(2, '0');
-    dateInput.value = `${yyyy}-${mm}-${dd}`;
-  }
 
-  let uploadedBase64Images = [];
+// --- DETAILED PRODUCT POPUP EDITOR (ACF) ---
 
-  if (imagesInput) {
-    imagesInput.addEventListener('change', (e) => {
-      const files = Array.from(e.target.files);
-      const previewContainer = document.getElementById('insta-post-img-preview');
-      if (previewContainer) previewContainer.innerHTML = '';
-      uploadedBase64Images = [];
-
-      files.forEach(file => {
-        const reader = new FileReader();
-        reader.onload = (event) => {
-          uploadedBase64Images.push(event.target.result);
-
-          // Add thumbnail preview
-          const img = document.createElement('img');
-          img.src = event.target.result;
-          img.style.width = '60px';
-          img.style.height = '60px';
-          img.style.objectFit = 'cover';
-          img.style.borderRadius = '4px';
-          img.style.border = '1px solid var(--color-border)';
-          if (previewContainer) previewContainer.appendChild(img);
-        };
-        reader.readAsDataURL(file);
-      });
-    });
-  }
-
-  if (form) {
-    form.addEventListener('submit', (e) => {
-      e.preventDefault();
-      
-      const session = JSON.parse(sessionStorage.getItem('nova_admin_session'));
-      if (!session) {
-        showToast("ADMIN SESSION EXPIRED. PLEASE RE-LOGIN.");
-        return;
-      }
-
-      const locationInput = document.getElementById('insta-post-location');
-      const captionInput = document.getElementById('insta-post-caption');
-      const selectedDateVal = dateInput ? dateInput.value : '';
-
-      const location = locationInput ? locationInput.value.trim() : '';
-      const caption = captionInput ? captionInput.value.trim() : '';
-
-      if (!location || !caption || !selectedDateVal) {
-        showToast("PLEASE FILL IN ALL REQUIRED FIELDS.");
-        return;
-      }
-
-      if (uploadedBase64Images.length === 0) {
-        showToast("PLEASE UPLOAD AT LEAST ONE IMAGE.");
-        return;
-      }
-
-      // Create new Instagram post object
-      const newPost = {
-        id: 'insta-post-' + Date.now(),
-        username: 'nova_giftshop',
-        avatar: 'assets/logo-favicon.png',
-        location: location,
-        caption: caption,
-        date: selectedDateVal, // YYYY-MM-DD
-        images: [...uploadedBase64Images],
-        likes: Math.floor(Math.random() * 800) + 150 // default likes count
-      };
-
-      // Add to beginning of state array
-      AppState.instagramPosts.unshift(newPost);
-      saveInstagramPosts(AppState.instagramPosts);
-
-      // Log admin activity
-      logAdminActivity(session.name, `Created Instagram post: Location="${location}", Images count=${uploadedBase64Images.length}`);
-      showToast("NEW INSTAGRAM POST ADDED.");
-
-      // Reset form
-      form.reset();
-      if (dateInput) {
-        const today = new Date();
-        const yyyy = today.getFullYear();
-        const mm = String(today.getMonth() + 1).padStart(2, '0');
-        const dd = String(today.getDate()).padStart(2, '0');
-        dateInput.value = `${yyyy}-${mm}-${dd}`;
-      }
-      uploadedBase64Images = [];
-      const previewContainer = document.getElementById('insta-post-img-preview');
-      if (previewContainer) previewContainer.innerHTML = '';
-      
-      // Update admin list
-      renderAdminInstagramPosts();
-      window.closeInstagramPostModal();
-    });
-  }
-}
-
-function renderAdminInstagramPosts() {
-  const tbody = document.getElementById('admin-insta-tbody');
-  if (!tbody) return;
-  tbody.innerHTML = '';
-
-  const posts = AppState.instagramPosts || [];
-  const lang = AppState.language;
-  const deleteBtnText = TRANSLATIONS[lang]['admin_btn_delete'] || 'Delete';
-
-  if (posts.length === 0) {
-    const emptyText = TRANSLATIONS[lang]['admin_logs_empty'] || 'No posts recorded.';
-    tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:var(--color-medium-gray); padding: 20px;">${emptyText}</td></tr>`;
-    return;
-  }
-
-  posts.forEach(post => {
-    const tr = document.createElement('tr');
-    
-    // Preview image (first image)
-    const firstImg = post.images && post.images.length > 0 ? post.images[0] : 'assets/insta_1.png';
-    const hasMultiple = post.images && post.images.length > 1;
-
-    // Truncated caption
-    const truncatedCaption = post.caption.length > 40 ? post.caption.substring(0, 40) + '...' : post.caption;
-
-    tr.innerHTML = `
-      <td>
-        <div style="position:relative; width: 40px; height: 40px;">
-          <img src="${firstImg}" alt="Insta" style="width: 40px; height: 40px; object-fit: cover; border-radius: 4px; border: 1px solid var(--color-border);">
-          ${hasMultiple ? `<span style="position:absolute; bottom:-2px; right:-2px; background:var(--color-black); color:var(--color-white); font-size:9px; padding:1px 3px; border-radius:2px; line-height:1;">+${post.images.length - 1}</span>` : ''}
-        </div>
-      </td>
-      <td><strong>${post.location}</strong></td>
-      <td title="${post.caption}">${truncatedCaption}</td>
-      <td><span style="font-family: monospace; font-size: 0.75rem;">${post.date}</span></td>
-      <td>
-        <button class="btn-secondary" style="font-size:0.65rem; padding: 4px 8px;" onclick="window.deleteInstagramPost('${post.id}')">${deleteBtnText}</button>
-      </td>
-    `;
-    tbody.appendChild(tr);
+// Helper to set modal checkbox states
+function setModalCheckboxes(prefix, values) {
+  document.querySelectorAll(`[id^="${prefix}"]`).forEach(cb => cb.checked = false);
+  (values || []).forEach(val => {
+    const cb = document.getElementById(`${prefix}${val.toLowerCase().replace(/\s+/g, '')}`);
+    if (cb) cb.checked = true;
   });
 }
 
-window.deleteInstagramPost = function(postId) {
-  const session = JSON.parse(sessionStorage.getItem('nova_admin_session'));
-  if (!session) return;
+// Helper to get modal checkbox values
+function getModalCheckboxValues(prefix) {
+  const values = [];
+  document.querySelectorAll(`[id^="${prefix}"]`).forEach(cb => {
+    if (cb.checked) values.push(cb.value);
+  });
+  return values;
+}
 
-  const posts = AppState.instagramPosts || [];
-  const idx = posts.findIndex(p => p.id === postId);
-  if (idx !== -1) {
-    const deletedLocation = posts[idx].location;
-    posts.splice(idx, 1);
-    saveInstagramPosts(posts);
-
-    logAdminActivity(session.name, `Deleted Instagram post for location: "${deletedLocation}"`);
-    showToast("INSTAGRAM POST DELETED.");
-
-    renderAdminInstagramPosts();
-  }
-};
-
-// --- DETAILED PRODUCT POPUP EDITOR (ACF) ---
 window.openDetailedProductModal = function(productId) {
   const product = AppState.products.find(p => p.id === productId);
   if (!product) return;
 
   const modal = document.getElementById('admin-product-modal-overlay');
   if (!modal) return;
+
+  // Set modal title
+  const titleEl = document.getElementById('admin-product-modal-title');
+  if (titleEl) titleEl.textContent = 'Edit Product Details';
 
   // Set values in inputs
   document.getElementById('modal-product-id').value = product.id;
@@ -5493,6 +5157,17 @@ window.openDetailedProductModal = function(productId) {
   document.getElementById('modal-notes-heart').value = product.notes && product.notes.heart ? product.notes.heart.join(', ') : '';
   document.getElementById('modal-notes-base').value = product.notes && product.notes.base ? product.notes.base.join(', ') : '';
 
+  // Set NEW fields: tags, vibes, rating, reviews, featured
+  setModalCheckboxes('modal-tag-', product.tags || []);
+  setModalCheckboxes('modal-vibe-', product.vibes || []);
+  
+  const ratingEl = document.getElementById('modal-product-rating');
+  if (ratingEl) ratingEl.value = product.rating || 0;
+  const reviewsEl = document.getElementById('modal-product-reviews');
+  if (reviewsEl) reviewsEl.value = product.reviewsCount || 0;
+  const featuredEl = document.getElementById('modal-product-featured');
+  if (featuredEl) featuredEl.checked = !!product.featured;
+
   // Setup preview img
   const previewImg = document.getElementById('modal-preview-img');
   if (previewImg) {
@@ -5512,6 +5187,56 @@ window.openDetailedProductModal = function(productId) {
   modal.classList.remove('hidden');
 };
 
+// Open modal in CREATE NEW PRODUCT mode
+window.openNewProductModal = function() {
+  const modal = document.getElementById('admin-product-modal-overlay');
+  if (!modal) return;
+
+  // Set modal title
+  const titleEl = document.getElementById('admin-product-modal-title');
+  if (titleEl) titleEl.textContent = 'Add New Product';
+
+  // Clear all fields
+  document.getElementById('modal-product-id').value = '__NEW__';
+  document.getElementById('modal-product-name').value = '';
+  document.getElementById('modal-product-brand').value = 'NOVA';
+  document.getElementById('modal-product-tagline').value = '';
+  document.getElementById('modal-product-description').value = '';
+  document.getElementById('modal-product-ingredients').value = '';
+  document.getElementById('modal-product-image').value = '';
+  
+  document.getElementById('modal-product-family').value = 'woody';
+  document.getElementById('modal-product-concentration').value = 'edp';
+  document.getElementById('modal-product-gender').value = 'unisex';
+
+  document.getElementById('modal-size-50').value = '';
+  document.getElementById('modal-size-100').value = '';
+  document.getElementById('modal-size-200').value = '';
+  document.getElementById('modal-product-stock').value = 0;
+
+  document.getElementById('modal-notes-top').value = '';
+  document.getElementById('modal-notes-heart').value = '';
+  document.getElementById('modal-notes-base').value = '';
+
+  // Clear new fields
+  setModalCheckboxes('modal-tag-', []);
+  setModalCheckboxes('modal-vibe-', []);
+  const ratingEl = document.getElementById('modal-product-rating');
+  if (ratingEl) ratingEl.value = '';
+  const reviewsEl = document.getElementById('modal-product-reviews');
+  if (reviewsEl) reviewsEl.value = '';
+  const featuredEl = document.getElementById('modal-product-featured');
+  if (featuredEl) featuredEl.checked = false;
+
+  // Clear preview
+  const previewImg = document.getElementById('modal-preview-img');
+  if (previewImg) previewImg.style.display = 'none';
+  const fileInput = document.getElementById('modal-product-image-file');
+  if (fileInput) fileInput.value = '';
+
+  modal.classList.remove('hidden');
+};
+
 window.closeDetailedProductModal = function(event) {
   const modal = document.getElementById('admin-product-modal-overlay');
   if (modal) {
@@ -5528,7 +5253,8 @@ window.saveDetailedProduct = function(event) {
   }
 
   const productId = document.getElementById('modal-product-id').value;
-  const product = AppState.products.find(p => p.id === productId);
+  const isNewProduct = (productId === '__NEW__');
+  let product = isNewProduct ? {} : AppState.products.find(p => p.id === productId);
   if (!product) return;
 
   const newName = document.getElementById('modal-product-name').value.trim();
@@ -5550,13 +5276,20 @@ window.saveDetailedProduct = function(event) {
   const notesHeart = document.getElementById('modal-notes-heart').value.split(',').map(s => s.trim()).filter(s => s.length > 0);
   const notesBase = document.getElementById('modal-notes-base').value.split(',').map(s => s.trim()).filter(s => s.length > 0);
 
+  // Read new fields
+  const newTags = getModalCheckboxValues('modal-tag-');
+  const newVibes = getModalCheckboxValues('modal-vibe-');
+  const newRating = parseFloat(document.getElementById('modal-product-rating').value) || 0;
+  const newReviewsCount = parseInt(document.getElementById('modal-product-reviews').value, 10) || 0;
+  const newFeatured = document.getElementById('modal-product-featured').checked;
+
   // Validate values
   if (!newName || !newBrand || !newTagline || !newDescription || !newImage || isNaN(price50) || isNaN(price100) || isNaN(price200) || isNaN(newStock)) {
     showToast("PLEASE FILL IN ALL REQUIRED FIELDS WITH VALID VALUES.");
     return;
   }
 
-  // Update product properties
+  // Update/set product properties
   product.name = newName;
   product.brand = newBrand;
   product.tagline = newTagline;
@@ -5566,8 +5299,13 @@ window.saveDetailedProduct = function(event) {
   product.scent_family = newScentFamily;
   product.concentration = newConcentration;
   product.gender_id = newGenderId;
-  product.price = price100; // 100ml price is the base price
+  product.price = price100;
   product.stock = newStock;
+  product.tags = newTags;
+  product.vibes = newVibes;
+  product.rating = newRating;
+  product.reviewsCount = newReviewsCount;
+  product.featured = newFeatured;
 
   // Update sizes array
   product.sizes = [
@@ -5583,6 +5321,36 @@ window.saveDetailedProduct = function(event) {
     base: notesBase
   };
 
+  if (isNewProduct) {
+    // Generate unique ID from name
+    product.id = newName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') + '-' + Date.now().toString(36);
+    
+    // Define computed properties for category and gender
+    Object.defineProperty(product, 'category', {
+      get() {
+        const fam = window.GLOBAL_ATTRIBUTES.scent_families[product.scent_family];
+        return fam ? fam.label.en : "";
+      },
+      configurable: true,
+      enumerable: true
+    });
+    Object.defineProperty(product, 'gender', {
+      get() {
+        const g = window.GLOBAL_ATTRIBUTES.genders[product.gender_id];
+        return g ? g.label.en : "";
+      },
+      configurable: true,
+      enumerable: true
+    });
+    
+    AppState.products.push(product);
+    logAdminActivity(session.name, `Created new product: ${product.name}`);
+    showToast(`SUCCESSFULLY CREATED ${product.name.toUpperCase()}.`);
+  } else {
+    logAdminActivity(session.name, `Edited product details for: ${product.name}`);
+    showToast(`SUCCESSFULLY UPDATED ${product.name.toUpperCase()} DETAILS.`);
+  }
+
   // Persist products to localStorage
   saveProductsToStorage();
 
@@ -5593,11 +5361,79 @@ window.saveDetailedProduct = function(event) {
   // Refresh admin panel elements
   refreshAdminDashboard();
 
-  // Log admin activity
-  logAdminActivity(session.name, `Created/Edited detailed product fields for: ${product.name}`);
-
-  showToast(`SUCCESSFULLY UPDATED ${product.name.toUpperCase()} DETAILS.`);
   closeDetailedProductModal();
+};
+// --- PRODUCT MANAGEMENT ACTIONS ---
+
+window.deleteProduct = function(productId) {
+  const product = AppState.products.find(p => p.id === productId);
+  if (!product) return;
+  
+  if (!confirm(`Are you sure you want to delete "${product.name}"? This action cannot be undone.`)) return;
+  
+  const session = JSON.parse(sessionStorage.getItem('nova_admin_session'));
+  const idx = AppState.products.findIndex(p => p.id === productId);
+  if (idx !== -1) {
+    AppState.products.splice(idx, 1);
+    saveProductsToStorage();
+    renderFeaturedProducts();
+    renderShop();
+    refreshAdminDashboard();
+    
+    if (session) {
+      logAdminActivity(session.name, `Deleted product: ${product.name}`);
+    }
+    showToast(`PRODUCT "${product.name.toUpperCase()}" DELETED.`);
+  }
+};
+
+window.toggleProductFeatured = function(productId) {
+  const product = AppState.products.find(p => p.id === productId);
+  if (!product) return;
+  
+  product.featured = !product.featured;
+  saveProductsToStorage();
+  renderFeaturedProducts();
+  refreshAdminDashboard();
+  
+  const session = JSON.parse(sessionStorage.getItem('nova_admin_session'));
+  if (session) {
+    logAdminActivity(session.name, `${product.featured ? 'Featured' : 'Unfeatured'} product: ${product.name}`);
+  }
+  showToast(`${product.name.toUpperCase()} ${product.featured ? 'MARKED AS FEATURED' : 'REMOVED FROM FEATURED'}.`);
+};
+
+window.filterInventoryTable = function(query) {
+  const tbody = document.getElementById('admin-inventory-tbody');
+  if (!tbody) return;
+  
+  const rows = tbody.querySelectorAll('tr');
+  const q = query.toLowerCase().trim();
+  
+  rows.forEach(row => {
+    const text = row.textContent.toLowerCase();
+    row.style.display = !q || text.includes(q) ? '' : 'none';
+  });
+};
+
+// --- ORDER MANAGEMENT ACTIONS ---
+
+window.deleteOrder = function(orderId) {
+  if (!confirm(`Are you sure you want to delete order #${orderId}? This action cannot be undone.`)) return;
+  
+  const session = JSON.parse(sessionStorage.getItem('nova_admin_session'));
+  if (typeof WooCommerceAdmin !== 'undefined') {
+    const idx = WooCommerceAdmin.orders.findIndex(o => o.id === orderId);
+    if (idx !== -1) {
+      WooCommerceAdmin.orders.splice(idx, 1);
+      refreshAdminDashboard();
+      
+      if (session) {
+        logAdminActivity(session.name, `Deleted order #${orderId}`);
+      }
+      showToast(`ORDER #${orderId} DELETED.`);
+    }
+  }
 };
 
 // Hook image file picker inside modal
@@ -5622,20 +5458,6 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-// Instagram Post Modal window handlers
-window.openInstagramPostModal = function() {
-  const modal = document.getElementById('admin-instagram-modal-overlay');
-  if (modal) {
-    modal.classList.remove('hidden');
-  }
-};
-
-window.closeInstagramPostModal = function(event) {
-  const modal = document.getElementById('admin-instagram-modal-overlay');
-  if (modal) {
-    modal.classList.add('hidden');
-  }
-};
 
 
 // ============================================
@@ -5768,7 +5590,7 @@ window.closeInstagramPostModal = function(event) {
     if (existingPosts.length > 0) {
       const postsToShow = existingPosts.slice(0, FEED_COUNT);
       postsToShow.forEach(post => {
-        const imgUrl = post.images && post.images.length > 0 ? post.images[0] : 'assets/insta_1.png';
+        const imgUrl = post.images && post.images.length > 0 ? post.images[0] : 'assets/insta_1.webp';
         const card = document.createElement('a');
         card.href = `https://www.instagram.com/${INSTAGRAM_USERNAME}/`;
         card.target = '_blank';
@@ -5953,9 +5775,15 @@ window.closeInstagramPostModal = function(event) {
       return;
     }
 
-    // Check if email already exists
+    // Check if email already exists in nova_users
     const users = getUsers();
-    if (users.find(u => u.email === email)) {
+    const existingUser = users.find(u => u.email === email);
+
+    // Also check nova_staff_profiles (from admin grant) 
+    const staffProfiles = JSON.parse(localStorage.getItem('nova_staff_profiles') || '{}');
+    const staffEntry = staffProfiles[email];
+
+    if (existingUser) {
       errorEl.textContent = 'An account with this email already exists.';
       errorEl.classList.remove('hidden');
       return;
@@ -5977,6 +5805,29 @@ window.closeInstagramPostModal = function(event) {
     saveSession(newUser);
     updateAuthUI(newUser);
 
+    // If this email was pre-granted admin access, sync the staff profile
+    if (staffEntry) {
+      staffEntry.name = firstName + ' ' + lastName;
+      staffEntry.password = password;
+      staffProfiles[email] = staffEntry;
+      localStorage.setItem('nova_staff_profiles', JSON.stringify(staffProfiles));
+    }
+
+    // If this user is an admin, auto-establish admin session
+    if (typeof isAdminEmail === 'function' && isAdminEmail(email)) {
+      const profile = staffEntry || {
+        username: email,
+        name: firstName + ' ' + lastName,
+        role: 'Shop Manager',
+        password: password
+      };
+      if (!staffEntry) {
+        staffProfiles[email] = profile;
+        localStorage.setItem('nova_staff_profiles', JSON.stringify(staffProfiles));
+      }
+      sessionStorage.setItem('nova_admin_session', JSON.stringify(profile));
+    }
+
     // Clear form
     event.target.reset();
     errorEl.classList.add('hidden');
@@ -5997,7 +5848,12 @@ window.closeInstagramPostModal = function(event) {
     const user = users.find(u => u.email === email);
 
     if (!user) {
-      errorEl.textContent = 'No account found with this email.';
+      // Check if they were granted admin but never signed up
+      if (typeof isAdminEmail === 'function' && isAdminEmail(email)) {
+        errorEl.textContent = 'Admin access was granted, but you need to Sign Up first to create your account.';
+      } else {
+        errorEl.textContent = 'No account found with this email.';
+      }
       errorEl.classList.remove('hidden');
       return;
     }
@@ -6014,6 +5870,30 @@ window.closeInstagramPostModal = function(event) {
     // Clear form
     event.target.reset();
     errorEl.classList.add('hidden');
+
+    // If this user is an admin, auto-establish admin session too
+    if (typeof isAdminEmail === 'function' && isAdminEmail(email)) {
+      const staff = JSON.parse(localStorage.getItem('nova_staff_profiles') || '{}');
+      let profile = staff[email];
+      if (!profile) {
+        // Create staff profile on the fly if missing
+        profile = {
+          username: email,
+          name: (user.firstName || '') + ' ' + (user.lastName || ''),
+          role: email === 'norayrnajaryann@gmail.com' ? 'Super Admin' : 'Shop Manager',
+          password: password
+        };
+        staff[email] = profile;
+        localStorage.setItem('nova_staff_profiles', JSON.stringify(staff));
+      } else {
+        // Sync the staff profile password with the user's actual password
+        profile.password = password;
+        profile.name = (user.firstName || '') + ' ' + (user.lastName || '');
+        staff[email] = profile;
+        localStorage.setItem('nova_staff_profiles', JSON.stringify(staff));
+      }
+      sessionStorage.setItem('nova_admin_session', JSON.stringify(profile));
+    }
 
     showToast('WELCOME BACK, ' + user.firstName.toUpperCase() + '!');
     if (typeof renderMyAccount === 'function') renderMyAccount();
@@ -6234,19 +6114,52 @@ window.closeInstagramPostModal = function(event) {
       return;
     }
 
-    // Check staff profiles (existing system)
-    const staff = JSON.parse(localStorage.getItem('nova_staff_profiles') || '{}');
-    const profile = staff[email];
-
-    if (!profile || profile.password !== password) {
-      showToast("INVALID EMAIL OR PASSWORD.");
-      return;
-    }
-
     // Check if this email has admin access
     if (!isAdminEmail(email)) {
       showToast("ACCESS DENIED. THIS ACCOUNT DOES NOT HAVE ADMIN PRIVILEGES.");
       return;
+    }
+
+    // First, try to authenticate via the main nova_users auth system
+    let users = [];
+    try { users = JSON.parse(localStorage.getItem('nova_users')) || []; } catch(e) {}
+    const authUser = users.find(u => u.email === email);
+
+    // Also check staff profiles as a fallback
+    const staff = JSON.parse(localStorage.getItem('nova_staff_profiles') || '{}');
+    let profile = staff[email];
+
+    // Verify password: check nova_users first (primary), then staff profiles (legacy fallback)
+    let authenticated = false;
+    if (authUser && authUser.passwordHash === hashPwd(password)) {
+      authenticated = true;
+    } else if (profile && profile.password === password) {
+      authenticated = true;
+    }
+
+    if (!authenticated) {
+      showToast("INVALID EMAIL OR PASSWORD.");
+      return;
+    }
+
+    // Ensure staff profile exists and is synced
+    if (!profile) {
+      profile = {
+        username: email,
+        name: authUser ? (authUser.firstName + ' ' + (authUser.lastName || '')).trim() : email.split('@')[0],
+        role: email === SUPER_ADMIN ? 'Super Admin' : 'Shop Manager',
+        password: password
+      };
+      staff[email] = profile;
+      localStorage.setItem('nova_staff_profiles', JSON.stringify(staff));
+    } else {
+      // Sync password and name
+      profile.password = password;
+      if (authUser) {
+        profile.name = (authUser.firstName + ' ' + (authUser.lastName || '')).trim();
+      }
+      staff[email] = profile;
+      localStorage.setItem('nova_staff_profiles', JSON.stringify(staff));
     }
 
     // Also sign into the main auth system if not already
@@ -6254,21 +6167,28 @@ window.closeInstagramPostModal = function(event) {
     try { session = JSON.parse(localStorage.getItem('nova_session')); } catch(e) {}
     
     if (!session || session.email !== email) {
-      // Create/update session
-      const authUser = {
+      // Use existing user data or create session from profile
+      const sessionData = authUser || {
         id: Date.now().toString(36),
         firstName: profile.name.split(' ')[0] || profile.name,
         lastName: profile.name.split(' ').slice(1).join(' ') || '',
         email: email,
+        passwordHash: hashPwd(password),
         createdAt: new Date().toISOString(),
         billing: { street: '', city: '', zip: '' }
       };
-      localStorage.setItem('nova_session', JSON.stringify(authUser));
+      localStorage.setItem('nova_session', JSON.stringify(sessionData));
       document.body.classList.add('user-logged-in');
       
+      // Also ensure this user exists in nova_users
+      if (!authUser) {
+        users.push(sessionData);
+        localStorage.setItem('nova_users', JSON.stringify(users));
+      }
+
       // Update header greeting
       const greetingEl = document.getElementById('header-greeting');
-      if (greetingEl) greetingEl.innerText = 'Hello, ' + authUser.firstName;
+      if (greetingEl) greetingEl.innerText = 'Hello, ' + sessionData.firstName;
     }
 
     // Successful admin login
@@ -6341,15 +6261,27 @@ window.closeInstagramPostModal = function(event) {
     emails.push(email);
     saveAdminEmails(emails);
 
-    // Also add to staff profiles if not there
+    // Check if user already exists in nova_users (the main auth system)
+    let users = [];
+    try { users = JSON.parse(localStorage.getItem('nova_users')) || []; } catch(e) {}
+    const existingUser = users.find(u => u.email === email);
+
+    // Add to staff profiles, using real name from nova_users if available
     const staff = JSON.parse(localStorage.getItem('nova_staff_profiles') || '{}');
     if (!staff[email]) {
+      const userName = existingUser 
+        ? (existingUser.firstName + ' ' + (existingUser.lastName || '')).trim()
+        : email.split('@')[0];
       staff[email] = {
         username: email,
-        name: email.split('@')[0],
+        name: userName,
         role: 'Shop Manager',
         password: 'temp_' + Math.random().toString(36).substr(2, 6)
       };
+      localStorage.setItem('nova_staff_profiles', JSON.stringify(staff));
+    } else if (existingUser) {
+      // Update staff profile name from actual user data
+      staff[email].name = (existingUser.firstName + ' ' + (existingUser.lastName || '')).trim();
       localStorage.setItem('nova_staff_profiles', JSON.stringify(staff));
     }
 
