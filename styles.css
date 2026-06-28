@@ -256,7 +256,7 @@ header.header-scrolled {
 }
 
 .logo-img {
-  height: 100px;
+  height: 35px;
   width: auto;
   transition: opacity 0.4s ease;
   display: block;
