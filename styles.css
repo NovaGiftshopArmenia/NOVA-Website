@@ -2421,7 +2421,8 @@ header.header-scrolled .lang-btn.active::after {
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
-  padding: var(--spacing-xl) var(--spacing-xl) 0 var(--spacing-xl);
+  padding: var(--spacing-xl) var(--spacing-xl) 40px var(--spacing-xl);
+  gap: 8px;
 }
 
 .chart-bar-wrap {
@@ -2943,7 +2944,7 @@ footer {
   .hero-image-container {
     position: relative;
     width: calc(100% - 32px) !important;
-    margin: 0 16px !important;
+    margin: 0 16px 30px 16px !important;
     height: 380px !important;
     mask-image: none !important;
     -webkit-mask-image: none !important;
@@ -5405,11 +5406,15 @@ header.header-scrolled .mobile-menu-icon-btn {
 /* Amber color */
 
 .chart-bar-label {
-  font-size: 0.75rem;
+  font-size: 0.65rem;
   color: var(--color-medium-gray);
   margin-top: 8px;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.02em;
+  word-break: break-word;
+  text-align: center;
+  max-width: 100%;
+  line-height: 1.2;
 }
 
 @media (max-width: 900px) {
@@ -6357,6 +6362,27 @@ button,
   color: inherit;
 }
 
+.cart-drawer-close svg,
+.mobile-menu-icon-btn svg,
+.account-icon-btn svg,
+.wishlist-icon-btn svg,
+.cart-icon-btn svg {
+  color: inherit;
+  stroke: currentColor;
+}
+
 a {
   -webkit-tap-highlight-color: transparent;
+  color: inherit;
+}
+
+/* Ensure mobile menu drawer links/buttons are never blue */
+.mobile-menu-drawer a,
+.mobile-menu-drawer button,
+.cart-drawer a,
+.cart-drawer button,
+.wishlist-drawer a,
+.wishlist-drawer button {
+  -webkit-appearance: none;
+  color: inherit;
 }

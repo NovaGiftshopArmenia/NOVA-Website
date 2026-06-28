@@ -236,8 +236,8 @@
                       <li class="auth-logged-in admin-only-link" style="display:none;"><a href="#/admin" data-trans="nav_admin">WooCommerce</a></li>
                       <li class="auth-logged-in"><a href="#/home" onclick="handleLogout()" data-trans="nav_logout">Log Out</a></li>
                       <!-- Guest state -->
-                      <li class="auth-guest"><a href="#/my-account" onclick="switchAuthTab('signin')">Sign In</a></li>
-                      <li class="auth-guest"><a href="#/my-account" onclick="switchAuthTab('signup')">Create Account</a></li>
+                      <li class="auth-guest"><a href="#/my-account" onclick="switchAuthTab('signin')" data-trans="auth_signin_btn">Sign In</a></li>
+                      <li class="auth-guest"><a href="#/my-account" onclick="switchAuthTab('signup')" data-trans="auth_signup_title">Create Account</a></li>
                     </ul>
         </div>
         
@@ -834,13 +834,13 @@
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width:16px; height:16px;">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><circle cx="12" cy="12" r="3"/>
                 </svg>
-                <span>Settings</span>
+                <span data-trans="admin_nav_dev">Settings</span>
               </div>
               <div class="admin-nav-item" data-admin-tab="clients">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width:16px; height:16px;">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                 </svg>
-                <span>Clients</span>
+                <span data-trans="admin_nav_clients">Clients</span>
               </div>
               <div class="admin-nav-item" data-admin-tab="logs">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width:16px; height:16px;">
@@ -1021,8 +1021,8 @@
                 <div class="admin-card">
                   <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom: 24px; flex-wrap:wrap; gap:16px;">
                     <div>
-                      <h3 class="serif-title" style="font-size: 1.5rem; margin-bottom: 8px;">Registered Clients</h3>
-                      <p style="font-size:0.85rem; color:var(--color-medium-gray); margin:0;">All users who have created an account on the website.</p>
+                      <h3 class="serif-title" style="font-size: 1.5rem; margin-bottom: 8px;" data-trans="admin_clients_title">Registered Clients</h3>
+                      <p style="font-size:0.85rem; color:var(--color-medium-gray); margin:0;" data-trans="admin_clients_desc">All users who have created an account on the website.</p>
                     </div>
                     <div style="display:flex; gap:8px; align-items:center;">
                       <span id="admin-clients-count" style="font-size:0.8rem; color:var(--color-medium-gray);">0 clients</span>
@@ -1033,10 +1033,10 @@
                       <thead>
                         <tr>
                           <th>#</th>
-                          <th>Name</th>
-                          <th>Email</th>
-                          <th>Registered</th>
-                          <th>Actions</th>
+                          <th data-trans="admin_th_name">Name</th>
+                          <th data-trans="auth_email_label">Email</th>
+                          <th data-trans="admin_th_registered">Registered</th>
+                          <th data-trans="admin_th_actions">Actions</th>
                         </tr>
                       </thead>
                       <tbody id="admin-clients-tbody">
@@ -1538,21 +1538,21 @@
       <div id="auth-gate" class="auth-gate">
         <div class="auth-card">
           <div class="auth-tabs">
-            <button class="auth-tab active" onclick="switchAuthTab('signin')" id="auth-tab-signin">Sign In</button>
-            <button class="auth-tab" onclick="switchAuthTab('signup')" id="auth-tab-signup">Create Account</button>
+            <button class="auth-tab active" onclick="switchAuthTab('signin')" id="auth-tab-signin" data-trans="auth_signin_btn">Sign In</button>
+            <button class="auth-tab" onclick="switchAuthTab('signup')" id="auth-tab-signup" data-trans="auth_signup_title">Create Account</button>
           </div>
 
           <!-- Sign In Form -->
           <form id="auth-signin-form" class="auth-form" onsubmit="handleSignIn(event)">
             <div class="auth-form-group">
-              <label for="signin-email">Email Address</label>
+              <label for="signin-email" data-trans="auth_email_label">Email Address</label>
               <input type="email" id="signin-email" placeholder="your@email.com" required class="auth-input">
             </div>
             <div class="auth-form-group">
-              <label for="signin-password">Password</label>
+              <label for="signin-password" data-trans="auth_password_label">Password</label>
               <input type="password" id="signin-password" placeholder="Enter password" required minlength="6" class="auth-input">
             </div>
-            <button type="submit" class="btn-primary auth-submit-btn">Sign In</button>
+            <button type="submit" class="btn-primary auth-submit-btn" data-trans="auth_signin_btn">Sign In</button>
             <p class="auth-error hidden" id="signin-error"></p>
           </form>
 
@@ -1560,27 +1560,27 @@
           <form id="auth-signup-form" class="auth-form hidden" onsubmit="handleSignUp(event)">
             <div class="auth-form-row">
               <div class="auth-form-group">
-                <label for="signup-first-name">First Name</label>
+                <label for="signup-first-name" data-trans="auth_first_name">First Name</label>
                 <input type="text" id="signup-first-name" placeholder="First name" required class="auth-input">
               </div>
               <div class="auth-form-group">
-                <label for="signup-last-name">Last Name</label>
+                <label for="signup-last-name" data-trans="auth_last_name">Last Name</label>
                 <input type="text" id="signup-last-name" placeholder="Last name" required class="auth-input">
               </div>
             </div>
             <div class="auth-form-group">
-              <label for="signup-email">Email Address</label>
+              <label for="signup-email" data-trans="auth_email_label">Email Address</label>
               <input type="email" id="signup-email" placeholder="your@email.com" required class="auth-input">
             </div>
             <div class="auth-form-group">
-              <label for="signup-password">Password</label>
+              <label for="signup-password" data-trans="auth_password_label">Password</label>
               <input type="password" id="signup-password" placeholder="Min 6 characters" required minlength="6" class="auth-input">
             </div>
             <div class="auth-form-group">
-              <label for="signup-password-confirm">Confirm Password</label>
+              <label for="signup-password-confirm" data-trans="auth_confirm_password">Confirm Password</label>
               <input type="password" id="signup-password-confirm" placeholder="Repeat password" required minlength="6" class="auth-input">
             </div>
-            <button type="submit" class="btn-primary auth-submit-btn">Create Account</button>
+            <button type="submit" class="btn-primary auth-submit-btn" data-trans="auth_signup_title">Create Account</button>
             <p class="auth-error hidden" id="signup-error"></p>
           </form>
         </div>
