@@ -7,7 +7,7 @@
   <meta name="description" content="Explore NOVA, an elegant and minimalist luxury perfumery. Experience high-end olfactory creations and seamless WooCommerce-style shopping.">
   <link rel="stylesheet" href="styles.css?v=27">
   <link rel="stylesheet" href="product.css?v=5">
-  <link rel="icon" type="image/png" href="assets/logo-favicon.png?v=4">
+  <link rel="icon" type="image/png" href="assets/logo-icon-dark-transparent.png">
 </head>
 <body>
 
@@ -228,10 +228,14 @@
             </svg>
           </button>
           <ul class="submenu account-submenu">
-            <li class="submenu-header" data-trans="hello_user">Ողջույն, Էմմա</li>
-            <li><a href="index.html#/admin" data-trans="nav_admin">WooCommerce Կառավարում</a></li>
-            <li><a href="index.html#/shop" onclick="showToast('ORDER HISTORY SIMULATION LOADED')" data-trans="nav_order_history">Պատվերների պատմություն</a></li>
-            <li><a href="index.html#/home" onclick="showToast('DEMO SESSION LOGGED OUT')" data-trans="nav_logout">Դուրս գալ</a></li>
+            <!-- Logged in state -->
+            <li class="submenu-header auth-logged-in" id="header-greeting">Hello</li>
+            <li class="auth-logged-in"><a href="index.html#/my-account" data-trans="my_account_title">My Account</a></li>
+            <li class="auth-logged-in admin-only-link" style="display:none;"><a href="index.html#/admin" data-trans="nav_admin">WooCommerce</a></li>
+            <li class="auth-logged-in"><a href="index.html#/home" onclick="handleLogout()" data-trans="nav_logout">Log Out</a></li>
+            <!-- Guest state -->
+            <li class="auth-guest"><a href="index.html#/my-account" onclick="switchAuthTab('signin')">Sign In</a></li>
+            <li class="auth-guest"><a href="index.html#/my-account" onclick="switchAuthTab('signup')">Create Account</a></li>
           </ul>
         </div>
 
@@ -561,6 +565,47 @@
                   <span data-trans="wishlist_title">My Wishlist</span>
                 </span>
                 <span id="mobile-wishlist-count-badge" class="wishlist-count" style="position: static; display: flex;">0</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Account Section -->
+        <div class="mobile-menu-section">
+          <h4 class="mobile-section-title" data-trans="my_account_title">My Account</h4>
+          <ul class="mobile-menu-links">
+            <!-- Shown when logged OUT -->
+            <li class="mobile-auth-guest">
+              <a href="index.html#/my-account" onclick="closeMobileMenu(); switchAuthTab('signin');" style="display: flex; align-items: center; gap: 8px;">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width: 20px; height: 20px;">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
+                </svg>
+                <span data-trans="auth_signin_btn">Sign In</span>
+              </a>
+            </li>
+            <li class="mobile-auth-guest">
+              <a href="index.html#/my-account" onclick="closeMobileMenu(); switchAuthTab('signup');" style="display: flex; align-items: center; gap: 8px;">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width: 20px; height: 20px;">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+                </svg>
+                <span data-trans="auth_signup_title">Create Account</span>
+              </a>
+            </li>
+            <!-- Shown when logged IN -->
+            <li class="mobile-auth-logged-in" style="display:none;">
+              <a href="index.html#/my-account" onclick="closeMobileMenu();" style="display: flex; align-items: center; gap: 8px;">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width: 20px; height: 20px;">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                </svg>
+                <span data-trans="my_account_title">My Account</span>
+              </a>
+            </li>
+            <li class="mobile-auth-logged-in" style="display:none;">
+              <a href="#" onclick="event.preventDefault(); closeMobileMenu(); handleLogout();" style="display: flex; align-items: center; gap: 8px;">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width: 20px; height: 20px;">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                </svg>
+                <span data-trans="nav_logout">Log Out</span>
               </a>
             </li>
           </ul>
