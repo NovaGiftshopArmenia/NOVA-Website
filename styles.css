@@ -2979,6 +2979,7 @@ footer {
     background-color: var(--color-light-gray) !important;
     border-radius: 50% !important;
     color: var(--color-black) !important;
+    box-sizing: content-box !important;
   }
 
   .promise-title {
