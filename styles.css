@@ -2944,7 +2944,7 @@ footer {
   .hero-image-container {
     position: relative;
     width: calc(100% - 32px) !important;
-    margin: 0 16px 30px 16px !important;
+    margin: 0 16px 50px 16px !important;
     height: 380px !important;
     mask-image: none !important;
     -webkit-mask-image: none !important;
