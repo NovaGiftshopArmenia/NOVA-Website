@@ -258,16 +258,21 @@ header.header-scrolled {
 .logo-img {
   height: 100px;
   width: auto;
-  transition: filter 0.4s ease;
+  transition: opacity 0.4s ease;
   display: block;
 }
 
-header:not(.header-scrolled) .logo-img {
-  filter: none;
+/* Dual logo system: dark logo on light header, light logo on dark scrolled header */
+.logo-scrolled {
+  display: none;
 }
 
-header.header-scrolled .logo-img {
-  filter: none;
+header.header-scrolled .logo-default {
+  display: none;
+}
+
+header.header-scrolled .logo-scrolled {
+  display: block;
 }
 
 .mobile-menu-drawer .logo-img {
