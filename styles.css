@@ -4911,7 +4911,7 @@ header.header-scrolled .mobile-menu-icon-btn {
   cursor: pointer;
   background-color: var(--color-white);
   transition: var(--transition-smooth);
-  min-height: 140px;
+  min-height: 165px;
   box-sizing: border-box;
 }
 
@@ -5086,6 +5086,18 @@ header.header-scrolled .mobile-menu-icon-btn {
 
   .account-dashboard-grid {
     grid-template-columns: 1fr;
+  }
+
+  .quick-nav-card {
+    min-height: 130px;
+  }
+
+  .quick-nav-text span {
+    font-size: 0.75rem;
+  }
+
+  .quick-nav-text small {
+    font-size: 0.68rem;
   }
 }
 
