@@ -4899,6 +4899,8 @@ header.header-scrolled .mobile-menu-icon-btn {
   cursor: pointer;
   background-color: var(--color-white);
   transition: var(--transition-smooth);
+  height: 100%;
+  box-sizing: border-box;
 }
 
 .quick-nav-card:hover {
