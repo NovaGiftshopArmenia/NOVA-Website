@@ -2113,6 +2113,11 @@ header.header-scrolled .lang-btn.active::after {
   grid-template-columns: 1fr 1fr;
   gap: var(--spacing-md);
   margin-bottom: var(--spacing-md);
+  align-items: start;
+}
+
+.form-row > .form-group {
+  margin-bottom: 0;
 }
 
 .form-group {
@@ -3737,8 +3742,8 @@ header.header-scrolled .mobile-menu-icon-btn {
   }
 
   .slider-product-card {
-    min-width: 85% !important;
-    width: 85% !important;
+    min-width: calc((100% - 12px) / 2) !important;
+    width: calc((100% - 12px) / 2) !important;
   }
 
   /* Hide all header actions on mobile except the mobile menu hamburger button */
@@ -6339,4 +6344,19 @@ body.user-logged-in .mobile-auth-guest {
     flex-direction: column;
     gap: 14px;
   }
+}
+
+/* Fix iOS Safari blue link/button color */
+button,
+.mobile-menu-links a,
+.cart-drawer-close,
+.mobile-menu-icon-btn,
+.size-btn,
+.qty-btn {
+  -webkit-appearance: none;
+  color: inherit;
+}
+
+a {
+  -webkit-tap-highlight-color: transparent;
 }

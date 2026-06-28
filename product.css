@@ -531,7 +531,6 @@ body:has(#product-page-body) {
   gap: var(--spacing-xl);
 }
 
-/* Responsive */
 @media (max-width: 900px) {
   .premium-product-hero {
     height: auto;
@@ -562,10 +561,29 @@ body:has(#product-page-body) {
     overflow-y: visible;
   }
   .pp-title {
-    font-size: 2.8rem;
+    font-size: 1.6rem;
+  }
+  .pp-price {
+    font-size: 1.3rem;
+  }
+  .pp-tagline {
+    font-size: 0.9rem;
+  }
+  .pp-description {
+    font-size: 0.82rem;
+  }
+  .pp-pyramid-tier {
+    font-size: 0.78rem;
+  }
+  .pp-pyramid-label {
+    font-size: 0.68rem;
+    width: 55px;
   }
   .pp-actions {
     flex-direction: column;
+  }
+  .qty-selector {
+    width: fit-content;
   }
   .pp-add-btn {
     padding: 16px 0;
@@ -577,6 +595,15 @@ body:has(#product-page-body) {
   .experience-text h2 {
     font-size: 2.2rem;
   }
+  .tier-label h4 {
+    font-size: 0.85rem;
+  }
+  .tier-label p {
+    font-size: 0.7rem;
+  }
+  .tier-value {
+    font-size: 1rem;
+  }
   .promises-grid {
     grid-template-columns: 1fr;
     gap: var(--spacing-md);
@@ -586,3 +613,4 @@ body:has(#product-page-body) {
     gap: var(--spacing-lg);
   }
 }
+
