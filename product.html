@@ -677,6 +677,159 @@
     </div>
   </footer>
 
+  <!-- Custom Confirm Dialog -->
+  <div id="nova-confirm-overlay" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.45); backdrop-filter:blur(4px); z-index:9999; justify-content:center; align-items:center;">
+    <div style="background:var(--color-white); border-radius:12px; padding:30px 34px; max-width:400px; width:90%; box-shadow:0 20px 50px rgba(0,0,0,0.2); text-align:center; animation:slideUp 0.25s ease forwards;">
+      <div style="margin-bottom:20px;">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="var(--color-sage)" style="width:40px; height:40px; margin:0 auto 10px;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4.5c-.77-.833-2.694-.833-3.464 0L3.34 16.5c-.77.833.192 2.5 1.732 2.5z"/></svg>
+        <p id="nova-confirm-message" style="font-size:0.95rem; color:var(--color-black); margin:0; line-height:1.5;"></p>
+      </div>
+      <div style="display:flex; gap:10px; justify-content:center;">
+        <button id="nova-confirm-cancel" style="padding:10px 28px; font-size:0.8rem; font-weight:600; border:1px solid var(--color-border); background:none; color:var(--color-medium-gray); border-radius:6px; cursor:pointer; text-transform:uppercase; letter-spacing:0.03em; transition:all 0.2s;">Cancel</button>
+        <button id="nova-confirm-ok" style="padding:10px 28px; font-size:0.8rem; font-weight:600; border:none; background:var(--color-sage); color:#fff; border-radius:6px; cursor:pointer; text-transform:uppercase; letter-spacing:0.03em; transition:all 0.2s;">Confirm</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Detailed Product Editor Modal -->
+  <div id="admin-product-modal-overlay" class="admin-modal-overlay hidden" onclick="closeDetailedProductModal(event)">
+    <div class="admin-modal-card" onclick="event.stopPropagation()">
+      <div class="admin-modal-header" style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--color-border); padding-bottom:12px; margin-bottom:20px;">
+        <h3 class="serif-title" id="admin-product-modal-title" style="font-size:1.4rem; margin:0;">Edit Product Details</h3>
+        <button type="button" class="admin-modal-close" onclick="closeDetailedProductModal(event)" style="background:none; border:none; font-size:1.8rem; cursor:pointer; color:var(--color-medium-gray); line-height:1;">&times;</button>
+      </div>
+      <div class="admin-modal-body">
+        <form id="admin-product-edit-form" onsubmit="saveDetailedProduct(event)">
+          <input type="hidden" id="modal-product-id">
+          <div class="modal-form-grid" style="display:grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+            <div style="display:flex; flex-direction:column; gap: 14px;">
+              <div class="form-group">
+                <label for="modal-product-name" style="font-size:0.75rem; text-transform:uppercase; color:var(--color-medium-gray); display:block; margin-bottom:4px;">Product Name *</label>
+                <input type="text" id="modal-product-name" required class="admin-input" style="width:100%; border:1px solid var(--color-border); padding:8px; border-radius:4px; background:var(--color-white);">
+              </div>
+              <div class="form-group">
+                <label for="modal-product-brand" style="font-size:0.75rem; text-transform:uppercase; color:var(--color-medium-gray); display:block; margin-bottom:4px;">Brand *</label>
+                <select id="modal-product-brand" required class="admin-input" style="width:100%; border:1px solid var(--color-border); padding:8px; border-radius:4px; background:var(--color-white);"></select>
+              </div>
+              <div class="form-group">
+                <label for="modal-product-tagline" style="font-size:0.75rem; text-transform:uppercase; color:var(--color-medium-gray); display:block; margin-bottom:4px;">Tagline / Short Desc *</label>
+                <input type="text" id="modal-product-tagline" required class="admin-input" style="width:100%; border:1px solid var(--color-border); padding:8px; border-radius:4px; background:var(--color-white);">
+              </div>
+              <div class="form-group">
+                <label for="modal-product-description" style="font-size:0.75rem; text-transform:uppercase; color:var(--color-medium-gray); display:block; margin-bottom:4px;">Description *</label>
+                <textarea id="modal-product-description" required class="admin-input" style="width:100%; border:1px solid var(--color-border); padding:8px; border-radius:4px; height: 100px; resize: vertical; background:var(--color-white);"></textarea>
+              </div>
+              <div class="form-group">
+                <label for="modal-product-ingredients" style="font-size:0.75rem; text-transform:uppercase; color:var(--color-medium-gray); display:block; margin-bottom:4px;">Ingredients</label>
+                <textarea id="modal-product-ingredients" class="admin-input" style="width:100%; border:1px solid var(--color-border); padding:8px; border-radius:4px; height: 80px; resize: vertical; background:var(--color-white);"></textarea>
+              </div>
+            </div>
+            <div style="display:flex; flex-direction:column; gap: 14px;">
+              <div class="form-group">
+                <label for="modal-product-image" style="font-size:0.75rem; text-transform:uppercase; color:var(--color-medium-gray); display:block; margin-bottom:4px;">Photo (Image URL) *</label>
+                <input type="text" id="modal-product-image" required class="admin-input" style="width:100%; border:1px solid var(--color-border); padding:8px; border-radius:4px; background:var(--color-white); margin-bottom:6px;">
+                <span style="font-size:0.7rem; color:var(--color-medium-gray); display:block; margin: 4px 0;">OR upload files:</span>
+                <input type="file" id="modal-product-image-file" accept="image/*" multiple class="admin-input" style="width:100%; border:1px solid var(--color-border); padding:6px; border-radius:4px; background:var(--color-white);">
+                <div id="modal-product-images-gallery" style="display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; min-height:0;"></div>
+              </div>
+              <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; align-items: end;">
+                <div class="form-group">
+                  <label for="modal-product-family" style="font-size:0.7rem; text-transform:uppercase; color:var(--color-medium-gray); display:block; margin-bottom:4px;">Family *</label>
+                  <select id="modal-product-family" class="admin-input" style="width:100%; border:1px solid var(--color-border); padding:8px; border-radius:4px; background:var(--color-white);">
+                    <option value="woody">Woody</option><option value="floral">Floral</option><option value="citrus">Citrus</option><option value="amber">Amber</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="modal-product-concentration" style="font-size:0.7rem; text-transform:uppercase; color:var(--color-medium-gray); display:block; margin-bottom:4px;">Type *</label>
+                  <select id="modal-product-concentration" class="admin-input" style="width:100%; border:1px solid var(--color-border); padding:8px; border-radius:4px; background:var(--color-white);">
+                    <option value="edc">EdC</option><option value="edt">EdT</option><option value="edp">EdP</option><option value="extrait">Extrait</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="modal-product-gender" style="font-size:0.7rem; text-transform:uppercase; color:var(--color-medium-gray); display:block; margin-bottom:4px;">Gender *</label>
+                  <select id="modal-product-gender" class="admin-input" style="width:100%; border:1px solid var(--color-border); padding:8px; border-radius:4px; background:var(--color-white);">
+                    <option value="men">Men</option><option value="women">Women</option><option value="unisex">Unisex</option>
+                  </select>
+                </div>
+              </div>
+              <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; align-items: end;">
+                <div class="form-group">
+                  <label for="modal-size-50" style="font-size:0.7rem; text-transform:uppercase; color:var(--color-medium-gray); display:block; margin-bottom:4px;">50ml Price ($)</label>
+                  <input type="number" id="modal-size-50" min="1" class="admin-input" placeholder="Leave blank if N/A" style="width:100%; border:1px solid var(--color-border); padding:8px; border-radius:4px; background:var(--color-white);">
+                </div>
+                <div class="form-group">
+                  <label for="modal-size-100" style="font-size:0.7rem; text-transform:uppercase; color:var(--color-medium-gray); display:block; margin-bottom:4px;">100ml Price ($)</label>
+                  <input type="number" id="modal-size-100" min="1" class="admin-input" placeholder="Leave blank if N/A" style="width:100%; border:1px solid var(--color-border); padding:8px; border-radius:4px; background:var(--color-white);">
+                </div>
+                <div class="form-group">
+                  <label for="modal-size-200" style="font-size:0.7rem; text-transform:uppercase; color:var(--color-medium-gray); display:block; margin-bottom:4px;">200ml Price ($)</label>
+                  <input type="number" id="modal-size-200" min="1" class="admin-input" placeholder="Leave blank if N/A" style="width:100%; border:1px solid var(--color-border); padding:8px; border-radius:4px; background:var(--color-white);">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="modal-product-stock" style="font-size:0.75rem; text-transform:uppercase; color:var(--color-medium-gray); display:block; margin-bottom:4px;">Stock Quantity *</label>
+                <input type="number" id="modal-product-stock" min="0" required class="admin-input" style="width:100%; border:1px solid var(--color-border); padding:8px; border-radius:4px; background:var(--color-white);">
+              </div>
+              <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px;">
+                <div class="form-group">
+                  <label for="modal-notes-top" style="font-size:0.7rem; text-transform:uppercase; color:var(--color-medium-gray); display:block; margin-bottom:4px;">Top Notes *</label>
+                  <input type="text" id="modal-notes-top" placeholder="e.g. Lime, Pear" required class="admin-input" style="width:100%; border:1px solid var(--color-border); padding:8px; border-radius:4px; background:var(--color-white); font-size:0.75rem;">
+                </div>
+                <div class="form-group">
+                  <label for="modal-notes-heart" style="font-size:0.7rem; text-transform:uppercase; color:var(--color-medium-gray); display:block; margin-bottom:4px;">Heart Notes *</label>
+                  <input type="text" id="modal-notes-heart" placeholder="e.g. Rose, Neroli" required class="admin-input" style="width:100%; border:1px solid var(--color-border); padding:8px; border-radius:4px; background:var(--color-white); font-size:0.75rem;">
+                </div>
+                <div class="form-group">
+                  <label for="modal-notes-base" style="font-size:0.7rem; text-transform:uppercase; color:var(--color-medium-gray); display:block; margin-bottom:4px;">Base Notes *</label>
+                  <input type="text" id="modal-notes-base" placeholder="e.g. Oud, Amber" required class="admin-input" style="width:100%; border:1px solid var(--color-border); padding:8px; border-radius:4px; background:var(--color-white); font-size:0.75rem;">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 14px;">
+            <div class="form-group" style="border:1px solid var(--color-border); border-radius:6px; padding:14px;">
+              <label style="font-size:0.7rem; text-transform:uppercase; color:var(--color-medium-gray); display:block; margin-bottom:10px; letter-spacing:0.05em;">Tags</label>
+              <div style="display:flex; flex-direction:column; gap:10px;">
+                <label style="font-size:0.8rem; display:flex; align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" id="modal-tag-bestseller" value="Best Seller"> Best Seller</label>
+                <label style="font-size:0.8rem; display:flex; align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" id="modal-tag-new" value="New"> New</label>
+                <label style="font-size:0.8rem; display:flex; align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" id="modal-tag-gift" value="Gift"> Gift</label>
+                <label style="font-size:0.8rem; display:flex; align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" id="modal-tag-home" value="Home"> Home</label>
+              </div>
+            </div>
+            <div class="form-group" style="border:1px solid var(--color-border); border-radius:6px; padding:14px;">
+              <label style="font-size:0.7rem; text-transform:uppercase; color:var(--color-medium-gray); display:block; margin-bottom:10px; letter-spacing:0.05em;">Vibes</label>
+              <div style="display:flex; flex-direction:column; gap:10px;">
+                <label style="font-size:0.8rem; display:flex; align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" id="modal-vibe-romantic" value="romantic"> Romantic</label>
+                <label style="font-size:0.8rem; display:flex; align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" id="modal-vibe-daily" value="daily"> Daily</label>
+                <label style="font-size:0.8rem; display:flex; align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" id="modal-vibe-professional" value="professional"> Business</label>
+                <label style="font-size:0.8rem; display:flex; align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" id="modal-vibe-cozy" value="cozy"> Cozy</label>
+                <label style="font-size:0.8rem; display:flex; align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" id="modal-vibe-mysterious" value="mysterious"> Mysterious</label>
+              </div>
+            </div>
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 10px;">
+            <div class="form-group">
+              <label for="modal-product-rating" style="font-size:0.7rem; text-transform:uppercase; color:var(--color-medium-gray); display:block; margin-bottom:4px;">Rating (0-5)</label>
+              <input type="number" id="modal-product-rating" min="0" max="5" step="0.1" class="admin-input" style="width:100%; border:1px solid var(--color-border); padding:8px; border-radius:4px; background:var(--color-white);">
+            </div>
+            <div class="form-group">
+              <label for="modal-product-reviews" style="font-size:0.7rem; text-transform:uppercase; color:var(--color-medium-gray); display:block; margin-bottom:4px;">Reviews Count</label>
+              <input type="number" id="modal-product-reviews" min="0" class="admin-input" style="width:100%; border:1px solid var(--color-border); padding:8px; border-radius:4px; background:var(--color-white);">
+            </div>
+            <div class="form-group" style="display:flex; align-items:center; gap:8px; padding-top:18px;">
+              <input type="checkbox" id="modal-product-featured">
+              <label for="modal-product-featured" style="font-size:0.75rem; cursor:pointer;">Featured Product</label>
+            </div>
+          </div>
+          <div class="modal-form-actions" style="margin-top: 24px; display: flex; justify-content: flex-end; gap: 12px; border-top:1px solid var(--color-border); padding-top:16px;">
+            <button type="button" class="btn-secondary" onclick="closeDetailedProductModal(event)" style="padding: 8px 16px; font-size:0.8rem;">Cancel</button>
+            <button type="submit" class="btn-primary" style="padding: 8px 20px; font-size:0.8rem;">Save Changes</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
   <!-- --- APPLICATION SCRIPTS --- -->
   <script src="products.js?v=9"></script>
   <script src="admin.js?v=9"></script>

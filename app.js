@@ -3849,24 +3849,24 @@ function renderProductPage(productId) {
   document.getElementById('pp-desc').innerText = description;
   document.getElementById('pp-rating-val').innerText = `${product.rating} (${product.reviewsCount} ${reviewsText})`;
 
-  // Show "Edit This Product" button for admins
+  // Show "Edit This Product" button for admins — inline with rating
   let editBtn = document.getElementById('pp-admin-edit-btn');
   if (editBtn) editBtn.remove();
   const adminSession = sessionStorage.getItem('nova_admin_session');
   if (adminSession) {
     editBtn = document.createElement('button');
     editBtn.id = 'pp-admin-edit-btn';
-    editBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width:13px; height:13px;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg> Edit This Product`;
-    editBtn.style.cssText = 'display:inline-flex; align-items:center; gap:6px; padding:6px 14px; font-size:0.7rem; font-weight:600; text-transform:uppercase; letter-spacing:0.04em; border:1px solid var(--color-sage); background:none; color:var(--color-sage); border-radius:4px; cursor:pointer; margin-top:10px; transition:all 0.2s;';
+    editBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width:12px; height:12px;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg> Edit`;
+    editBtn.style.cssText = 'display:inline-flex; align-items:center; gap:4px; padding:3px 10px; font-size:0.65rem; font-weight:600; text-transform:uppercase; letter-spacing:0.04em; border:1px solid var(--color-sage); background:none; color:var(--color-sage); border-radius:3px; cursor:pointer; margin-left:12px; transition:all 0.2s; vertical-align:middle;';
     editBtn.addEventListener('mouseenter', () => { editBtn.style.background = 'var(--color-sage)'; editBtn.style.color = '#fff'; });
     editBtn.addEventListener('mouseleave', () => { editBtn.style.background = 'none'; editBtn.style.color = 'var(--color-sage)'; });
     editBtn.addEventListener('click', () => {
-      openDetailedProductModal(product.id);
+      window.openDetailedProductModal(product.id);
     });
-    // Insert after the rating element
-    const ratingEl = document.getElementById('pp-rating-val');
-    if (ratingEl && ratingEl.parentElement) {
-      ratingEl.parentElement.insertBefore(editBtn, ratingEl.nextSibling);
+    // Insert inside the rating row, after the rating text
+    const ratingRow = document.querySelector('.pp-rating-row');
+    if (ratingRow) {
+      ratingRow.appendChild(editBtn);
     }
   }
 
@@ -5558,39 +5558,11 @@ function saveTrash(trash) {
   localStorage.setItem('nova_trash', JSON.stringify(trash));
 }
 
-// Custom confirm dialog (replaces browser confirm())
-function novaConfirm(message) {
-  return new Promise((resolve) => {
-    const overlay = document.getElementById('nova-confirm-overlay');
-    const msgEl = document.getElementById('nova-confirm-message');
-    const okBtn = document.getElementById('nova-confirm-ok');
-    const cancelBtn = document.getElementById('nova-confirm-cancel');
-    if (!overlay || !msgEl || !okBtn || !cancelBtn) { resolve(confirm(message)); return; }
-
-    msgEl.textContent = message;
-    overlay.style.display = 'flex';
-
-    function cleanup() {
-      overlay.style.display = 'none';
-      okBtn.removeEventListener('click', onOk);
-      cancelBtn.removeEventListener('click', onCancel);
-      overlay.removeEventListener('click', onOverlay);
-    }
-    function onOk() { cleanup(); resolve(true); }
-    function onCancel() { cleanup(); resolve(false); }
-    function onOverlay(e) { if (e.target === overlay) { cleanup(); resolve(false); } }
-
-    okBtn.addEventListener('click', onOk);
-    cancelBtn.addEventListener('click', onCancel);
-    overlay.addEventListener('click', onOverlay);
-  });
-}
-
-window.deleteProduct = async function(productId) {
+window.deleteProduct = function(productId) {
   const product = AppState.products.find(p => p.id === productId);
   if (!product) return;
   
-  if (!await novaConfirm(`Move "${product.name}" to trash?`)) return;
+  if (!confirm(`Move "${product.name}" to trash?`)) return;
   
   const session = JSON.parse(sessionStorage.getItem('nova_admin_session'));
   const idx = AppState.products.findIndex(p => p.id === productId);
@@ -5636,18 +5608,18 @@ window.restoreFromTrash = function(productId) {
   showToast(`"${product.name.toUpperCase()}" RESTORED.`);
 };
 
-window.permanentlyDelete = async function(productId) {
-  if (!await novaConfirm('Permanently delete this product? This cannot be undone.')) return;
+window.permanentlyDelete = function(productId) {
+  if (!confirm('Permanently delete this product? This cannot be undone.')) return;
   const trash = getTrash().filter(p => p.id !== productId);
   saveTrash(trash);
   renderTrashList();
   showToast('PRODUCT PERMANENTLY DELETED.');
 };
 
-window.emptyTrash = async function() {
+window.emptyTrash = function() {
   const trash = getTrash();
   if (trash.length === 0) { showToast('TRASH IS ALREADY EMPTY.'); return; }
-  if (!await novaConfirm(`Permanently delete all ${trash.length} product(s) in trash?`)) return;
+  if (!confirm(`Permanently delete all ${trash.length} product(s) in trash?`)) return;
   saveTrash([]);
   renderTrashList();
   showToast('TRASH EMPTIED.');
@@ -5714,10 +5686,77 @@ window.filterInventoryTable = function(query) {
   });
 };
 
+// --- BULK ACTIONS ---
+window.toggleAllInventoryCheckboxes = function(checked) {
+  document.querySelectorAll('.inv-row-checkbox').forEach(cb => {
+    // Only toggle visible rows
+    const row = cb.closest('tr');
+    if (row && row.style.display !== 'none') {
+      cb.checked = checked;
+    }
+  });
+};
+
+window.executeBulkAction = function() {
+  const actionSelect = document.getElementById('bulk-action-select');
+  const action = actionSelect ? actionSelect.value : '';
+  
+  if (!action) {
+    showToast('PLEASE SELECT A BULK ACTION.');
+    return;
+  }
+
+  const checkedIds = [];
+  document.querySelectorAll('.inv-row-checkbox:checked').forEach(cb => {
+    checkedIds.push(cb.value);
+  });
+
+  if (checkedIds.length === 0) {
+    showToast('NO PRODUCTS SELECTED.');
+    return;
+  }
+
+  if (action === 'trash') {
+    if (!confirm(`Move ${checkedIds.length} product(s) to trash?`)) return;
+
+    const session = JSON.parse(sessionStorage.getItem('nova_admin_session'));
+    const trash = getTrash();
+    const names = [];
+
+    checkedIds.forEach(productId => {
+      const idx = AppState.products.findIndex(p => p.id === productId);
+      if (idx !== -1) {
+        const product = AppState.products[idx];
+        names.push(product.name);
+        trash.unshift({ ...product, deletedAt: new Date().toISOString() });
+        AppState.products.splice(idx, 1);
+      }
+    });
+
+    saveTrash(trash);
+    saveProductsToStorage();
+    renderFeaturedProducts();
+    renderShop();
+    refreshAdminDashboard();
+
+    if (session) {
+      logAdminActivity(session.name, `Bulk moved to trash: ${names.join(', ')}`);
+    }
+    showToast(`${checkedIds.length} PRODUCT(S) MOVED TO TRASH.`);
+    
+    // Reset select-all checkbox
+    const selectAll = document.getElementById('inv-select-all');
+    if (selectAll) selectAll.checked = false;
+    
+    // Reset dropdown
+    if (actionSelect) actionSelect.value = '';
+  }
+};
+
 // --- ORDER MANAGEMENT ACTIONS ---
 
-window.deleteOrder = async function(orderId) {
-  if (!await novaConfirm(`Are you sure you want to delete order #${orderId}? This action cannot be undone.`)) return;
+window.deleteOrder = function(orderId) {
+  if (!confirm(`Are you sure you want to delete order #${orderId}? This action cannot be undone.`)) return;
   
   const session = JSON.parse(sessionStorage.getItem('nova_admin_session'));
   if (typeof WooCommerceAdmin !== 'undefined') {
@@ -6490,8 +6529,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }).join('');
   };
 
-  window.deleteClient = async function(userId) {
-    if (!await novaConfirm('Remove this client?')) return;
+  window.deleteClient = function(userId) {
+    if (!confirm('Remove this client?')) return;
     let users = [];
     try { users = JSON.parse(localStorage.getItem('nova_users')) || []; }
     catch(e) { users = []; }

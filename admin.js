@@ -197,6 +197,7 @@ const WooCommerceAdmin = {
       const isFeatured = !!product.featured;
 
       tr.innerHTML = `
+        <td><input type="checkbox" class="inv-row-checkbox" value="${product.id}" style="cursor:pointer;"></td>
         <td style="cursor: pointer;" onclick="openDetailedProductModal('${product.id}')"><img src="${product.image}" alt="${product.name}" style="width: 40px; height: 50px; object-fit: cover; border: 1px solid var(--color-border);"></td>
         <td style="cursor: pointer;" onclick="openDetailedProductModal('${product.id}')">
           <div style="font-weight: 500;">${product.name}</div>
