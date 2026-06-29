@@ -954,12 +954,12 @@
                         <h3 class="admin-card-title" style="margin-bottom:4px;">Recently Deleted Products</h3>
                         <p style="font-size:0.8rem; color:var(--color-medium-gray); margin:0;">Products moved to trash can be restored or permanently deleted.</p>
                       </div>
-                      <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
-                        <label style="display:flex; align-items:center; gap:6px; font-size:0.75rem; cursor:pointer; color:var(--color-medium-gray);">
+                      <div style="display:flex; gap:8px; align-items:center;">
+                        <label style="display:flex; align-items:center; gap:6px; font-size:0.75rem; cursor:pointer; color:var(--color-medium-gray); white-space:nowrap;">
                           <input type="checkbox" id="trash-select-all" onchange="toggleAllTrashCheckboxes(this.checked)" style="cursor:pointer;">
                           Select All
                         </label>
-                        <select id="trash-bulk-action-select" class="admin-input" style="border:1px solid var(--color-border); border-radius:4px; padding:7px 12px; font-size:0.75rem; background:var(--color-white); min-width:160px;">
+                        <select id="trash-bulk-action-select" class="admin-input" style="border:1px solid var(--color-border); border-radius:4px; padding:7px 12px; font-size:0.75rem; background:var(--color-white); min-width:140px;">
                           <option value="">Bulk Actions</option>
                           <option value="restore">Restore All</option>
                           <option value="delete">Delete All</option>
