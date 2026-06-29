@@ -5322,16 +5322,19 @@ window.openDetailedProductModal = function(productId) {
   const featuredEl = document.getElementById('modal-product-featured');
   if (featuredEl) featuredEl.checked = !!product.featured;
 
-  // Setup preview img
-  const previewImg = document.getElementById('modal-preview-img');
-  if (previewImg) {
-    if (product.image) {
-      previewImg.src = product.image;
-      previewImg.style.display = 'block';
-    } else {
-      previewImg.style.display = 'none';
-    }
+  // Setup image gallery
+  window._modalUploadedImages = [];
+  if (product.image) {
+    window._modalUploadedImages.push(product.image);
   }
+  if (product.images && Array.isArray(product.images)) {
+    product.images.forEach(img => {
+      if (!window._modalUploadedImages.includes(img)) {
+        window._modalUploadedImages.push(img);
+      }
+    });
+  }
+  renderModalImageGallery();
 
   // Clear file input
   const fileInput = document.getElementById('modal-product-image-file');
@@ -5382,9 +5385,9 @@ window.openNewProductModal = function() {
   const featuredEl = document.getElementById('modal-product-featured');
   if (featuredEl) featuredEl.checked = false;
 
-  // Clear preview
-  const previewImg = document.getElementById('modal-preview-img');
-  if (previewImg) previewImg.style.display = 'none';
+  // Clear image gallery
+  window._modalUploadedImages = [];
+  renderModalImageGallery();
   const fileInput = document.getElementById('modal-product-image-file');
   if (fileInput) fileInput.value = '';
 
@@ -5590,24 +5593,94 @@ window.deleteOrder = function(orderId) {
   }
 };
 
-// Hook image file picker inside modal
+// Multi-image gallery for product modal
+window._modalUploadedImages = [];
+
+function renderModalImageGallery() {
+  const gallery = document.getElementById('modal-product-images-gallery');
+  if (!gallery) return;
+  gallery.innerHTML = '';
+
+  window._modalUploadedImages.forEach((imgSrc, idx) => {
+    const thumb = document.createElement('div');
+    thumb.style.cssText = 'position:relative; width:70px; height:70px; border:1px solid var(--color-border); border-radius:6px; overflow:hidden; cursor:grab; flex-shrink:0;';
+    thumb.draggable = true;
+    thumb.dataset.imgIdx = idx;
+
+    const img = document.createElement('img');
+    img.src = imgSrc;
+    img.style.cssText = 'width:100%; height:100%; object-fit:cover;';
+    thumb.appendChild(img);
+
+    // Index badge
+    const badge = document.createElement('span');
+    badge.textContent = idx + 1;
+    badge.style.cssText = 'position:absolute; top:2px; left:2px; background:rgba(0,0,0,0.6); color:#fff; font-size:0.6rem; padding:1px 5px; border-radius:3px;';
+    thumb.appendChild(badge);
+
+    // Remove button
+    const removeBtn = document.createElement('button');
+    removeBtn.type = 'button';
+    removeBtn.innerHTML = '&times;';
+    removeBtn.style.cssText = 'position:absolute; top:2px; right:2px; background:rgba(0,0,0,0.6); color:#fff; border:none; border-radius:50%; width:18px; height:18px; font-size:0.75rem; cursor:pointer; display:flex; align-items:center; justify-content:center; line-height:1; padding:0;';
+    removeBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      window._modalUploadedImages.splice(idx, 1);
+      syncMainImageFromGallery();
+      renderModalImageGallery();
+    });
+    thumb.appendChild(removeBtn);
+
+    // Drag events
+    thumb.addEventListener('dragstart', (e) => {
+      e.dataTransfer.setData('text/plain', idx);
+      thumb.style.opacity = '0.4';
+    });
+    thumb.addEventListener('dragend', () => { thumb.style.opacity = '1'; });
+    thumb.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      thumb.style.outline = '2px solid var(--color-sage)';
+    });
+    thumb.addEventListener('dragleave', () => { thumb.style.outline = 'none'; });
+    thumb.addEventListener('drop', (e) => {
+      e.preventDefault();
+      thumb.style.outline = 'none';
+      const fromIdx = parseInt(e.dataTransfer.getData('text/plain'));
+      const toIdx = idx;
+      if (fromIdx === toIdx) return;
+      const [moved] = window._modalUploadedImages.splice(fromIdx, 1);
+      window._modalUploadedImages.splice(toIdx, 0, moved);
+      syncMainImageFromGallery();
+      renderModalImageGallery();
+    });
+
+    gallery.appendChild(thumb);
+  });
+}
+
+function syncMainImageFromGallery() {
+  const urlField = document.getElementById('modal-product-image');
+  if (urlField && window._modalUploadedImages.length > 0) {
+    urlField.value = window._modalUploadedImages[0];
+  }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   const modalImgFile = document.getElementById('modal-product-image-file');
   if (modalImgFile) {
     modalImgFile.addEventListener('change', (e) => {
-      const file = e.target.files[0];
-      if (file) {
+      const files = Array.from(e.target.files);
+      files.forEach(file => {
         const reader = new FileReader();
         reader.onload = (event) => {
-          document.getElementById('modal-product-image').value = event.target.result;
-          const previewImg = document.getElementById('modal-preview-img');
-          if (previewImg) {
-            previewImg.src = event.target.result;
-            previewImg.style.display = 'block';
-          }
+          window._modalUploadedImages.push(event.target.result);
+          syncMainImageFromGallery();
+          renderModalImageGallery();
         };
         reader.readAsDataURL(file);
-      }
+      });
+      // Reset input so same files can be re-selected
+      e.target.value = '';
     });
   }
 });
