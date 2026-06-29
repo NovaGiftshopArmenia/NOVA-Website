@@ -5643,6 +5643,7 @@ function renderTrashList() {
     const deletedDate = product.deletedAt ? new Date(product.deletedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : 'Unknown';
     return `
       <div style="display:flex; align-items:center; gap:14px; padding:12px 14px; border:1px solid var(--color-border); border-radius:6px; background:var(--color-white); margin-bottom:8px; flex-wrap:wrap;">
+        <input type="checkbox" class="trash-row-checkbox" value="${product.id}" style="cursor:pointer;">
         <img src="${product.image}" alt="${product.name}" style="width:50px; height:50px; object-fit:cover; border-radius:4px; border:1px solid var(--color-border);">
         <div style="flex:1; min-width:120px;">
           <div style="font-size:0.85rem; font-weight:600;">${product.name}</div>
@@ -5655,7 +5656,62 @@ function renderTrashList() {
       </div>
     `;
   }).join('');
+
+  // Reset select-all
+  const selectAll = document.getElementById('trash-select-all');
+  if (selectAll) selectAll.checked = false;
 }
+
+window.toggleAllTrashCheckboxes = function(checked) {
+  document.querySelectorAll('.trash-row-checkbox').forEach(cb => { cb.checked = checked; });
+};
+
+window.executeTrashBulkAction = function() {
+  const actionSelect = document.getElementById('trash-bulk-action-select');
+  const action = actionSelect ? actionSelect.value : '';
+
+  if (!action) { showToast('PLEASE SELECT A BULK ACTION.'); return; }
+
+  const checkedIds = [];
+  document.querySelectorAll('.trash-row-checkbox:checked').forEach(cb => { checkedIds.push(cb.value); });
+
+  if (checkedIds.length === 0) { showToast('NO PRODUCTS SELECTED.'); return; }
+
+  if (action === 'restore') {
+    if (!confirm(`Restore ${checkedIds.length} product(s)?`)) return;
+    const trash = getTrash();
+    const session = JSON.parse(sessionStorage.getItem('nova_admin_session'));
+
+    checkedIds.forEach(id => {
+      const idx = trash.findIndex(p => p.id === id);
+      if (idx !== -1) {
+        const product = { ...trash[idx] };
+        delete product.deletedAt;
+        trash.splice(idx, 1);
+        AppState.products.push(product);
+      }
+    });
+
+    saveTrash(trash);
+    saveProductsToStorage();
+    renderFeaturedProducts();
+    renderShop();
+    refreshAdminDashboard();
+    renderTrashList();
+    if (session) logAdminActivity(session.name, `Bulk restored ${checkedIds.length} product(s) from trash`);
+    showToast(`${checkedIds.length} PRODUCT(S) RESTORED.`);
+  }
+
+  if (action === 'delete') {
+    if (!confirm(`Permanently delete ${checkedIds.length} product(s)? This cannot be undone.`)) return;
+    let trash = getTrash().filter(p => !checkedIds.includes(p.id));
+    saveTrash(trash);
+    renderTrashList();
+    showToast(`${checkedIds.length} PRODUCT(S) PERMANENTLY DELETED.`);
+  }
+
+  if (actionSelect) actionSelect.value = '';
+};
 
 window.toggleProductFeatured = function(productId) {
   const product = AppState.products.find(p => p.id === productId);
