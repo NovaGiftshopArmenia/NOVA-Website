@@ -932,6 +932,7 @@
                 <div style="display:flex; gap:0; margin-bottom:20px; border-bottom:2px solid var(--color-border);">
                   <button class="inventory-sub-tab active" data-inv-tab="products" onclick="switchInventorySubTab('products')" style="padding:10px 24px; font-size:0.8rem; font-weight:600; text-transform:uppercase; letter-spacing:0.05em; background:none; border:none; cursor:pointer; color:var(--color-black); border-bottom:2px solid var(--color-black); margin-bottom:-2px; transition:all 0.2s;">Products</button>
                   <button class="inventory-sub-tab" data-inv-tab="brands" onclick="switchInventorySubTab('brands')" style="padding:10px 24px; font-size:0.8rem; font-weight:600; text-transform:uppercase; letter-spacing:0.05em; background:none; border:none; cursor:pointer; color:var(--color-medium-gray); border-bottom:2px solid transparent; margin-bottom:-2px; transition:all 0.2s;">Brands</button>
+                  <button class="inventory-sub-tab" data-inv-tab="trash" onclick="switchInventorySubTab('trash')" style="padding:10px 24px; font-size:0.8rem; font-weight:600; text-transform:uppercase; letter-spacing:0.05em; background:none; border:none; cursor:pointer; color:var(--color-medium-gray); border-bottom:2px solid transparent; margin-bottom:-2px; transition:all 0.2s;">Trash</button>
                 </div>
 
                 <!-- Products Sub-Panel -->
@@ -990,6 +991,29 @@
                     <!-- Brands List -->
                     <div id="admin-brands-list" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(200px, 1fr)); gap:10px;">
                       <!-- Populated dynamically -->
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Trash Sub-Panel -->
+                <div id="inv-sub-trash" class="inv-sub-panel" style="display:none;">
+                  <div class="admin-card">
+                    <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:20px; flex-wrap:wrap; gap:12px;">
+                      <div>
+                        <h3 class="admin-card-title" style="margin-bottom:4px;">Recently Deleted Products</h3>
+                        <p style="font-size:0.8rem; color:var(--color-medium-gray); margin:0;">Products moved to trash can be restored or permanently deleted.</p>
+                      </div>
+                      <button class="btn-primary" onclick="emptyTrash()" style="padding:8px 18px; font-size:0.75rem; white-space:nowrap; display:flex; align-items:center; gap:6px; background:var(--color-medium-gray);">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width:14px; height:14px;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                        Empty Trash
+                      </button>
+                    </div>
+                    <div id="admin-trash-list">
+                      <!-- Populated dynamically -->
+                    </div>
+                    <div id="admin-trash-empty" style="text-align:center; padding:40px 20px; color:var(--color-medium-gray); display:none;">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width:48px; height:48px; margin:0 auto 12px; opacity:0.4;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                      <p style="font-size:0.9rem;">Trash is empty</p>
                     </div>
                   </div>
                 </div>

@@ -5528,15 +5528,30 @@ window.saveDetailedProduct = function(event) {
 };
 // --- PRODUCT MANAGEMENT ACTIONS ---
 
+// Trash management
+function getTrash() {
+  try { return JSON.parse(localStorage.getItem('nova_trash') || '[]'); } catch(e) { return []; }
+}
+
+function saveTrash(trash) {
+  localStorage.setItem('nova_trash', JSON.stringify(trash));
+}
+
 window.deleteProduct = function(productId) {
   const product = AppState.products.find(p => p.id === productId);
   if (!product) return;
   
-  if (!confirm(`Are you sure you want to delete "${product.name}"? This action cannot be undone.`)) return;
+  if (!confirm(`Move "${product.name}" to trash?`)) return;
   
   const session = JSON.parse(sessionStorage.getItem('nova_admin_session'));
   const idx = AppState.products.findIndex(p => p.id === productId);
   if (idx !== -1) {
+    // Move to trash with deletion timestamp
+    const trashedProduct = { ...product, deletedAt: new Date().toISOString() };
+    const trash = getTrash();
+    trash.unshift(trashedProduct);
+    saveTrash(trash);
+
     AppState.products.splice(idx, 1);
     saveProductsToStorage();
     renderFeaturedProducts();
@@ -5544,11 +5559,82 @@ window.deleteProduct = function(productId) {
     refreshAdminDashboard();
     
     if (session) {
-      logAdminActivity(session.name, `Deleted product: ${product.name}`);
+      logAdminActivity(session.name, `Moved to trash: ${product.name}`);
     }
-    showToast(`PRODUCT "${product.name.toUpperCase()}" DELETED.`);
+    showToast(`"${product.name.toUpperCase()}" MOVED TO TRASH.`);
   }
 };
+
+window.restoreFromTrash = function(productId) {
+  const trash = getTrash();
+  const idx = trash.findIndex(p => p.id === productId);
+  if (idx === -1) return;
+
+  const product = { ...trash[idx] };
+  delete product.deletedAt;
+  trash.splice(idx, 1);
+  saveTrash(trash);
+
+  AppState.products.push(product);
+  saveProductsToStorage();
+  renderFeaturedProducts();
+  renderShop();
+  refreshAdminDashboard();
+  renderTrashList();
+
+  const session = JSON.parse(sessionStorage.getItem('nova_admin_session'));
+  if (session) logAdminActivity(session.name, `Restored from trash: ${product.name}`);
+  showToast(`"${product.name.toUpperCase()}" RESTORED.`);
+};
+
+window.permanentlyDelete = function(productId) {
+  if (!confirm('Permanently delete this product? This cannot be undone.')) return;
+  const trash = getTrash().filter(p => p.id !== productId);
+  saveTrash(trash);
+  renderTrashList();
+  showToast('PRODUCT PERMANENTLY DELETED.');
+};
+
+window.emptyTrash = function() {
+  const trash = getTrash();
+  if (trash.length === 0) { showToast('TRASH IS ALREADY EMPTY.'); return; }
+  if (!confirm(`Permanently delete all ${trash.length} product(s) in trash?`)) return;
+  saveTrash([]);
+  renderTrashList();
+  showToast('TRASH EMPTIED.');
+};
+
+function renderTrashList() {
+  const container = document.getElementById('admin-trash-list');
+  const emptyMsg = document.getElementById('admin-trash-empty');
+  if (!container) return;
+
+  const trash = getTrash();
+  
+  if (trash.length === 0) {
+    container.innerHTML = '';
+    if (emptyMsg) emptyMsg.style.display = 'block';
+    return;
+  }
+  if (emptyMsg) emptyMsg.style.display = 'none';
+
+  container.innerHTML = trash.map(product => {
+    const deletedDate = product.deletedAt ? new Date(product.deletedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : 'Unknown';
+    return `
+      <div style="display:flex; align-items:center; gap:14px; padding:12px 14px; border:1px solid var(--color-border); border-radius:6px; background:var(--color-white); margin-bottom:8px; flex-wrap:wrap;">
+        <img src="${product.image}" alt="${product.name}" style="width:50px; height:50px; object-fit:cover; border-radius:4px; border:1px solid var(--color-border);">
+        <div style="flex:1; min-width:120px;">
+          <div style="font-size:0.85rem; font-weight:600;">${product.name}</div>
+          <div style="font-size:0.7rem; color:var(--color-medium-gray);">${product.brand} · Deleted ${deletedDate}</div>
+        </div>
+        <div style="display:flex; gap:8px;">
+          <button onclick="restoreFromTrash('${product.id}')" style="padding:6px 14px; font-size:0.7rem; border:1px solid var(--color-sage); background:none; color:var(--color-sage); border-radius:4px; cursor:pointer; font-weight:600; text-transform:uppercase; transition:all 0.2s;" onmouseover="this.style.background='var(--color-sage)';this.style.color='#fff'" onmouseout="this.style.background='none';this.style.color='var(--color-sage)'">Restore</button>
+          <button onclick="permanentlyDelete('${product.id}')" style="padding:6px 14px; font-size:0.7rem; border:1px solid #c00; background:none; color:#c00; border-radius:4px; cursor:pointer; font-weight:600; text-transform:uppercase; transition:all 0.2s;" onmouseover="this.style.background='#c00';this.style.color='#fff'" onmouseout="this.style.background='none';this.style.color='#c00'">Delete</button>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
 
 window.toggleProductFeatured = function(productId) {
   const product = AppState.products.find(p => p.id === productId);
@@ -5687,6 +5773,8 @@ window.switchInventorySubTab = function(tabName) {
 
   if (tabName === 'brands') {
     renderBrandsList();
+  } else if (tabName === 'trash') {
+    renderTrashList();
   }
 };
 
