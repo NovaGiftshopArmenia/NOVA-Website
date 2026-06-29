@@ -5762,20 +5762,43 @@ function syncMainImageFromGallery() {
   }
 }
 
+// Convert an image file to WebP using Canvas API
+function convertToWebP(file, quality = 0.85) {
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        canvas.width = img.naturalWidth;
+        canvas.height = img.naturalHeight;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0);
+        // Export as WebP
+        const webpDataUrl = canvas.toDataURL('image/webp', quality);
+        resolve(webpDataUrl);
+      };
+      img.onerror = () => {
+        // Fallback to original if conversion fails
+        resolve(e.target.result);
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   const modalImgFile = document.getElementById('modal-product-image-file');
   if (modalImgFile) {
-    modalImgFile.addEventListener('change', (e) => {
+    modalImgFile.addEventListener('change', async (e) => {
       const files = Array.from(e.target.files);
-      files.forEach(file => {
-        const reader = new FileReader();
-        reader.onload = (event) => {
-          window._modalUploadedImages.push(event.target.result);
-          syncMainImageFromGallery();
-          renderModalImageGallery();
-        };
-        reader.readAsDataURL(file);
-      });
+      for (const file of files) {
+        const webpDataUrl = await convertToWebP(file);
+        window._modalUploadedImages.push(webpDataUrl);
+        syncMainImageFromGallery();
+        renderModalImageGallery();
+      }
       // Reset input so same files can be re-selected
       e.target.value = '';
     });
