@@ -4012,6 +4012,12 @@ window.goToCheckout = function () {
     return;
   }
   closeCartDrawer();
+  // If on product page, redirect to main page checkout
+  const isProductPage = window.location.pathname.endsWith('/product') || window.location.pathname.endsWith('/product.html');
+  if (isProductPage) {
+    window.location.href = 'index.html#/checkout';
+    return;
+  }
   window.location.hash = '#/checkout';
   renderCheckoutPage();
 };
