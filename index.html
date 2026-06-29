@@ -290,50 +290,12 @@
       <!-- Infinite Brand Slider -->
       <div class="brand-slider-section">
         <div class="brand-slider-track">
-          <div class="brand-slider-list">
-            <span class="brand-slider-item" onclick="window.location.hash='#/shop'; applyPresetFilter('brand', 'Chanel')" data-trans="brand_chanel">Chanel</span>
-            <span class="brand-slider-item" onclick="window.location.hash='#/shop'; applyPresetFilter('brand', 'Dior')" data-trans="brand_dior">Dior</span>
-            <span class="brand-slider-item" onclick="window.location.hash='#/shop'; applyPresetFilter('brand', 'Giorgio Armani')" data-trans="brand_giorgio_armani">Giorgio Armani</span>
-            <span class="brand-slider-item" onclick="window.location.hash='#/shop'; applyPresetFilter('brand', 'Yves Saint Laurent')" data-trans="brand_yves_saint_laurent">Yves Saint Laurent</span>
-            <span class="brand-slider-item" onclick="window.location.hash='#/shop'; applyPresetFilter('brand', 'Gucci')" data-trans="brand_gucci">Gucci</span>
-            <span class="brand-slider-item" onclick="window.location.hash='#/shop'; applyPresetFilter('brand', 'Versace')" data-trans="brand_versace">Versace</span>
-            <span class="brand-slider-item" onclick="window.location.hash='#/shop'; applyPresetFilter('brand', 'Calvin Klein')" data-trans="brand_calvin_klein">Calvin Klein</span>
-            <span class="brand-slider-item" onclick="window.location.hash='#/shop'; applyPresetFilter('brand', 'Dolce & Gabbana')" data-trans="brand_dolce_gabbana">Dolce & Gabbana</span>
-            <span class="brand-slider-item" onclick="window.location.hash='#/shop'; applyPresetFilter('brand', 'Tom Ford')" data-trans="brand_tom_ford">Tom Ford</span>
-            <span class="brand-slider-item" onclick="window.location.hash='#/shop'; applyPresetFilter('brand', 'Hermès')" data-trans="brand_hermes">Hermès</span>
-            <span class="brand-slider-item" onclick="window.location.hash='#/shop'; applyPresetFilter('brand', 'Burberry')" data-trans="brand_burberry">Burberry</span>
-            <span class="brand-slider-item" onclick="window.location.hash='#/shop'; applyPresetFilter('brand', 'Lancôme')" data-trans="brand_lancome">Lancôme</span>
-            <span class="brand-slider-item" onclick="window.location.hash='#/shop'; applyPresetFilter('brand', 'Paco Rabanne')" data-trans="brand_paco_rabanne">Paco Rabanne</span>
-            <span class="brand-slider-item" onclick="window.location.hash='#/shop'; applyPresetFilter('brand', 'Jean Paul Gaultier')" data-trans="brand_jean_paul_gaultier">Jean Paul Gaultier</span>
-            <span class="brand-slider-item" onclick="window.location.hash='#/shop'; applyPresetFilter('brand', 'Hugo Boss')" data-trans="brand_hugo_boss">Hugo Boss</span>
-            <span class="brand-slider-item" onclick="window.location.hash='#/shop'; applyPresetFilter('brand', 'Creed')" data-trans="brand_creed">Creed</span>
-            <span class="brand-slider-item" onclick="window.location.hash='#/shop'; applyPresetFilter('brand', 'Jo Malone London')" data-trans="brand_jo_malone">Jo Malone London</span>
-            <span class="brand-slider-item" onclick="window.location.hash='#/shop'; applyPresetFilter('brand', 'Maison Francis Kurkdjian')" data-trans="brand_maison_francis_kurkdjian">Maison Francis Kurkdjian</span>
-            <span class="brand-slider-item" onclick="window.location.hash='#/shop'; applyPresetFilter('brand', 'Byredo')">Byredo</span>
-            <span class="brand-slider-item" onclick="window.location.hash='#/shop'; applyPresetFilter('brand', 'Le Labo')">Le Labo</span>
+          <div class="brand-slider-list" id="brand-slider-list-1">
+            <!-- Populated dynamically from admin brands -->
           </div>
           <!-- Duplicate for seamless scroll -->
-          <div class="brand-slider-list" aria-hidden="true">
-            <span class="brand-slider-item" onclick="window.location.hash='#/shop'; applyPresetFilter('brand', 'Chanel')" data-trans="brand_chanel">Chanel</span>
-            <span class="brand-slider-item" onclick="window.location.hash='#/shop'; applyPresetFilter('brand', 'Dior')" data-trans="brand_dior">Dior</span>
-            <span class="brand-slider-item" onclick="window.location.hash='#/shop'; applyPresetFilter('brand', 'Giorgio Armani')" data-trans="brand_giorgio_armani">Giorgio Armani</span>
-            <span class="brand-slider-item" onclick="window.location.hash='#/shop'; applyPresetFilter('brand', 'Yves Saint Laurent')" data-trans="brand_yves_saint_laurent">Yves Saint Laurent</span>
-            <span class="brand-slider-item" onclick="window.location.hash='#/shop'; applyPresetFilter('brand', 'Gucci')" data-trans="brand_gucci">Gucci</span>
-            <span class="brand-slider-item" onclick="window.location.hash='#/shop'; applyPresetFilter('brand', 'Versace')" data-trans="brand_versace">Versace</span>
-            <span class="brand-slider-item" onclick="window.location.hash='#/shop'; applyPresetFilter('brand', 'Calvin Klein')" data-trans="brand_calvin_klein">Calvin Klein</span>
-            <span class="brand-slider-item" onclick="window.location.hash='#/shop'; applyPresetFilter('brand', 'Dolce & Gabbana')" data-trans="brand_dolce_gabbana">Dolce & Gabbana</span>
-            <span class="brand-slider-item" onclick="window.location.hash='#/shop'; applyPresetFilter('brand', 'Tom Ford')" data-trans="brand_tom_ford">Tom Ford</span>
-            <span class="brand-slider-item" onclick="window.location.hash='#/shop'; applyPresetFilter('brand', 'Hermès')" data-trans="brand_hermes">Hermès</span>
-            <span class="brand-slider-item" onclick="window.location.hash='#/shop'; applyPresetFilter('brand', 'Burberry')" data-trans="brand_burberry">Burberry</span>
-            <span class="brand-slider-item" onclick="window.location.hash='#/shop'; applyPresetFilter('brand', 'Lancôme')" data-trans="brand_lancome">Lancôme</span>
-            <span class="brand-slider-item" onclick="window.location.hash='#/shop'; applyPresetFilter('brand', 'Paco Rabanne')" data-trans="brand_paco_rabanne">Paco Rabanne</span>
-            <span class="brand-slider-item" onclick="window.location.hash='#/shop'; applyPresetFilter('brand', 'Jean Paul Gaultier')" data-trans="brand_jean_paul_gaultier">Jean Paul Gaultier</span>
-            <span class="brand-slider-item" onclick="window.location.hash='#/shop'; applyPresetFilter('brand', 'Hugo Boss')" data-trans="brand_hugo_boss">Hugo Boss</span>
-            <span class="brand-slider-item" onclick="window.location.hash='#/shop'; applyPresetFilter('brand', 'Creed')" data-trans="brand_creed">Creed</span>
-            <span class="brand-slider-item" onclick="window.location.hash='#/shop'; applyPresetFilter('brand', 'Jo Malone London')" data-trans="brand_jo_malone">Jo Malone London</span>
-            <span class="brand-slider-item" onclick="window.location.hash='#/shop'; applyPresetFilter('brand', 'Maison Francis Kurkdjian')" data-trans="brand_maison_francis_kurkdjian">Maison Francis Kurkdjian</span>
-            <span class="brand-slider-item" onclick="window.location.hash='#/shop'; applyPresetFilter('brand', 'Byredo')">Byredo</span>
-            <span class="brand-slider-item" onclick="window.location.hash='#/shop'; applyPresetFilter('brand', 'Le Labo')">Le Labo</span>
+          <div class="brand-slider-list" id="brand-slider-list-2" aria-hidden="true">
+            <!-- Populated dynamically from admin brands -->
           </div>
         </div>
       </div>

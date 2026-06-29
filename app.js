@@ -1888,6 +1888,7 @@ window.changeLanguage = function (lang) {
 
   // Re-render components that are dynamically built
   renderFeaturedProducts();
+  if (typeof renderBrandSlider === 'function') renderBrandSlider();
   if (typeof renderFilterWidgets === 'function') {
     renderFilterWidgets('desktop-sidebar-filters', false);
   }
@@ -5847,8 +5848,33 @@ function getBrands() {
   return allBrands;
 }
 
+// Render the homepage brand slider from admin Brands list
+function renderBrandSlider() {
+  const list1 = document.getElementById('brand-slider-list-1');
+  const list2 = document.getElementById('brand-slider-list-2');
+  if (!list1 || !list2) return;
+
+  const brands = getBrands();
+  const buildItems = () => brands.map(brand => {
+    const span = document.createElement('span');
+    span.className = 'brand-slider-item';
+    span.textContent = brand;
+    span.addEventListener('click', () => {
+      window.location.hash = '#/shop';
+      if (typeof applyPresetFilter === 'function') applyPresetFilter('brand', brand);
+    });
+    return span;
+  });
+
+  list1.innerHTML = '';
+  list2.innerHTML = '';
+  buildItems().forEach(el => list1.appendChild(el));
+  buildItems().forEach(el => list2.appendChild(el));
+}
+
 function saveBrands(brands) {
   localStorage.setItem('nova_brands', JSON.stringify(brands));
+  renderBrandSlider();
 }
 
 window.addNewBrand = function() {
