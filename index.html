@@ -928,36 +928,69 @@
 
               <!-- B. INVENTORY TAB PANEL -->
               <div id="admin-sec-inventory" class="admin-panel-sub hidden">
-                <div class="admin-card">
-                  <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom: 16px; flex-wrap:wrap; gap:12px;">
-                    <div>
-                      <h3 class="admin-card-title" style="margin-bottom:4px;" data-trans="admin_inventory_title">WooCommerce Inventory & Price Control</h3>
-                      <p style="font-size:0.8rem; color:var(--color-medium-gray); margin:0;" data-trans="admin_inventory_desc">Edit prices and quantity stock levels. Click "Update" to apply to storefront immediately.</p>
+                <!-- Sub-tabs for Inventory -->
+                <div style="display:flex; gap:0; margin-bottom:20px; border-bottom:2px solid var(--color-border);">
+                  <button class="inventory-sub-tab active" data-inv-tab="products" onclick="switchInventorySubTab('products')" style="padding:10px 24px; font-size:0.8rem; font-weight:600; text-transform:uppercase; letter-spacing:0.05em; background:none; border:none; cursor:pointer; color:var(--color-black); border-bottom:2px solid var(--color-black); margin-bottom:-2px; transition:all 0.2s;">Products</button>
+                  <button class="inventory-sub-tab" data-inv-tab="brands" onclick="switchInventorySubTab('brands')" style="padding:10px 24px; font-size:0.8rem; font-weight:600; text-transform:uppercase; letter-spacing:0.05em; background:none; border:none; cursor:pointer; color:var(--color-medium-gray); border-bottom:2px solid transparent; margin-bottom:-2px; transition:all 0.2s;">Brands</button>
+                </div>
+
+                <!-- Products Sub-Panel -->
+                <div id="inv-sub-products" class="inv-sub-panel">
+                  <div class="admin-card">
+                    <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom: 16px; flex-wrap:wrap; gap:12px;">
+                      <div>
+                        <h3 class="admin-card-title" style="margin-bottom:4px;" data-trans="admin_inventory_title">WooCommerce Inventory & Price Control</h3>
+                        <p style="font-size:0.8rem; color:var(--color-medium-gray); margin:0;" data-trans="admin_inventory_desc">Edit prices and quantity stock levels. Click "Update" to apply to storefront immediately.</p>
+                      </div>
+                      <button class="btn-primary" onclick="openNewProductModal()" style="padding:8px 18px; font-size:0.75rem; white-space:nowrap; display:flex; align-items:center; gap:6px;">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width:14px; height:14px;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                        Add New Product
+                      </button>
                     </div>
-                    <button class="btn-primary" onclick="openNewProductModal()" style="padding:8px 18px; font-size:0.75rem; white-space:nowrap; display:flex; align-items:center; gap:6px;">
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width:14px; height:14px;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-                      Add New Product
-                    </button>
+                    <div style="margin-bottom:16px;">
+                      <input type="text" id="admin-inventory-search" placeholder="Search products by name or brand..." class="admin-input" style="width:100%; max-width:360px; border:1px solid var(--color-border); border-radius:4px; padding:8px 12px; font-size:0.8rem; background-color: var(--color-white);" oninput="filterInventoryTable(this.value)">
+                    </div>
+                    <div class="admin-table-wrap">
+                      <table class="admin-table text-left">
+                        <thead>
+                          <tr>
+                            <th data-trans="admin_th_image">Image</th>
+                            <th data-trans="admin_th_fragrance">Fragrance</th>
+                            <th data-trans="admin_th_price">Price (100ml)</th>
+                            <th data-trans="admin_th_stock_qty">Stock Quantity</th>
+                            <th data-trans="admin_th_availability">Availability</th>
+                            <th data-trans="admin_th_actions">Actions</th>
+                          </tr>
+                        </thead>
+                        <tbody id="admin-inventory-tbody">
+                          <!-- Populated dynamically -->
+                        </tbody>
+                      </table>
+                    </div>
                   </div>
-                  <div style="margin-bottom:16px;">
-                    <input type="text" id="admin-inventory-search" placeholder="Search products by name or brand..." class="admin-input" style="width:100%; max-width:360px; border:1px solid var(--color-border); border-radius:4px; padding:8px 12px; font-size:0.8rem; background-color: var(--color-white);" oninput="filterInventoryTable(this.value)">
-                  </div>
-                  <div class="admin-table-wrap">
-                    <table class="admin-table text-left">
-                      <thead>
-                        <tr>
-                          <th data-trans="admin_th_image">Image</th>
-                          <th data-trans="admin_th_fragrance">Fragrance</th>
-                          <th data-trans="admin_th_price">Price (100ml)</th>
-                          <th data-trans="admin_th_stock_qty">Stock Quantity</th>
-                          <th data-trans="admin_th_availability">Availability</th>
-                          <th data-trans="admin_th_actions">Actions</th>
-                        </tr>
-                      </thead>
-                      <tbody id="admin-inventory-tbody">
-                        <!-- Populated dynamically -->
-                      </tbody>
-                    </table>
+                </div>
+
+                <!-- Brands Sub-Panel -->
+                <div id="inv-sub-brands" class="inv-sub-panel" style="display:none;">
+                  <div class="admin-card">
+                    <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:20px; flex-wrap:wrap; gap:12px;">
+                      <div>
+                        <h3 class="admin-card-title" style="margin-bottom:4px;">Brand Management</h3>
+                        <p style="font-size:0.8rem; color:var(--color-medium-gray); margin:0;">Manage the list of brands available in the product form dropdown.</p>
+                      </div>
+                    </div>
+                    <!-- Add Brand Form -->
+                    <form onsubmit="event.preventDefault(); addNewBrand();" style="display:flex; gap:10px; margin-bottom:20px; flex-wrap:wrap;">
+                      <input type="text" id="admin-new-brand-input" placeholder="Enter brand name..." class="admin-input" style="flex:1; min-width:200px; border:1px solid var(--color-border); border-radius:4px; padding:8px 12px; font-size:0.8rem; background-color:var(--color-white);">
+                      <button type="submit" class="btn-primary" style="padding:8px 18px; font-size:0.75rem; white-space:nowrap; display:flex; align-items:center; gap:6px;">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width:14px; height:14px;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                        Add Brand
+                      </button>
+                    </form>
+                    <!-- Brands List -->
+                    <div id="admin-brands-list" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(200px, 1fr)); gap:10px;">
+                      <!-- Populated dynamically -->
+                    </div>
                   </div>
                 </div>
               </div>
@@ -1072,7 +1105,9 @@
                   </div>
                   <div class="form-group">
                     <label for="modal-product-brand" style="font-size:0.75rem; text-transform:uppercase; color:var(--color-medium-gray); display:block; margin-bottom:4px;" data-trans="modal_lbl_brand">Brand *</label>
-                    <input type="text" id="modal-product-brand" required class="admin-input" style="width:100%; border:1px solid var(--color-border); padding:8px; border-radius:4px; background:var(--color-white);">
+                    <select id="modal-product-brand" required class="admin-input" style="width:100%; border:1px solid var(--color-border); padding:8px; border-radius:4px; background:var(--color-white);">
+                      <!-- Populated dynamically from brands list -->
+                    </select>
                   </div>
                   <div class="form-group">
                     <label for="modal-product-tagline" style="font-size:0.75rem; text-transform:uppercase; color:var(--color-medium-gray); display:block; margin-bottom:4px;" data-trans="modal_lbl_tagline">Tagline / Short Desc *</label>

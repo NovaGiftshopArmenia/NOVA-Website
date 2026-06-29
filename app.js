@@ -5283,7 +5283,7 @@ window.openDetailedProductModal = function(productId) {
   // Set values in inputs
   document.getElementById('modal-product-id').value = product.id;
   document.getElementById('modal-product-name').value = product.name;
-  document.getElementById('modal-product-brand').value = product.brand || 'NOVA';
+  populateBrandDropdown(product.brand || 'NOVA');
   document.getElementById('modal-product-tagline').value = product.tagline || '';
   document.getElementById('modal-product-description').value = product.description || '';
   document.getElementById('modal-product-ingredients').value = product.ingredients || '';
@@ -5356,7 +5356,7 @@ window.openNewProductModal = function() {
   // Clear all fields
   document.getElementById('modal-product-id').value = '__NEW__';
   document.getElementById('modal-product-name').value = '';
-  document.getElementById('modal-product-brand').value = 'NOVA';
+  populateBrandDropdown('NOVA');
   document.getElementById('modal-product-tagline').value = '';
   document.getElementById('modal-product-description').value = '';
   document.getElementById('modal-product-ingredients').value = '';
@@ -5590,6 +5590,97 @@ window.deleteOrder = function(orderId) {
       }
       showToast(`ORDER #${orderId} DELETED.`);
     }
+  }
+};
+// ============================================
+// BRAND MANAGEMENT SYSTEM
+// ============================================
+
+// Default brands
+const DEFAULT_BRANDS = ['NOVA', 'Dior', 'Chanel', 'Tom Ford', 'Versace', 'Paco Rabanne', 'Yves Saint Laurent', 'Giorgio Armani', 'Gucci', 'Burberry', 'Dolce & Gabbana', 'Hermès', 'Lancôme', 'Calvin Klein', 'Hugo Boss', 'Givenchy', 'Prada', 'Valentino', 'Bvlgari', 'Montblanc'];
+
+function getBrands() {
+  const stored = localStorage.getItem('nova_brands');
+  if (stored) {
+    try { return JSON.parse(stored); } catch(e) {}
+  }
+  // Initialize with defaults + any brands from products
+  const productBrands = (AppState.products || []).map(p => p.brand).filter(Boolean);
+  const allBrands = [...new Set([...DEFAULT_BRANDS, ...productBrands])].sort((a, b) => a.localeCompare(b));
+  localStorage.setItem('nova_brands', JSON.stringify(allBrands));
+  return allBrands;
+}
+
+function saveBrands(brands) {
+  localStorage.setItem('nova_brands', JSON.stringify(brands));
+}
+
+window.addNewBrand = function() {
+  const input = document.getElementById('admin-new-brand-input');
+  if (!input) return;
+  const name = input.value.trim();
+  if (!name) return;
+
+  const brands = getBrands();
+  if (brands.some(b => b.toLowerCase() === name.toLowerCase())) {
+    showToast('BRAND ALREADY EXISTS.');
+    return;
+  }
+  brands.push(name);
+  brands.sort((a, b) => a.localeCompare(b));
+  saveBrands(brands);
+  input.value = '';
+  renderBrandsList();
+  showToast(`BRAND "${name}" ADDED.`);
+};
+
+window.removeBrand = function(brandName) {
+  const brands = getBrands().filter(b => b !== brandName);
+  saveBrands(brands);
+  renderBrandsList();
+  showToast(`BRAND "${brandName}" REMOVED.`);
+};
+
+function renderBrandsList() {
+  const container = document.getElementById('admin-brands-list');
+  if (!container) return;
+  const brands = getBrands();
+  container.innerHTML = brands.map(brand => `
+    <div style="display:flex; align-items:center; justify-content:space-between; padding:10px 14px; border:1px solid var(--color-border); border-radius:6px; background:var(--color-white);">
+      <span style="font-size:0.85rem; font-weight:500;">${brand}</span>
+      <button type="button" onclick="removeBrand('${brand.replace(/'/g, "\\'")}')" style="background:none; border:none; cursor:pointer; color:var(--color-medium-gray); font-size:1.1rem; padding:0 4px; line-height:1; transition:color 0.2s;" onmouseover="this.style.color='#c00'" onmouseout="this.style.color='var(--color-medium-gray)'">&times;</button>
+    </div>
+  `).join('');
+}
+
+function populateBrandDropdown(selectedBrand) {
+  const select = document.getElementById('modal-product-brand');
+  if (!select) return;
+  const brands = getBrands();
+  select.innerHTML = brands.map(b => `<option value="${b}" ${b === selectedBrand ? 'selected' : ''}>${b}</option>`).join('');
+}
+
+// Inventory sub-tab switching
+window.switchInventorySubTab = function(tabName) {
+  document.querySelectorAll('.inv-sub-panel').forEach(p => p.style.display = 'none');
+  document.querySelectorAll('.inventory-sub-tab').forEach(btn => {
+    btn.style.color = 'var(--color-medium-gray)';
+    btn.style.borderBottomColor = 'transparent';
+    btn.classList.remove('active');
+  });
+
+  const panel = document.getElementById('inv-sub-' + tabName);
+  if (panel) panel.style.display = 'block';
+
+  const tab = document.querySelector(`.inventory-sub-tab[data-inv-tab="${tabName}"]`);
+  if (tab) {
+    tab.style.color = 'var(--color-black)';
+    tab.style.borderBottomColor = 'var(--color-black)';
+    tab.classList.add('active');
+  }
+
+  if (tabName === 'brands') {
+    renderBrandsList();
   }
 };
 
