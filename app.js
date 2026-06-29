@@ -3777,19 +3777,6 @@ window.initProductPage = function () {
   initProductInteractiveFeatures();
 };
 
-const PRODUCT_THUMBNAILS = {
-  "santal-01": ["assets/santal.webp", "assets/insta_1.webp", "assets/insta_2.webp", "assets/insta_3.webp", "assets/insta_4.webp"],
-  "fleur-cerisier": ["assets/fleur.webp", "assets/insta_5.webp", "assets/insta_6.webp", "assets/insta_7.webp", "assets/insta_8.webp"],
-  "agrumes-frais": ["assets/agrumes.webp", "assets/insta_1.webp", "assets/insta_3.webp", "assets/insta_5.webp", "assets/insta_7.webp"],
-  "ambre-chaud": ["assets/ambre.webp", "assets/insta_2.webp", "assets/insta_4.webp", "assets/insta_6.webp", "assets/insta_8.webp"],
-  "figue-noire": ["assets/figue.webp", "assets/insta_3.webp", "assets/insta_4.webp", "assets/insta_5.webp", "assets/insta_6.webp"],
-  "vetiver-blanc": ["assets/agrumes.webp", "assets/insta_7.webp", "assets/insta_8.webp", "assets/insta_1.webp", "assets/insta_2.webp"],
-  "rose-epicee": ["assets/rose.webp", "assets/insta_4.webp", "assets/insta_5.webp", "assets/insta_6.webp", "assets/insta_7.webp"],
-  "musc-invisible": ["assets/vanille.webp", "assets/insta_1.webp", "assets/insta_2.webp", "assets/insta_3.webp", "assets/insta_4.webp"],
-  "oud-absolu": ["assets/oud.webp", "assets/insta_5.webp", "assets/insta_6.webp", "assets/insta_7.webp", "assets/insta_8.webp"],
-  "neroli-portofino": ["assets/agrumes.webp", "assets/insta_2.webp", "assets/insta_3.webp", "assets/insta_4.webp", "assets/insta_5.webp"]
-};
-
 function initProductInteractiveFeatures() {
   // 1. Hover Inspect Zoom Magnifier
   const zoomContainer = document.getElementById('pp-zoom-container');
@@ -3839,8 +3826,10 @@ function renderProductPage(productId) {
   const product = AppState.products.find(p => p.id === productId);
   if (!product) return;
 
+  // Determine available sizes and select first available
+  const availableSizes = (product.sizes || []).filter(s => s.price && s.price > 0);
   AppState.selectedProduct = product;
-  AppState.selectedSize = '100ml'; // reset to 100ml on opening
+  AppState.selectedSize = availableSizes.length > 0 ? availableSizes[0].size : '100ml';
 
   // Get translations
   const transProd = getTranslatedProduct(productId);
@@ -3860,24 +3849,31 @@ function renderProductPage(productId) {
   document.getElementById('pp-desc').innerText = description;
   document.getElementById('pp-rating-val').innerText = `${product.rating} (${product.reviewsCount} ${reviewsText})`;
 
-  // Render secondary thumbnails
-  const thumbs = PRODUCT_THUMBNAILS[productId] || [product.image, "assets/insta_1.webp", "assets/insta_2.webp", "assets/insta_3.webp", "assets/insta_4.webp"];
+  // Render thumbnails from product.images array only
+  const allImages = [];
+  if (product.image) allImages.push(product.image);
+  if (product.images && Array.isArray(product.images)) {
+    product.images.forEach(img => {
+      if (!allImages.includes(img)) allImages.push(img);
+    });
+  }
+
   const thumbGrid = document.getElementById('pp-thumbnails');
   if (thumbGrid) {
     thumbGrid.innerHTML = '';
-    thumbs.forEach((src, idx) => {
-      const thumbItem = document.createElement('div');
-      thumbItem.className = `pp-thumbnail-item ${idx === 0 ? 'active' : ''}`;
-      thumbItem.innerHTML = `<img src="${src}" alt="Thumbnail ${idx + 1}">`;
-      thumbItem.addEventListener('click', () => {
-        // Switch main image
-        document.getElementById('pp-img').src = src;
-        // Toggle active class on thumbnails
-        thumbGrid.querySelectorAll('.pp-thumbnail-item').forEach(btn => btn.classList.remove('active'));
-        thumbItem.classList.add('active');
+    if (allImages.length > 1) {
+      allImages.forEach((src, idx) => {
+        const thumbItem = document.createElement('div');
+        thumbItem.className = `pp-thumbnail-item ${idx === 0 ? 'active' : ''}`;
+        thumbItem.innerHTML = `<img src="${src}" alt="Thumbnail ${idx + 1}">`;
+        thumbItem.addEventListener('click', () => {
+          document.getElementById('pp-img').src = src;
+          thumbGrid.querySelectorAll('.pp-thumbnail-item').forEach(btn => btn.classList.remove('active'));
+          thumbItem.classList.add('active');
+        });
+        thumbGrid.appendChild(thumbItem);
       });
-      thumbGrid.appendChild(thumbItem);
-    });
+    }
   }
 
   // Populate Olfactory narrative notes
@@ -3963,7 +3959,10 @@ function renderSizeSelectors(product) {
   const container = document.getElementById('pp-sizes');
   container.innerHTML = '';
 
-  product.sizes.forEach(sizeObj => {
+  // Only show sizes that have a valid price
+  const validSizes = (product.sizes || []).filter(s => s.price && s.price > 0);
+  
+  validSizes.forEach(sizeObj => {
     const btn = document.createElement('button');
     btn.className = `size-btn ${sizeObj.size === AppState.selectedSize ? 'active' : ''}`;
     btn.innerText = sizeObj.size;
@@ -5294,14 +5293,15 @@ window.openDetailedProductModal = function(productId) {
   document.getElementById('modal-product-concentration').value = product.concentration || 'edp';
   document.getElementById('modal-product-gender').value = product.gender_id || 'unisex';
 
-  // Set sizes prices
-  const price50 = product.sizes && product.sizes[0] ? product.sizes[0].price : Math.round(product.price * 0.615);
-  const price100 = product.sizes && product.sizes[1] ? product.sizes[1].price : product.price;
-  const price200 = product.sizes && product.sizes[2] ? product.sizes[2].price : Math.round(product.price * 1.59);
+  // Set sizes prices — look up by size name, leave blank if not present
+  const findSize = (name) => (product.sizes || []).find(s => s.size === name);
+  const s50 = findSize('50ml');
+  const s100 = findSize('100ml');
+  const s200 = findSize('200ml');
   
-  document.getElementById('modal-size-50').value = price50;
-  document.getElementById('modal-size-100').value = price100;
-  document.getElementById('modal-size-200').value = price200;
+  document.getElementById('modal-size-50').value = s50 && s50.price > 0 ? s50.price : '';
+  document.getElementById('modal-size-100').value = s100 && s100.price > 0 ? s100.price : '';
+  document.getElementById('modal-size-200').value = s200 && s200.price > 0 ? s200.price : '';
 
   // Set stock
   document.getElementById('modal-product-stock').value = product.stock || 0;
@@ -5424,9 +5424,9 @@ window.saveDetailedProduct = function(event) {
   const newConcentration = document.getElementById('modal-product-concentration').value;
   const newGenderId = document.getElementById('modal-product-gender').value;
 
-  const price50 = parseFloat(document.getElementById('modal-size-50').value);
-  const price100 = parseFloat(document.getElementById('modal-size-100').value);
-  const price200 = parseFloat(document.getElementById('modal-size-200').value);
+  const price50 = document.getElementById('modal-size-50').value.trim() !== '' ? parseFloat(document.getElementById('modal-size-50').value) : null;
+  const price100 = document.getElementById('modal-size-100').value.trim() !== '' ? parseFloat(document.getElementById('modal-size-100').value) : null;
+  const price200 = document.getElementById('modal-size-200').value.trim() !== '' ? parseFloat(document.getElementById('modal-size-200').value) : null;
   const newStock = parseInt(document.getElementById('modal-product-stock').value, 10);
 
   const notesTop = document.getElementById('modal-notes-top').value.split(',').map(s => s.trim()).filter(s => s.length > 0);
@@ -5440,11 +5440,20 @@ window.saveDetailedProduct = function(event) {
   const newReviewsCount = parseInt(document.getElementById('modal-product-reviews').value, 10) || 0;
   const newFeatured = document.getElementById('modal-product-featured').checked;
 
-  // Validate values
-  if (!newName || !newBrand || !newTagline || !newDescription || !newImage || isNaN(price50) || isNaN(price100) || isNaN(price200) || isNaN(newStock)) {
-    showToast("PLEASE FILL IN ALL REQUIRED FIELDS WITH VALID VALUES.");
+  // Build sizes array — only include sizes with valid prices
+  const newSizes = [];
+  if (price50 !== null && !isNaN(price50) && price50 > 0) newSizes.push({ size: "50ml", price: Math.round(price50) });
+  if (price100 !== null && !isNaN(price100) && price100 > 0) newSizes.push({ size: "100ml", price: Math.round(price100) });
+  if (price200 !== null && !isNaN(price200) && price200 > 0) newSizes.push({ size: "200ml", price: Math.round(price200) });
+
+  // Validate required fields (at least one size required)
+  if (!newName || !newBrand || !newTagline || !newDescription || !newImage || newSizes.length === 0 || isNaN(newStock)) {
+    showToast("PLEASE FILL IN ALL REQUIRED FIELDS. AT LEAST ONE SIZE PRICE IS REQUIRED.");
     return;
   }
+
+  // Determine the main price (first available size)
+  const mainPrice = newSizes[0].price;
 
   // Update/set product properties
   product.name = newName;
@@ -5453,10 +5462,11 @@ window.saveDetailedProduct = function(event) {
   product.description = newDescription;
   product.ingredients = newIngredients;
   product.image = newImage;
+  product.images = [...window._modalUploadedImages];
   product.scent_family = newScentFamily;
   product.concentration = newConcentration;
   product.gender_id = newGenderId;
-  product.price = price100;
+  product.price = mainPrice;
   product.stock = newStock;
   product.tags = newTags;
   product.vibes = newVibes;
@@ -5465,11 +5475,7 @@ window.saveDetailedProduct = function(event) {
   product.featured = newFeatured;
 
   // Update sizes array
-  product.sizes = [
-    { size: "50ml", price: Math.round(price50) },
-    { size: "100ml", price: Math.round(price100) },
-    { size: "200ml", price: Math.round(price200) }
-  ];
+  product.sizes = newSizes;
 
   // Update notes
   product.notes = {
