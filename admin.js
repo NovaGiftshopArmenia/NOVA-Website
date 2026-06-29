@@ -83,37 +83,51 @@ const WooCommerceAdmin = {
     document.getElementById('admin-aov-val').innerText = `֏${metrics.aov}`;
     document.getElementById('admin-stock-val').innerText = metrics.stockCount;
 
-    // Render sales chart by category
-    const salesByCategory = { Woody: 0, Floral: 0, Citrus: 0, Amber: 0 };
+    // Render sales chart by top 5 brands (based on real product data)
+    const salesByBrand = {};
     
-    // Add dynamically calculated totals from new completed/processing orders
+    // Calculate total value per brand from orders
     this.orders.forEach(order => {
       if (order.status !== 'failed') {
         order.items.forEach(item => {
-          // Find matching category from list
           const prod = productsList.find(p => p.name === item.name);
-          if (prod) {
-            const itemTotal = item.qty * prod.price; // approximation
-            salesByCategory[prod.category] = (salesByCategory[prod.category] || 0) + itemTotal;
+          if (prod && prod.brand) {
+            salesByBrand[prod.brand] = (salesByBrand[prod.brand] || 0) + (item.qty * prod.price);
           }
         });
       }
     });
 
-    const categories = ['Woody', 'Floral', 'Citrus', 'Amber'];
-    const maxVal = Math.max(...categories.map(cat => salesByCategory[cat] || 1));
+    // If no orders yet, use product count * price as a proxy
+    if (Object.keys(salesByBrand).length === 0) {
+      productsList.forEach(prod => {
+        if (prod.brand) {
+          salesByBrand[prod.brand] = (salesByBrand[prod.brand] || 0) + (prod.stock * prod.price);
+        }
+      });
+    }
 
-    categories.forEach(cat => {
-      const val = salesByCategory[cat] || 0;
-      const pct = maxVal > 0 ? (val / maxVal) * 80 : 0; // max height 80%
-      const barElement = document.getElementById(`chart-bar-${cat.toLowerCase()}`);
-      const valElement = document.getElementById(`chart-val-${cat.toLowerCase()}`);
-      
-      if (barElement && valElement) {
-        barElement.style.height = `${pct}%`;
-        valElement.innerText = `֏${val}`;
-      }
-    });
+    // Sort and take top 5
+    const sortedBrands = Object.entries(salesByBrand)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 5);
+
+    const chartContainer = document.getElementById('admin-brand-chart');
+    if (chartContainer && sortedBrands.length > 0) {
+      const maxVal = sortedBrands[0][1] || 1;
+      chartContainer.innerHTML = sortedBrands.map(([brand, val]) => {
+        const pct = maxVal > 0 ? (val / maxVal) * 80 : 0;
+        return `
+          <div class="chart-bar-wrap">
+            <div class="chart-bar-val">֏${val.toLocaleString()}</div>
+            <div class="chart-bar" style="height:${pct}%"></div>
+            <div class="chart-bar-label">${brand}</div>
+          </div>
+        `;
+      }).join('');
+    } else if (chartContainer) {
+      chartContainer.innerHTML = '<p style="text-align:center; color:var(--color-medium-gray); padding:30px; font-size:0.85rem;">No brand data available yet.</p>';
+    }
 
     // Render orders table
     this.renderOrdersTable();
