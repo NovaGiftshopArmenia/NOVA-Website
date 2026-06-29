@@ -287,7 +287,7 @@ const TRANSLATIONS = {
     my_account_title: "Իմ Հաշիվը",
     acc_nav_dashboard: "Գլխավոր էջ",
     acc_nav_wardrobe: "Բույրերի Պահարան",
-    acc_nav_discovery: "Փորձանմուշներ",
+    acc_nav_discovery: "Անձնական Զեղչ",
     acc_nav_details: "Հաշվի Տվյալներ",
     acc_nav_orders: "Պատվերների Պատմություն",
     acc_dash_welcome: "Բարի գալուստ ձեր անձնական հոտառական պորտալ: Այստեղից դուք կարող եք հետևել ձեր գնումներին, կառավարել ձեր հասցեները և կուտակված կրեդիտները:",
@@ -716,14 +716,14 @@ const TRANSLATIONS = {
     my_account_title: "Личный Кабинет",
     acc_nav_dashboard: "Панель управления",
     acc_nav_wardrobe: "Гардероб ароматов",
-    acc_nav_discovery: "Пробники и открытие",
+    acc_nav_discovery: "Персональная Скидка",
     acc_nav_details: "Настройки аккаунта",
     acc_nav_orders: "История заказов",
     acc_dash_welcome: "Добро пожаловать в ваш личный ольфакторный портал. Отсюда вы можете отслеживать свои покупки парфюмерии, управлять адресами и скидками.",
     acc_scent_profile: "Профиль ароматов",
     acc_scent_profile_desc: "На основании ваших покупок, ваши ольфакторные предпочтения:",
     acc_wardrobe_title: "Мой гардероб ароматов",
-    acc_discovery_title: "Отслеживание пробников",
+    acc_discovery_title: "Персональная Скидка",
     acc_promo_tag: "КЛУБ DISCOVERY",
     acc_promo_title: "Обменяйте пробник на флакон",
     acc_promo_desc: "Понравились пробники? Примените скидку 4,000 AMD при покупке любого полноразмерного (100мл) флакона!",
@@ -744,7 +744,7 @@ const TRANSLATIONS = {
     admin_th_registered: "Зарегистрирован",
     admin_th_actions: "Действия",
     acc_nav_wardrobe_sub: "Просмотр купленных флаконов",
-    acc_nav_discovery_sub: "Отслеживание пробников",
+    acc_nav_discovery_sub: "Ваш эксклюзивный код скидки",
     acc_nav_orders_sub: "Отслеживание отправлений",
     acc_nav_details_sub: "Редактировать адреса и эл. почту",
     acc_th_id: "ID",
@@ -1145,14 +1145,14 @@ const TRANSLATIONS = {
     my_account_title: "My Account",
     acc_nav_dashboard: "Dashboard",
     acc_nav_wardrobe: "Scent Wardrobe",
-    acc_nav_discovery: "Discovery & Samples",
+    acc_nav_discovery: "Personal Discount",
     acc_nav_details: "Account Details",
     acc_nav_orders: "Order History",
     acc_dash_welcome: "Welcome to your private olfactory portal. From here, you can track your seasonal scent purchases, configure your delivery preferences, and manage your discovery credit.",
     acc_scent_profile: "Scent Profile Summary",
     acc_scent_profile_desc: "Based on your olfactory choices, your main preferences are:",
     acc_wardrobe_title: "My Scent Wardrobe",
-    acc_discovery_title: "Discovery & Sample Tracking",
+    acc_discovery_title: "Personal Discount",
     acc_promo_tag: "DISCOVERY CLUB",
     acc_promo_title: "Convert Sample to Full-Bottle",
     acc_promo_desc: "Loved your samples? Apply your 4,000 AMD discovery credit toward any full-sized (100ml) bottle!",
@@ -1173,7 +1173,7 @@ const TRANSLATIONS = {
     admin_th_registered: "Registered",
     admin_th_actions: "Actions",
     acc_nav_wardrobe_sub: "View purchased bottles",
-    acc_nav_discovery_sub: "Track sample vials",
+    acc_nav_discovery_sub: "Your exclusive brand code",
     acc_nav_orders_sub: "Track shipments",
     acc_nav_details_sub: "Edit addresses & email",
     acc_th_id: "ID",
@@ -4664,43 +4664,8 @@ window.renderMyAccount = function() {
     }
   }
 
-  // 5. Render Discovery & Samples
-  const samplesContainer = document.getElementById('account-samples-container');
-  if (samplesContainer) {
-    samplesContainer.innerHTML = '';
-    if (customer.discoverySamples.length === 0) {
-      samplesContainer.innerHTML = `<div style="text-align: center; color: var(--color-medium-gray); padding: 20px 0; font-size: 0.9rem;" data-trans="acc_discovery_empty">No discovery samples purchased yet.</div>`;
-    } else {
-      const table = document.createElement('table');
-      table.className = 'admin-table text-left';
-      const lang = AppState.language;
-      const thKit = TRANSLATIONS[lang]['acc_th_sample_kit'] || 'Sample Kit';
-      const thDate = TRANSLATIONS[lang]['acc_th_purchase_date'] || 'Purchase Date';
-      const thStatus = TRANSLATIONS[lang]['acc_th_status'] || 'Status';
-      const thCredit = TRANSLATIONS[lang]['acc_th_credit_value'] || 'Credit Value';
-      table.innerHTML = `
-        <thead>
-          <tr>
-            <th>${thKit}</th>
-            <th>${thDate}</th>
-            <th>${thStatus}</th>
-            <th>${thCredit}</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${customer.discoverySamples.map(sample => `
-            <tr>
-              <td><strong>${sample.name}</strong></td>
-              <td>${sample.purchaseDate}</td>
-              <td><span class="admin-status-badge badge-completed">${sample.status}</span></td>
-              <td><strong>${sample.creditValue}</strong></td>
-            </tr>
-          `).join('')}
-        </tbody>
-      `;
-      samplesContainer.appendChild(table);
-    }
-  }
+  // 5. Render Personal Discount
+  renderPersonalDiscount();
 
   // 6. Render Order History
   const ordersTbody = document.getElementById('account-orders-tbody');
@@ -6980,3 +6945,152 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 })();
+
+// ============================================
+// PERSONAL DISCOUNT SYSTEM
+// ============================================
+
+const DISCOUNT_PERCENT = 10;
+const DISCOUNT_CYCLE_DAYS = 14;
+
+function getActiveDiscount() {
+  const brands = typeof getBrands === 'function' ? getBrands() : [];
+  if (brands.length === 0) return null;
+
+  // Calculate which 14-day cycle we're in based on a fixed epoch
+  const epoch = new Date('2025-01-01T00:00:00Z').getTime();
+  const now = Date.now();
+  const cycleIndex = Math.floor((now - epoch) / (DISCOUNT_CYCLE_DAYS * 24 * 60 * 60 * 1000));
+  
+  // Pick brand deterministically from cycle index
+  const brandIndex = cycleIndex % brands.length;
+  const brand = brands[brandIndex];
+
+  // Calculate expiry
+  const cycleStartMs = epoch + cycleIndex * DISCOUNT_CYCLE_DAYS * 24 * 60 * 60 * 1000;
+  const cycleEndMs = cycleStartMs + DISCOUNT_CYCLE_DAYS * 24 * 60 * 60 * 1000;
+  const daysLeft = Math.max(0, Math.ceil((cycleEndMs - now) / (24 * 60 * 60 * 1000)));
+
+  // Generate code from brand name
+  const code = 'NOVA' + brand.replace(/[^A-Za-z0-9]/g, '').toUpperCase().slice(0, 8) + DISCOUNT_PERCENT;
+
+  return { brand, code, percent: DISCOUNT_PERCENT, daysLeft, cycleIndex };
+}
+
+function renderPersonalDiscount() {
+  const discount = getActiveDiscount();
+  if (!discount) return;
+
+  const titleEl = document.getElementById('discount-brand-title');
+  const descEl = document.getElementById('discount-description');
+  const codeEl = document.getElementById('discount-code-display');
+  const amountEl = document.getElementById('discount-amount-display');
+  const brandEl = document.getElementById('discount-brand-display');
+  const expiresEl = document.getElementById('discount-expires-display');
+
+  if (titleEl) titleEl.textContent = `${discount.percent}% Off All ${discount.brand} Products`;
+  if (descEl) descEl.textContent = `Enjoy ${discount.percent}% off on all ${discount.brand} products! A new brand is featured every ${DISCOUNT_CYCLE_DAYS} days. Use the code below at checkout.`;
+  if (codeEl) {
+    codeEl.textContent = discount.code;
+    codeEl.onclick = () => {
+      navigator.clipboard.writeText(discount.code).then(() => {
+        showToast('DISCOUNT CODE COPIED!');
+      }).catch(() => {});
+    };
+  }
+  if (amountEl) amountEl.textContent = `${discount.percent}%`;
+  if (brandEl) brandEl.textContent = discount.brand;
+  if (expiresEl) expiresEl.textContent = `${discount.daysLeft} day${discount.daysLeft !== 1 ? 's' : ''}`;
+}
+
+// Active applied discount state
+let appliedDiscount = null;
+
+window.applyDiscountCode = function() {
+  const input = document.getElementById('checkout-discount-input');
+  const msgEl = document.getElementById('checkout-discount-msg');
+  if (!input || !msgEl) return;
+
+  const enteredCode = input.value.trim().toUpperCase();
+  
+  if (!enteredCode) {
+    msgEl.style.display = 'block';
+    msgEl.style.color = '#c00';
+    msgEl.textContent = 'Please enter a discount code.';
+    return;
+  }
+
+  const discount = getActiveDiscount();
+  if (!discount) {
+    msgEl.style.display = 'block';
+    msgEl.style.color = '#c00';
+    msgEl.textContent = 'No active discount available.';
+    return;
+  }
+
+  if (enteredCode !== discount.code) {
+    msgEl.style.display = 'block';
+    msgEl.style.color = '#c00';
+    msgEl.textContent = 'Invalid discount code.';
+    appliedDiscount = null;
+    updateCheckoutTotals();
+    return;
+  }
+
+  // Check if any cart items match the discount brand
+  const matchingItems = AppState.cart.filter(item => {
+    const product = AppState.products.find(p => p.id === item.productId);
+    return product && product.brand && product.brand.toLowerCase() === discount.brand.toLowerCase();
+  });
+
+  if (matchingItems.length === 0) {
+    msgEl.style.display = 'block';
+    msgEl.style.color = '#c00';
+    msgEl.textContent = `This code is valid only for ${discount.brand} products. Your cart has no ${discount.brand} items.`;
+    appliedDiscount = null;
+    updateCheckoutTotals();
+    return;
+  }
+
+  // Apply discount
+  appliedDiscount = discount;
+  msgEl.style.display = 'block';
+  msgEl.style.color = 'var(--color-sage)';
+  msgEl.textContent = `✓ ${discount.percent}% discount applied to ${matchingItems.length} ${discount.brand} item(s)!`;
+  updateCheckoutTotals();
+};
+
+// Override updateCheckoutTotals to account for discounts
+const _originalUpdateCheckoutTotals = updateCheckoutTotals;
+window.updateCheckoutTotals = function() {
+  const subtotal = AppState.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+  const shippingSelect = document.getElementById('shipping-method');
+  const shippingCost = shippingSelect ? parseInt(shippingSelect.value) : 0;
+
+  let discountAmount = 0;
+  if (appliedDiscount) {
+    AppState.cart.forEach(item => {
+      const product = AppState.products.find(p => p.id === item.productId);
+      if (product && product.brand && product.brand.toLowerCase() === appliedDiscount.brand.toLowerCase()) {
+        discountAmount += Math.round((item.price * item.quantity) * appliedDiscount.percent / 100);
+      }
+    });
+  }
+
+  const total = subtotal + shippingCost - discountAmount;
+
+  document.getElementById('checkout-subtotal-val').innerText = `֏${subtotal.toLocaleString()}`;
+  document.getElementById('checkout-shipping-val').innerText = shippingCost === 0 ? 'Free' : `֏${shippingCost.toLocaleString()}`;
+  document.getElementById('checkout-total-val').innerText = `֏${total.toLocaleString()}`;
+
+  const discountRow = document.getElementById('checkout-discount-row');
+  const discountVal = document.getElementById('checkout-discount-val');
+  if (discountRow && discountVal) {
+    if (discountAmount > 0) {
+      discountRow.style.display = 'flex';
+      discountVal.textContent = `-֏${discountAmount.toLocaleString()}`;
+    } else {
+      discountRow.style.display = 'none';
+    }
+  }
+};

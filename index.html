@@ -712,6 +712,16 @@
               <!-- Populated dynamically -->
             </div>
             
+            <!-- Discount Code Field -->
+            <div style="margin-bottom:16px; padding-bottom:16px; border-bottom:1px solid var(--color-border);">
+              <label style="font-size:0.75rem; text-transform:uppercase; letter-spacing:0.05em; color:var(--color-medium-gray); display:block; margin-bottom:6px;">Discount Code</label>
+              <div style="display:flex; gap:8px;">
+                <input type="text" id="checkout-discount-input" placeholder="Enter discount code" style="flex:1; border:1px solid var(--color-border); border-radius:4px; padding:8px 12px; font-size:0.8rem; text-transform:uppercase; letter-spacing:0.05em;">
+                <button type="button" onclick="applyDiscountCode()" class="btn-primary" style="padding:8px 16px; font-size:0.7rem; white-space:nowrap;">Apply</button>
+              </div>
+              <div id="checkout-discount-msg" style="font-size:0.75rem; margin-top:6px; display:none;"></div>
+            </div>
+
             <div style="font-size: 0.9rem; display: flex; flex-direction: column; gap: 8px;">
               <div style="display:flex; justify-content:space-between;">
                 <span data-trans="checkout_subtotal">Subtotal:</span>
@@ -720,6 +730,10 @@
               <div style="display:flex; justify-content:space-between;">
                 <span data-trans="checkout_shipping_row">Shipping:</span>
                 <strong id="checkout-shipping-val">Free</strong>
+              </div>
+              <div id="checkout-discount-row" style="display:none; justify-content:space-between; color:var(--color-sage);">
+                <span>Discount:</span>
+                <strong id="checkout-discount-val">-֏0</strong>
               </div>
               <div class="order-summary-total-row">
                 <span data-trans="checkout_total">Total:</span>
@@ -1631,8 +1645,8 @@
             <span data-trans="acc_nav_wardrobe">Scent Wardrobe</span>
           </button>
           <button class="account-nav-btn" data-account-tab="discovery">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width: 18px; height: 18px;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 113.536 0V21h-7v-3.05a5 5 0 013.536-2.05z"/></svg>
-            <span data-trans="acc_nav_discovery">Discovery & Samples</span>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width: 18px; height: 18px;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A2 2 0 013 12V7a4 4 0 014-4z"/></svg>
+            <span data-trans="acc_nav_discovery">Personal Discount</span>
           </button>
           <button class="account-nav-btn" data-account-tab="orders">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width: 18px; height: 18px;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/></svg>
@@ -1681,11 +1695,11 @@
                 </div>
                 <div class="quick-nav-card" onclick="switchAccountTab('discovery')">
                   <div class="quick-icon-wrap">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width: 24px; height: 24px;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 113.536 0V21h-7v-3.05a5 5 0 013.536-2.05z"/></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width: 24px; height: 24px;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A2 2 0 013 12V7a4 4 0 014-4z"/></svg>
                   </div>
                   <div class="quick-nav-text">
-                    <span data-trans="acc_nav_discovery" style="font-weight:500;">Discovery Sets</span>
-                    <small style="color: var(--color-medium-gray); font-size: 0.75rem;" data-trans="acc_nav_discovery_sub">Track sample vials</small>
+                    <span data-trans="acc_nav_discovery" style="font-weight:500;">Personal Discount</span>
+                    <small style="color: var(--color-medium-gray); font-size: 0.75rem;" data-trans="acc_nav_discovery_sub">Your exclusive brand code</small>
                   </div>
                 </div>
                 <div class="quick-nav-card" onclick="switchAccountTab('orders')">
@@ -1718,25 +1732,39 @@
             </div>
           </div>
 
-          <!-- 3. Discovery Subview -->
+          <!-- 3. Personal Discount Subview -->
           <div id="account-sec-discovery" class="account-panel hidden">
-            <h3 class="serif-title" style="font-size: 1.5rem; margin-bottom: 16px;" data-trans="acc_discovery_title">Discovery & Sample Tracking</h3>
+            <h3 class="serif-title" style="font-size: 1.5rem; margin-bottom: 16px;" data-trans="acc_discovery_title">Personal Discount</h3>
             
-            <!-- Promotional banner for sample credit -->
+            <!-- Discount banner -->
             <div class="discovery-promo-banner">
               <div class="promo-content">
-                <span class="promo-tag" data-trans="acc_promo_tag">DISCOVERY CLUB</span>
-                <h4 class="serif-title" style="font-size: 1.4rem; color: var(--color-white); margin-top: 4px;" data-trans="acc_promo_title">Convert Sample to Full-Bottle</h4>
-                <p style="font-size: 0.88rem; color: #DCD9D2; margin-top: 6px; max-width: 500px;" data-trans="acc_promo_desc">Loved your samples? Apply your 4,000 AMD discovery credit toward any full-sized (100ml) bottle!</p>
+                <span class="promo-tag">EXCLUSIVE OFFER</span>
+                <h4 class="serif-title" style="font-size: 1.4rem; color: var(--color-white); margin-top: 4px;" id="discount-brand-title">Loading...</h4>
+                <p style="font-size: 0.88rem; color: #DCD9D2; margin-top: 6px; max-width: 500px;" id="discount-description">A new brand discount is generated for you every 14 days. Use the code below at checkout!</p>
               </div>
               <div class="promo-code-box">
-                <span style="font-size: 0.65rem; letter-spacing: 0.1em; color: var(--color-sage);" data-trans="acc_promo_code_lbl">YOUR UNIQUE CREDIT CODE:</span>
-                <strong class="promo-code">NOVADISCOVER4K</strong>
+                <span style="font-size: 0.65rem; letter-spacing: 0.1em; color: var(--color-sage);">YOUR DISCOUNT CODE:</span>
+                <strong class="promo-code" id="discount-code-display" style="cursor:pointer;" title="Click to copy">---</strong>
               </div>
             </div>
 
-            <div id="account-samples-container" style="margin-top: 24px;">
-              <!-- Rendered via JS -->
+            <div style="margin-top: 24px;">
+              <div style="display:flex; gap:16px; flex-wrap:wrap;">
+                <div style="flex:1; min-width:220px; padding:20px; border:1px solid var(--color-border); border-radius:8px; background:var(--color-white);">
+                  <div style="font-size:0.7rem; text-transform:uppercase; letter-spacing:0.08em; color:var(--color-medium-gray); margin-bottom:6px;">Discount Amount</div>
+                  <div style="font-size:1.4rem; font-weight:600;" id="discount-amount-display">10%</div>
+                </div>
+                <div style="flex:1; min-width:220px; padding:20px; border:1px solid var(--color-border); border-radius:8px; background:var(--color-white);">
+                  <div style="font-size:0.7rem; text-transform:uppercase; letter-spacing:0.08em; color:var(--color-medium-gray); margin-bottom:6px;">Valid For Brand</div>
+                  <div style="font-size:1.4rem; font-weight:600;" id="discount-brand-display">---</div>
+                </div>
+                <div style="flex:1; min-width:220px; padding:20px; border:1px solid var(--color-border); border-radius:8px; background:var(--color-white);">
+                  <div style="font-size:0.7rem; text-transform:uppercase; letter-spacing:0.08em; color:var(--color-medium-gray); margin-bottom:6px;">Expires In</div>
+                  <div style="font-size:1.4rem; font-weight:600;" id="discount-expires-display">-- days</div>
+                </div>
+              </div>
+              <p style="margin-top:16px; font-size:0.8rem; color:var(--color-medium-gray);">This discount applies <strong>only</strong> to products from the featured brand. A new brand and code are automatically generated every 14 days. Enter the code at checkout to receive your discount.</p>
             </div>
           </div>
 
