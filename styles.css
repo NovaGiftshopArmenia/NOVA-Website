@@ -6048,7 +6048,7 @@ header.header-scrolled .mobile-menu-icon-btn {
   border: 1px solid var(--color-border);
   border-radius: 12px;
   width: 90%;
-  max-width: 800px;
+  max-width: 920px;
   max-height: 90vh;
   overflow-y: auto;
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
@@ -6085,6 +6085,69 @@ header.header-scrolled .mobile-menu-icon-btn {
 .admin-modal-card textarea:focus {
   border-color: var(--color-black);
   outline: none;
+}
+
+/* Styled admin selects */
+.admin-modal-card select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  padding-right: 32px !important;
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+
+.admin-modal-card select:hover {
+  border-color: var(--color-sage);
+}
+
+/* Styled admin checkboxes */
+.admin-modal-card input[type="checkbox"] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  min-width: 16px;
+  border: 1.5px solid var(--color-border);
+  border-radius: 3px;
+  background: var(--color-white);
+  cursor: pointer;
+  position: relative;
+  transition: all 0.15s ease;
+  margin: 0;
+  padding: 0 !important;
+}
+
+.admin-modal-card input[type="checkbox"]:checked {
+  background-color: var(--color-sage);
+  border-color: var(--color-sage);
+}
+
+.admin-modal-card input[type="checkbox"]:checked::after {
+  content: '';
+  position: absolute;
+  left: 4px;
+  top: 1px;
+  width: 5px;
+  height: 9px;
+  border: solid var(--color-white);
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.admin-modal-card input[type="checkbox"]:hover {
+  border-color: var(--color-sage);
+}
+
+/* Price grid alignment */
+.admin-modal-card .form-group label {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* Modal mobile styles */
