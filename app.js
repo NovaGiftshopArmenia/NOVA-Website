@@ -3849,6 +3849,27 @@ function renderProductPage(productId) {
   document.getElementById('pp-desc').innerText = description;
   document.getElementById('pp-rating-val').innerText = `${product.rating} (${product.reviewsCount} ${reviewsText})`;
 
+  // Show "Edit This Product" button for admins
+  let editBtn = document.getElementById('pp-admin-edit-btn');
+  if (editBtn) editBtn.remove();
+  const adminSession = sessionStorage.getItem('nova_admin_session');
+  if (adminSession) {
+    editBtn = document.createElement('button');
+    editBtn.id = 'pp-admin-edit-btn';
+    editBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width:13px; height:13px;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg> Edit This Product`;
+    editBtn.style.cssText = 'display:inline-flex; align-items:center; gap:6px; padding:6px 14px; font-size:0.7rem; font-weight:600; text-transform:uppercase; letter-spacing:0.04em; border:1px solid var(--color-sage); background:none; color:var(--color-sage); border-radius:4px; cursor:pointer; margin-top:10px; transition:all 0.2s;';
+    editBtn.addEventListener('mouseenter', () => { editBtn.style.background = 'var(--color-sage)'; editBtn.style.color = '#fff'; });
+    editBtn.addEventListener('mouseleave', () => { editBtn.style.background = 'none'; editBtn.style.color = 'var(--color-sage)'; });
+    editBtn.addEventListener('click', () => {
+      openDetailedProductModal(product.id);
+    });
+    // Insert after the rating element
+    const ratingEl = document.getElementById('pp-rating-val');
+    if (ratingEl && ratingEl.parentElement) {
+      ratingEl.parentElement.insertBefore(editBtn, ratingEl.nextSibling);
+    }
+  }
+
   // Render thumbnails from product.images array only
   const allImages = [];
   if (product.image) allImages.push(product.image);
