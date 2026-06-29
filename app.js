@@ -7079,9 +7079,14 @@ window.updateCheckoutTotals = function() {
 
   const total = subtotal + shippingCost - discountAmount;
 
-  document.getElementById('checkout-subtotal-val').innerText = `֏${subtotal.toLocaleString()}`;
-  document.getElementById('checkout-shipping-val').innerText = shippingCost === 0 ? 'Free' : `֏${shippingCost.toLocaleString()}`;
-  document.getElementById('checkout-total-val').innerText = `֏${total.toLocaleString()}`;
+  const subtotalEl = document.getElementById('checkout-subtotal-val');
+  const shippingValEl = document.getElementById('checkout-shipping-val');
+  const totalEl = document.getElementById('checkout-total-val');
+  if (!subtotalEl || !totalEl) return;
+
+  subtotalEl.innerText = `֏${subtotal.toLocaleString()}`;
+  if (shippingValEl) shippingValEl.innerText = shippingCost === 0 ? 'Free' : `֏${shippingCost.toLocaleString()}`;
+  totalEl.innerText = `֏${total.toLocaleString()}`;
 
   const discountRow = document.getElementById('checkout-discount-row');
   const discountVal = document.getElementById('checkout-discount-val');
