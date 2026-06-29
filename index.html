@@ -968,23 +968,23 @@
                 <!-- Trash Sub-Panel -->
                 <div id="inv-sub-trash" class="inv-sub-panel" style="display:none;">
                   <div class="admin-card">
-                    <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:14px; flex-wrap:wrap; gap:12px;">
+                    <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:16px; flex-wrap:wrap; gap:12px;">
                       <div>
                         <h3 class="admin-card-title" style="margin-bottom:4px;">Recently Deleted Products</h3>
                         <p style="font-size:0.8rem; color:var(--color-medium-gray); margin:0;">Products moved to trash can be restored or permanently deleted.</p>
                       </div>
-                    </div>
-                    <div id="trash-bulk-bar" style="display:flex; gap:8px; align-items:center; margin-bottom:16px; flex-wrap:wrap;">
-                      <label style="display:flex; align-items:center; gap:6px; font-size:0.75rem; cursor:pointer; color:var(--color-medium-gray);">
-                        <input type="checkbox" id="trash-select-all" onchange="toggleAllTrashCheckboxes(this.checked)" style="cursor:pointer;">
-                        Select All
-                      </label>
-                      <select id="trash-bulk-action-select" class="admin-input" style="border:1px solid var(--color-border); border-radius:4px; padding:7px 12px; font-size:0.75rem; background:var(--color-white); min-width:160px; margin-left:auto;">
-                        <option value="">Bulk Actions</option>
-                        <option value="restore">Restore All</option>
-                        <option value="delete">Delete All</option>
-                      </select>
-                      <button onclick="executeTrashBulkAction()" class="btn-primary" style="padding:7px 18px; font-size:0.75rem; white-space:nowrap;">Proceed</button>
+                      <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+                        <label style="display:flex; align-items:center; gap:6px; font-size:0.75rem; cursor:pointer; color:var(--color-medium-gray);">
+                          <input type="checkbox" id="trash-select-all" onchange="toggleAllTrashCheckboxes(this.checked)" style="cursor:pointer;">
+                          Select All
+                        </label>
+                        <select id="trash-bulk-action-select" class="admin-input" style="border:1px solid var(--color-border); border-radius:4px; padding:7px 12px; font-size:0.75rem; background:var(--color-white); min-width:160px;">
+                          <option value="">Bulk Actions</option>
+                          <option value="restore">Restore All</option>
+                          <option value="delete">Delete All</option>
+                        </select>
+                        <button onclick="executeTrashBulkAction()" class="btn-primary" style="padding:7px 18px; font-size:0.75rem; white-space:nowrap;">Proceed</button>
+                      </div>
                     </div>
                     <div id="admin-trash-list">
                       <!-- Populated dynamically -->
