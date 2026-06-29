@@ -6494,11 +6494,11 @@ a {
 
 /* Ensure mobile menu drawer links/buttons are never blue */
 .mobile-menu-drawer a,
-.mobile-menu-drawer button,
+.mobile-menu-drawer button:not(.btn-primary),
 .cart-drawer a,
-.cart-drawer button,
+.cart-drawer button:not(.btn-primary),
 .wishlist-drawer a,
-.wishlist-drawer button {
+.wishlist-drawer button:not(.btn-primary) {
   -webkit-appearance: none;
   color: inherit;
 }
