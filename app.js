@@ -7045,8 +7045,7 @@ window.applyDiscountCode = function() {
 
   // Check if any cart items match the discount brand
   const matchingItems = AppState.cart.filter(item => {
-    const product = AppState.products.find(p => p.id === item.productId);
-    return product && product.brand && product.brand.toLowerCase() === discount.brand.toLowerCase();
+    return item.product && item.product.brand && item.product.brand.toLowerCase() === discount.brand.toLowerCase();
   });
 
   if (matchingItems.length === 0) {
@@ -7076,8 +7075,7 @@ window.updateCheckoutTotals = function() {
   let discountAmount = 0;
   if (appliedDiscount) {
     AppState.cart.forEach(item => {
-      const product = AppState.products.find(p => p.id === item.productId);
-      if (product && product.brand && product.brand.toLowerCase() === appliedDiscount.brand.toLowerCase()) {
+      if (item.product && item.product.brand && item.product.brand.toLowerCase() === appliedDiscount.brand.toLowerCase()) {
         discountAmount += Math.round((item.price * item.quantity) * appliedDiscount.percent / 100);
       }
     });
