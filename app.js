@@ -1690,7 +1690,7 @@ function addProductGetters(productsArray) {
 
 // APP STATE
 const AppState = {
-  products: [...INITIAL_PRODUCTS], // Will be overwritten by Firestore data on init
+  products: [], // Empty by default; loaded from Firestore on init (DO NOT pre-fill with INITIAL_PRODUCTS)
   cart: [],
   wishlist: [], // Wishlist product IDs
   instagramPosts: [...DEFAULT_INSTAGRAM_POSTS], // Will be overwritten by Firestore data on init
@@ -1823,17 +1823,18 @@ window.addEventListener('DOMContentLoaded', async () => {
 
     // Load products from Firestore (or seed if first run)
     const firestoreProducts = NovaDB.getProducts();
-    console.log('[NOVA] Firestore products:', firestoreProducts ? firestoreProducts.length : 'null');
+    console.log('[NOVA] Firestore products:', firestoreProducts ? firestoreProducts.length : 'null (no doc)');
     if (firestoreProducts !== null) {
-      // Document exists in Firestore — use it (even if empty, that means admin deleted all)
+      // Document exists in Firestore — use it (even if empty array, that means admin deleted all)
       AppState.products = firestoreProducts;
       addProductGetters(AppState.products);
       console.log('[NOVA] Loaded', AppState.products.length, 'products from Firestore');
     } else {
-      // First run only: no products doc in Firestore yet — seed with defaults
-      addProductGetters(INITIAL_PRODUCTS);
-      NovaDB.saveProducts(INITIAL_PRODUCTS);
-      console.log('[NOVA] Seeded Firestore with', INITIAL_PRODUCTS.length, 'initial products');
+      // First run ONLY: no products doc exists in Firestore at all — seed with defaults
+      AppState.products = [...INITIAL_PRODUCTS];
+      addProductGetters(AppState.products);
+      await NovaDB.saveProducts(AppState.products);
+      console.log('[NOVA] First run: seeded Firestore with', AppState.products.length, 'initial products');
     }
 
     // Load orders from Firestore
@@ -5597,7 +5598,7 @@ function saveTrash(trash) {
   NovaDB.saveTrash(trash);
 }
 
-window.deleteProduct = function(productId) {
+window.deleteProduct = async function(productId) {
   const product = AppState.products.find(p => p.id === productId);
   if (!product) return;
   
@@ -5613,7 +5614,7 @@ window.deleteProduct = function(productId) {
     saveTrash(trash);
 
     AppState.products.splice(idx, 1);
-    saveProductsToStorage();
+    await saveProductsToStorage();
     renderFeaturedProducts();
     renderShop();
     refreshAdminDashboard();
@@ -5792,7 +5793,7 @@ window.toggleAllInventoryCheckboxes = function(checked) {
   });
 };
 
-window.executeBulkAction = function() {
+window.executeBulkAction = async function() {
   const actionSelect = document.getElementById('bulk-action-select');
   const action = actionSelect ? actionSelect.value : '';
   
@@ -5829,7 +5830,7 @@ window.executeBulkAction = function() {
     });
 
     saveTrash(trash);
-    saveProductsToStorage();
+    await saveProductsToStorage();
     renderFeaturedProducts();
     renderShop();
     refreshAdminDashboard();
