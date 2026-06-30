@@ -1729,8 +1729,9 @@ const AppState = {
   outOfStockNotifications: []
 };
 
-window.saveProductsToStorage = function() {
-  NovaDB.saveProducts(AppState.products);
+window.saveProductsToStorage = async function() {
+  console.log('[NOVA] saveProductsToStorage called with', AppState.products.length, 'products');
+  await NovaDB.saveProducts(AppState.products);
 };
 
 let TempMobileFilters = {};
@@ -1823,12 +1824,13 @@ window.addEventListener('DOMContentLoaded', async () => {
     // Load products from Firestore (or seed if first run)
     const firestoreProducts = NovaDB.getProducts();
     console.log('[NOVA] Firestore products:', firestoreProducts ? firestoreProducts.length : 'null');
-    if (firestoreProducts && firestoreProducts.length > 0) {
+    if (firestoreProducts !== null) {
+      // Document exists in Firestore — use it (even if empty, that means admin deleted all)
       AppState.products = firestoreProducts;
       addProductGetters(AppState.products);
       console.log('[NOVA] Loaded', AppState.products.length, 'products from Firestore');
     } else {
-      // First run: seed Firestore with INITIAL_PRODUCTS
+      // First run only: no products doc in Firestore yet — seed with defaults
       addProductGetters(INITIAL_PRODUCTS);
       NovaDB.saveProducts(INITIAL_PRODUCTS);
       console.log('[NOVA] Seeded Firestore with', INITIAL_PRODUCTS.length, 'initial products');

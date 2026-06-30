@@ -1,10 +1,6 @@
 // ============================================
 // NOVA FIREBASE CONFIGURATION & DATABASE HELPER
 // ============================================
-// This file initializes Firebase and provides the NovaDB helper
-// which replaces localStorage for all shared/admin data.
-// Per-user data (cart, wishlist, session, language) stays in localStorage.
-
 const firebaseConfig = {
   apiKey: "AIzaSyDqh33t_bQw6DUlwmHuInLAqWtUb_T1A5I",
   authDomain: "nova-giftshop.firebaseapp.com",
@@ -19,35 +15,17 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
-// Enable offline persistence — writes are cached locally first,
-// so even if the page is refreshed before sync completes, data persists
-db.enablePersistence({ synchronizeTabs: true }).catch(err => {
-  if (err.code === 'failed-precondition') {
-    console.warn('[NovaDB] Persistence unavailable: multiple tabs open');
-  } else if (err.code === 'unimplemented') {
-    console.warn('[NovaDB] Persistence not supported in this browser');
-  }
-});
-
 // ============================================
-// NovaDB — Cache-first Firestore wrapper
+// NovaDB — Firestore wrapper with in-memory cache
 // ============================================
-// Strategy:
-//   - On init(), fetch ALL shared data from Firestore into memory cache
-//   - Reads are synchronous (from cache) — no code flow changes needed
-//   - Writes update cache immediately + fire async Firestore write
-//   - If Firestore is empty (first run), seed it with defaults
-
 const NovaDB = {
   _cache: {},
   _collection: 'site_data',
   _ready: false,
   _initPromise: null,
+  _pendingWrites: 0,
 
-  // ---- INITIALIZATION ----
-  // Fetches all documents from 'site_data' collection into cache
   async init() {
-    // If already initializing, return the existing promise (prevents duplicate inits)
     if (this._initPromise) return this._initPromise;
     this._initPromise = this._doInit();
     return this._initPromise;
@@ -60,36 +38,47 @@ const NovaDB = {
         this._cache[doc.id] = doc.data();
       });
       this._ready = true;
-      console.log('[NovaDB] Loaded from Firestore:', Object.keys(this._cache));
+      console.log('[NovaDB] ✅ Loaded from Firestore:', Object.keys(this._cache));
+      
+      // Log products count specifically
+      const prods = this._cache['products'];
+      if (prods && prods.items) {
+        console.log('[NovaDB] Products in Firestore:', prods.items.length);
+      } else {
+        console.log('[NovaDB] No products document in Firestore yet');
+      }
     } catch (e) {
-      console.error('[NovaDB] Failed to load from Firestore, falling back to defaults:', e);
+      console.error('[NovaDB] ❌ Failed to load from Firestore:', e);
       this._ready = false;
     }
   },
 
-  // Wait for init to complete — call this from any DOMContentLoaded handler
   async whenReady() {
     if (this._ready) return;
     if (this._initPromise) await this._initPromise;
   },
 
-  // ---- GENERIC GET/SET ----
-  // Get data from cache (synchronous)
+  // ---- GET (synchronous, from cache) ----
   get(docId) {
     return this._cache[docId] || null;
   },
 
-  // Set data: update cache + write to Firestore
-  // Returns a Promise so callers can await if needed
-  set(docId, data) {
+  // ---- SET (updates cache + writes to Firestore) ----
+  async set(docId, data) {
     this._cache[docId] = data;
-    return db.collection(this._collection).doc(docId).set(data)
-      .then(() => {
-        console.log(`[NovaDB] Saved '${docId}' to Firestore`);
-      })
-      .catch(e => {
-        console.error(`[NovaDB] Failed to write '${docId}':`, e);
-      });
+    this._pendingWrites++;
+    try {
+      await db.collection(this._collection).doc(docId).set(data);
+      console.log(`[NovaDB] ✅ Saved '${docId}' to Firestore`);
+    } catch (e) {
+      console.error(`[NovaDB] ❌ FAILED to write '${docId}':`, e);
+      // Show visible error so user can report it
+      if (typeof showToast === 'function') {
+        showToast('DATABASE ERROR: ' + e.message);
+      }
+    } finally {
+      this._pendingWrites--;
+    }
   },
 
   // ---- PRODUCTS ----
@@ -99,26 +88,22 @@ const NovaDB = {
   },
 
   saveProducts(productsArray) {
-    try {
-      // Explicitly pick known product fields (avoid getter/descriptor issues)
-      const PRODUCT_FIELDS = ['id', 'name', 'scent_family', 'concentration', 'gender_id', 
-        'vibes', 'price', 'image', 'images', 'brand', 'tags', 'rating', 'reviewsCount',
-        'tagline', 'description', 'ingredients', 'notes', 'sizes', 'stock', 'featured'];
-      
-      const clean = productsArray.map(p => {
-        const obj = {};
-        PRODUCT_FIELDS.forEach(key => {
-          if (p[key] !== undefined) {
-            obj[key] = p[key];
-          }
-        });
-        return obj;
+    // Explicitly pick known product fields only
+    const PRODUCT_FIELDS = ['id', 'name', 'scent_family', 'concentration', 'gender_id', 
+      'vibes', 'price', 'image', 'images', 'brand', 'tags', 'rating', 'reviewsCount',
+      'tagline', 'description', 'ingredients', 'notes', 'sizes', 'stock', 'featured'];
+    
+    const clean = productsArray.map(p => {
+      const obj = {};
+      PRODUCT_FIELDS.forEach(key => {
+        if (p[key] !== undefined) {
+          obj[key] = p[key];
+        }
       });
-      console.log(`[NovaDB] Saving ${clean.length} products to Firestore...`);
-      return this.set('products', { items: clean });
-    } catch (e) {
-      console.error('[NovaDB] Error in saveProducts:', e);
-    }
+      return obj;
+    });
+    console.log(`[NovaDB] 📦 Saving ${clean.length} products...`);
+    return this.set('products', { items: clean });
   },
 
   // ---- ORDERS ----
@@ -128,7 +113,7 @@ const NovaDB = {
   },
 
   saveOrders(ordersArray) {
-    this.set('orders', { items: ordersArray });
+    return this.set('orders', { items: ordersArray });
   },
 
   // ---- INSTAGRAM POSTS ----
@@ -138,7 +123,7 @@ const NovaDB = {
   },
 
   saveInstagramPosts(postsArray) {
-    this.set('instagram_posts', { items: postsArray });
+    return this.set('instagram_posts', { items: postsArray });
   },
 
   // ---- BRANDS ----
@@ -148,7 +133,7 @@ const NovaDB = {
   },
 
   saveBrands(brandsArray) {
-    this.set('brands', { items: brandsArray });
+    return this.set('brands', { items: brandsArray });
   },
 
   // ---- TRASH ----
@@ -158,7 +143,7 @@ const NovaDB = {
   },
 
   saveTrash(trashArray) {
-    this.set('trash', { items: trashArray });
+    return this.set('trash', { items: trashArray });
   },
 
   // ---- STAFF PROFILES ----
@@ -168,7 +153,7 @@ const NovaDB = {
   },
 
   saveStaffProfiles(profilesObj) {
-    this.set('staff_profiles', { data: profilesObj });
+    return this.set('staff_profiles', { data: profilesObj });
   },
 
   // ---- AUDIT LOGS ----
@@ -178,17 +163,17 @@ const NovaDB = {
   },
 
   saveAuditLogs(logsArray) {
-    this.set('audit_logs', { entries: logsArray });
+    return this.set('audit_logs', { entries: logsArray });
   },
 
-  // ---- USERS (registered customer accounts) ----
+  // ---- USERS ----
   getUsers() {
     const doc = this.get('users');
     return doc ? doc.items : [];
   },
 
   saveUsers(usersArray) {
-    this.set('users', { items: usersArray });
+    return this.set('users', { items: usersArray });
   },
 
   // ---- ADMIN EMAILS ----
@@ -198,10 +183,57 @@ const NovaDB = {
   },
 
   saveAdminEmails(emailsArray) {
-    this.set('admin_emails', { emails: emailsArray });
+    return this.set('admin_emails', { emails: emailsArray });
+  },
+
+  // ---- DEBUG HELPER ----
+  // Call from console: NovaDB.debug()
+  async debug() {
+    console.log('=== NovaDB Debug ===');
+    console.log('Ready:', this._ready);
+    console.log('Pending writes:', this._pendingWrites);
+    console.log('Cache keys:', Object.keys(this._cache));
+    console.log('Products in cache:', this._cache['products']?.items?.length || 'none');
+    console.log('Products in AppState:', window.AppState?.products?.length || 'none');
+    console.log('Trash in cache:', this._cache['trash']?.items?.length || 'none');
+    
+    // Verify by reading directly from Firestore
+    try {
+      const doc = await db.collection(this._collection).doc('products').get();
+      if (doc.exists) {
+        const data = doc.data();
+        console.log('Products in Firestore (live):', data.items?.length || 'none');
+        console.log('Product IDs in Firestore:', data.items?.map(p => p.id));
+      } else {
+        console.log('Products document does NOT exist in Firestore!');
+      }
+    } catch(e) {
+      console.error('Failed to read from Firestore:', e);
+    }
+    
+    console.log('Products in AppState:', window.AppState?.products?.map(p => p.id));
+    console.log('=== End Debug ===');
+  },
+
+  // Quick test: delete first product and save
+  async testDelete() {
+    console.log('=== Test Delete ===');
+    console.log('Before: AppState has', window.AppState.products.length, 'products');
+    const removed = window.AppState.products.splice(0, 1);
+    console.log('Removed:', removed[0]?.name);
+    console.log('After splice: AppState has', window.AppState.products.length, 'products');
+    
+    await this.saveProducts(window.AppState.products);
+    console.log('Save complete. Verifying...');
+    
+    // Read back from Firestore directly
+    const doc = await db.collection(this._collection).doc('products').get();
+    if (doc.exists) {
+      console.log('Firestore now has:', doc.data().items?.length, 'products');
+    }
+    console.log('=== End Test ===');
   }
 };
 
-// Expose globally
 window.NovaDB = NovaDB;
 window.db = db;
