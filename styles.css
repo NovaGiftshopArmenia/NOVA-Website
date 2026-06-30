@@ -3106,10 +3106,9 @@ footer {
 .wishlist-drawer,
 .cart-drawer-content,
 .wishlist-drawer-content,
-input:not([type="checkbox"]):not([type="radio"]),
+input:not([type="checkbox"]):not([type="radio"]):not(.search-input),
 select,
 textarea,
-.search-container,
 .gender-image-wrap {
   border-radius: 10px;
 }
