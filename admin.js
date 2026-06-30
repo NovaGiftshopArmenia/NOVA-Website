@@ -1,18 +1,14 @@
 // MOCK ORDERS DATABASE
-const MOCK_ORDERS = [];
 
 const WooCommerceAdmin = {
   orders: (() => {
-    try {
-      const saved = localStorage.getItem('nova_orders');
-      return saved ? JSON.parse(saved) : [];
-    } catch(e) {
-      return [];
-    }
+    // Orders will be loaded from Firestore during NovaDB.init()
+    // Start with empty array; will be populated in app.js DOMContentLoaded
+    return [];
   })(),
 
   saveOrdersToStorage() {
-    localStorage.setItem('nova_orders', JSON.stringify(this.orders));
+    NovaDB.saveOrders(this.orders);
   },
   
   // Calculate analytics metrics

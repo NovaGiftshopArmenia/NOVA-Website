@@ -1659,49 +1659,41 @@ const DEFAULT_INSTAGRAM_POSTS = [
   }
 ];
 
+// Helper: add computed getters to product objects
+function addProductGetters(productsArray) {
+  productsArray.forEach(p => {
+    // Only add if not already a getter
+    const catDesc = Object.getOwnPropertyDescriptor(p, 'category');
+    if (!catDesc || typeof catDesc.get !== 'function') {
+      Object.defineProperty(p, 'category', {
+        get() {
+          const fam = window.GLOBAL_ATTRIBUTES.scent_families[p.scent_family];
+          return fam ? fam.label.en : "";
+        },
+        configurable: true,
+        enumerable: true
+      });
+    }
+    const genDesc = Object.getOwnPropertyDescriptor(p, 'gender');
+    if (!genDesc || typeof genDesc.get !== 'function') {
+      Object.defineProperty(p, 'gender', {
+        get() {
+          const g = window.GLOBAL_ATTRIBUTES.genders[p.gender_id];
+          return g ? g.label.en : "";
+        },
+        configurable: true,
+        enumerable: true
+      });
+    }
+  });
+}
+
 // APP STATE
 const AppState = {
-  products: (() => {
-    try {
-      const saved = localStorage.getItem('nova_products');
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        parsed.forEach(p => {
-          Object.defineProperty(p, 'category', {
-            get() {
-              const fam = window.GLOBAL_ATTRIBUTES.scent_families[p.scent_family];
-              return fam ? fam.label.en : "";
-            },
-            configurable: true,
-            enumerable: true
-          });
-          Object.defineProperty(p, 'gender', {
-            get() {
-              const g = window.GLOBAL_ATTRIBUTES.genders[p.gender_id];
-              return g ? g.label.en : "";
-            },
-            configurable: true,
-            enumerable: true
-          });
-        });
-        return parsed;
-      }
-    } catch(e) {
-      console.error("Error loading products from storage:", e);
-    }
-    return [...INITIAL_PRODUCTS];
-  })(),
+  products: [...INITIAL_PRODUCTS], // Will be overwritten by Firestore data on init
   cart: [],
   wishlist: [], // Wishlist product IDs
-  instagramPosts: (() => {
-    try {
-      const saved = JSON.parse(localStorage.getItem('nova_instagram_posts'));
-      if (saved && saved.length > 0) return saved;
-    } catch (e) {}
-    // Seed default posts if empty
-    localStorage.setItem('nova_instagram_posts', JSON.stringify(DEFAULT_INSTAGRAM_POSTS));
-    return [...DEFAULT_INSTAGRAM_POSTS];
-  })(),
+  instagramPosts: [...DEFAULT_INSTAGRAM_POSTS], // Will be overwritten by Firestore data on init
   currentRoute: 'home', // 'home', 'shop', 'checkout', 'admin', 'my-account'
   language: localStorage.getItem('nova_lang_choice') || 'am', // Default language is Armenian ('am')
   filters: {
@@ -1738,7 +1730,7 @@ const AppState = {
 };
 
 window.saveProductsToStorage = function() {
-  localStorage.setItem('nova_products', JSON.stringify(AppState.products));
+  NovaDB.saveProducts(AppState.products);
 };
 
 let TempMobileFilters = {};
@@ -1822,7 +1814,40 @@ const DOM = {
 };
 
 // INITIALIZATION
-window.addEventListener('DOMContentLoaded', () => {
+window.addEventListener('DOMContentLoaded', async () => {
+  // --- FIREBASE: Load all shared data from Firestore before rendering ---
+  try {
+    await NovaDB.init();
+    console.log('[NOVA] Firestore data loaded successfully');
+
+    // Load products from Firestore (or seed if first run)
+    const firestoreProducts = NovaDB.getProducts();
+    if (firestoreProducts && firestoreProducts.length > 0) {
+      AppState.products = firestoreProducts;
+      addProductGetters(AppState.products);
+    } else {
+      // First run: seed Firestore with INITIAL_PRODUCTS
+      NovaDB.saveProducts(INITIAL_PRODUCTS);
+      console.log('[NOVA] Seeded Firestore with initial products');
+    }
+
+    // Load orders from Firestore
+    const firestoreOrders = NovaDB.getOrders();
+    if (firestoreOrders) {
+      WooCommerceAdmin.orders = firestoreOrders;
+    }
+
+    // Load Instagram posts from Firestore
+    const firestoreInsta = NovaDB.getInstagramPosts();
+    if (firestoreInsta && firestoreInsta.length > 0) {
+      AppState.instagramPosts = firestoreInsta;
+    } else {
+      NovaDB.saveInstagramPosts(DEFAULT_INSTAGRAM_POSTS);
+    }
+  } catch (e) {
+    console.warn('[NOVA] Firestore init failed, using defaults:', e);
+  }
+
   const isProductPage = window.location.pathname.endsWith('/product') || window.location.pathname.endsWith('/product.html');
   if (isProductPage) {
     initProductPage();
@@ -4752,15 +4777,7 @@ function initMyAccountNavigation() {
 // ==========================================
 
 function initStaffProfiles() {
-  const saved = localStorage.getItem('nova_staff_profiles');
-  let parsed = {};
-  if (saved) {
-    try {
-      parsed = JSON.parse(saved);
-    } catch(e) {
-      parsed = {};
-    }
-  }
+  let parsed = NovaDB.getStaffProfiles() || {};
   
   if (!parsed['norayrnajaryann@gmail.com']) {
     parsed['norayrnajaryann@gmail.com'] = {
@@ -4781,17 +4798,17 @@ function initStaffProfiles() {
       role: 'Shop Manager',
       password: 'david123'
     };
-    localStorage.setItem('nova_staff_profiles', JSON.stringify(parsed));
+    NovaDB.saveStaffProfiles(parsed);
   }
 }
 
 function getStaffProfiles() {
   initStaffProfiles();
-  return JSON.parse(localStorage.getItem('nova_staff_profiles'));
+  return NovaDB.getStaffProfiles() || {};
 }
 
 function saveStaffProfiles(profiles) {
-  localStorage.setItem('nova_staff_profiles', JSON.stringify(profiles));
+  NovaDB.saveStaffProfiles(profiles);
 }
 
 // submitAdminCredentials is defined in the Admin Access Control System section below
@@ -4850,15 +4867,7 @@ window.switchAdminTab = function(tabId) {
 
 
 window.logAdminActivity = function(actor, action) {
-  let logs = [];
-  const saved = localStorage.getItem('nova_audit_logs');
-  if (saved) {
-    try {
-      logs = JSON.parse(saved);
-    } catch(e) {
-      logs = [];
-    }
-  }
+  let logs = NovaDB.getAuditLogs() || [];
   
   const dateObj = new Date();
   const timestamp = dateObj.getFullYear() + '-' + 
@@ -4878,7 +4887,7 @@ window.logAdminActivity = function(actor, action) {
     logs = logs.slice(0, 100);
   }
   
-  localStorage.setItem('nova_audit_logs', JSON.stringify(logs));
+  NovaDB.saveAuditLogs(logs);
 };
 
 window.clearAuditLogs = function() {
@@ -4890,7 +4899,7 @@ window.clearAuditLogs = function() {
     return;
   }
   
-  localStorage.setItem('nova_audit_logs', JSON.stringify([]));
+  NovaDB.saveAuditLogs([]);
   logAdminActivity(session.name, "Cleared platform audit logs history");
   showToast("AUDIT LOGS HISTORY CLEARED.");
   renderAuditLogsTable();
@@ -4901,15 +4910,7 @@ window.renderAuditLogsTable = function() {
   if (!tbody) return;
   tbody.innerHTML = '';
   
-  let logs = [];
-  const saved = localStorage.getItem('nova_audit_logs');
-  if (saved) {
-    try {
-      logs = JSON.parse(saved);
-    } catch(e) {
-      logs = [];
-    }
-  }
+  let logs = NovaDB.getAuditLogs() || [];
   
   const lang = AppState.language;
   if (logs.length === 0) {
@@ -5104,7 +5105,7 @@ window.toggleInstaLike = function(btn, postId) {
         if (post) {
           post.likes = currentLikes;
           // Silently save to storage (don't re-render to avoid losing class active state)
-          localStorage.setItem('nova_instagram_posts', JSON.stringify(AppState.instagramPosts));
+          NovaDB.saveInstagramPosts(AppState.instagramPosts);
         }
       }
     }
@@ -5126,7 +5127,7 @@ window.toggleInstaSave = function(btn) {
 
 // DYNAMIC INSTAGRAM MANAGER AND RENDERER
 function saveInstagramPosts(posts) {
-  localStorage.setItem('nova_instagram_posts', JSON.stringify(posts));
+  NovaDB.saveInstagramPosts(posts);
   AppState.instagramPosts = posts;
   renderInstagramFeed();
 }
@@ -5507,7 +5508,7 @@ window.saveDetailedProduct = function(event) {
     showToast(`SUCCESSFULLY UPDATED ${product.name.toUpperCase()} DETAILS.`);
   }
 
-  // Persist products to localStorage
+  // Persist products to Firestore
   saveProductsToStorage();
 
   // Re-render shop views
@@ -5523,11 +5524,11 @@ window.saveDetailedProduct = function(event) {
 
 // Trash management
 function getTrash() {
-  try { return JSON.parse(localStorage.getItem('nova_trash') || '[]'); } catch(e) { return []; }
+  return NovaDB.getTrash() || [];
 }
 
 function saveTrash(trash) {
-  localStorage.setItem('nova_trash', JSON.stringify(trash));
+  NovaDB.saveTrash(trash);
 }
 
 window.deleteProduct = function(productId) {
@@ -5808,14 +5809,14 @@ window.deleteOrder = function(orderId) {
 const DEFAULT_BRANDS = ['NOVA', 'Dior', 'Chanel', 'Tom Ford', 'Versace', 'Paco Rabanne', 'Yves Saint Laurent', 'Giorgio Armani', 'Gucci', 'Burberry', 'Dolce & Gabbana', 'Hermès', 'Lancôme', 'Calvin Klein', 'Hugo Boss', 'Givenchy', 'Prada', 'Valentino', 'Bvlgari', 'Montblanc'];
 
 function getBrands() {
-  const stored = localStorage.getItem('nova_brands');
-  if (stored) {
-    try { return JSON.parse(stored); } catch(e) {}
+  const stored = NovaDB.getBrands();
+  if (stored && stored.length > 0) {
+    return stored;
   }
   // Initialize with defaults + any brands from products
   const productBrands = (AppState.products || []).map(p => p.brand).filter(Boolean);
   const allBrands = [...new Set([...DEFAULT_BRANDS, ...productBrands])].sort((a, b) => a.localeCompare(b));
-  localStorage.setItem('nova_brands', JSON.stringify(allBrands));
+  NovaDB.saveBrands(allBrands);
   return allBrands;
 }
 
@@ -5844,7 +5845,7 @@ function renderBrandSlider() {
 }
 
 function saveBrands(brands) {
-  localStorage.setItem('nova_brands', JSON.stringify(brands));
+  NovaDB.saveBrands(brands);
   renderBrandSlider();
 }
 
@@ -6228,13 +6229,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Get all registered users
   function getUsers() {
-    try { return JSON.parse(localStorage.getItem(USERS_KEY)) || []; }
-    catch(e) { return []; }
+    return NovaDB.getUsers() || [];
   }
 
   // Save users array
   function saveUsers(users) {
-    localStorage.setItem(USERS_KEY, JSON.stringify(users));
+    NovaDB.saveUsers(users);
   }
 
   // Get current session
@@ -6356,7 +6356,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const existingUser = users.find(u => u.email === email);
 
     // Also check nova_staff_profiles (from admin grant) 
-    const staffProfiles = JSON.parse(localStorage.getItem('nova_staff_profiles') || '{}');
+    const staffProfiles = NovaDB.getStaffProfiles() || {};
     const staffEntry = staffProfiles[email];
 
     if (existingUser) {
@@ -6386,7 +6386,7 @@ document.addEventListener('DOMContentLoaded', () => {
       staffEntry.name = firstName + ' ' + lastName;
       staffEntry.password = password;
       staffProfiles[email] = staffEntry;
-      localStorage.setItem('nova_staff_profiles', JSON.stringify(staffProfiles));
+      NovaDB.saveStaffProfiles(staffProfiles);
     }
 
     // If this user is an admin, auto-establish admin session
@@ -6399,7 +6399,7 @@ document.addEventListener('DOMContentLoaded', () => {
       };
       if (!staffEntry) {
         staffProfiles[email] = profile;
-        localStorage.setItem('nova_staff_profiles', JSON.stringify(staffProfiles));
+        NovaDB.saveStaffProfiles(staffProfiles);
       }
       sessionStorage.setItem('nova_admin_session', JSON.stringify(profile));
     }
@@ -6449,7 +6449,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // If this user is an admin, auto-establish admin session too
     if (typeof isAdminEmail === 'function' && isAdminEmail(email)) {
-      const staff = JSON.parse(localStorage.getItem('nova_staff_profiles') || '{}');
+      const staff = NovaDB.getStaffProfiles() || {};
       let profile = staff[email];
       if (!profile) {
         // Create staff profile on the fly if missing
@@ -6460,13 +6460,13 @@ document.addEventListener('DOMContentLoaded', () => {
           password: password
         };
         staff[email] = profile;
-        localStorage.setItem('nova_staff_profiles', JSON.stringify(staff));
+        NovaDB.saveStaffProfiles(staff);
       } else {
         // Sync the staff profile password with the user's actual password
         profile.password = password;
         profile.name = (user.firstName || '') + ' ' + (user.lastName || '');
         staff[email] = profile;
-        localStorage.setItem('nova_staff_profiles', JSON.stringify(staff));
+        NovaDB.saveStaffProfiles(staff);
       }
       sessionStorage.setItem('nova_admin_session', JSON.stringify(profile));
     }
@@ -6535,9 +6535,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const countEl = document.getElementById('admin-clients-count');
     if (!tbody) return;
 
-    let users = [];
-    try { users = JSON.parse(localStorage.getItem('nova_users')) || []; }
-    catch(e) { users = []; }
+    let users = NovaDB.getUsers() || [];
 
     if (countEl) countEl.textContent = users.length + ' client' + (users.length !== 1 ? 's' : '');
 
@@ -6584,11 +6582,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   window.deleteClient = function(userId) {
     if (!confirm('Remove this client?')) return;
-    let users = [];
-    try { users = JSON.parse(localStorage.getItem('nova_users')) || []; }
-    catch(e) { users = []; }
+    let users = NovaDB.getUsers() || [];
     users = users.filter(u => u.id !== userId);
-    localStorage.setItem('nova_users', JSON.stringify(users));
+    NovaDB.saveUsers(users);
     renderAdminClients();
     showToast('CLIENT REMOVED.');
   };
@@ -6623,18 +6619,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Initialize admin emails list
   function getAdminEmails() {
-    try {
-      const saved = JSON.parse(localStorage.getItem(ADMIN_EMAILS_KEY));
-      if (Array.isArray(saved)) return saved;
-    } catch(e) {}
+    const saved = NovaDB.getAdminEmails();
+    if (Array.isArray(saved)) return saved;
     // Default: only super admin
     const defaults = [SUPER_ADMIN];
-    localStorage.setItem(ADMIN_EMAILS_KEY, JSON.stringify(defaults));
+    NovaDB.saveAdminEmails(defaults);
     return defaults;
   }
 
   function saveAdminEmails(emails) {
-    localStorage.setItem(ADMIN_EMAILS_KEY, JSON.stringify(emails));
+    NovaDB.saveAdminEmails(emails);
   }
 
   // Check if an email has admin access
@@ -6697,12 +6691,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // First, try to authenticate via the main nova_users auth system
-    let users = [];
-    try { users = JSON.parse(localStorage.getItem('nova_users')) || []; } catch(e) {}
+    const users = NovaDB.getUsers() || [];
     const authUser = users.find(u => u.email === email);
 
     // Also check staff profiles as a fallback
-    const staff = JSON.parse(localStorage.getItem('nova_staff_profiles') || '{}');
+    const staff = NovaDB.getStaffProfiles() || {};
     let profile = staff[email];
 
     // Verify password: check nova_users first (primary), then staff profiles (legacy fallback)
@@ -6727,7 +6720,7 @@ document.addEventListener('DOMContentLoaded', () => {
         password: password
       };
       staff[email] = profile;
-      localStorage.setItem('nova_staff_profiles', JSON.stringify(staff));
+      NovaDB.saveStaffProfiles(staff);
     } else {
       // Sync password and name
       profile.password = password;
@@ -6735,7 +6728,7 @@ document.addEventListener('DOMContentLoaded', () => {
         profile.name = (authUser.firstName + ' ' + (authUser.lastName || '')).trim();
       }
       staff[email] = profile;
-      localStorage.setItem('nova_staff_profiles', JSON.stringify(staff));
+      NovaDB.saveStaffProfiles(staff);
     }
 
     // Also sign into the main auth system if not already
@@ -6759,7 +6752,7 @@ document.addEventListener('DOMContentLoaded', () => {
       // Also ensure this user exists in nova_users
       if (!authUser) {
         users.push(sessionData);
-        localStorage.setItem('nova_users', JSON.stringify(users));
+        NovaDB.saveUsers(users);
       }
 
       // Update header greeting
@@ -6800,7 +6793,7 @@ document.addEventListener('DOMContentLoaded', () => {
           
           if (!adminSession && session) {
             // Auto-login to admin
-            const staff = JSON.parse(localStorage.getItem('nova_staff_profiles') || '{}');
+            const staff = NovaDB.getStaffProfiles() || {};
             const profile = staff[session.email];
             if (profile) {
               sessionStorage.setItem('nova_admin_session', JSON.stringify(profile));
@@ -6838,12 +6831,11 @@ document.addEventListener('DOMContentLoaded', () => {
     saveAdminEmails(emails);
 
     // Check if user already exists in nova_users (the main auth system)
-    let users = [];
-    try { users = JSON.parse(localStorage.getItem('nova_users')) || []; } catch(e) {}
+    const users = NovaDB.getUsers() || [];
     const existingUser = users.find(u => u.email === email);
 
     // Add to staff profiles, using real name from nova_users if available
-    const staff = JSON.parse(localStorage.getItem('nova_staff_profiles') || '{}');
+    const staff = NovaDB.getStaffProfiles() || {};
     if (!staff[email]) {
       const userName = existingUser 
         ? (existingUser.firstName + ' ' + (existingUser.lastName || '')).trim()
@@ -6854,11 +6846,11 @@ document.addEventListener('DOMContentLoaded', () => {
         role: 'Shop Manager',
         password: 'temp_' + Math.random().toString(36).substr(2, 6)
       };
-      localStorage.setItem('nova_staff_profiles', JSON.stringify(staff));
+      NovaDB.saveStaffProfiles(staff);
     } else if (existingUser) {
       // Update staff profile name from actual user data
       staff[email].name = (existingUser.firstName + ' ' + (existingUser.lastName || '')).trim();
-      localStorage.setItem('nova_staff_profiles', JSON.stringify(staff));
+      NovaDB.saveStaffProfiles(staff);
     }
 
     showToast('ADMIN ACCESS GRANTED TO ' + email.toUpperCase());
@@ -6906,8 +6898,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Initialize on load
   function initAdminAccess() {
     // Ensure super admin user account exists in auth system
-    let users = [];
-    try { users = JSON.parse(localStorage.getItem('nova_users')) || []; } catch(e) {}
+    let users = NovaDB.getUsers() || [];
     if (!users.find(u => u.email === SUPER_ADMIN)) {
       users.push({
         id: 'superadmin',
@@ -6918,7 +6909,7 @@ document.addEventListener('DOMContentLoaded', () => {
         createdAt: new Date().toISOString(),
         billing: { street: '', city: '', zip: '' }
       });
-      localStorage.setItem('nova_users', JSON.stringify(users));
+      NovaDB.saveUsers(users);
     }
 
     // Ensure admin emails list exists
