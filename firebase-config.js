@@ -100,21 +100,22 @@ const NovaDB = {
 
   saveProducts(productsArray) {
     try {
-      // Strip getter properties before saving (category, gender are computed)
+      // Explicitly pick known product fields (avoid getter/descriptor issues)
+      const PRODUCT_FIELDS = ['id', 'name', 'scent_family', 'concentration', 'gender_id', 
+        'vibes', 'price', 'image', 'images', 'brand', 'tags', 'rating', 'reviewsCount',
+        'tagline', 'description', 'ingredients', 'notes', 'sizes', 'stock', 'featured'];
+      
       const clean = productsArray.map(p => {
         const obj = {};
-        for (const key of Object.keys(p)) {
-          // Skip computed getter properties
-          const descriptor = Object.getOwnPropertyDescriptor(p, key);
-          if (descriptor && typeof descriptor.get === 'function') continue;
-          // Skip undefined values (Firestore rejects them)
-          if (p[key] === undefined) continue;
-          obj[key] = p[key];
-        }
+        PRODUCT_FIELDS.forEach(key => {
+          if (p[key] !== undefined) {
+            obj[key] = p[key];
+          }
+        });
         return obj;
       });
       console.log(`[NovaDB] Saving ${clean.length} products to Firestore...`);
-      this.set('products', { items: clean });
+      return this.set('products', { items: clean });
     } catch (e) {
       console.error('[NovaDB] Error in saveProducts:', e);
     }
