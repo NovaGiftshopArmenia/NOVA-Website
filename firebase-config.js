@@ -42,10 +42,18 @@ const NovaDB = {
   _cache: {},
   _collection: 'site_data',
   _ready: false,
+  _initPromise: null,
 
   // ---- INITIALIZATION ----
   // Fetches all documents from 'site_data' collection into cache
   async init() {
+    // If already initializing, return the existing promise (prevents duplicate inits)
+    if (this._initPromise) return this._initPromise;
+    this._initPromise = this._doInit();
+    return this._initPromise;
+  },
+
+  async _doInit() {
     try {
       const snapshot = await db.collection(this._collection).get();
       snapshot.forEach(doc => {
@@ -57,6 +65,12 @@ const NovaDB = {
       console.error('[NovaDB] Failed to load from Firestore, falling back to defaults:', e);
       this._ready = false;
     }
+  },
+
+  // Wait for init to complete — call this from any DOMContentLoaded handler
+  async whenReady() {
+    if (this._ready) return;
+    if (this._initPromise) await this._initPromise;
   },
 
   // ---- GENERIC GET/SET ----

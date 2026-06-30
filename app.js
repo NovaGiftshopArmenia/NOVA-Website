@@ -4776,7 +4776,8 @@ function initMyAccountNavigation() {
 // --- WOOCOMMERCE ADMIN ACCESS CONTROL ---
 // ==========================================
 
-function initStaffProfiles() {
+async function initStaffProfiles() {
+  await NovaDB.whenReady();
   let parsed = NovaDB.getStaffProfiles() || {};
   
   if (!parsed['norayrnajaryann@gmail.com']) {
@@ -6896,7 +6897,10 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   // Initialize on load
-  function initAdminAccess() {
+  async function initAdminAccess() {
+    // Wait for Firestore data to be loaded
+    await NovaDB.whenReady();
+
     // Ensure super admin user account exists in auth system
     let users = NovaDB.getUsers() || [];
     if (!users.find(u => u.email === SUPER_ADMIN)) {
