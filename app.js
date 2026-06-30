@@ -7182,3 +7182,332 @@ window.updateCheckoutTotals = function() {
     }
   }
 };
+
+// --- CSV IMPORT SYSTEM ---
+
+// Parse CSV text into array of objects using header row as keys
+function parseCSV(text) {
+  const lines = text.split(/\r?\n/).filter(line => line.trim());
+  if (lines.length < 2) return [];
+  
+  // Parse header - handle quoted fields
+  const parseRow = (row) => {
+    const result = [];
+    let current = '';
+    let inQuotes = false;
+    for (let i = 0; i < row.length; i++) {
+      const ch = row[i];
+      if (ch === '"') {
+        inQuotes = !inQuotes;
+      } else if (ch === ',' && !inQuotes) {
+        result.push(current.trim());
+        current = '';
+      } else {
+        current += ch;
+      }
+    }
+    result.push(current.trim());
+    return result;
+  };
+
+  const headers = parseRow(lines[0]);
+  const rows = [];
+  for (let i = 1; i < lines.length; i++) {
+    const values = parseRow(lines[i]);
+    if (values.length < 2) continue; // skip empty rows
+    const obj = {};
+    headers.forEach((h, idx) => {
+      obj[h] = values[idx] || '';
+    });
+    rows.push(obj);
+  }
+  return rows;
+}
+
+// Map gender string to gender_id
+function mapGender(genderStr) {
+  if (!genderStr) return 'unisex';
+  const g = genderStr.toLowerCase().trim();
+  if (g.includes('men') && !g.includes('women') && !g.includes('unisex')) return 'men';
+  if (g.includes('women') || g.includes('female') || g.includes('her')) return 'women';
+  if (g.includes('unisex') || g.includes('both')) return 'unisex';
+  if (g === 'm' || g === 'male' || g === 'him') return 'men';
+  if (g === 'f' || g === 'w') return 'women';
+  return 'unisex';
+}
+
+// Map scent family string
+function mapFamily(familyStr) {
+  if (!familyStr) return 'woody';
+  const f = familyStr.toLowerCase().trim();
+  if (f.includes('wood') || f.includes('oud')) return 'woody';
+  if (f.includes('floral') || f.includes('flower') || f.includes('rose')) return 'floral';
+  if (f.includes('citrus') || f.includes('fresh') || f.includes('aqua') || f.includes('marine')) return 'citrus';
+  if (f.includes('amber') || f.includes('oriental') || f.includes('spicy') || f.includes('warm') || f.includes('vanilla')) return 'amber';
+  return 'woody';
+}
+
+// Map vibe string to vibes array
+function mapVibes(vibeStr) {
+  if (!vibeStr) return ['daily'];
+  const v = vibeStr.toLowerCase().trim();
+  const vibes = [];
+  if (v.includes('romantic') || v.includes('evening') || v.includes('date') || v.includes('night')) vibes.push('romantic');
+  if (v.includes('daily') || v.includes('fresh') || v.includes('casual') || v.includes('day')) vibes.push('daily');
+  if (v.includes('business') || v.includes('professional') || v.includes('elegant') || v.includes('office') || v.includes('formal')) vibes.push('professional');
+  if (v.includes('warm') || v.includes('cozy') || v.includes('comfort') || v.includes('winter')) vibes.push('cozy');
+  if (v.includes('myster') || v.includes('bold') || v.includes('dark') || v.includes('intense') || v.includes('powerful')) vibes.push('mysterious');
+  return vibes.length > 0 ? vibes : ['daily'];
+}
+
+// Map tags string to tags array
+function mapTags(tagStr) {
+  if (!tagStr) return [];
+  const tags = [];
+  const t = tagStr.toLowerCase().trim();
+  if (t.includes('best') || t.includes('seller') || t.includes('popular')) tags.push('Best Seller');
+  if (t.includes('new') || t.includes('arrival')) tags.push('New');
+  if (t.includes('gift')) tags.push('Gift');
+  if (t.includes('home')) tags.push('Home');
+  // If comma-separated, parse directly
+  if (tagStr.includes(',')) {
+    tagStr.split(',').forEach(tag => {
+      const trimmed = tag.trim();
+      if (trimmed && !tags.includes(trimmed)) tags.push(trimmed);
+    });
+  }
+  return tags;
+}
+
+// Parse notes string into array
+function parseNotes(notesStr) {
+  if (!notesStr) return [];
+  return notesStr.split(',').map(n => n.trim()).filter(n => n.length > 0);
+}
+
+// Detect concentration from product name
+function detectConcentration(productName) {
+  if (!productName) return 'edp';
+  const p = productName.toLowerCase();
+  if (p.includes('extrait') || p.includes('parfum intense') || p.includes('pure parfum')) return 'extrait';
+  if (p.includes('eau de parfum') || p.includes('edp')) return 'edp';
+  if (p.includes('eau de toilette') || p.includes('edt')) return 'edt';
+  if (p.includes('eau de cologne') || p.includes('edc') || p.includes('cologne')) return 'edc';
+  return 'edp';
+}
+
+// Generate a slug/ID from product name
+function generateProductId(name) {
+  return name.toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '')
+    + '-' + Date.now().toString(36) + Math.random().toString(36).substring(2, 5);
+}
+
+// Generate placeholder tagline from available data
+function generatePlaceholderTagline(brand, productName, family, topNotes, heartNotes, baseNotes) {
+  const familyAdjectives = {
+    woody: ['earthy', 'grounding', 'warm', 'sophisticated'],
+    floral: ['elegant', 'romantic', 'delicate', 'captivating'],
+    citrus: ['vibrant', 'fresh', 'energizing', 'sparkling'],
+    amber: ['opulent', 'sensual', 'rich', 'enveloping']
+  };
+  const adj = familyAdjectives[family] || familyAdjectives.woody;
+  const mainAdj = adj[Math.floor(Math.random() * adj.length)];
+  
+  const keyNotes = [];
+  if (topNotes.length > 0) keyNotes.push(topNotes[0]);
+  if (heartNotes.length > 0) keyNotes.push(heartNotes[0]);
+  if (baseNotes.length > 0) keyNotes.push(baseNotes[0]);
+  
+  const notesStr = keyNotes.length > 0 ? keyNotes.join(', ') : 'rare ingredients';
+  return `A ${mainAdj} fragrance crafted with ${notesStr} — awaiting expert description.`;
+}
+
+// Generate placeholder description
+function generatePlaceholderDescription(name, brand, family, concentration, topNotes, heartNotes, baseNotes, ingredients) {
+  const concLabel = {
+    edc: 'Eau de Cologne',
+    edt: 'Eau de Toilette',
+    edp: 'Eau de Parfum',
+    extrait: 'Extrait de Parfum'
+  }[concentration] || 'Eau de Parfum';
+
+  const topStr = topNotes.length > 0 ? topNotes.join(', ') : 'citrus and aromatic notes';
+  const heartStr = heartNotes.length > 0 ? heartNotes.join(', ') : 'floral and spicy accords';
+  const baseStr = baseNotes.length > 0 ? baseNotes.join(', ') : 'woody and musky foundations';
+  const ingredientsStr = ingredients || 'Alcohol Denat., Parfum (Fragrance), Aqua (Water).';
+
+  return `${name} is a ${concLabel} by ${brand} that captures attention from the very first spray.\n\nFragrance Notes & Composition\n\nTop Notes: ${topStr} — creating an immediate, captivating first impression.\n\nHeart Notes: ${heartStr} — forming the rich, complex core of this sophisticated composition.\n\nBase Notes (The Trail): ${baseStr} — providing depth, longevity, and an unforgettable sillage.\n\nBottle & Quality Guarantee:\nThis premium formulation is manufactured to meet strict international quality standards.\n\nIngredients: ${ingredientsStr}`;
+}
+
+// Main CSV import handler
+window.handleCSVImport = async function(input) {
+  const file = input.files[0];
+  if (!file) return;
+  
+  // Validate file type
+  if (!file.name.toLowerCase().endsWith('.csv')) {
+    showToast('INVALID FILE TYPE. PLEASE UPLOAD A .CSV FILE ONLY.');
+    input.value = '';
+    return;
+  }
+
+  const session = JSON.parse(sessionStorage.getItem('nova_admin_session'));
+  if (!session) {
+    showToast('ADMIN SESSION EXPIRED. PLEASE RE-LOGIN.');
+    input.value = '';
+    return;
+  }
+
+  try {
+    const text = await file.text();
+    const rows = parseCSV(text);
+    
+    if (rows.length === 0) {
+      showToast('CSV FILE IS EMPTY OR INVALID.');
+      input.value = '';
+      return;
+    }
+
+    // Expected column names (exact match from user spec)
+    const REQUIRED_COLUMNS = [
+      'Brand', 'Product', 'Gender', 'Size (ml)', 'Price (AMD)', 'SKU',
+      'Vibe', 'Tag', 'Rating', 'Reviews Count', 'Amount', 'Family',
+      'Top Notes', 'Heart Notes', 'Base Notes', 'Ingridients'
+    ];
+
+    // Check which columns exist
+    const csvColumns = Object.keys(rows[0]);
+    const missingColumns = REQUIRED_COLUMNS.filter(col => !csvColumns.includes(col));
+    
+    if (missingColumns.length > 0) {
+      // Try case-insensitive match
+      const csvLower = csvColumns.map(c => c.toLowerCase().trim());
+      const stillMissing = REQUIRED_COLUMNS.filter(col => 
+        !csvColumns.includes(col) && !csvLower.includes(col.toLowerCase().trim())
+      );
+      if (stillMissing.length > 3) {
+        showToast(`MISSING CSV COLUMNS: ${stillMissing.slice(0, 3).join(', ')}...`);
+        input.value = '';
+        return;
+      }
+    }
+
+    // Helper: get value from row with case-insensitive fallback
+    const getVal = (row, colName) => {
+      if (row[colName] !== undefined) return row[colName];
+      const key = Object.keys(row).find(k => k.toLowerCase().trim() === colName.toLowerCase().trim());
+      return key ? row[key] : '';
+    };
+
+    let importedCount = 0;
+    let skippedCount = 0;
+
+    for (const row of rows) {
+      const brand = getVal(row, 'Brand').trim();
+      const product = getVal(row, 'Product').trim();
+      
+      if (!brand || !product) {
+        skippedCount++;
+        continue;
+      }
+
+      // Build product name: Brand + Product (as requested)
+      const name = `${brand} ${product}`;
+      
+      // Parse fields
+      const gender = mapGender(getVal(row, 'Gender'));
+      const sizeStr = getVal(row, 'Size (ml)');
+      const priceStr = getVal(row, 'Price (AMD)');
+      const sku = getVal(row, 'SKU').trim();
+      const vibes = mapVibes(getVal(row, 'Vibe'));
+      const tags = mapTags(getVal(row, 'Tag'));
+      const rating = parseFloat(getVal(row, 'Rating')) || 0;
+      const reviewsCount = parseInt(getVal(row, 'Reviews Count'), 10) || 0;
+      const stock = parseInt(getVal(row, 'Amount'), 10) || 0;
+      const family = mapFamily(getVal(row, 'Family'));
+      const topNotes = parseNotes(getVal(row, 'Top Notes'));
+      const heartNotes = parseNotes(getVal(row, 'Heart Notes'));
+      const baseNotes = parseNotes(getVal(row, 'Base Notes'));
+      const ingredients = getVal(row, 'Ingridients').trim();
+
+      // Parse size and price
+      const size = parseInt(sizeStr, 10) || 100;
+      const price = parseInt(priceStr, 10) || 0;
+      const concentration = detectConcentration(product);
+
+      // Build sizes array
+      const sizes = [];
+      if (size && price > 0) {
+        sizes.push({ size: `${size}ml`, price: price });
+      }
+
+      // Generate placeholder tagline and description
+      const tagline = generatePlaceholderTagline(brand, product, family, topNotes, heartNotes, baseNotes);
+      const description = generatePlaceholderDescription(name, brand, family, concentration, topNotes, heartNotes, baseNotes, ingredients);
+
+      // Create product object
+      const newProduct = {
+        id: generateProductId(name),
+        name: name,
+        brand: brand,
+        scent_family: family,
+        concentration: concentration,
+        gender_id: gender,
+        vibes: vibes,
+        price: price,
+        image: '',
+        images: [],
+        tags: tags,
+        rating: rating,
+        reviewsCount: reviewsCount,
+        tagline: tagline,
+        description: description,
+        ingredients: ingredients,
+        notes: {
+          top: topNotes,
+          heart: heartNotes,
+          base: baseNotes
+        },
+        sizes: sizes,
+        stock: stock,
+        featured: false,
+        sku: sku
+      };
+
+      // Add computed getters
+      Object.defineProperty(newProduct, 'category', {
+        get() { const fam = window.GLOBAL_ATTRIBUTES.scent_families[newProduct.scent_family]; return fam ? fam.label.en : ""; },
+        configurable: true, enumerable: true
+      });
+      Object.defineProperty(newProduct, 'gender', {
+        get() { const g = window.GLOBAL_ATTRIBUTES.genders[newProduct.gender_id]; return g ? g.label.en : ""; },
+        configurable: true, enumerable: true
+      });
+
+      AppState.products.push(newProduct);
+      importedCount++;
+    }
+
+    if (importedCount > 0) {
+      await saveProductsToStorage();
+      renderFeaturedProducts();
+      renderShop();
+      refreshAdminDashboard();
+      logAdminActivity(session.name, `Imported ${importedCount} product(s) from CSV: ${file.name}`);
+    }
+
+    const msg = `IMPORTED ${importedCount} PRODUCT(S) FROM CSV.` + 
+      (skippedCount > 0 ? ` SKIPPED ${skippedCount} ROW(S).` : '');
+    showToast(msg);
+    console.log(`[NOVA CSV Import] ${importedCount} imported, ${skippedCount} skipped from "${file.name}"`);
+
+  } catch (e) {
+    console.error('[NOVA CSV Import] Error:', e);
+    showToast('ERROR READING CSV FILE: ' + e.message);
+  }
+
+  input.value = ''; // Reset file input
+};
+
