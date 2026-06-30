@@ -19,6 +19,16 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
+// Enable offline persistence — writes are cached locally first,
+// so even if the page is refreshed before sync completes, data persists
+db.enablePersistence({ synchronizeTabs: true }).catch(err => {
+  if (err.code === 'failed-precondition') {
+    console.warn('[NovaDB] Persistence unavailable: multiple tabs open');
+  } else if (err.code === 'unimplemented') {
+    console.warn('[NovaDB] Persistence not supported in this browser');
+  }
+});
+
 // ============================================
 // NovaDB — Cache-first Firestore wrapper
 // ============================================
@@ -55,12 +65,17 @@ const NovaDB = {
     return this._cache[docId] || null;
   },
 
-  // Set data: update cache + write to Firestore (async, fire-and-forget)
+  // Set data: update cache + write to Firestore
+  // Returns a Promise so callers can await if needed
   set(docId, data) {
     this._cache[docId] = data;
-    db.collection(this._collection).doc(docId).set(data).catch(e => {
-      console.error(`[NovaDB] Failed to write '${docId}':`, e);
-    });
+    return db.collection(this._collection).doc(docId).set(data)
+      .then(() => {
+        console.log(`[NovaDB] Saved '${docId}' to Firestore`);
+      })
+      .catch(e => {
+        console.error(`[NovaDB] Failed to write '${docId}':`, e);
+      });
   },
 
   // ---- PRODUCTS ----
