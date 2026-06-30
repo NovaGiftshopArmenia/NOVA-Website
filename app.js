@@ -7374,7 +7374,8 @@ window.handleCSVImport = async function(input) {
     const REQUIRED_COLUMNS = [
       'Brand', 'Product', 'Gender', 'Size (ml)', 'Price (AMD)', 'SKU',
       'Vibe', 'Tag', 'Rating', 'Reviews Count', 'Amount', 'Family',
-      'Top Notes', 'Heart Notes', 'Base Notes', 'Ingridients'
+      'Top Notes', 'Heart Notes', 'Base Notes', 'Ingridients',
+      'Description', 'Tagline', 'Name'
     ];
 
     // Check which columns exist
@@ -7443,14 +7444,19 @@ window.handleCSVImport = async function(input) {
         sizes.push({ size: `${size}ml`, price: price });
       }
 
-      // Generate placeholder tagline and description
-      const tagline = generatePlaceholderTagline(brand, product, family, topNotes, heartNotes, baseNotes);
-      const description = generatePlaceholderDescription(name, brand, family, concentration, topNotes, heartNotes, baseNotes, ingredients);
+      // Read description, tagline, name from CSV (fallback to auto-generated if empty)
+      const csvName = getVal(row, 'Name').trim();
+      const csvTagline = getVal(row, 'Tagline').trim();
+      const csvDescription = getVal(row, 'Description').trim();
+      
+      const finalName = csvName || name; // CSV Name or Brand + Product
+      const tagline = csvTagline || generatePlaceholderTagline(brand, product, family, topNotes, heartNotes, baseNotes);
+      const description = csvDescription || generatePlaceholderDescription(finalName, brand, family, concentration, topNotes, heartNotes, baseNotes, ingredients);
 
       // Create product object
       const newProduct = {
-        id: generateProductId(name),
-        name: name,
+        id: generateProductId(finalName),
+        name: finalName,
         brand: brand,
         scent_family: family,
         concentration: concentration,
