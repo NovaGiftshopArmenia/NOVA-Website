@@ -5877,10 +5877,11 @@ const DEFAULT_BRANDS = ['NOVA', 'Dior', 'Chanel', 'Tom Ford', 'Versace', 'Paco R
 
 function getBrands() {
   const stored = NovaDB.getBrands();
-  if (stored && stored.length > 0) {
+  if (stored !== null) {
+    // Document exists in Firestore — use it (even if empty, that means admin deleted all)
     return stored;
   }
-  // Initialize with defaults + any brands from products
+  // First run ONLY: no brands doc exists in Firestore — seed with defaults
   const productBrands = (AppState.products || []).map(p => p.brand).filter(Boolean);
   const allBrands = [...new Set([...DEFAULT_BRANDS, ...productBrands])].sort((a, b) => a.localeCompare(b));
   NovaDB.saveBrands(allBrands);
