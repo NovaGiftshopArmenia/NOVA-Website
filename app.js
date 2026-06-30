@@ -1876,14 +1876,17 @@ window.changeLanguage = function (lang) {
   AppState.language = lang;
   localStorage.setItem('nova_lang_choice', lang);
 
-  // Update active state on language buttons
-  document.querySelectorAll('.lang-btn').forEach(btn => {
+  // Update active state on language dropdown items
+  document.querySelectorAll('.lang-dropdown-item').forEach(btn => {
     if (btn.getAttribute('data-lang') === lang) {
       btn.classList.add('active');
     } else {
       btn.classList.remove('active');
     }
   });
+  // Update the dropdown toggle text
+  const currentLabel = document.querySelector('.lang-dropdown-current');
+  if (currentLabel) currentLabel.textContent = lang.toUpperCase();
 
   // Loop through all data-trans elements and translate them
   document.querySelectorAll('[data-trans]').forEach(el => {
@@ -2401,11 +2404,25 @@ function initEventListeners() {
 
 
 
-  // Language selectors click event
-  document.querySelectorAll('.lang-btn').forEach(btn => {
+  // Language dropdown
+  const langDropdown = document.getElementById('lang-dropdown');
+  const langToggle = document.getElementById('lang-dropdown-toggle');
+  if (langToggle && langDropdown) {
+    langToggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      langDropdown.classList.toggle('open');
+    });
+    document.addEventListener('click', (e) => {
+      if (!langDropdown.contains(e.target)) {
+        langDropdown.classList.remove('open');
+      }
+    });
+  }
+  document.querySelectorAll('.lang-dropdown-item').forEach(btn => {
     btn.addEventListener('click', (e) => {
-      const selectedLang = e.target.getAttribute('data-lang');
+      const selectedLang = e.currentTarget.getAttribute('data-lang');
       changeLanguage(selectedLang);
+      if (langDropdown) langDropdown.classList.remove('open');
     });
   });
 
