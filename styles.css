@@ -358,40 +358,62 @@ header.header-scrolled .nav-menu>li>a.active {
 }
 
 .search-input {
-  border: var(--border-width) solid var(--color-border);
-  padding: 6px 12px;
-  padding-right: 32px;
-  font-size: 0.8rem;
-  width: 0px;
-  opacity: 0;
-  transition: var(--transition-smooth);
-  background-color: var(--color-white);
+  border: none;
+  border-bottom: 1.5px solid #b5a78a;
+  padding: 6px 30px 6px 0;
+  font-size: 0.72rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  width: 180px;
+  opacity: 1;
+  transition: border-color 0.3s ease;
+  background-color: transparent;
   color: var(--color-black);
+  font-family: var(--font-body);
+  outline: none;
+  border-radius: 0;
+}
+
+.search-input::placeholder {
+  color: #999;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  font-size: 0.72rem;
+}
+
+.search-input:focus {
+  border-bottom-color: var(--color-black);
 }
 
 header.header-scrolled .search-input {
-  background-color: #1A1A1A;
-  border-color: #333;
+  background-color: transparent;
+  border-bottom-color: #555;
   color: var(--color-white);
 }
 
-.search-input:focus,
-.search-container.active .search-input {
-  width: 200px;
-  opacity: 1;
+header.header-scrolled .search-input::placeholder {
+  color: #888;
+}
+
+header.header-scrolled .search-input:focus {
+  border-bottom-color: #ccc;
 }
 
 .search-btn {
   position: absolute;
-  right: 8px;
+  right: 4px;
   display: flex;
   align-items: center;
   color: inherit;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
 }
 
 .search-btn svg {
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
 }
 
 /* Search Results Dropdown */
@@ -1197,13 +1219,6 @@ header.header-scrolled .mega-product-thumb {
   overflow: hidden;
 }
 
-/* Hide language selector when search is active/focused to avoid breaking menu layout */
-.header-actions:has(.search-container.active) .lang-selector,
-.header-actions:has(.search-input:focus) .lang-selector {
-  max-width: 0;
-  opacity: 0;
-  margin-right: 0;
-}
 
 .lang-btn {
   color: var(--color-medium-gray);
