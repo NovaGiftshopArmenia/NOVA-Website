@@ -99,18 +99,25 @@ const NovaDB = {
   },
 
   saveProducts(productsArray) {
-    // Strip getter properties before saving (category, gender are computed)
-    const clean = productsArray.map(p => {
-      const obj = {};
-      for (const key of Object.keys(p)) {
-        // Skip computed getter properties
-        const descriptor = Object.getOwnPropertyDescriptor(p, key);
-        if (descriptor && typeof descriptor.get === 'function') continue;
-        obj[key] = p[key];
-      }
-      return obj;
-    });
-    this.set('products', { items: clean });
+    try {
+      // Strip getter properties before saving (category, gender are computed)
+      const clean = productsArray.map(p => {
+        const obj = {};
+        for (const key of Object.keys(p)) {
+          // Skip computed getter properties
+          const descriptor = Object.getOwnPropertyDescriptor(p, key);
+          if (descriptor && typeof descriptor.get === 'function') continue;
+          // Skip undefined values (Firestore rejects them)
+          if (p[key] === undefined) continue;
+          obj[key] = p[key];
+        }
+        return obj;
+      });
+      console.log(`[NovaDB] Saving ${clean.length} products to Firestore...`);
+      this.set('products', { items: clean });
+    } catch (e) {
+      console.error('[NovaDB] Error in saveProducts:', e);
+    }
   },
 
   // ---- ORDERS ----

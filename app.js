@@ -1822,13 +1822,16 @@ window.addEventListener('DOMContentLoaded', async () => {
 
     // Load products from Firestore (or seed if first run)
     const firestoreProducts = NovaDB.getProducts();
+    console.log('[NOVA] Firestore products:', firestoreProducts ? firestoreProducts.length : 'null');
     if (firestoreProducts && firestoreProducts.length > 0) {
       AppState.products = firestoreProducts;
       addProductGetters(AppState.products);
+      console.log('[NOVA] Loaded', AppState.products.length, 'products from Firestore');
     } else {
       // First run: seed Firestore with INITIAL_PRODUCTS
+      addProductGetters(INITIAL_PRODUCTS);
       NovaDB.saveProducts(INITIAL_PRODUCTS);
-      console.log('[NOVA] Seeded Firestore with initial products');
+      console.log('[NOVA] Seeded Firestore with', INITIAL_PRODUCTS.length, 'initial products');
     }
 
     // Load orders from Firestore
