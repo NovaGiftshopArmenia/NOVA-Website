@@ -89,7 +89,7 @@ const NovaDB = {
 
   saveProducts(productsArray) {
     // Explicitly pick known product fields only
-    const PRODUCT_FIELDS = ['id', 'name', 'scent_family', 'concentration', 'gender_id', 
+    const PRODUCT_FIELDS = ['id', 'name', 'scent_family', 'gender_id', 
       'vibes', 'price', 'image', 'images', 'brand', 'tags', 'rating', 'reviewsCount',
       'tagline', 'description', 'ingredients', 'notes', 'sizes', 'stock', 'featured'];
     

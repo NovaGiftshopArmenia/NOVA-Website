@@ -269,7 +269,6 @@ const TRANSLATIONS = {
     suggestions_title: "Ամբողջացրեք Ծիսակարգը",
     search_no_results: "Հոտառական նոտաներ չեն գտնվել:",
     filter_scent_family: "Բույրերի Ընտանիք",
-    filter_concentration: "Խտություն",
     filter_gender: "Սեռ",
     filter_vibe: "Տրամադրություն / Առիթ",
     filter_price: "Գին",
@@ -417,7 +416,6 @@ const TRANSLATIONS = {
     modal_lbl_image_url: "Նկար (Image URL) *",
     modal_lbl_or_upload: "ԿԱՄ վերբեռնել ֆայլ՝",
     modal_lbl_family: "Ընտանիք *",
-    modal_lbl_concentration: "Տեսակ *",
     modal_lbl_gender: "Սեռ *",
     modal_lbl_stock: "Պաշարի Քանակ *",
     modal_lbl_notes_top: "Վերին Նոտաներ *",
@@ -698,7 +696,6 @@ const TRANSLATIONS = {
     suggestions_title: "Завершите Ритуал",
     search_no_results: "Ольфакторные ноты не найдены.",
     filter_scent_family: "Семейство ароматов",
-    filter_concentration: "Концентрация",
     filter_gender: "Пол",
     filter_vibe: "Атмосфера / Повод",
     filter_price: "Цена",
@@ -846,7 +843,6 @@ const TRANSLATIONS = {
     modal_lbl_image_url: "Фото (Изображение URL) *",
     modal_lbl_or_upload: "ИЛИ загрузить файл:",
     modal_lbl_family: "Семейство *",
-    modal_lbl_concentration: "Тип *",
     modal_lbl_gender: "Пол *",
     modal_lbl_stock: "Количество на складе *",
     modal_lbl_notes_top: "Верхние Ноты *",
@@ -1127,7 +1123,6 @@ const TRANSLATIONS = {
     suggestions_title: "Complete the Ritual",
     search_no_results: "No olfactory notes found.",
     filter_scent_family: "Scent Family",
-    filter_concentration: "Concentration",
     filter_gender: "Gender",
     filter_vibe: "Vibe / Occasion",
     filter_price: "Price",
@@ -1275,7 +1270,6 @@ const TRANSLATIONS = {
     modal_lbl_image_url: "Photo (Image URL) *",
     modal_lbl_or_upload: "OR upload a file:",
     modal_lbl_family: "Family *",
-    modal_lbl_concentration: "Type *",
     modal_lbl_gender: "Gender *",
     modal_lbl_stock: "Stock Quantity *",
     modal_lbl_notes_top: "Top Notes *",
@@ -1704,7 +1698,6 @@ const AppState = {
     gender: '',
     tag: '',
     scent_families: [],
-    concentrations: [],
     genders: [],
     vibes: [],
     sizes: [],
@@ -2247,7 +2240,6 @@ function initEventListeners() {
   if (clearBtnMobile) {
     clearBtnMobile.addEventListener('click', () => {
       TempMobileFilters.scent_families = [];
-      TempMobileFilters.concentrations = [];
       TempMobileFilters.genders = [];
       TempMobileFilters.vibes = [];
       TempMobileFilters.sizes = [];
@@ -2566,11 +2558,6 @@ function renderShop() {
       filtered = filtered.filter(p => AppState.filters.scent_families.includes(p.scent_family));
     }
 
-    // Filter Concentration (Multi-Select)
-    if (AppState.filters.concentrations && AppState.filters.concentrations.length > 0) {
-      filtered = filtered.filter(p => AppState.filters.concentrations.includes(p.concentration));
-    }
-
     // Filter Gender (Multi-Select)
     if (AppState.filters.genders && AppState.filters.genders.length > 0) {
       filtered = filtered.filter(p => AppState.filters.genders.includes(p.gender_id));
@@ -2732,7 +2719,6 @@ window.clearFilterItem = function (arrayName, value) {
 
 window.applyPresetFilter = function (type, value) {
   AppState.filters.scent_families = [];
-  AppState.filters.concentrations = [];
   AppState.filters.genders = [];
   AppState.filters.vibes = [];
   AppState.filters.sizes = [];
@@ -2787,7 +2773,6 @@ window.renderFilterWidgets = function (containerId, isMobile) {
     `;
     sidebarHeader.querySelector('.desktop-clear-all-btn').addEventListener('click', () => {
       AppState.filters.scent_families = [];
-      AppState.filters.concentrations = [];
       AppState.filters.genders = [];
       AppState.filters.vibes = [];
       AppState.filters.sizes = [];
@@ -2861,34 +2846,6 @@ window.renderFilterWidgets = function (containerId, isMobile) {
   });
   scentGroup.appendChild(scentList);
   container.appendChild(scentGroup);
-
-  // 3. Concentration swatches (Pills)
-  const concGroup = document.createElement('div');
-  concGroup.className = 'filter-group';
-  concGroup.appendChild(createFilterHeader('filter_concentration', 'Concentration'));
-  const concList = document.createElement('div');
-  concList.className = 'swatches-wrap';
-
-  Object.keys(GLOBAL_ATTRIBUTES.concentrations).forEach(key => {
-    const item = GLOBAL_ATTRIBUTES.concentrations[key];
-    const isActive = filtersState.concentrations.includes(key);
-    const button = document.createElement('button');
-    button.className = `swatch-pill ${isActive ? 'active' : ''}`;
-    button.innerText = item.short;
-    button.title = item.label[lang] || item.label.en;
-    button.addEventListener('click', () => {
-      toggleFilterValue(filtersState.concentrations, key);
-      if (!isMobile) {
-        button.classList.toggle('active');
-        renderShop();
-      } else {
-        renderFilterWidgets(containerId, isMobile);
-      }
-    });
-    concList.appendChild(button);
-  });
-  concGroup.appendChild(concList);
-  container.appendChild(concGroup);
 
   // 4. Gender swatches (Pills)
   const genGroup = document.createElement('div');
@@ -5541,7 +5498,6 @@ window.openProductEditor = function(productId) {
     document.getElementById('pe-notes-heart').value = '';
     document.getElementById('pe-notes-base').value = '';
     document.getElementById('pe-family').value = 'woody';
-    document.getElementById('pe-concentration').value = 'edp';
     document.getElementById('pe-gender').value = 'unisex';
     document.getElementById('pe-rating').value = '';
     document.getElementById('pe-reviews').value = '';
@@ -5566,7 +5522,6 @@ window.openProductEditor = function(productId) {
     document.getElementById('pe-notes-heart').value = product.notes?.heart?.join(', ') || '';
     document.getElementById('pe-notes-base').value = product.notes?.base?.join(', ') || '';
     document.getElementById('pe-family').value = product.scent_family || 'woody';
-    document.getElementById('pe-concentration').value = product.concentration || 'edp';
     document.getElementById('pe-gender').value = product.gender_id || 'unisex';
     document.getElementById('pe-rating').value = product.rating || '';
     document.getElementById('pe-reviews').value = product.reviewsCount || '';
@@ -5619,7 +5574,6 @@ window.saveProductFromEditor = function() {
   const newIngredients = document.getElementById('pe-ingredients').value.trim();
   const newImage = document.getElementById('pe-image-url').value.trim() || (window._editorUploadedImages[0] || '');
   const newScentFamily = document.getElementById('pe-family').value;
-  const newConcentration = document.getElementById('pe-concentration').value;
   const newGenderId = document.getElementById('pe-gender').value;
   // Collect dynamic sizes from all size rows
   const newSizes = [];
@@ -5653,7 +5607,6 @@ window.saveProductFromEditor = function() {
   product.image = newImage;
   product.images = [...window._editorUploadedImages];
   product.scent_family = newScentFamily;
-  product.concentration = newConcentration;
   product.gender_id = newGenderId;
   product.price = mainPrice;
   product.stock = newStock;
@@ -7382,16 +7335,6 @@ function parseNotes(notesStr) {
   return notesStr.split(',').map(n => n.trim()).filter(n => n.length > 0);
 }
 
-// Detect concentration from product name
-function detectConcentration(productName) {
-  if (!productName) return 'edp';
-  const p = productName.toLowerCase();
-  if (p.includes('extrait') || p.includes('parfum intense') || p.includes('pure parfum')) return 'extrait';
-  if (p.includes('eau de parfum') || p.includes('edp')) return 'edp';
-  if (p.includes('eau de toilette') || p.includes('edt')) return 'edt';
-  if (p.includes('eau de cologne') || p.includes('edc') || p.includes('cologne')) return 'edc';
-  return 'edp';
-}
 
 // Generate a slug/ID from product name
 function generateProductId(name) {
@@ -7422,20 +7365,13 @@ function generatePlaceholderTagline(brand, productName, family, topNotes, heartN
 }
 
 // Generate placeholder description
-function generatePlaceholderDescription(name, brand, family, concentration, topNotes, heartNotes, baseNotes, ingredients) {
-  const concLabel = {
-    edc: 'Eau de Cologne',
-    edt: 'Eau de Toilette',
-    edp: 'Eau de Parfum',
-    extrait: 'Extrait de Parfum'
-  }[concentration] || 'Eau de Parfum';
-
+function generatePlaceholderDescription(name, brand, family, topNotes, heartNotes, baseNotes, ingredients) {
   const topStr = topNotes.length > 0 ? topNotes.join(', ') : 'citrus and aromatic notes';
   const heartStr = heartNotes.length > 0 ? heartNotes.join(', ') : 'floral and spicy accords';
   const baseStr = baseNotes.length > 0 ? baseNotes.join(', ') : 'woody and musky foundations';
   const ingredientsStr = ingredients || 'Alcohol Denat., Parfum (Fragrance), Aqua (Water).';
 
-  return `${name} is a ${concLabel} by ${brand} that captures attention from the very first spray.\n\nFragrance Notes & Composition\n\nTop Notes: ${topStr} — creating an immediate, captivating first impression.\n\nHeart Notes: ${heartStr} — forming the rich, complex core of this sophisticated composition.\n\nBase Notes (The Trail): ${baseStr} — providing depth, longevity, and an unforgettable sillage.\n\nBottle & Quality Guarantee:\nThis premium formulation is manufactured to meet strict international quality standards.\n\nIngredients: ${ingredientsStr}`;
+  return `${name} is a premium fragrance by ${brand} that captures attention from the very first spray.\n\nFragrance Notes & Composition\n\nTop Notes: ${topStr} — creating an immediate, captivating first impression.\n\nHeart Notes: ${heartStr} — forming the rich, complex core of this sophisticated composition.\n\nBase Notes (The Trail): ${baseStr} — providing depth, longevity, and an unforgettable sillage.\n\nBottle & Quality Guarantee:\nThis premium formulation is manufactured to meet strict international quality standards.\n\nIngredients: ${ingredientsStr}`;
 }
 
 // Main CSV import handler
@@ -7533,7 +7469,7 @@ window.handleCSVImport = async function(input) {
       // Parse size and price
       const size = parseInt(sizeStr, 10) || 100;
       const price = parseInt(priceStr, 10) || 0;
-      const concentration = detectConcentration(product);
+
 
       // Build sizes array
       const sizes = [];
@@ -7548,7 +7484,7 @@ window.handleCSVImport = async function(input) {
       
       const finalName = csvName || name; // CSV Name or Brand + Product
       const tagline = csvTagline || generatePlaceholderTagline(brand, product, family, topNotes, heartNotes, baseNotes);
-      const description = csvDescription || generatePlaceholderDescription(finalName, brand, family, concentration, topNotes, heartNotes, baseNotes, ingredients);
+      const description = csvDescription || generatePlaceholderDescription(finalName, brand, family, topNotes, heartNotes, baseNotes, ingredients);
 
       // Create product object
       const newProduct = {
@@ -7556,7 +7492,7 @@ window.handleCSVImport = async function(input) {
         name: finalName,
         brand: brand,
         scent_family: family,
-        concentration: concentration,
+
         gender_id: gender,
         vibes: vibes,
         price: price,
