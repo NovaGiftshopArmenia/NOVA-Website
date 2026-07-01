@@ -7268,46 +7268,76 @@ function parseCSV(text) {
   // Strip BOM character if present (common with Excel/Google Sheets exports)
   if (text.charCodeAt(0) === 0xFEFF) text = text.slice(1);
   
-  const lines = text.split(/\r?\n/).filter(line => line.trim());
-  if (lines.length < 2) return [];
+  // Parse the entire text character-by-character to handle multi-line quoted fields
+  const records = [];
+  let current = '';
+  let inQuotes = false;
+  let row = [];
   
-  // Auto-detect delimiter by checking the header line
-  const headerLine = lines[0];
-  let delimiter = ',';
-  if (headerLine.includes('\t')) {
-    delimiter = '\t';
-  } else if (headerLine.split(';').length > headerLine.split(',').length) {
-    delimiter = ';';
-  }
-  console.log(`[NOVA CSV] Detected delimiter: "${delimiter === '\t' ? 'TAB' : delimiter}", ${lines.length - 1} data rows`);
-  
-  // Parse a row — handle quoted fields
-  const parseRow = (row) => {
-    const result = [];
-    let current = '';
-    let inQuotes = false;
-    for (let i = 0; i < row.length; i++) {
-      const ch = row[i];
-      if (ch === '"') {
-        inQuotes = !inQuotes;
-      } else if (ch === delimiter && !inQuotes) {
-        result.push(current.trim());
-        current = '';
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i];
+    if (ch === '"') {
+      if (inQuotes && i + 1 < text.length && text[i + 1] === '"') {
+        current += '"'; // escaped quote ""
+        i++;
       } else {
-        current += ch;
+        inQuotes = !inQuotes;
       }
+    } else if ((ch === '\n' || ch === '\r') && !inQuotes) {
+      // End of row (skip \r in \r\n)
+      if (ch === '\r' && i + 1 < text.length && text[i + 1] === '\n') i++;
+      row.push(current.trim());
+      current = '';
+      if (row.some(cell => cell.length > 0)) records.push(row);
+      row = [];
+    } else if (ch === ',' && !inQuotes) {
+      // Field separator
+      row.push(current.trim());
+      current = '';
+    } else {
+      current += ch;
     }
-    result.push(current.trim());
-    return result;
-  };
+  }
+  // Last field/row
+  row.push(current.trim());
+  if (row.some(cell => cell.length > 0)) records.push(row);
 
-  const headers = parseRow(lines[0]);
-  console.log('[NOVA CSV] Columns found:', headers.join(', '));
+  if (records.length < 2) return [];
+  
+  // Auto-detect delimiter from the header row
+  // If header row only has 1 field, it wasn't split by commas — try tab/semicolon
+  let headers = records[0];
+  let delimiter = null;
+  
+  if (headers.length <= 1) {
+    // Not comma-separated — re-parse with tab or semicolon
+    const headerStr = headers[0] || '';
+    if (headerStr.includes('\t')) {
+      delimiter = '\t';
+    } else if (headerStr.includes(';')) {
+      delimiter = ';';
+    }
+    
+    if (delimiter) {
+      // Re-parse all records with the detected delimiter
+      const reParsed = [];
+      for (const rec of records) {
+        const joined = rec.join(','); // rejoin since commas weren't the delimiter
+        reParsed.push(joined.split(delimiter).map(s => s.trim()));
+      }
+      records.length = 0;
+      reParsed.forEach(r => records.push(r));
+      headers = records[0];
+    }
+  }
+  
+  console.log(`[NOVA CSV] Parsed ${records.length - 1} data rows, ${headers.length} columns`);
+  console.log('[NOVA CSV] Columns:', headers.join(', '));
   
   const rows = [];
-  for (let i = 1; i < lines.length; i++) {
-    const values = parseRow(lines[i]);
-    if (values.length < 2) continue; // skip empty rows
+  for (let i = 1; i < records.length; i++) {
+    const values = records[i];
+    if (values.length < 2) continue;
     const obj = {};
     headers.forEach((h, idx) => {
       obj[h] = values[idx] || '';
