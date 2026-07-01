@@ -5453,15 +5453,41 @@ window.removeEditorImage = function(idx) {
   document.getElementById('pe-image-url').value = window._editorUploadedImages[0] || '';
 };
 
+// Convert any image data URL to WebP format using Canvas API
+function convertToWebP(dataUrl, quality = 0.85) {
+  return new Promise((resolve) => {
+    // If it's already webp or not a data URL, return as-is
+    if (!dataUrl.startsWith('data:image/') || dataUrl.startsWith('data:image/webp')) {
+      resolve(dataUrl);
+      return;
+    }
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      canvas.width = img.naturalWidth;
+      canvas.height = img.naturalHeight;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0);
+      const webpUrl = canvas.toDataURL('image/webp', quality);
+      console.log(`[NOVA] Image converted to WebP: ${(dataUrl.length / 1024).toFixed(0)}KB → ${(webpUrl.length / 1024).toFixed(0)}KB`);
+      resolve(webpUrl);
+    };
+    img.onerror = () => resolve(dataUrl); // fallback to original if conversion fails
+    img.src = dataUrl;
+  });
+}
+
 function initEditorImageHandlers() {
   const fileInput = document.getElementById('pe-image-file');
   if (fileInput) {
     fileInput.addEventListener('change', function() {
       Array.from(this.files).forEach(file => {
         const reader = new FileReader();
-        reader.onload = function(e) {
-          if (!window._editorUploadedImages.includes(e.target.result)) {
-            window._editorUploadedImages.push(e.target.result);
+        reader.onload = async function(e) {
+          // Convert to WebP before storing
+          const webpData = await convertToWebP(e.target.result);
+          if (!window._editorUploadedImages.includes(webpData)) {
+            window._editorUploadedImages.push(webpData);
           }
           renderEditorImageGallery();
           document.getElementById('pe-image-url').value = window._editorUploadedImages[0] || '';
