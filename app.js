@@ -1835,6 +1835,20 @@ window.addEventListener('DOMContentLoaded', async () => {
       console.log('[NOVA] First run: seeded Firestore with', AppState.products.length, 'initial products');
     }
 
+    // ONE-TIME MIGRATION: Fix all MANCERA product brands
+    let brandFixCount = 0;
+    AppState.products.forEach(p => {
+      if (p.name && p.name.toUpperCase().includes('MANCERA') && p.brand !== 'MANCERA') {
+        console.log(`[NOVA MIGRATION] Fixing brand: "${p.name}" ${p.brand} → MANCERA`);
+        p.brand = 'MANCERA';
+        brandFixCount++;
+      }
+    });
+    if (brandFixCount > 0) {
+      await saveProductsToStorage();
+      console.log(`[NOVA MIGRATION] Fixed brand for ${brandFixCount} MANCERA product(s)`);
+    }
+
     // Load orders from Firestore
     const firestoreOrders = NovaDB.getOrders();
     if (firestoreOrders) {
