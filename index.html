@@ -1148,11 +1148,11 @@
                 <div class="pe-field"><label class="pe-label" for="pe-ingredients">Ingredients <span class="pe-label-hint">— INCI list (optional)</span></label><textarea id="pe-ingredients" class="pe-textarea" placeholder="Alcohol Denat., Parfum…" style="min-height:80px;"></textarea></div>
                 <div class="pe-field">
                   <label class="pe-label">Pricing</label>
-                  <div class="pe-price-grid">
-                    <div class="pe-price-field"><label class="pe-label" style="font-size:0.7rem;font-weight:400;">50ml</label><span class="pe-currency">$</span><input type="number" id="pe-price-50" class="pe-input" min="1" placeholder="—"></div>
-                    <div class="pe-price-field"><label class="pe-label" style="font-size:0.7rem;font-weight:400;">100ml</label><span class="pe-currency">$</span><input type="number" id="pe-price-100" class="pe-input" min="1" placeholder="—"></div>
-                    <div class="pe-price-field"><label class="pe-label" style="font-size:0.7rem;font-weight:400;">200ml</label><span class="pe-currency">$</span><input type="number" id="pe-price-200" class="pe-input" min="1" placeholder="—"></div>
-                  </div>
+                  <div id="pe-sizes-container" class="pe-price-grid"></div>
+                  <button type="button" id="pe-add-size-btn" class="pe-add-size-btn" onclick="addSizeRow()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                    Add Size
+                  </button>
                 </div>
               </div>
               <div class="pe-tab-panel" id="pe-panel-inventory">

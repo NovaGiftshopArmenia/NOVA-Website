@@ -6200,10 +6200,25 @@ header.header-scrolled .mobile-menu-icon-btn {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23646970' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
   background-repeat: no-repeat; background-position: right 10px center; padding-right: 32px; cursor: pointer;
 }
-.pe-price-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
-.pe-price-field { position: relative; }
+.pe-price-grid { display: flex; flex-wrap: wrap; gap: 12px; }
+.pe-price-field { position: relative; min-width: 120px; flex: 0 0 auto; }
 .pe-price-field .pe-currency { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: #646970; font-size: 0.85rem; pointer-events: none; margin-top: 12px; }
-.pe-price-field .pe-input { padding-left: 24px; }
+.pe-price-field .pe-input { padding-left: 24px; width: 120px; }
+.pe-price-field .pe-size-remove {
+  position: absolute; top: -2px; right: -6px; width: 18px; height: 18px;
+  border-radius: 50%; border: 1px solid #dcdcde; background: #fff; color: #cc1818;
+  font-size: 13px; line-height: 16px; text-align: center; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; transition: opacity 0.15s;
+}
+.pe-price-field:hover .pe-size-remove { opacity: 1; }
+.pe-add-size-btn {
+  display: inline-flex; align-items: center; gap: 6px; margin-top: 8px;
+  padding: 6px 14px; font-size: 0.78rem; font-weight: 500;
+  color: #2271b1; background: none; border: 1px dashed #2271b1;
+  border-radius: 4px; cursor: pointer; transition: all 0.15s;
+}
+.pe-add-size-btn:hover { background: #f0f6fc; border-color: #135e96; color: #135e96; }
 
 .pe-checkbox-list { display: flex; flex-direction: column; gap: 10px; }
 .pe-checkbox-item { display: flex; align-items: center; gap: 8px; font-size: 0.82rem; color: #1d2327; cursor: pointer; }
@@ -6255,7 +6270,8 @@ header.header-scrolled .mobile-menu-icon-btn {
   .pe-topbar-title { display: none; }
   .pe-content { margin: 12px auto; padding: 0 10px; }
   .pe-name-input { font-size: 1.1rem; padding: 10px 12px; }
-  .pe-price-grid, .pe-notes-grid { grid-template-columns: 1fr; }
+  .pe-price-grid { flex-direction: column; }
+  .pe-notes-grid { grid-template-columns: 1fr; }
   .pe-gallery-grid { grid-template-columns: repeat(4, 1fr); }
   .pe-tabs-nav { overflow-x: auto; }
   .pe-tab-btn { padding: 8px 12px; font-size: 0.7rem; }

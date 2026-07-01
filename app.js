@@ -5420,6 +5420,60 @@ function initStockStatus() {
   updateStatus();
 }
 
+// ---- DYNAMIC SIZE ROWS ----
+let _sizeCounter = 0;
+
+function createSizeRow(sizeLabel, priceValue, allowRemove) {
+  _sizeCounter++;
+  const uid = 'pe-size-' + _sizeCounter;
+  const field = document.createElement('div');
+  field.className = 'pe-price-field';
+  field.setAttribute('data-size', sizeLabel);
+  field.id = uid;
+  field.innerHTML = `
+    <label class="pe-label" style="font-size:0.7rem;font-weight:400;">${sizeLabel.toUpperCase()}</label>
+    <span class="pe-currency">֏</span>
+    <input type="number" class="pe-input" min="1" placeholder="—" value="${priceValue !== '' && priceValue !== undefined ? priceValue : ''}">
+    ${allowRemove ? `<button type="button" class="pe-size-remove" title="Remove size" onclick="removeSizeRow('${uid}')">×</button>` : ''}
+  `;
+  return field;
+}
+
+function initDynamicSizes(sizesArray) {
+  const container = document.getElementById('pe-sizes-container');
+  if (!container) return;
+  container.innerHTML = '';
+  _sizeCounter = 0;
+  sizesArray.forEach((s, i) => {
+    // First size (100ml default) cannot be removed; all others can
+    container.appendChild(createSizeRow(s.size, s.price, i > 0));
+  });
+}
+
+window.addSizeRow = function() {
+  const sizeValue = prompt('Enter size value (e.g. 30, 120, 250):');
+  if (!sizeValue) return;
+  const numericSize = parseInt(sizeValue.replace(/[^0-9]/g, ''), 10);
+  if (isNaN(numericSize) || numericSize <= 0) {
+    showToast('PLEASE ENTER A VALID SIZE NUMBER.');
+    return;
+  }
+  const sizeLabel = numericSize + 'ml';
+  // Check if this size already exists
+  const existing = document.querySelector(`#pe-sizes-container .pe-price-field[data-size="${sizeLabel}"]`);
+  if (existing) {
+    showToast(`SIZE ${sizeLabel.toUpperCase()} ALREADY EXISTS.`);
+    return;
+  }
+  const container = document.getElementById('pe-sizes-container');
+  container.appendChild(createSizeRow(sizeLabel, '', true));
+};
+
+window.removeSizeRow = function(uid) {
+  const field = document.getElementById(uid);
+  if (field) field.remove();
+};
+
 // ---- OPEN PRODUCT EDITOR ----
 window.openProductEditor = function(productId) {
   const page = document.getElementById('product-editor-page');
@@ -5438,9 +5492,7 @@ window.openProductEditor = function(productId) {
     document.getElementById('pe-tagline').value = '';
     document.getElementById('pe-description').value = '';
     document.getElementById('pe-ingredients').value = '';
-    document.getElementById('pe-price-50').value = '';
-    document.getElementById('pe-price-100').value = '';
-    document.getElementById('pe-price-200').value = '';
+    initDynamicSizes([{ size: '100ml', price: '' }]);
     document.getElementById('pe-stock').value = 0;
     document.getElementById('pe-notes-top').value = '';
     document.getElementById('pe-notes-heart').value = '';
@@ -5462,11 +5514,10 @@ window.openProductEditor = function(productId) {
     document.getElementById('pe-tagline').value = product.tagline || '';
     document.getElementById('pe-description').value = product.description || '';
     document.getElementById('pe-ingredients').value = product.ingredients || '';
-    const findSize = (name) => (product.sizes || []).find(s => s.size === name);
-    const s50 = findSize('50ml'), s100 = findSize('100ml'), s200 = findSize('200ml');
-    document.getElementById('pe-price-50').value = s50 && s50.price > 0 ? s50.price : '';
-    document.getElementById('pe-price-100').value = s100 && s100.price > 0 ? s100.price : '';
-    document.getElementById('pe-price-200').value = s200 && s200.price > 0 ? s200.price : '';
+    const existingSizes = (product.sizes || []).length > 0
+      ? product.sizes.map(s => ({ size: s.size, price: s.price > 0 ? s.price : '' }))
+      : [{ size: '100ml', price: '' }];
+    initDynamicSizes(existingSizes);
     document.getElementById('pe-stock').value = product.stock || 0;
     document.getElementById('pe-notes-top').value = product.notes?.top?.join(', ') || '';
     document.getElementById('pe-notes-heart').value = product.notes?.heart?.join(', ') || '';
@@ -5527,9 +5578,16 @@ window.saveProductFromEditor = function() {
   const newScentFamily = document.getElementById('pe-family').value;
   const newConcentration = document.getElementById('pe-concentration').value;
   const newGenderId = document.getElementById('pe-gender').value;
-  const price50 = document.getElementById('pe-price-50').value.trim() !== '' ? parseFloat(document.getElementById('pe-price-50').value) : null;
-  const price100 = document.getElementById('pe-price-100').value.trim() !== '' ? parseFloat(document.getElementById('pe-price-100').value) : null;
-  const price200 = document.getElementById('pe-price-200').value.trim() !== '' ? parseFloat(document.getElementById('pe-price-200').value) : null;
+  // Collect dynamic sizes from all size rows
+  const newSizes = [];
+  document.querySelectorAll('#pe-sizes-container .pe-price-field').forEach(field => {
+    const sizeLabel = field.getAttribute('data-size');
+    const priceInput = field.querySelector('.pe-input');
+    const priceVal = priceInput ? parseFloat(priceInput.value) : NaN;
+    if (sizeLabel && !isNaN(priceVal) && priceVal > 0) {
+      newSizes.push({ size: sizeLabel, price: Math.round(priceVal) });
+    }
+  });
   const newStock = parseInt(document.getElementById('pe-stock').value, 10);
   const notesTop = document.getElementById('pe-notes-top').value.split(',').map(s => s.trim()).filter(s => s.length > 0);
   const notesHeart = document.getElementById('pe-notes-heart').value.split(',').map(s => s.trim()).filter(s => s.length > 0);
@@ -5539,10 +5597,6 @@ window.saveProductFromEditor = function() {
   const newRating = parseFloat(document.getElementById('pe-rating').value) || 0;
   const newReviewsCount = parseInt(document.getElementById('pe-reviews').value, 10) || 0;
   const newFeatured = document.getElementById('pe-featured').checked;
-  const newSizes = [];
-  if (price50 !== null && !isNaN(price50) && price50 > 0) newSizes.push({ size: "50ml", price: Math.round(price50) });
-  if (price100 !== null && !isNaN(price100) && price100 > 0) newSizes.push({ size: "100ml", price: Math.round(price100) });
-  if (price200 !== null && !isNaN(price200) && price200 > 0) newSizes.push({ size: "200ml", price: Math.round(price200) });
   if (!newName || !newBrand || !newTagline || !newDescription || !newImage || newSizes.length === 0 || isNaN(newStock)) {
     showToast("PLEASE FILL IN ALL REQUIRED FIELDS. AT LEAST ONE SIZE PRICE IS REQUIRED.");
     return;
