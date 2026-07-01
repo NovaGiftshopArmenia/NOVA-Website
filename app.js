@@ -1,3 +1,8 @@
+// Format price with comma separators (23000 → "23,000")
+function formatPrice(num) {
+  return Number(num).toLocaleString('en-US');
+}
+
 // LOCALIZATION DICTIONARIES
 const TRANSLATIONS = {
   am: {
@@ -2516,7 +2521,7 @@ function createSliderProductCard(product, badgeText) {
     <h3 class="product-card-name serif-title">${product.name}</h3>
     <p class="product-card-tagline">${tagline}</p>
     <div class="product-card-footer">
-      <span class="product-card-price">֏${product.price}</span>
+      <span class="product-card-price">֏${formatPrice(product.price)}</span>
       <div class="product-card-rating">
         <span class="rating-star">★</span>
         <span>${product.rating}</span>
@@ -3125,7 +3130,7 @@ function createProductCard(product) {
     <h3 class="product-card-name serif-title">${product.name}</h3>
     <p class="product-card-tagline">${tagline}</p>
     <div class="product-card-footer">
-      <span class="product-card-price">֏${product.price}</span>
+      <span class="product-card-price">֏${formatPrice(product.price)}</span>
       <div class="product-card-rating">
         <span class="rating-star">★</span>
         <span>${product.rating}</span>
@@ -3446,7 +3451,7 @@ function updateCartUI() {
             <input type="text" class="cart-item-qty-input" value="${item.quantity}" readonly>
             <button class="cart-item-qty-btn" onclick="updateCartQty(${index}, 1)">+</button>
           </div>
-          <span class="cart-item-price">֏${itemTotal}</span>
+          <span class="cart-item-price">֏${formatPrice(itemTotal)}</span>
         </div>
       </div>
       <button class="cart-item-remove" onclick="removeCartItem(${index})">
@@ -3458,7 +3463,7 @@ function updateCartUI() {
     DOM.cartItemsContainer.appendChild(itemDiv);
   });
 
-  DOM.cartSubtotal.innerText = `֏${subtotal}`;
+  DOM.cartSubtotal.innerText = `֏${formatPrice(subtotal)}`;
 }
 
 window.updateCartQty = function (index, change) {
@@ -3630,7 +3635,7 @@ function updateWishlistUI() {
         <h4 class="cart-item-name">${prod.name}</h4>
         <div class="cart-item-meta">${translatedCategory} &bull; ${prod.brand}</div>
         <div class="cart-item-row" style="margin-top: 10px;">
-          <span class="cart-item-price">֏${prod.price}</span>
+          <span class="cart-item-price">֏${formatPrice(prod.price)}</span>
           <button class="btn-primary" style="font-size:0.7rem; padding: 6px 12px;" onclick="closeWishlistDrawer(); quickAddToCart('${prod.id}')" ${prod.stock <= 0 ? 'disabled' : ''}>
             ${addBtnLabel}
           </button>
@@ -3748,7 +3753,7 @@ window.renderWishlistPage = function () {
       <div class="wishlist-page-details">
         <div class="wishlist-page-meta">${translatedCategory} &bull; ${prod.brand}</div>
         <h4 class="wishlist-page-name" style="cursor: pointer;" onclick="openProductModal('${prod.id}')">${prod.name}</h4>
-        <div class="wishlist-page-price">֏${prod.price}</div>
+        <div class="wishlist-page-price">֏${formatPrice(prod.price)}</div>
         <div class="wishlist-page-actions">
           <button class="btn-primary wishlist-page-add-btn" onclick="quickAddToCart('${prod.id}')" ${prod.stock <= 0 ? 'disabled' : ''}>
             ${addBtnLabel}
@@ -4007,7 +4012,7 @@ function renderSizeSelectors(product) {
 function updateModalPrice(product) {
   const sizeObj = product.sizes.find(s => s.size === AppState.selectedSize);
   const price = sizeObj ? sizeObj.price : product.price;
-  document.getElementById('pp-price').innerText = `֏${price}`;
+  document.getElementById('pp-price').innerText = `֏${formatPrice(price)}`;
 }
 
 // CHECKOUT LOGIC
@@ -4037,7 +4042,7 @@ function renderCheckoutPage() {
     div.className = 'order-summary-item';
     div.innerHTML = `
       <span>${item.product.name} (x${item.quantity}) - ${item.size}</span>
-      <strong>֏${item.price * item.quantity}</strong>
+      <strong>֏${formatPrice(item.price * item.quantity)}</strong>
     `;
     summaryContainer.appendChild(div);
   });
@@ -4077,9 +4082,9 @@ function updateCheckoutTotals() {
   const shippingCost = shippingSelect ? parseInt(shippingSelect.value) : 0;
   const total = subtotal + shippingCost;
 
-  document.getElementById('checkout-subtotal-val').innerText = `֏${subtotal}`;
-  document.getElementById('checkout-shipping-val').innerText = shippingCost === 0 ? 'Free' : `֏${shippingCost}`;
-  document.getElementById('checkout-total-val').innerText = `֏${total}`;
+  document.getElementById('checkout-subtotal-val').innerText = `֏${formatPrice(subtotal)}`;
+  document.getElementById('checkout-shipping-val').innerText = shippingCost === 0 ? 'Free' : `֏${formatPrice(shippingCost)}`;
+  document.getElementById('checkout-total-val').innerText = `֏${formatPrice(total)}`;
 }
 
 function processCheckout() {
@@ -4144,7 +4149,7 @@ function processCheckout() {
           <div style="font-size: 0.85rem; display: flex; flex-direction: column; gap: 8px;">
             <div style="display:flex; justify-content:space-between;"><span>${orderDateLabel}</span><span>${order.date}</span></div>
             <div style="display:flex; justify-content:space-between;"><span>${orderShipToLabel}</span><span>${customerData.address}, ${customerData.city}</span></div>
-            <div style="display:flex; justify-content:space-between; font-weight: 600;"><span>${orderTotalPaidLabel}</span><span>֏${order.total}</span></div>
+            <div style="display:flex; justify-content:space-between; font-weight: 600;"><span>${orderTotalPaidLabel}</span><span>֏${formatPrice(order.total)}</span></div>
           </div>
         </div>
         <button class="btn-primary" onclick="restoreCheckoutPage(); window.location.hash='#/shop';">${continueShoppingBtnText}</button>
@@ -4161,7 +4166,7 @@ function processCheckout() {
       const itemPrice = prod ? prod.price : 0;
       return {
         name: i.name,
-        price: `֏${itemPrice}`,
+        price: `֏${formatPrice(itemPrice)}`,
         qty: i.qty,
         bunch: i.qty
       };
@@ -4172,9 +4177,9 @@ function processCheckout() {
       order_id: order.id,
       orders: ordersList,
       cost: {
-        shipping: shippingVal === 0 ? 'Free' : `֏${shippingVal}`,
+        shipping: shippingVal === 0 ? 'Free' : `֏${formatPrice(shippingVal)}`,
         tax: '֏0',
-        total: `֏${order.total}`
+        total: `֏${formatPrice(order.total)}`
       }
     }).catch(err => console.error('Order confirmation email error:', err));
   }
@@ -4329,7 +4334,7 @@ window.saveProductInventory = function (productId) {
     // Log admin activity
     const session = JSON.parse(sessionStorage.getItem('nova_admin_session'));
     if (session) {
-      logAdminActivity(session.name, `Updated inventory for ${product.name}: Price=֏${newPrice}, Stock=${newStock}`);
+      logAdminActivity(session.name, `Updated inventory for ${product.name}: Price=֏${formatPrice(newPrice)}, Stock=${newStock}`);
     }
 
     showToast(`UPDATED ${product.name.toUpperCase()} STOCK AND PRICE.`);
@@ -4492,7 +4497,7 @@ function renderSearchDropdown(query, dropdown) {
           <span class="search-result-name">${prod.name}</span>
           <span class="search-result-tagline">${prod.tagline}</span>
         </div>
-        <span class="search-result-price">֏${prod.price}</span>
+        <span class="search-result-price">֏${formatPrice(prod.price)}</span>
       `;
       dropdown.appendChild(item);
     });
@@ -4723,7 +4728,7 @@ window.renderMyAccount = function() {
               <h4 class="serif-title" style="font-size: 1.1rem;">${prod.name}</h4>
               <p style="font-size: 0.75rem; color: var(--color-medium-gray);">${prod.tagline}</p>
               <div style="display:flex; justify-content:space-between; align-items:center; margin-top:8px;">
-                <strong>֏${prod.price}</strong>
+                <strong>֏${formatPrice(prod.price)}</strong>
                 ${prod.stock > 0 ? 
                   `<button class="btn-primary" onclick="buyAgain('${prod.id}')" style="font-size:0.65rem; padding: 4px 8px;">Add to Bag</button>` :
                   `<button class="${notifyBtnClass}" onclick="toggleOutofStockNotification('${prod.id}')" style="font-size:0.65rem; padding: 4px 8px;">${notifyBtnText}</button>`
@@ -7217,16 +7222,16 @@ window.updateCheckoutTotals = function() {
   const totalEl = document.getElementById('checkout-total-val');
   if (!subtotalEl || !totalEl) return;
 
-  subtotalEl.innerText = `֏${subtotal.toLocaleString()}`;
-  if (shippingValEl) shippingValEl.innerText = shippingCost === 0 ? 'Free' : `֏${shippingCost.toLocaleString()}`;
-  totalEl.innerText = `֏${total.toLocaleString()}`;
+  subtotalEl.innerText = `֏${formatPrice(subtotal)}`;
+  if (shippingValEl) shippingValEl.innerText = shippingCost === 0 ? 'Free' : `֏${formatPrice(shippingCost)}`;
+  totalEl.innerText = `֏${formatPrice(total)}`;
 
   const discountRow = document.getElementById('checkout-discount-row');
   const discountVal = document.getElementById('checkout-discount-val');
   if (discountRow && discountVal) {
     if (discountAmount > 0) {
       discountRow.style.display = 'flex';
-      discountVal.textContent = `-֏${discountAmount.toLocaleString()}`;
+      discountVal.textContent = `-֏${formatPrice(discountAmount)}`;
     } else {
       discountRow.style.display = 'none';
     }
@@ -7294,6 +7299,7 @@ function mapFamily(familyStr) {
   if (f.includes('floral') || f.includes('flower') || f.includes('rose')) return 'floral';
   if (f.includes('citrus') || f.includes('fresh') || f.includes('aqua') || f.includes('marine')) return 'citrus';
   if (f.includes('amber') || f.includes('oriental') || f.includes('spicy') || f.includes('warm') || f.includes('vanilla')) return 'amber';
+  if (f.includes('aromatic') || f.includes('herbal') || f.includes('herb') || f.includes('lavender') || f.includes('sage') || f.includes('fougere') || f.includes('fougère')) return 'aromatic';
   return 'woody';
 }
 

@@ -4,7 +4,8 @@ const GLOBAL_ATTRIBUTES = {
     woody: { id: "woody", label: { en: "Woody", am: "Փայտային", ru: "Древесные" }, color: "#8E806A" },
     floral: { id: "floral", label: { en: "Floral", am: "Ծաղկային", ru: "Цветочные" }, color: "#E4A5B8" },
     citrus: { id: "citrus", label: { en: "Citrus", am: "Ցիտրուսային", ru: "Цитрусовые" }, color: "#F4D160" },
-    amber: { id: "amber", label: { en: "Amber", am: "Ամբրային", ru: "Ամբրային" }, color: "#D67B27" }
+    amber: { id: "amber", label: { en: "Amber", am: "Ամբրային", ru: "Амбровые" }, color: "#D67B27" },
+    aromatic: { id: "aromatic", label: { en: "Aromatic", am: "Արոմատիկ", ru: "Ароматические" }, color: "#7BA05B" }
   },
   genders: {
     men: { id: "men", label: { en: "Men", am: "Տղամարդկանց", ru: "Мужчинам" } },
