@@ -5678,8 +5678,12 @@ window.saveProductFromEditor = async function() {
   const newRating = parseFloat(document.getElementById('pe-rating').value) || 0;
   const newReviewsCount = parseInt(document.getElementById('pe-reviews').value, 10) || 0;
   const newFeatured = document.getElementById('pe-featured').checked;
-  if (!newName || !newBrand || !newTagline || !newDescription || !newImage || newSizes.length === 0 || isNaN(newStock)) {
+  if (!newName || !newBrand || !newTagline || !newDescription || newSizes.length === 0 || isNaN(newStock)) {
     showToast("PLEASE FILL IN ALL REQUIRED FIELDS. AT LEAST ONE SIZE PRICE IS REQUIRED.");
+    return;
+  }
+  if (isNewProduct && !newImage) {
+    showToast("PLEASE ADD AT LEAST ONE PRODUCT IMAGE.");
     return;
   }
   const mainPrice = newSizes[0].price;
