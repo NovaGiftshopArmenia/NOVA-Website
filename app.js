@@ -7265,10 +7265,23 @@ window.updateCheckoutTotals = function() {
 
 // Parse CSV text into array of objects using header row as keys
 function parseCSV(text) {
+  // Strip BOM character if present (common with Excel/Google Sheets exports)
+  if (text.charCodeAt(0) === 0xFEFF) text = text.slice(1);
+  
   const lines = text.split(/\r?\n/).filter(line => line.trim());
   if (lines.length < 2) return [];
   
-  // Parse header - handle quoted fields
+  // Auto-detect delimiter by checking the header line
+  const headerLine = lines[0];
+  let delimiter = ',';
+  if (headerLine.includes('\t')) {
+    delimiter = '\t';
+  } else if (headerLine.split(';').length > headerLine.split(',').length) {
+    delimiter = ';';
+  }
+  console.log(`[NOVA CSV] Detected delimiter: "${delimiter === '\t' ? 'TAB' : delimiter}", ${lines.length - 1} data rows`);
+  
+  // Parse a row — handle quoted fields
   const parseRow = (row) => {
     const result = [];
     let current = '';
@@ -7277,7 +7290,7 @@ function parseCSV(text) {
       const ch = row[i];
       if (ch === '"') {
         inQuotes = !inQuotes;
-      } else if (ch === ',' && !inQuotes) {
+      } else if (ch === delimiter && !inQuotes) {
         result.push(current.trim());
         current = '';
       } else {
@@ -7289,6 +7302,8 @@ function parseCSV(text) {
   };
 
   const headers = parseRow(lines[0]);
+  console.log('[NOVA CSV] Columns found:', headers.join(', '));
+  
   const rows = [];
   for (let i = 1; i < lines.length; i++) {
     const values = parseRow(lines[i]);
@@ -7555,6 +7570,11 @@ window.handleCSVImport = async function(input) {
       const productName = getVal(row, 'Product Name').trim();
       
       if (!brand || !productName) {
+        if (skippedCount === 0) {
+          console.log('[NOVA CSV] First row skipped. brand:', JSON.stringify(brand), 'productName:', JSON.stringify(productName));
+          console.log('[NOVA CSV] Row keys:', Object.keys(row).join(', '));
+          console.log('[NOVA CSV] Row values:', Object.values(row).slice(0, 5).join(' | '));
+        }
         skippedCount++;
         continue;
       }
