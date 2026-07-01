@@ -5507,6 +5507,7 @@ window.openProductEditor = function(productId) {
     document.getElementById('pe-product-name').value = '';
     document.getElementById('pe-slug').textContent = '\u2014';
     populateEditorBrandDropdown('NOVA');
+    document.getElementById('pe-sku').value = '';
     document.getElementById('pe-tagline').value = '';
     document.getElementById('pe-description').value = '';
     document.getElementById('pe-ingredients').value = '';
@@ -5528,6 +5529,7 @@ window.openProductEditor = function(productId) {
     document.getElementById('pe-product-name').value = product.name;
     document.getElementById('pe-slug').textContent = product.id;
     populateEditorBrandDropdown(product.brand || 'NOVA');
+    document.getElementById('pe-sku').value = product.sku || '';
     document.getElementById('pe-tagline').value = product.tagline || '';
     document.getElementById('pe-description').value = product.description || '';
     document.getElementById('pe-ingredients').value = product.ingredients || '';
@@ -5587,6 +5589,7 @@ window.saveProductFromEditor = async function() {
   if (!product) return;
   const newName = document.getElementById('pe-product-name').value.trim();
   const newBrand = document.getElementById('pe-brand').value.trim();
+  const newSku = document.getElementById('pe-sku').value.trim();
   const newTagline = document.getElementById('pe-tagline').value.trim();
   const newDescription = document.getElementById('pe-description').value.trim();
   const newIngredients = document.getElementById('pe-ingredients').value.trim();
@@ -5634,6 +5637,7 @@ window.saveProductFromEditor = async function() {
   product.reviewsCount = newReviewsCount;
   product.featured = newFeatured;
   product.sizes = newSizes;
+  product.sku = newSku;
   product.notes = { top: notesTop, heart: notesHeart, base: notesBase };
   if (isNewProduct) {
     product.id = newName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') + '-' + Date.now().toString(36);

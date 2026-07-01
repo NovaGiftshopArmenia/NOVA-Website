@@ -211,7 +211,7 @@ const WooCommerceAdmin = {
         <td style="cursor: pointer;" onclick="openDetailedProductModal('${product.id}')"><img src="${product.image}" alt="${product.name}" style="width: 40px; height: 50px; object-fit: cover; border: 1px solid var(--color-border);"></td>
         <td style="cursor: pointer;" onclick="openDetailedProductModal('${product.id}')">
           <div style="font-weight: 500;">${product.name}</div>
-          <div style="font-size: 0.7rem; color: var(--color-medium-gray);">${product.brand || ''} · ${product.category}</div>
+          <div style="font-size: 0.7rem; color: var(--color-medium-gray);">${product.brand || ''}${product.sku ? ' · ' + product.sku : ''}</div>
         </td>
         <td>
           <div style="display:flex; align-items:center; gap: 4px;">
