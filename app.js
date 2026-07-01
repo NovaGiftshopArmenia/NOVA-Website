@@ -5348,12 +5348,55 @@ function renderEditorImageGallery() {
   }
   galleryWrap.innerHTML = '';
   images.forEach((img, idx) => {
-    galleryWrap.innerHTML += `
-      <div class="pe-gallery-thumb ${idx === 0 ? 'active' : ''}" onclick="setEditorMainImage(${idx})">
-        <img src="${img}" alt="Gallery ${idx+1}">
-        <button type="button" class="pe-gallery-remove" onclick="event.stopPropagation(); removeEditorImage(${idx})">\u00d7</button>
-      </div>`;
+    const thumb = document.createElement('div');
+    thumb.className = 'pe-gallery-thumb' + (idx === 0 ? ' active' : '');
+    thumb.draggable = true;
+    thumb.setAttribute('data-img-idx', idx);
+    thumb.innerHTML = `
+      <img src="${img}" alt="Gallery ${idx+1}">
+      <button type="button" class="pe-gallery-remove" onclick="event.stopPropagation(); removeEditorImage(${idx})">\u00d7</button>
+    `;
+    thumb.addEventListener('click', () => setEditorMainImage(idx));
+    // Drag & drop handlers
+    thumb.addEventListener('dragstart', (e) => {
+      e.dataTransfer.effectAllowed = 'move';
+      e.dataTransfer.setData('text/plain', idx.toString());
+      thumb.classList.add('pe-dragging');
+    });
+    thumb.addEventListener('dragend', () => {
+      thumb.classList.remove('pe-dragging');
+      document.querySelectorAll('.pe-gallery-thumb.pe-drag-over').forEach(el => el.classList.remove('pe-drag-over'));
+    });
+    thumb.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+      thumb.classList.add('pe-drag-over');
+    });
+    thumb.addEventListener('dragleave', () => {
+      thumb.classList.remove('pe-drag-over');
+    });
+    thumb.addEventListener('drop', (e) => {
+      e.preventDefault();
+      thumb.classList.remove('pe-drag-over');
+      const fromIdx = parseInt(e.dataTransfer.getData('text/plain'), 10);
+      const toIdx = idx;
+      if (fromIdx !== toIdx && !isNaN(fromIdx)) {
+        const imgs = window._editorUploadedImages;
+        const [moved] = imgs.splice(fromIdx, 1);
+        imgs.splice(toIdx, 0, moved);
+        renderEditorImageGallery();
+        document.getElementById('pe-image-url').value = imgs[0] || '';
+      }
+    });
+    galleryWrap.appendChild(thumb);
   });
+  // Add "+" button to add more images
+  const addBtn = document.createElement('div');
+  addBtn.className = 'pe-gallery-add';
+  addBtn.title = 'Add more images';
+  addBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>`;
+  addBtn.addEventListener('click', () => document.getElementById('pe-image-file').click());
+  galleryWrap.appendChild(addBtn);
 }
 
 window.setEditorMainImage = function(idx) {

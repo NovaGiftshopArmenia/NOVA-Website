@@ -6256,6 +6256,16 @@ header.header-scrolled .mobile-menu-icon-btn {
 .pe-gallery-thumb.active { border-color: #2271b1; box-shadow: 0 0 0 2px #2271b1; }
 .pe-gallery-remove { position: absolute; top: 2px; right: 2px; background: rgba(0,0,0,0.65); color: #fff; border: none; width: 18px; height: 18px; border-radius: 50%; font-size: 11px; cursor: pointer; display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.15s; }
 .pe-gallery-thumb:hover .pe-gallery-remove { opacity: 1; }
+.pe-gallery-thumb[draggable="true"] { cursor: grab; }
+.pe-gallery-thumb[draggable="true"]:active { cursor: grabbing; }
+.pe-gallery-thumb.pe-dragging { opacity: 0.35; }
+.pe-gallery-thumb.pe-drag-over { border-color: #2271b1; box-shadow: 0 0 0 2px rgba(34,113,177,0.4); transform: scale(1.05); transition: all 0.15s; }
+.pe-gallery-add {
+  aspect-ratio: 1; border: 2px dashed #c3c4c7; border-radius: 3px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; color: #646970; transition: all 0.15s;
+}
+.pe-gallery-add:hover { border-color: #2271b1; color: #2271b1; background: #f0f6fc; }
 
 .pe-notes-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
 .pe-stats-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
