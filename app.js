@@ -5328,11 +5328,30 @@ function populateEditorBrandDropdown(selectedBrand) {
   const select = document.getElementById('pe-brand');
   if (!select) return;
   select.innerHTML = '';
-  const brands = NovaDB.getBrands() || ['NOVA'];
-  const brandList = Array.isArray(brands) ? brands : [brands];
-  if (!brandList.includes('NOVA')) brandList.unshift('NOVA');
-  brandList.forEach(b => {
-    const name = typeof b === 'string' ? b : (b.name || b);
+  
+  // Collect brands from DB, existing products, and ensure selected is included
+  const dbBrands = NovaDB.getBrands() || [];
+  const brandSet = new Set(Array.isArray(dbBrands) ? dbBrands.map(b => typeof b === 'string' ? b : (b.name || b)) : []);
+  brandSet.add('NOVA');
+  
+  // Add brands from all existing products
+  if (AppState.products && AppState.products.length > 0) {
+    AppState.products.forEach(p => {
+      if (p.brand && p.brand.trim()) brandSet.add(p.brand.trim());
+    });
+  }
+  
+  // Always include the selected brand
+  if (selectedBrand && selectedBrand.trim()) brandSet.add(selectedBrand.trim());
+  
+  // Sort alphabetically, but keep NOVA first
+  const brandList = [...brandSet].sort((a, b) => {
+    if (a === 'NOVA') return -1;
+    if (b === 'NOVA') return 1;
+    return a.localeCompare(b);
+  });
+  
+  brandList.forEach(name => {
     const opt = document.createElement('option');
     opt.value = name;
     opt.textContent = name;
