@@ -7763,47 +7763,73 @@ window.handleCSVImport = async function(input) {
       const tagline = csvTagline || generatePlaceholderTagline(brand, product, family, topNotes, heartNotes, baseNotes);
       const description = csvDescription || generatePlaceholderDescription(finalName, brand, family, topNotes, heartNotes, baseNotes, ingredients);
 
-      // Create product object
-      const newProduct = {
-        id: generateProductId(finalName),
-        name: finalName,
-        brand: brand,
-        scent_family: family,
+      // Check if a product with the same name already exists (update it)
+      const existingIdx = AppState.products.findIndex(p => p.name.toLowerCase().trim() === finalName.toLowerCase().trim());
+      
+      if (existingIdx >= 0) {
+        // Update existing product, preserving its id and images
+        const existing = AppState.products[existingIdx];
+        existing.name = finalName;
+        existing.brand = brand;
+        existing.scent_family = family;
+        existing.gender_id = gender;
+        existing.vibes = vibes;
+        existing.price = price;
+        existing.tags = tags;
+        existing.rating = rating;
+        existing.reviewsCount = reviewsCount;
+        existing.tagline = tagline;
+        existing.description = description;
+        existing.ingredients = ingredients;
+        existing.notes = { top: topNotes, heart: heartNotes, base: baseNotes };
+        existing.sizes = sizes;
+        existing.stock = stock;
+        existing.sku = sku;
+        console.log(`[NOVA CSV] Updated existing product: "${existing.name}" | brand="${existing.brand}" | sku="${existing.sku}"`);
+        importedCount++;
+      } else {
+        // Create new product object
+        const newProduct = {
+          id: generateProductId(finalName),
+          name: finalName,
+          brand: brand,
+          scent_family: family,
+          gender_id: gender,
+          vibes: vibes,
+          price: price,
+          image: '',
+          images: [],
+          tags: tags,
+          rating: rating,
+          reviewsCount: reviewsCount,
+          tagline: tagline,
+          description: description,
+          ingredients: ingredients,
+          notes: {
+            top: topNotes,
+            heart: heartNotes,
+            base: baseNotes
+          },
+          sizes: sizes,
+          stock: stock,
+          featured: false,
+          sku: sku
+        };
 
-        gender_id: gender,
-        vibes: vibes,
-        price: price,
-        image: '',
-        images: [],
-        tags: tags,
-        rating: rating,
-        reviewsCount: reviewsCount,
-        tagline: tagline,
-        description: description,
-        ingredients: ingredients,
-        notes: {
-          top: topNotes,
-          heart: heartNotes,
-          base: baseNotes
-        },
-        sizes: sizes,
-        stock: stock,
-        featured: false,
-        sku: sku
-      };
+        // Add computed getters
+        Object.defineProperty(newProduct, 'category', {
+          get() { const fam = window.GLOBAL_ATTRIBUTES.scent_families[newProduct.scent_family]; return fam ? fam.label.en : ""; },
+          configurable: true, enumerable: true
+        });
+        Object.defineProperty(newProduct, 'gender', {
+          get() { const g = window.GLOBAL_ATTRIBUTES.genders[newProduct.gender_id]; return g ? g.label.en : ""; },
+          configurable: true, enumerable: true
+        });
 
-      // Add computed getters
-      Object.defineProperty(newProduct, 'category', {
-        get() { const fam = window.GLOBAL_ATTRIBUTES.scent_families[newProduct.scent_family]; return fam ? fam.label.en : ""; },
-        configurable: true, enumerable: true
-      });
-      Object.defineProperty(newProduct, 'gender', {
-        get() { const g = window.GLOBAL_ATTRIBUTES.genders[newProduct.gender_id]; return g ? g.label.en : ""; },
-        configurable: true, enumerable: true
-      });
-
-      AppState.products.push(newProduct);
-      importedCount++;
+        AppState.products.push(newProduct);
+        console.log(`[NOVA CSV] New product imported: "${newProduct.name}" | brand="${newProduct.brand}" | sku="${newProduct.sku}"`);
+        importedCount++;
+      }
     }
 
     if (importedCount > 0) {
