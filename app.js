@@ -1895,6 +1895,14 @@ window.changeLanguage = function (lang) {
       btn.classList.remove('active');
     }
   });
+  // Update active state on lang-btn buttons (product.html)
+  document.querySelectorAll('.lang-btn[data-lang]').forEach(btn => {
+    if (btn.getAttribute('data-lang') === lang) {
+      btn.classList.add('active');
+    } else {
+      btn.classList.remove('active');
+    }
+  });
   // Update the dropdown toggle text
   const currentLabel = document.querySelector('.lang-dropdown-current');
   if (currentLabel) currentLabel.textContent = lang.toUpperCase();
@@ -2433,6 +2441,16 @@ function initEventListeners() {
       const selectedLang = e.currentTarget.getAttribute('data-lang');
       changeLanguage(selectedLang);
       if (langDropdown) langDropdown.classList.remove('open');
+    });
+  });
+  // Also bind lang-btn buttons (used on product.html)
+  document.querySelectorAll('.lang-btn[data-lang]').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      const selectedLang = e.currentTarget.getAttribute('data-lang');
+      changeLanguage(selectedLang);
+      // Update active states on all lang-btn elements
+      document.querySelectorAll('.lang-btn[data-lang]').forEach(b => b.classList.remove('active'));
+      e.currentTarget.classList.add('active');
     });
   });
 
