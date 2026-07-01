@@ -3870,7 +3870,51 @@ function renderProductPage(productId) {
   document.getElementById('pp-category').innerText = `${translatedCategory} • ${product.brand}`;
   document.getElementById('pp-name').innerText = product.name;
   document.getElementById('pp-tagline').innerText = tagline;
-  document.getElementById('pp-desc').innerText = description;
+  
+  // Description with "Read More" truncation
+  const descEl = document.getElementById('pp-desc');
+  const descWrapper = document.getElementById('pp-desc-wrapper');
+  const readMoreBtn = document.getElementById('pp-read-more-btn');
+  
+  if (descEl) {
+    descEl.textContent = description;
+    
+    // Check if description is long enough to need truncation
+    if (descWrapper && readMoreBtn) {
+      // Use requestAnimationFrame to measure after render
+      requestAnimationFrame(() => {
+        const fullHeight = descEl.scrollHeight;
+        const TRUNCATE_HEIGHT = 180; // matches CSS .collapsed max-height
+        
+        if (fullHeight > TRUNCATE_HEIGHT + 40) {
+          descWrapper.classList.add('collapsed');
+          readMoreBtn.style.display = 'inline-block';
+          
+          const lang = AppState.language;
+          const readMoreText = lang === 'am' ? '\u053F\u0561\u0580\u0564\u0561\u056C \u0561\u057E\u0565\u056C\u056B\u0576' : lang === 'ru' ? '\u0427\u0438\u0442\u0430\u0442\u044C \u0434\u0430\u043B\u0435\u0435' : 'Read More';
+          const readLessText = lang === 'am' ? '\u0553\u0561\u056F\u0565\u056C' : lang === 'ru' ? '\u0421\u0432\u0435\u0440\u043D\u0443\u0442\u044C' : 'Read Less';
+          readMoreBtn.textContent = readMoreText;
+          
+          readMoreBtn.onclick = () => {
+            const isCollapsed = descWrapper.classList.contains('collapsed');
+            if (isCollapsed) {
+              descWrapper.classList.remove('collapsed');
+              descWrapper.classList.add('expanded');
+              readMoreBtn.textContent = readLessText;
+            } else {
+              descWrapper.classList.remove('expanded');
+              descWrapper.classList.add('collapsed');
+              readMoreBtn.textContent = readMoreText;
+            }
+          };
+        } else {
+          descWrapper.classList.remove('collapsed');
+          descWrapper.classList.add('expanded');
+          readMoreBtn.style.display = 'none';
+        }
+      });
+    }
+  }
   document.getElementById('pp-rating-val').innerText = `${product.rating} (${product.reviewsCount} ${reviewsText})`;
 
   // Show "Edit This Product" button for admins — inline with rating

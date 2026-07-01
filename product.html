@@ -271,7 +271,10 @@
             <span class="stars">★★★★★</span> <span id="pp-rating-val"></span>
           </div>
           <p id="pp-tagline" class="pp-tagline"></p>
-          <p id="pp-desc" class="pp-description"></p>
+          <div id="pp-desc-wrapper" class="pp-desc-wrapper">
+            <div id="pp-desc" class="pp-description"></div>
+          </div>
+          <button id="pp-read-more-btn" class="pp-read-more-btn" style="display:none;">Read More</button>
           
           <div class="pp-pyramid">
             <div class="pp-pyramid-tier"><span class="pp-pyramid-label" data-trans="modal_top">Top</span><span id="pp-top"></span></div>
@@ -827,11 +830,11 @@
   <!-- --- FIREBASE SDK --- -->
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
-  <script src="firebase-config.js?v=1"></script>
+  <script src="firebase-config.js?v=2"></script>
 
   <!-- --- APPLICATION SCRIPTS --- -->
-  <script src="products.js?v=10"></script>
-  <script src="admin.js?v=11"></script>
-  <script src="app.js?v=19"></script>
+  <script src="products.js?v=11"></script>
+  <script src="admin.js?v=12"></script>
+  <script src="app.js?v=28"></script>
 </body>
 </html>
