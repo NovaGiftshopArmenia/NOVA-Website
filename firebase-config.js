@@ -91,7 +91,7 @@ const NovaDB = {
     // Explicitly pick known product fields only
     const PRODUCT_FIELDS = ['id', 'name', 'scent_family', 'gender_id', 
       'vibes', 'price', 'image', 'images', 'brand', 'tags', 'rating', 'reviewsCount',
-      'tagline', 'description', 'ingredients', 'notes', 'sizes', 'stock', 'featured'];
+      'tagline', 'description', 'ingredients', 'notes', 'sizes', 'stock', 'featured', 'sku'];
     
     const clean = productsArray.map(p => {
       const obj = {};
@@ -144,6 +144,16 @@ const NovaDB = {
 
   saveTrash(trashArray) {
     return this.set('trash', { items: trashArray });
+  },
+
+  // ---- PRODUCT TRANSLATIONS ----
+  getProductTranslations() {
+    const doc = this.get('product_translations');
+    return doc ? doc.data : null;
+  },
+
+  saveProductTranslations(translationsObj) {
+    return this.set('product_translations', { data: translationsObj });
   },
 
   // ---- STAFF PROFILES ----

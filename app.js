@@ -1848,6 +1848,19 @@ window.addEventListener('DOMContentLoaded', async () => {
     } else {
       NovaDB.saveInstagramPosts(DEFAULT_INSTAGRAM_POSTS);
     }
+
+    // Load product translations from Firestore
+    const firestoreTranslations = NovaDB.getProductTranslations();
+    if (firestoreTranslations) {
+      // Merge saved translations into PRODUCT_TRANSLATIONS
+      ['am', 'ru'].forEach(lang => {
+        if (firestoreTranslations[lang]) {
+          if (!PRODUCT_TRANSLATIONS[lang]) PRODUCT_TRANSLATIONS[lang] = {};
+          Object.assign(PRODUCT_TRANSLATIONS[lang], firestoreTranslations[lang]);
+        }
+      });
+      console.log('[NOVA] Loaded product translations from Firestore');
+    }
   } catch (e) {
     console.warn('[NOVA] Firestore init failed, using defaults:', e);
   }
@@ -5565,7 +5578,7 @@ window.closeProductEditor = function() {
 window.closeDetailedProductModal = function() { window.closeProductEditor(); };
 
 // ---- SAVE FROM EDITOR ----
-window.saveProductFromEditor = function() {
+window.saveProductFromEditor = async function() {
   const session = JSON.parse(sessionStorage.getItem('nova_admin_session'));
   if (!session) { showToast("ADMIN SESSION EXPIRED. PLEASE RE-LOGIN."); return; }
   const productId = document.getElementById('pe-product-id').value;
@@ -5639,7 +5652,17 @@ window.saveProductFromEditor = function() {
     logAdminActivity(session.name, `Edited product details for: ${product.name}`);
     showToast(`SUCCESSFULLY UPDATED ${product.name.toUpperCase()} DETAILS.`);
   }
-  saveProductsToStorage();
+  await saveProductsToStorage();
+  
+  // Auto-translate product text to RU/HY
+  showToast('TRANSLATING PRODUCT TO RU/HY...');
+  try {
+    await translateProductFields(product);
+    await saveAllTranslations();
+  } catch (e) {
+    console.warn('[NOVA] Auto-translation failed:', e);
+  }
+  
   renderFeaturedProducts();
   renderShop();
   refreshAdminDashboard();
@@ -7380,6 +7403,88 @@ function generatePlaceholderDescription(name, brand, family, topNotes, heartNote
   return `${name} is a premium fragrance by ${brand} that captures attention from the very first spray.\n\nFragrance Notes & Composition\n\nTop Notes: ${topStr} — creating an immediate, captivating first impression.\n\nHeart Notes: ${heartStr} — forming the rich, complex core of this sophisticated composition.\n\nBase Notes (The Trail): ${baseStr} — providing depth, longevity, and an unforgettable sillage.\n\nBottle & Quality Guarantee:\nThis premium formulation is manufactured to meet strict international quality standards.\n\nIngredients: ${ingredientsStr}`;
 }
 
+// ---- AUTO-TRANSLATION SYSTEM ----
+
+// Translate text using free Google Translate endpoint (no API key needed)
+async function translateText(text, targetLang) {
+  if (!text || text.trim().length === 0) return '';
+  try {
+    const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=${targetLang}&dt=t&q=${encodeURIComponent(text)}`;
+    const response = await fetch(url);
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    const data = await response.json();
+    // data[0] is array of [translatedSegment, originalSegment] arrays
+    return data[0].map(segment => segment[0]).join('');
+  } catch (e) {
+    console.warn(`[NOVA Translation] Failed to translate to ${targetLang}:`, e.message);
+    return ''; // Return empty — English fallback will be used
+  }
+}
+
+// Translate all product text fields into Russian (ru) and Armenian (hy)
+async function translateProductFields(product) {
+  const langMap = { ru: 'ru', am: 'hy' }; // am uses 'hy' language code for Armenian
+  
+  for (const [dictKey, langCode] of Object.entries(langMap)) {
+    if (!PRODUCT_TRANSLATIONS[dictKey]) PRODUCT_TRANSLATIONS[dictKey] = {};
+    
+    const translatedTagline = await translateText(product.tagline, langCode);
+    await new Promise(r => setTimeout(r, 200)); // Rate limit delay
+    
+    const translatedDescription = await translateText(product.description, langCode);
+    await new Promise(r => setTimeout(r, 200));
+    
+    // Translate notes
+    const topNotes = product.notes?.top || [];
+    const heartNotes = product.notes?.heart || [];
+    const baseNotes = product.notes?.base || [];
+    
+    const translatedTop = [];
+    for (const note of topNotes) {
+      translatedTop.push(await translateText(note, langCode));
+      await new Promise(r => setTimeout(r, 100));
+    }
+    
+    const translatedHeart = [];
+    for (const note of heartNotes) {
+      translatedHeart.push(await translateText(note, langCode));
+      await new Promise(r => setTimeout(r, 100));
+    }
+    
+    const translatedBase = [];
+    for (const note of baseNotes) {
+      translatedBase.push(await translateText(note, langCode));
+      await new Promise(r => setTimeout(r, 100));
+    }
+    
+    PRODUCT_TRANSLATIONS[dictKey][product.id] = {
+      tagline: translatedTagline || product.tagline,
+      description: translatedDescription || product.description,
+      top: translatedTop.length > 0 ? translatedTop : topNotes,
+      heart: translatedHeart.length > 0 ? translatedHeart : heartNotes,
+      base: translatedBase.length > 0 ? translatedBase : baseNotes
+    };
+  }
+}
+
+// Save all dynamically generated translations to Firestore
+async function saveAllTranslations() {
+  // Collect only dynamically generated translations (not hardcoded ones)
+  // We save the entire PRODUCT_TRANSLATIONS dict since hardcoded ones get overwritten on load anyway
+  const toSave = { am: {}, ru: {} };
+  ['am', 'ru'].forEach(lang => {
+    if (PRODUCT_TRANSLATIONS[lang]) {
+      Object.assign(toSave[lang], PRODUCT_TRANSLATIONS[lang]);
+    }
+  });
+  try {
+    await NovaDB.saveProductTranslations(toSave);
+    console.log('[NOVA] Product translations saved to Firestore');
+  } catch (e) {
+    console.warn('[NOVA] Failed to save translations:', e);
+  }
+}
+
 // Main CSV import handler
 window.handleCSVImport = async function(input) {
   const file = input.files[0];
@@ -7414,7 +7519,7 @@ window.handleCSVImport = async function(input) {
       'Brand', 'Product', 'Gender', 'Size (ml)', 'Price (AMD)', 'SKU',
       'Vibe', 'Tag', 'Rating', 'Reviews Count', 'Amount', 'Family',
       'Top Notes', 'Heart Notes', 'Base Notes', 'Ingridients',
-      'Description', 'Tagline', 'Name'
+      'Description', 'Tagline', 'Product Name'
     ];
 
     // Check which columns exist
@@ -7447,14 +7552,15 @@ window.handleCSVImport = async function(input) {
     for (const row of rows) {
       const brand = getVal(row, 'Brand').trim();
       const product = getVal(row, 'Product').trim();
+      const productName = getVal(row, 'Product Name').trim();
       
-      if (!brand || !product) {
+      if (!brand || !productName) {
         skippedCount++;
         continue;
       }
 
-      // Build product name: Brand + Product (as requested)
-      const name = `${brand} ${product}`;
+      // Display name comes from "Product Name" column
+      const name = productName;
       
       // Parse fields
       const gender = mapGender(getVal(row, 'Gender'));
@@ -7483,12 +7589,11 @@ window.handleCSVImport = async function(input) {
         sizes.push({ size: `${size}ml`, price: price });
       }
 
-      // Read description, tagline, name from CSV (fallback to auto-generated if empty)
-      const csvName = getVal(row, 'Name').trim();
+      // Read description, tagline from CSV (fallback to auto-generated if empty)
       const csvTagline = getVal(row, 'Tagline').trim();
       const csvDescription = getVal(row, 'Description').trim();
       
-      const finalName = csvName || name; // CSV Name or Brand + Product
+      const finalName = productName;
       const tagline = csvTagline || generatePlaceholderTagline(brand, product, family, topNotes, heartNotes, baseNotes);
       const description = csvDescription || generatePlaceholderDescription(finalName, brand, family, topNotes, heartNotes, baseNotes, ingredients);
 
@@ -7537,6 +7642,24 @@ window.handleCSVImport = async function(input) {
 
     if (importedCount > 0) {
       await saveProductsToStorage();
+      
+      // Auto-translate all imported products
+      const importedProducts = AppState.products.slice(-importedCount);
+      showToast(`TRANSLATING ${importedCount} PRODUCT(S) TO RU/HY...`);
+      
+      for (let i = 0; i < importedProducts.length; i++) {
+        showToast(`TRANSLATING PRODUCT ${i + 1}/${importedProducts.length}...`);
+        try {
+          await translateProductFields(importedProducts[i]);
+        } catch (e) {
+          console.warn(`[NOVA] Translation failed for ${importedProducts[i].name}:`, e);
+        }
+      }
+      
+      // Save translations to Firestore
+      await saveAllTranslations();
+      showToast('TRANSLATIONS COMPLETE.');
+      
       renderFeaturedProducts();
       renderShop();
       refreshAdminDashboard();
