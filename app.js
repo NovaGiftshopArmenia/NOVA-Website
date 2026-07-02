@@ -1828,11 +1828,11 @@ window.addEventListener('DOMContentLoaded', async () => {
       addProductGetters(AppState.products);
       console.log('[NOVA] Loaded', AppState.products.length, 'products from Firestore');
     } else {
-      // First run ONLY: no products doc exists in Firestore at all — seed with defaults
-      AppState.products = [...INITIAL_PRODUCTS];
+      // No products doc in Firestore — start with empty array
+      // DO NOT save empty array to Firestore (would overwrite if doc was temporarily unreadable)
+      AppState.products = [];
       addProductGetters(AppState.products);
-      await NovaDB.saveProducts(AppState.products);
-      console.log('[NOVA] First run: seeded Firestore with', AppState.products.length, 'initial products');
+      console.log('[NOVA] No products doc found. Starting with empty catalog. Add products via admin panel.');
     }
 
     // ONE-TIME MIGRATION: Fix all MANCERA product brands
