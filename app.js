@@ -1822,42 +1822,18 @@ window.addEventListener('DOMContentLoaded', async () => {
     // Load products from Firestore (or seed if first run)
     const firestoreProducts = NovaDB.getProducts();
     console.log('[NOVA] Firestore products:', firestoreProducts ? firestoreProducts.length : 'null (no doc)');
-    if (firestoreProducts !== null && firestoreProducts.length > 0) {
-      // Document exists and has products — use it
+    if (firestoreProducts !== null) {
+      // Document exists in Firestore — use it (even if empty array, that means admin deleted all)
       AppState.products = firestoreProducts;
-      // Merge: ensure all INITIAL_PRODUCTS are present (in case Firestore lost some)
-      const existingIds = new Set(AppState.products.map(p => p.id));
-      let merged = 0;
-      INITIAL_PRODUCTS.forEach(ip => {
-        if (!existingIds.has(ip.id)) {
-          AppState.products.push({...ip});
-          merged++;
-        }
-      });
-      if (merged > 0) {
-        console.log(`[NOVA] Merged ${merged} missing initial products back`);
-        await NovaDB.saveProducts(AppState.products);
-      }
       addProductGetters(AppState.products);
       console.log('[NOVA] Loaded', AppState.products.length, 'products from Firestore');
     } else {
-      // No products doc or empty array (corrupted save) — seed with defaults
+      // First run ONLY: no products doc exists in Firestore at all — seed with defaults
       AppState.products = [...INITIAL_PRODUCTS];
       addProductGetters(AppState.products);
       await NovaDB.saveProducts(AppState.products);
-      console.log('[NOVA] Seeded Firestore with', AppState.products.length, 'initial products');
+      console.log('[NOVA] First run: seeded Firestore with', AppState.products.length, 'initial products');
     }
-
-    // Admin console helper to force-reseed products
-    window._novaForceReseed = async function() {
-      AppState.products = [...INITIAL_PRODUCTS];
-      addProductGetters(AppState.products);
-      await NovaDB.saveProducts(AppState.products);
-      renderFeaturedProducts();
-      renderShop();
-      console.log('[NOVA] Force-reseeded', AppState.products.length, 'products');
-      if (typeof showToast === 'function') showToast('PRODUCTS RESEEDED FROM DEFAULTS');
-    };
 
     // ONE-TIME MIGRATION: Fix all MANCERA product brands
     let brandFixCount = 0;

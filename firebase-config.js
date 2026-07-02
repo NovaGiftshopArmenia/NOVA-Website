@@ -101,14 +101,6 @@ const NovaDB = {
           obj[key] = p[key];
         }
       });
-      // Strip base64 images to prevent exceeding Firestore 1MB doc limit
-      if (obj.image && obj.image.startsWith('data:')) {
-        obj.image = '';
-        console.warn(`[NovaDB] ⚠️ Stripped base64 image from product "${obj.name}" — upload to Storage first`);
-      }
-      if (obj.images && Array.isArray(obj.images)) {
-        obj.images = obj.images.filter(img => !img.startsWith('data:'));
-      }
       return obj;
     });
     console.log(`[NovaDB] 📦 Saving ${clean.length} products...`);
