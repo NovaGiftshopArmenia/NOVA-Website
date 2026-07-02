@@ -3915,10 +3915,14 @@ function renderProductPage(productId) {
     const splitMarkers = [
       'Who It\'s For:', 'Who it\'s for:', 'Who Its For:',
       'Для кого:', 'Для кого это:', 'Кому подходит:',
+      'Ում համար է:', 'Ում համար է',
       'Key Features:', 'Key features:',
       'Ключевые особенности:', 'Основные характеристики:',
+      'Հիմնական հատկանիշներ:', 'Հիմնdelays առանձնահատկdelays:',
       'Fragrance Notes & Composition', 'Fragrance Notes',
       'Ноты и состав аромата', 'Ноты аромата',
+      'Օdelays Նdelays:', 'Օdelays նdelays և delays:',
+      'Բուdelays delays:', 'Հdelays delays:',
     ];
     
     let splitIdx = -1;
@@ -3931,14 +3935,25 @@ function renderProductPage(productId) {
       }
     }
     
+    // Fallback: if no marker found and text is long, split at ~250 chars on a sentence boundary
+    if (splitIdx <= 0 && description.length > 300) {
+      const searchArea = description.substring(200, 400);
+      const sentenceEnd = searchArea.search(/[.։!?]\s/);
+      if (sentenceEnd > 0) {
+        splitIdx = 200 + sentenceEnd + 1;
+        matchedMarker = '';
+      } else {
+        splitIdx = 250;
+        matchedMarker = '';
+      }
+    }
+    
     if (splitIdx > 0 && readMoreBtn) {
-      // Show intro up to the marker (including the marker line)
       const introText = description.substring(0, splitIdx + matchedMarker.length);
       const restText = description.substring(splitIdx + matchedMarker.length);
       
       descEl.textContent = introText;
       
-      // Read More button text
       const lang = AppState.language;
       const readMoreLabel = lang === 'am' ? '\u053F\u0561\u0580\u0564\u0561\u056C \u0561\u057E\u0565\u056C\u056B\u0576' : lang === 'ru' ? '\u0427\u0438\u0442\u0430\u0442\u044C \u0434\u0430\u043B\u0435\u0435' : 'Read More';
       const readLessLabel = lang === 'am' ? '\u0553\u0561\u056F\u0565\u056C' : lang === 'ru' ? '\u0421\u0432\u0435\u0440\u043D\u0443\u0442\u044C' : 'Read Less';
