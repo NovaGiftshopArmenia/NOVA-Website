@@ -247,6 +247,7 @@ const NovaDB = {
 
   // ---- IMAGE STORAGE ----
   // Upload a base64 data URL to Firebase Storage and return the download URL
+  // Falls back to base64 if Storage is not configured or times out
   async uploadImage(dataUrl, productId, index) {
     if (!dataUrl || !dataUrl.startsWith('data:')) {
       // Already a URL (not base64), return as-is
@@ -259,17 +260,22 @@ const NovaDB = {
       // Convert data URL to blob
       const response = await fetch(dataUrl);
       const blob = await response.blob();
-      // Upload
-      const snapshot = await ref.put(blob, { contentType: 'image/webp' });
-      const downloadUrl = await snapshot.ref.getDownloadURL();
-      console.log(`[NovaDB] \u2705 Uploaded image to Storage: ${path}`);
-      return downloadUrl;
+      // Upload with 10-second timeout
+      const uploadPromise = ref.put(blob, { contentType: 'image/webp' }).then(async (snapshot) => {
+        const downloadUrl = await snapshot.ref.getDownloadURL();
+        console.log(`[NovaDB] ✅ Uploaded image to Storage: ${path}`);
+        return downloadUrl;
+      });
+      const timeoutPromise = new Promise((_, reject) =>
+        setTimeout(() => reject(new Error('Upload timed out (10s). Check Firebase Storage rules.')), 10000)
+      );
+      return await Promise.race([uploadPromise, timeoutPromise]);
     } catch (e) {
-      console.error('[NovaDB] \u274c Image upload failed:', e);
+      console.warn('[NovaDB] ⚠️ Storage upload failed, saving base64 directly:', e.message);
       if (typeof showToast === 'function') {
-        showToast('IMAGE UPLOAD FAILED: ' + e.message);
+        showToast('⚠️ Storage unavailable — saving image inline.');
       }
-      // Fallback: return the data URL so the product still works in-memory
+      // Fallback: return the data URL (will be stored as base64 in Firestore)
       return dataUrl;
     }
   },
