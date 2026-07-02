@@ -3898,7 +3898,9 @@ function renderProductPage(productId) {
   const reviewsText = TRANSLATIONS[AppState.language]['reviews_label'] || 'reviews';
 
   // Populate Product Page Fields
-  document.getElementById('pp-img').src = product.image;
+  const ppImg = document.getElementById('pp-img');
+  const productImageSrc = product.image || (product.images && product.images[0]) || '';
+  ppImg.src = productImageSrc || "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400' fill='%23f5f5f5'%3E%3Crect width='400' height='400'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23ccc' font-size='14' font-family='sans-serif'%3ENo Image%3C/text%3E%3C/svg%3E";
   document.getElementById('pp-category').innerText = `${translatedCategory} • ${product.brand}`;
   document.getElementById('pp-name').innerText = product.name;
   document.getElementById('pp-tagline').innerText = tagline;
