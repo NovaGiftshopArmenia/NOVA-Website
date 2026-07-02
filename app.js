@@ -5505,13 +5505,15 @@ window.removeEditorImage = function(idx) {
 };
 
 // Convert any image data URL to WebP format using Canvas API
-function convertToWebP(dataUrl, quality = 0.85) {
+// Quality: starts at 0.92, iteratively reduces to fit under 200KB, never below 0.90
+function convertToWebP(dataUrl, quality = 0.92) {
   return new Promise((resolve) => {
-    // If it's already webp or not a data URL, return as-is
-    if (!dataUrl.startsWith('data:image/') || dataUrl.startsWith('data:image/webp')) {
+    if (!dataUrl.startsWith('data:image/')) {
       resolve(dataUrl);
       return;
     }
+    const MAX_SIZE_BYTES = 200 * 1024; // 200 KB
+    const MIN_QUALITY = 0.90;
     const img = new Image();
     img.onload = () => {
       const canvas = document.createElement('canvas');
@@ -5519,11 +5521,27 @@ function convertToWebP(dataUrl, quality = 0.85) {
       canvas.height = img.naturalHeight;
       const ctx = canvas.getContext('2d');
       ctx.drawImage(img, 0, 0);
-      const webpUrl = canvas.toDataURL('image/webp', quality);
-      console.log(`[NOVA] Image converted to WebP: ${(dataUrl.length / 1024).toFixed(0)}KB → ${(webpUrl.length / 1024).toFixed(0)}KB`);
+      // Iteratively reduce quality to stay under 200KB
+      let currentQuality = quality;
+      let webpUrl = canvas.toDataURL('image/webp', currentQuality);
+      while (webpUrl.length > MAX_SIZE_BYTES * 1.37 && currentQuality > MIN_QUALITY) {
+        // 1.37 factor: base64 is ~37% larger than raw bytes
+        currentQuality -= 0.01;
+        webpUrl = canvas.toDataURL('image/webp', currentQuality);
+      }
+      // If still too large at min quality, scale down the image dimensions
+      if (webpUrl.length > MAX_SIZE_BYTES * 1.37) {
+        const scale = Math.sqrt((MAX_SIZE_BYTES * 1.37) / webpUrl.length);
+        canvas.width = Math.round(img.naturalWidth * scale);
+        canvas.height = Math.round(img.naturalHeight * scale);
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        webpUrl = canvas.toDataURL('image/webp', MIN_QUALITY);
+      }
+      const finalSizeKB = (webpUrl.length / 1024 / 1.37).toFixed(0);
+      console.log(`[NOVA] WebP: quality=${currentQuality.toFixed(2)}, ~${finalSizeKB}KB`);
       resolve(webpUrl);
     };
-    img.onerror = () => resolve(dataUrl); // fallback to original if conversion fails
+    img.onerror = () => resolve(dataUrl);
     img.src = dataUrl;
   });
 }
@@ -5723,98 +5741,162 @@ window.closeDetailedProductModal = function() { window.closeProductEditor(); };
 window.saveProductFromEditor = async function() {
   const session = JSON.parse(sessionStorage.getItem('nova_admin_session'));
   if (!session) { showToast("ADMIN SESSION EXPIRED. PLEASE RE-LOGIN."); return; }
-  const productId = document.getElementById('pe-product-id').value;
-  const isNewProduct = (productId === '__NEW__');
-  let product = isNewProduct ? {} : AppState.products.find(p => p.id === productId);
-  if (!product) return;
-  const newName = document.getElementById('pe-product-name').value.trim();
-  const newBrand = document.getElementById('pe-brand').value.trim();
-  const newSku = document.getElementById('pe-sku').value.trim();
-  const newTagline = document.getElementById('pe-tagline').value.trim();
-  const newDescription = document.getElementById('pe-description').value.trim();
-  const newIngredients = document.getElementById('pe-ingredients').value.trim();
-  const newImage = document.getElementById('pe-image-url').value.trim() || (window._editorUploadedImages[0] || '');
-  const newScentFamily = document.getElementById('pe-family').value;
-  const newGenderId = document.getElementById('pe-gender').value;
-  // Collect dynamic sizes from all size rows
-  const newSizes = [];
-  document.querySelectorAll('#pe-sizes-container .pe-price-field').forEach(field => {
-    const sizeLabel = field.getAttribute('data-size');
-    const priceInput = field.querySelector('.pe-input');
-    const priceVal = priceInput ? parseFloat(priceInput.value) : NaN;
-    if (sizeLabel && !isNaN(priceVal) && priceVal > 0) {
-      newSizes.push({ size: sizeLabel, price: Math.round(priceVal) });
-    }
-  });
-  const newStock = parseInt(document.getElementById('pe-stock').value, 10);
-  const notesTop = document.getElementById('pe-notes-top').value.split(',').map(s => s.trim()).filter(s => s.length > 0);
-  const notesHeart = document.getElementById('pe-notes-heart').value.split(',').map(s => s.trim()).filter(s => s.length > 0);
-  const notesBase = document.getElementById('pe-notes-base').value.split(',').map(s => s.trim()).filter(s => s.length > 0);
-  const newTags = getEditorCheckboxValues('pe-tag-');
-  const newVibes = getEditorCheckboxValues('pe-vibe-');
-  const newRating = parseFloat(document.getElementById('pe-rating').value) || 0;
-  const newReviewsCount = parseInt(document.getElementById('pe-reviews').value, 10) || 0;
-  const newFeatured = document.getElementById('pe-featured').checked;
-  if (!newName || !newBrand || !newTagline || !newDescription || newSizes.length === 0 || isNaN(newStock)) {
-    showToast("PLEASE FILL IN ALL REQUIRED FIELDS. AT LEAST ONE SIZE PRICE IS REQUIRED.");
-    return;
+
+  // ---- Button loading animation ----
+  const publishBtn = document.querySelector('.pe-publish-btn');
+  const originalBtnText = publishBtn ? publishBtn.textContent : 'Update';
+  if (publishBtn) {
+    publishBtn.textContent = 'SAVING...';
+    publishBtn.disabled = true;
+    publishBtn.classList.add('pe-btn-saving');
   }
-  if (isNewProduct && !newImage) {
-    showToast("PLEASE ADD AT LEAST ONE PRODUCT IMAGE.");
-    return;
-  }
-  const mainPrice = newSizes[0].price;
-  product.name = newName;
-  product.brand = newBrand;
-  product.tagline = newTagline;
-  product.description = newDescription;
-  product.ingredients = newIngredients;
-  product.image = newImage;
-  product.images = [...window._editorUploadedImages];
-  product.scent_family = newScentFamily;
-  product.gender_id = newGenderId;
-  product.price = mainPrice;
-  product.stock = newStock;
-  product.tags = newTags;
-  product.vibes = newVibes;
-  product.rating = newRating;
-  product.reviewsCount = newReviewsCount;
-  product.featured = newFeatured;
-  product.sizes = newSizes;
-  product.sku = newSku;
-  product.notes = { top: notesTop, heart: notesHeart, base: notesBase };
-  if (isNewProduct) {
-    product.id = newName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') + '-' + Date.now().toString(36);
-    Object.defineProperty(product, 'category', {
-      get() { const fam = window.GLOBAL_ATTRIBUTES.scent_families[product.scent_family]; return fam ? fam.label.en : ""; },
-      configurable: true, enumerable: true
-    });
-    Object.defineProperty(product, 'gender', {
-      get() { const g = window.GLOBAL_ATTRIBUTES.genders[product.gender_id]; return g ? g.label.en : ""; },
-      configurable: true, enumerable: true
-    });
-    AppState.products.push(product);
-    logAdminActivity(session.name, `Created new product: ${product.name}`);
-    showToast(`SUCCESSFULLY CREATED ${product.name.toUpperCase()}.`);
-  } else {
-    logAdminActivity(session.name, `Edited product details for: ${product.name}`);
-    showToast(`SUCCESSFULLY UPDATED ${product.name.toUpperCase()} DETAILS.`);
-  }
-  await saveProductsToStorage();
-  
-  // Auto-translate product text to RU/HY
-  showToast('TRANSLATING PRODUCT TO RU/HY...');
+
   try {
-    await translateProductFields(product);
-    await saveAllTranslations();
-  } catch (e) {
-    console.warn('[NOVA] Auto-translation failed:', e);
+    const productId = document.getElementById('pe-product-id').value;
+    const isNewProduct = (productId === '__NEW__');
+    let product = isNewProduct ? {} : AppState.products.find(p => p.id === productId);
+    if (!product) { _restoreBtn(); return; }
+    const newName = document.getElementById('pe-product-name').value.trim();
+    const newBrand = document.getElementById('pe-brand').value.trim();
+    const newSku = document.getElementById('pe-sku').value.trim();
+    const newTagline = document.getElementById('pe-tagline').value.trim();
+    const newDescription = document.getElementById('pe-description').value.trim();
+    const newIngredients = document.getElementById('pe-ingredients').value.trim();
+    const newImage = document.getElementById('pe-image-url').value.trim() || (window._editorUploadedImages[0] || '');
+    const newScentFamily = document.getElementById('pe-family').value;
+    const newGenderId = document.getElementById('pe-gender').value;
+    // Collect dynamic sizes from all size rows
+    const newSizes = [];
+    document.querySelectorAll('#pe-sizes-container .pe-price-field').forEach(field => {
+      const sizeLabel = field.getAttribute('data-size');
+      const priceInput = field.querySelector('.pe-input');
+      const priceVal = priceInput ? parseFloat(priceInput.value) : NaN;
+      if (sizeLabel && !isNaN(priceVal) && priceVal > 0) {
+        newSizes.push({ size: sizeLabel, price: Math.round(priceVal) });
+      }
+    });
+    const newStock = parseInt(document.getElementById('pe-stock').value, 10);
+    const notesTop = document.getElementById('pe-notes-top').value.split(',').map(s => s.trim()).filter(s => s.length > 0);
+    const notesHeart = document.getElementById('pe-notes-heart').value.split(',').map(s => s.trim()).filter(s => s.length > 0);
+    const notesBase = document.getElementById('pe-notes-base').value.split(',').map(s => s.trim()).filter(s => s.length > 0);
+    const newTags = getEditorCheckboxValues('pe-tag-');
+    const newVibes = getEditorCheckboxValues('pe-vibe-');
+    const newRating = parseFloat(document.getElementById('pe-rating').value) || 0;
+    const newReviewsCount = parseInt(document.getElementById('pe-reviews').value, 10) || 0;
+    const newFeatured = document.getElementById('pe-featured').checked;
+    if (!newName || !newBrand || !newTagline || !newDescription || newSizes.length === 0 || isNaN(newStock)) {
+      showToast("PLEASE FILL IN ALL REQUIRED FIELDS. AT LEAST ONE SIZE PRICE IS REQUIRED.");
+      _restoreBtn();
+      return;
+    }
+    if (isNewProduct && !newImage) {
+      showToast("PLEASE ADD AT LEAST ONE PRODUCT IMAGE.");
+      _restoreBtn();
+      return;
+    }
+
+    // Generate product ID early for new products (needed for image upload path)
+    if (isNewProduct) {
+      product.id = newName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') + '-' + Date.now().toString(36);
+    }
+
+    // ---- Upload images to Firebase Storage ----
+    const finalProductId = isNewProduct ? product.id : productId;
+    const uploadedImages = [];
+    if (publishBtn) publishBtn.textContent = 'UPLOADING...';
+
+    for (let i = 0; i < window._editorUploadedImages.length; i++) {
+      const imgSrc = window._editorUploadedImages[i];
+      if (imgSrc.startsWith('data:')) {
+        // Base64 image — upload to Storage
+        const url = await NovaDB.uploadImage(imgSrc, finalProductId, i);
+        uploadedImages.push(url);
+      } else {
+        // Already a URL — keep as-is
+        uploadedImages.push(imgSrc);
+      }
+    }
+
+    // Also handle the main image URL if it was pasted (not from the gallery)
+    let finalMainImage = uploadedImages[0] || '';
+    if (newImage && newImage.startsWith('data:') && !uploadedImages.includes(newImage)) {
+      finalMainImage = await NovaDB.uploadImage(newImage, finalProductId, 999);
+    } else if (newImage && !newImage.startsWith('data:')) {
+      finalMainImage = newImage;
+    }
+
+    if (publishBtn) publishBtn.textContent = 'SAVING...';
+
+    const mainPrice = newSizes[0].price;
+    product.name = newName;
+    product.brand = newBrand;
+    product.tagline = newTagline;
+    product.description = newDescription;
+    product.ingredients = newIngredients;
+    product.image = finalMainImage;
+    product.images = uploadedImages;
+    product.scent_family = newScentFamily;
+    product.gender_id = newGenderId;
+    product.price = mainPrice;
+    product.stock = newStock;
+    product.tags = newTags;
+    product.vibes = newVibes;
+    product.rating = newRating;
+    product.reviewsCount = newReviewsCount;
+    product.featured = newFeatured;
+    product.sizes = newSizes;
+    product.sku = newSku;
+    product.notes = { top: notesTop, heart: notesHeart, base: notesBase };
+
+    // Update the editor gallery with uploaded URLs (replace base64 with URLs)
+    window._editorUploadedImages = uploadedImages;
+    document.getElementById('pe-image-url').value = finalMainImage;
+
+    if (isNewProduct) {
+      Object.defineProperty(product, 'category', {
+        get() { const fam = window.GLOBAL_ATTRIBUTES.scent_families[product.scent_family]; return fam ? fam.label.en : ""; },
+        configurable: true, enumerable: true
+      });
+      Object.defineProperty(product, 'gender', {
+        get() { const g = window.GLOBAL_ATTRIBUTES.genders[product.gender_id]; return g ? g.label.en : ""; },
+        configurable: true, enumerable: true
+      });
+      AppState.products.push(product);
+      logAdminActivity(session.name, `Created new product: ${product.name}`);
+      showToast(`SUCCESSFULLY CREATED ${product.name.toUpperCase()}.`);
+    } else {
+      logAdminActivity(session.name, `Edited product details for: ${product.name}`);
+      showToast(`SUCCESSFULLY UPDATED ${product.name.toUpperCase()} DETAILS.`);
+    }
+    await saveProductsToStorage();
+    
+    // Auto-translate product text to RU/HY
+    showToast('TRANSLATING PRODUCT TO RU/HY...');
+    try {
+      await translateProductFields(product);
+      await saveAllTranslations();
+    } catch (e) {
+      console.warn('[NOVA] Auto-translation failed:', e);
+    }
+    
+    renderFeaturedProducts();
+    renderShop();
+    refreshAdminDashboard();
+    closeProductEditor();
+  } catch (err) {
+    console.error('[NOVA] Save failed:', err);
+    showToast('SAVE FAILED: ' + err.message);
+  } finally {
+    _restoreBtn();
   }
-  
-  renderFeaturedProducts();
-  renderShop();
-  refreshAdminDashboard();
-  closeProductEditor();
+
+  function _restoreBtn() {
+    if (publishBtn) {
+      publishBtn.textContent = originalBtnText;
+      publishBtn.disabled = false;
+      publishBtn.classList.remove('pe-btn-saving');
+    }
+  }
 };
 
 // Keep old function name as alias
@@ -6304,8 +6386,11 @@ function syncMainImageFromGallery() {
 }
 
 // Convert an image file to WebP using Canvas API
-function convertFileToWebP(file, quality = 0.85) {
+// Same quality constraints: 92% start, 90% min, 200KB max
+function convertFileToWebP(file, quality = 0.92) {
   return new Promise((resolve) => {
+    const MAX_SIZE_BYTES = 200 * 1024;
+    const MIN_QUALITY = 0.90;
     const reader = new FileReader();
     reader.onload = (e) => {
       const img = new Image();
@@ -6315,12 +6400,22 @@ function convertFileToWebP(file, quality = 0.85) {
         canvas.height = img.naturalHeight;
         const ctx = canvas.getContext('2d');
         ctx.drawImage(img, 0, 0);
-        // Export as WebP
-        const webpDataUrl = canvas.toDataURL('image/webp', quality);
+        let currentQuality = quality;
+        let webpDataUrl = canvas.toDataURL('image/webp', currentQuality);
+        while (webpDataUrl.length > MAX_SIZE_BYTES * 1.37 && currentQuality > MIN_QUALITY) {
+          currentQuality -= 0.01;
+          webpDataUrl = canvas.toDataURL('image/webp', currentQuality);
+        }
+        if (webpDataUrl.length > MAX_SIZE_BYTES * 1.37) {
+          const scale = Math.sqrt((MAX_SIZE_BYTES * 1.37) / webpDataUrl.length);
+          canvas.width = Math.round(img.naturalWidth * scale);
+          canvas.height = Math.round(img.naturalHeight * scale);
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+          webpDataUrl = canvas.toDataURL('image/webp', MIN_QUALITY);
+        }
         resolve(webpDataUrl);
       };
       img.onerror = () => {
-        // Fallback to original if conversion fails
         resolve(e.target.result);
       };
       img.src = e.target.result;

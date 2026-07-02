@@ -6138,6 +6138,16 @@ header.header-scrolled .mobile-menu-icon-btn {
   letter-spacing: 0.04em; text-transform: uppercase;
 }
 .pe-publish-btn:hover { background: #135e96; border-color: #135e96; }
+.pe-publish-btn:disabled { cursor: not-allowed; opacity: 0.9; }
+.pe-btn-saving {
+  animation: pe-pulse 1.2s ease-in-out infinite;
+  pointer-events: none;
+  box-shadow: 0 0 12px rgba(34, 113, 177, 0.4);
+}
+@keyframes pe-pulse {
+  0%, 100% { background: #2271b1; box-shadow: 0 0 8px rgba(34, 113, 177, 0.3); }
+  50% { background: #1a5a8e; box-shadow: 0 0 20px rgba(34, 113, 177, 0.6); }
+}
 
 .pe-content {
   display: grid; grid-template-columns: 1fr 340px;

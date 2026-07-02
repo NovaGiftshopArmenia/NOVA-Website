@@ -14,6 +14,7 @@ const firebaseConfig = {
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
+const storage = firebase.storage();
 
 // ============================================
 // NovaDB — Firestore wrapper with in-memory cache
@@ -242,8 +243,50 @@ const NovaDB = {
       console.log('Firestore now has:', doc.data().items?.length, 'products');
     }
     console.log('=== End Test ===');
+  },
+
+  // ---- IMAGE STORAGE ----
+  // Upload a base64 data URL to Firebase Storage and return the download URL
+  async uploadImage(dataUrl, productId, index) {
+    if (!dataUrl || !dataUrl.startsWith('data:')) {
+      // Already a URL (not base64), return as-is
+      return dataUrl;
+    }
+    try {
+      const filename = `img_${index}_${Date.now()}.webp`;
+      const path = `products/${productId}/${filename}`;
+      const ref = storage.ref().child(path);
+      // Convert data URL to blob
+      const response = await fetch(dataUrl);
+      const blob = await response.blob();
+      // Upload
+      const snapshot = await ref.put(blob, { contentType: 'image/webp' });
+      const downloadUrl = await snapshot.ref.getDownloadURL();
+      console.log(`[NovaDB] \u2705 Uploaded image to Storage: ${path}`);
+      return downloadUrl;
+    } catch (e) {
+      console.error('[NovaDB] \u274c Image upload failed:', e);
+      if (typeof showToast === 'function') {
+        showToast('IMAGE UPLOAD FAILED: ' + e.message);
+      }
+      // Fallback: return the data URL so the product still works in-memory
+      return dataUrl;
+    }
+  },
+
+  // Delete an image from Firebase Storage by its URL
+  async deleteImage(url) {
+    if (!url || !url.includes('firebasestorage.googleapis.com')) return;
+    try {
+      const ref = storage.refFromURL(url);
+      await ref.delete();
+      console.log('[NovaDB] \ud83d\uddd1\ufe0f Deleted image from Storage');
+    } catch (e) {
+      console.warn('[NovaDB] Could not delete image:', e.message);
+    }
   }
 };
 
 window.NovaDB = NovaDB;
 window.db = db;
+window.storage = storage;
