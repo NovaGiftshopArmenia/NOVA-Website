@@ -101,9 +101,26 @@ const NovaDB = {
           obj[key] = p[key];
         }
       });
+      // CRITICAL: Strip base64 images to prevent exceeding Firestore 1MB doc limit
+      // Only keep URLs (http/https). Base64 data must be uploaded to Storage first.
+      if (obj.image && obj.image.startsWith('data:')) {
+        console.warn(`[NovaDB] ⚠️ Stripping base64 image from product "${obj.name}" — upload to Storage first`);
+        obj.image = '';
+      }
+      if (obj.images && Array.isArray(obj.images)) {
+        obj.images = obj.images.filter(img => !img.startsWith('data:'));
+      }
       return obj;
     });
-    console.log(`[NovaDB] 📦 Saving ${clean.length} products...`);
+    const jsonStr = JSON.stringify({ items: clean });
+    const sizeKB = Math.round(jsonStr.length / 1024);
+    console.log(`[NovaDB] 📦 Saving ${clean.length} products (${sizeKB}KB)...`);
+    if (sizeKB > 900) {
+      console.error(`[NovaDB] ❌ Products data is ${sizeKB}KB — too close to Firestore 1MB limit!`);
+      if (typeof showToast === 'function') {
+        showToast('⚠️ WARNING: Product data is very large. Some images may need re-uploading.');
+      }
+    }
     return this.set('products', { items: clean });
   },
 
