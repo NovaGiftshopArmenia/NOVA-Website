@@ -6304,7 +6304,7 @@ function syncMainImageFromGallery() {
 }
 
 // Convert an image file to WebP using Canvas API
-function convertToWebP(file, quality = 0.85) {
+function convertFileToWebP(file, quality = 0.85) {
   return new Promise((resolve) => {
     const reader = new FileReader();
     reader.onload = (e) => {
@@ -6335,7 +6335,7 @@ document.addEventListener('DOMContentLoaded', () => {
     modalImgFile.addEventListener('change', async (e) => {
       const files = Array.from(e.target.files);
       for (const file of files) {
-        const webpDataUrl = await convertToWebP(file);
+        const webpDataUrl = await convertFileToWebP(file);
         window._modalUploadedImages.push(webpDataUrl);
         syncMainImageFromGallery();
         renderModalImageGallery();
