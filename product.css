@@ -574,6 +574,7 @@ body:has(#product-page-body) {
   }
   .hero-split-left {
     height: auto;
+    position: static;
   }
   .zoom-image-container {
     height: 450px;
