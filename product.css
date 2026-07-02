@@ -206,8 +206,8 @@ body:has(#product-page-body) {
 .pp-read-more-btn {
   background: none;
   border: none;
-  color: var(--color-sage, #6B7B5E);
-  font-size: 0.85rem;
+  color: #333;
+  font-size: 0.9rem;
   font-weight: 600;
   cursor: pointer;
   padding: 2px 6px;
@@ -216,9 +216,11 @@ body:has(#product-page-body) {
   transition: color 0.2s ease, opacity 0.2s ease;
   display: inline;
   vertical-align: baseline;
+  text-decoration: underline;
+  text-underline-offset: 2px;
 }
 .pp-read-more-btn:hover {
-  color: #4a5a3e;
+  color: #000;
   opacity: 0.85;
 }
 
