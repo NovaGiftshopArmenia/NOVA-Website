@@ -8006,19 +8006,3 @@ window.handleCSVImport = async function(input) {
   input.value = ''; // Reset file input
 };
 
-// ============================================
-// HERO SLIDE DOTS — Sync indicator dots with CSS crossfade
-// ============================================
-(function initHeroDots() {
-  const dots = document.querySelectorAll('.hero-dot');
-  if (dots.length === 0) return;
-  
-  let activeIndex = 0;
-  const totalSlides = dots.length;
-  
-  setInterval(() => {
-    dots.forEach(d => d.classList.remove('active'));
-    activeIndex = (activeIndex + 1) % totalSlides;
-    dots[activeIndex].classList.add('active');
-  }, 4000); // Match the 4s delay between slides
-})();
