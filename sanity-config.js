@@ -3,65 +3,75 @@
 // ============================================
 // Handles: Products, Product Images, Product Translations
 // Everything else stays in Firebase (orders, users, etc.)
+// Uses Sanity HTTP API directly — no SDK dependency needed
 
 const SANITY_CONFIG = {
   projectId: '49iqr6js',
   dataset: 'production',
   apiVersion: '2024-01-01',
-  token: 'skerzCM4AF5WJN5lLQPctC45fI6FqsoLU2C9m23ENIUCruklL6NXxbagwPWMVXYPqnK5zdz8WZLR3mXC98WQNda4URhyziGHpcaf6HKnYjqBW00alXalDdDShSy2MrU8UwEfKwvqVkcE8u9Ii01aN5z64HRSkeW97FsBRuKRhSnCxafYhcVw',
-  useCdn: false // We need fresh data, not cached
+  token: 'skerzCM4AF5WJN5lLQPctC45fI6FqsoLU2C9m23ENIUCruklL6NXxbagwPWMVXYPqnK5zdz8WZLR3mXC98WQNda4URhyziGHpcaf6HKnYjqBW00alXalDdDShSy2MrU8UwEfKwvqVkcE8u9Ii01aN5z64HRSkeW97FsBRuKRhSnCxafYhcVw'
 };
+
+// Base URLs for Sanity API
+const SANITY_API = `https://${SANITY_CONFIG.projectId}.api.sanity.io/v${SANITY_CONFIG.apiVersion}/data`;
+const SANITY_ASSETS_API = `https://${SANITY_CONFIG.projectId}.api.sanity.io/v${SANITY_CONFIG.apiVersion}/assets/images/${SANITY_CONFIG.dataset}`;
+
+// Standard headers for authenticated requests
+function sanityHeaders(contentType) {
+  const h = { 'Authorization': `Bearer ${SANITY_CONFIG.token}` };
+  if (contentType) h['Content-Type'] = contentType;
+  return h;
+}
 
 // ============================================
 // NovaSanity — Sanity wrapper for product management
+// Uses raw HTTP API (fetch) — no SDK needed
 // ============================================
 const NovaSanity = {
-  _client: null,
   _products: null,
   _translations: null,
   _ready: false,
 
-  // Initialize the Sanity client and load all products
+  // Initialize — fetch all products from Sanity
   async init() {
     try {
-      // Create Sanity client using the CDN-loaded library
-      this._client = sanityClient.createClient({
-        projectId: SANITY_CONFIG.projectId,
-        dataset: SANITY_CONFIG.dataset,
-        apiVersion: SANITY_CONFIG.apiVersion,
-        token: SANITY_CONFIG.token,
-        useCdn: SANITY_CONFIG.useCdn
-      });
+      // GROQ query to fetch all products
+      const query = `*[_type == "product"] | order(_createdAt desc) {
+        _id,
+        productId,
+        name,
+        brand,
+        sku,
+        tagline,
+        description,
+        ingredients,
+        scent_family,
+        gender_id,
+        price,
+        sizes,
+        stock,
+        tags,
+        vibes,
+        rating,
+        reviewsCount,
+        featured,
+        notes,
+        "image": mainImage.asset->url,
+        "images": galleryImages[].asset->url,
+        translations
+      }`;
 
-      // Fetch all products from Sanity
-      const products = await this._client.fetch(
-        `*[_type == "product"] | order(_createdAt desc) {
-          _id,
-          productId,
-          name,
-          brand,
-          sku,
-          tagline,
-          description,
-          ingredients,
-          scent_family,
-          gender_id,
-          price,
-          sizes,
-          stock,
-          tags,
-          vibes,
-          rating,
-          reviewsCount,
-          featured,
-          notes,
-          "image": mainImage.asset->url,
-          "images": galleryImages[].asset->url,
-          translations
-        }`
-      );
+      const url = `${SANITY_API}/query/${SANITY_CONFIG.dataset}?query=${encodeURIComponent(query)}`;
+      const response = await fetch(url, { headers: sanityHeaders() });
 
-      // Transform Sanity documents to match the existing AppState.products format
+      if (!response.ok) {
+        throw new Error(`Sanity API error: ${response.status} ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      const products = data.result || [];
+
+      // Transform Sanity documents to match AppState.products format
       this._products = products.map(doc => this._transformFromSanity(doc));
 
       // Extract translations from products
@@ -76,7 +86,9 @@ const NovaSanity = {
 
       this._ready = true;
       console.log(`[NovaSanity] ✅ Loaded ${this._products.length} products from Sanity`);
-      console.log(`[NovaSanity] ✅ Loaded translations for ${Object.keys(this._translations.am).length} products`);
+      if (Object.keys(this._translations.am).length > 0) {
+        console.log(`[NovaSanity] ✅ Loaded translations for ${Object.keys(this._translations.am).length} products`);
+      }
       return this._products;
     } catch (e) {
       console.error('[NovaSanity] ❌ Failed to initialize:', e);
@@ -101,7 +113,7 @@ const NovaSanity = {
   _transformFromSanity(doc) {
     return {
       id: doc.productId || doc._id,
-      _sanityId: doc._id, // Keep Sanity's internal ID for updates
+      _sanityId: doc._id,
       name: doc.name || '',
       brand: doc.brand || '',
       sku: doc.sku || '',
@@ -120,16 +132,32 @@ const NovaSanity = {
       featured: doc.featured || false,
       notes: doc.notes || { top: [], heart: [], base: [] },
       image: doc.image || '',
-      images: doc.images || []
+      images: (doc.images || []).filter(Boolean)
     };
+  },
+
+  // ---- MUTATIONS (create, update, delete) via Sanity Mutations API ----
+
+  async _mutate(mutations) {
+    const url = `${SANITY_API}/mutate/${SANITY_CONFIG.dataset}`;
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: sanityHeaders('application/json'),
+      body: JSON.stringify({ mutations })
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`Sanity mutation failed: ${response.status} — ${errorText}`);
+    }
+
+    return await response.json();
   },
 
   // Save a single product to Sanity (create or update)
   async saveProduct(product) {
-    if (!this._client) throw new Error('Sanity client not initialized');
-
     const sanityId = product._sanityId || `product-${product.id}`;
-    
+
     const doc = {
       _id: sanityId,
       _type: 'product',
@@ -153,40 +181,43 @@ const NovaSanity = {
       notes: product.notes || { top: [], heart: [], base: [] }
     };
 
-    // Handle main image — if it's a Sanity asset URL, create a reference
+    // Handle main image — store as Sanity image reference if it's a Sanity URL
     if (product.image && product.image.includes('cdn.sanity.io')) {
-      // Already a Sanity URL — extract asset ID and create reference
-      const assetId = this._extractAssetId(product.image);
-      if (assetId) {
-        doc.mainImage = { _type: 'image', asset: { _type: 'reference', _ref: assetId } };
+      const assetRef = this._urlToAssetRef(product.image);
+      if (assetRef) {
+        doc.mainImage = { _type: 'image', asset: { _type: 'reference', _ref: assetRef } };
       }
+    } else if (product.image) {
+      // External URL — store in a separate field
+      doc.externalImageUrl = product.image;
     }
-    // If image is NOT a Sanity URL, we store it as a plain string for now
-    // (it might be an external URL or empty)
 
-    // Handle gallery images similarly
+    // Handle gallery images
     if (product.images && product.images.length > 0) {
       const galleryRefs = [];
-      for (const imgUrl of product.images) {
+      product.images.forEach(imgUrl => {
         if (imgUrl && imgUrl.includes('cdn.sanity.io')) {
-          const assetId = this._extractAssetId(imgUrl);
-          if (assetId) {
-            galleryRefs.push({ _type: 'image', _key: this._generateKey(), asset: { _type: 'reference', _ref: assetId } });
+          const assetRef = this._urlToAssetRef(imgUrl);
+          if (assetRef) {
+            galleryRefs.push({
+              _type: 'image',
+              _key: this._generateKey(),
+              asset: { _type: 'reference', _ref: assetRef }
+            });
           }
         }
-      }
+      });
       if (galleryRefs.length > 0) {
         doc.galleryImages = galleryRefs;
       }
     }
 
     try {
-      const result = await this._client.createOrReplace(doc);
-      product._sanityId = result._id;
-      console.log(`[NovaSanity] ✅ Saved product "${product.name}" to Sanity (${result._id})`);
-      return result;
+      await this._mutate([{ createOrReplace: doc }]);
+      product._sanityId = sanityId;
+      console.log(`[NovaSanity] ✅ Saved product "${product.name}" (${sanityId})`);
     } catch (e) {
-      console.error(`[NovaSanity] ❌ Failed to save product "${product.name}":`, e);
+      console.error(`[NovaSanity] ❌ Failed to save "${product.name}":`, e);
       if (typeof showToast === 'function') {
         showToast('SANITY SAVE ERROR: ' + e.message);
       }
@@ -194,74 +225,142 @@ const NovaSanity = {
     }
   },
 
-  // Save ALL products (used by saveProductsToStorage)
+  // Save ALL products
   async saveAllProducts(productsArray) {
     console.log(`[NovaSanity] 📦 Saving ${productsArray.length} products to Sanity...`);
-    const promises = productsArray.map(p => this.saveProduct(p));
-    await Promise.all(promises);
+    // Batch mutations for efficiency (max ~50 at a time)
+    const batchSize = 50;
+    for (let i = 0; i < productsArray.length; i += batchSize) {
+      const batch = productsArray.slice(i, i + batchSize);
+      const mutations = batch.map(product => {
+        const sanityId = product._sanityId || `product-${product.id}`;
+        product._sanityId = sanityId;
+
+        const doc = {
+          _id: sanityId,
+          _type: 'product',
+          productId: product.id,
+          name: product.name,
+          brand: product.brand,
+          sku: product.sku || '',
+          tagline: product.tagline,
+          description: product.description,
+          ingredients: product.ingredients || '',
+          scent_family: product.scent_family,
+          gender_id: product.gender_id,
+          price: product.price,
+          sizes: product.sizes || [],
+          stock: product.stock || 0,
+          tags: product.tags || [],
+          vibes: product.vibes || [],
+          rating: product.rating || 0,
+          reviewsCount: product.reviewsCount || 0,
+          featured: product.featured || false,
+          notes: product.notes || { top: [], heart: [], base: [] }
+        };
+
+        // Handle images
+        if (product.image && product.image.includes('cdn.sanity.io')) {
+          const assetRef = this._urlToAssetRef(product.image);
+          if (assetRef) doc.mainImage = { _type: 'image', asset: { _type: 'reference', _ref: assetRef } };
+        } else if (product.image) {
+          doc.externalImageUrl = product.image;
+        }
+
+        if (product.images && product.images.length > 0) {
+          const galleryRefs = [];
+          product.images.forEach(imgUrl => {
+            if (imgUrl && imgUrl.includes('cdn.sanity.io')) {
+              const ref = this._urlToAssetRef(imgUrl);
+              if (ref) galleryRefs.push({ _type: 'image', _key: this._generateKey(), asset: { _type: 'reference', _ref: ref } });
+            }
+          });
+          if (galleryRefs.length > 0) doc.galleryImages = galleryRefs;
+        }
+
+        return { createOrReplace: doc };
+      });
+
+      await this._mutate(mutations);
+    }
     console.log(`[NovaSanity] ✅ All ${productsArray.length} products saved`);
   },
 
   // Save product translations for a specific product
   async saveProductTranslation(productId, translations) {
-    if (!this._client) return;
-    
     const sanityId = `product-${productId}`;
     try {
-      await this._client.patch(sanityId)
-        .set({ translations: translations })
-        .commit();
-      
+      await this._mutate([{
+        patch: {
+          id: sanityId,
+          set: { translations: translations }
+        }
+      }]);
+
       // Update local cache
       if (translations.am) this._translations.am[productId] = translations.am;
       if (translations.ru) this._translations.ru[productId] = translations.ru;
-      
+
       console.log(`[NovaSanity] ✅ Saved translations for "${productId}"`);
     } catch (e) {
       console.warn(`[NovaSanity] ⚠️ Failed to save translations for "${productId}":`, e);
     }
   },
 
-  // Save ALL translations (used by saveAllTranslations)
+  // Save ALL translations
   async saveAllTranslations(translationsObj) {
-    if (!this._client || !translationsObj) return;
-    
+    if (!translationsObj) return;
+
     const productIds = new Set([
       ...Object.keys(translationsObj.am || {}),
       ...Object.keys(translationsObj.ru || {})
     ]);
 
     console.log(`[NovaSanity] 📦 Saving translations for ${productIds.size} products...`);
-    
+
+    // Batch patch mutations
+    const mutations = [];
     for (const pid of productIds) {
       const trans = {
         am: translationsObj.am?.[pid] || null,
         ru: translationsObj.ru?.[pid] || null
       };
-      await this.saveProductTranslation(pid, trans);
+      mutations.push({
+        patch: {
+          id: `product-${pid}`,
+          set: { translations: trans }
+        }
+      });
+
+      // Update local cache
+      if (trans.am) this._translations.am[pid] = trans.am;
+      if (trans.ru) this._translations.ru[pid] = trans.ru;
     }
-    
-    console.log(`[NovaSanity] ✅ All translations saved`);
+
+    if (mutations.length > 0) {
+      try {
+        await this._mutate(mutations);
+        console.log(`[NovaSanity] ✅ All translations saved`);
+      } catch (e) {
+        console.warn(`[NovaSanity] ⚠️ Failed to save translations batch:`, e);
+      }
+    }
   },
 
   // Delete a product from Sanity
   async deleteProduct(productId) {
-    if (!this._client) return;
-    
     const sanityId = `product-${productId}`;
     try {
-      await this._client.delete(sanityId);
-      console.log(`[NovaSanity] 🗑️ Deleted product "${productId}" from Sanity`);
+      await this._mutate([{ delete: { id: sanityId } }]);
+      console.log(`[NovaSanity] 🗑️ Deleted product "${productId}"`);
     } catch (e) {
-      console.warn(`[NovaSanity] ⚠️ Failed to delete product "${productId}":`, e);
+      console.warn(`[NovaSanity] ⚠️ Failed to delete "${productId}":`, e);
     }
   },
 
-  // Upload an image to Sanity Assets
-  // Accepts: File, Blob, or base64 data URL
-  async uploadImage(imageData, productId, index) {
-    if (!this._client) throw new Error('Sanity client not initialized');
+  // ---- IMAGE UPLOAD via Sanity Assets API ----
 
+  async uploadImage(imageData, productId, index) {
     // If it's already a URL (not base64), return as-is
     if (typeof imageData === 'string' && !imageData.startsWith('data:')) {
       return imageData;
@@ -270,7 +369,6 @@ const NovaSanity = {
     try {
       let blob;
       if (typeof imageData === 'string' && imageData.startsWith('data:')) {
-        // Convert base64 data URL to blob
         const response = await fetch(imageData);
         blob = await response.blob();
       } else if (imageData instanceof Blob || imageData instanceof File) {
@@ -281,15 +379,25 @@ const NovaSanity = {
       }
 
       const filename = `${productId}_img_${index}_${Date.now()}.webp`;
-      
-      console.log(`[NovaSanity] ⬆️ Uploading image "${filename}" (${Math.round(blob.size / 1024)}KB)...`);
-      
-      const asset = await this._client.assets.upload('image', blob, {
-        filename: filename,
-        contentType: blob.type || 'image/webp'
+      console.log(`[NovaSanity] ⬆️ Uploading "${filename}" (${Math.round(blob.size / 1024)}KB)...`);
+
+      const uploadUrl = `${SANITY_ASSETS_API}?filename=${encodeURIComponent(filename)}`;
+      const response = await fetch(uploadUrl, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${SANITY_CONFIG.token}`,
+          'Content-Type': blob.type || 'image/webp'
+        },
+        body: blob
       });
 
-      const imageUrl = asset.url;
+      if (!response.ok) {
+        const errText = await response.text();
+        throw new Error(`Upload failed: ${response.status} — ${errText}`);
+      }
+
+      const result = await response.json();
+      const imageUrl = result.document?.url || '';
       console.log(`[NovaSanity] ✅ Image uploaded: ${imageUrl}`);
       return imageUrl;
     } catch (e) {
@@ -301,36 +409,40 @@ const NovaSanity = {
     }
   },
 
-  // Delete an image asset from Sanity (by URL)
+  // Delete an image asset from Sanity
   async deleteImage(url) {
     if (!url || !url.includes('cdn.sanity.io')) return;
     try {
-      const assetId = this._extractAssetId(url);
-      if (assetId) {
-        await this._client.delete(assetId);
-        console.log('[NovaSanity] 🗑️ Deleted image asset from Sanity');
+      const assetRef = this._urlToAssetRef(url);
+      if (assetRef) {
+        await this._mutate([{ delete: { id: assetRef } }]);
+        console.log('[NovaSanity] 🗑️ Deleted image asset');
       }
     } catch (e) {
       console.warn('[NovaSanity] Could not delete image:', e.message);
     }
   },
 
-  // Extract Sanity asset ID from a CDN URL
-  // URL format: https://cdn.sanity.io/images/{projectId}/{dataset}/{assetId}.{ext}
-  _extractAssetId(url) {
+  // ---- HELPERS ----
+
+  // Convert a Sanity CDN URL to an asset reference ID
+  // URL: https://cdn.sanity.io/images/{projectId}/{dataset}/{id}-{widthxheight}.{ext}
+  _urlToAssetRef(url) {
     if (!url || !url.includes('cdn.sanity.io')) return null;
     try {
       const parts = url.split('/');
-      const filename = parts[parts.length - 1].split('?')[0]; // Remove query params
-      const [name, ext] = filename.split('.');
-      // Sanity asset IDs look like: image-{hash}-{width}x{height}-{ext}
+      const filename = parts[parts.length - 1].split('?')[0];
+      // filename like: abc123-800x600.webp
+      const dotIdx = filename.lastIndexOf('.');
+      const ext = filename.substring(dotIdx + 1);
+      const name = filename.substring(0, dotIdx);
       return `image-${name}-${ext}`;
     } catch (e) {
       return null;
     }
   },
 
-  // Generate a random key for array items (Sanity requires _key on array items)
+  // Generate a random key for Sanity array items
   _generateKey() {
     return Math.random().toString(36).substring(2, 10);
   },
@@ -342,14 +454,15 @@ const NovaSanity = {
     console.log('Products in cache:', this._products?.length || 0);
     console.log('Translations (AM):', Object.keys(this._translations?.am || {}).length);
     console.log('Translations (RU):', Object.keys(this._translations?.ru || {}).length);
-    
-    if (this._client) {
-      try {
-        const count = await this._client.fetch('count(*[_type == "product"])');
-        console.log('Products in Sanity (live):', count);
-      } catch (e) {
-        console.error('Failed to query Sanity:', e);
-      }
+
+    try {
+      const query = encodeURIComponent('count(*[_type == "product"])');
+      const url = `${SANITY_API}/query/${SANITY_CONFIG.dataset}?query=${query}`;
+      const resp = await fetch(url, { headers: sanityHeaders() });
+      const data = await resp.json();
+      console.log('Products in Sanity (live):', data.result);
+    } catch (e) {
+      console.error('Failed to query Sanity:', e);
     }
     console.log('=== End Debug ===');
   }
