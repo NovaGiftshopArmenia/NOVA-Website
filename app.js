@@ -1729,7 +1729,7 @@ const AppState = {
 
 window.saveProductsToStorage = async function() {
   console.log('[NOVA] saveProductsToStorage called with', AppState.products.length, 'products');
-  await NovaDB.saveProducts(AppState.products);
+  await NovaSanity.saveAllProducts(AppState.products);
 };
 
 let TempMobileFilters = {};
@@ -1819,21 +1819,12 @@ window.addEventListener('DOMContentLoaded', async () => {
     await NovaDB.init();
     console.log('[NOVA] Firestore data loaded successfully');
 
-    // Load products from Firestore (or seed if first run)
-    const firestoreProducts = NovaDB.getProducts();
-    console.log('[NOVA] Firestore products:', firestoreProducts ? firestoreProducts.length : 'null (no doc)');
-    if (firestoreProducts !== null) {
-      // Document exists in Firestore — use it (even if empty array, that means admin deleted all)
-      AppState.products = firestoreProducts;
-      addProductGetters(AppState.products);
-      console.log('[NOVA] Loaded', AppState.products.length, 'products from Firestore');
-    } else {
-      // No products doc in Firestore — start with empty array
-      // DO NOT save empty array to Firestore (would overwrite if doc was temporarily unreadable)
-      AppState.products = [];
-      addProductGetters(AppState.products);
-      console.log('[NOVA] No products doc found. Starting with empty catalog. Add products via admin panel.');
-    }
+    // Load products from Sanity CMS
+    const sanityProducts = await NovaSanity.init();
+    console.log('[NOVA] Sanity products:', sanityProducts ? sanityProducts.length : 'null');
+    AppState.products = sanityProducts || [];
+    addProductGetters(AppState.products);
+    console.log('[NOVA] Loaded', AppState.products.length, 'products from Sanity CMS');
 
     // ONE-TIME MIGRATION: Fix all MANCERA product brands
     let brandFixCount = 0;
@@ -1863,17 +1854,17 @@ window.addEventListener('DOMContentLoaded', async () => {
       NovaDB.saveInstagramPosts(DEFAULT_INSTAGRAM_POSTS);
     }
 
-    // Load product translations from Firestore
-    const firestoreTranslations = NovaDB.getProductTranslations();
-    if (firestoreTranslations) {
+    // Load product translations from Sanity (stored per-product)
+    const sanityTranslations = NovaSanity.getProductTranslations();
+    if (sanityTranslations) {
       // Merge saved translations into PRODUCT_TRANSLATIONS
       ['am', 'ru'].forEach(lang => {
-        if (firestoreTranslations[lang]) {
+        if (sanityTranslations[lang]) {
           if (!PRODUCT_TRANSLATIONS[lang]) PRODUCT_TRANSLATIONS[lang] = {};
-          Object.assign(PRODUCT_TRANSLATIONS[lang], firestoreTranslations[lang]);
+          Object.assign(PRODUCT_TRANSLATIONS[lang], sanityTranslations[lang]);
         }
       });
-      console.log('[NOVA] Loaded product translations from Firestore');
+      console.log('[NOVA] Loaded product translations from Sanity');
     }
   } catch (e) {
     console.warn('[NOVA] Firestore init failed, using defaults:', e);
@@ -5817,7 +5808,7 @@ window.saveProductFromEditor = async function() {
       product.id = newName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') + '-' + Date.now().toString(36);
     }
 
-    // ---- Upload images to Firebase Storage ----
+    // ---- Upload images to Sanity Assets ----
     const finalProductId = isNewProduct ? product.id : productId;
     const uploadedImages = [];
     if (publishBtn) publishBtn.textContent = 'UPLOADING...';
@@ -5825,8 +5816,8 @@ window.saveProductFromEditor = async function() {
     for (let i = 0; i < window._editorUploadedImages.length; i++) {
       const imgSrc = window._editorUploadedImages[i];
       if (imgSrc.startsWith('data:')) {
-        // Base64 image — upload to Storage
-        const url = await NovaDB.uploadImage(imgSrc, finalProductId, i);
+        // Base64 image — upload to Sanity
+        const url = await NovaSanity.uploadImage(imgSrc, finalProductId, i);
         uploadedImages.push(url);
       } else {
         // Already a URL — keep as-is
@@ -5837,7 +5828,7 @@ window.saveProductFromEditor = async function() {
     // Also handle the main image URL if it was pasted (not from the gallery)
     let finalMainImage = uploadedImages[0] || '';
     if (newImage && newImage.startsWith('data:') && !uploadedImages.includes(newImage)) {
-      finalMainImage = await NovaDB.uploadImage(newImage, finalProductId, 999);
+      finalMainImage = await NovaSanity.uploadImage(newImage, finalProductId, 999);
     } else if (newImage && !newImage.startsWith('data:')) {
       finalMainImage = newImage;
     }
@@ -7772,7 +7763,7 @@ async function translateProductFields(product) {
   }
 }
 
-// Save all dynamically generated translations to Firestore
+// Save all dynamically generated translations to Sanity (per-product)
 async function saveAllTranslations() {
   // Collect only dynamically generated translations (not hardcoded ones)
   // We save the entire PRODUCT_TRANSLATIONS dict since hardcoded ones get overwritten on load anyway
@@ -7783,8 +7774,8 @@ async function saveAllTranslations() {
     }
   });
   try {
-    await NovaDB.saveProductTranslations(toSave);
-    console.log('[NOVA] Product translations saved to Firestore');
+    await NovaSanity.saveAllTranslations(toSave);
+    console.log('[NOVA] Product translations saved to Sanity');
   } catch (e) {
     console.warn('[NOVA] Failed to save translations:', e);
   }

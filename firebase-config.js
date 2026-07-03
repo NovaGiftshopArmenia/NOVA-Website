@@ -1,5 +1,7 @@
 // ============================================
 // NOVA FIREBASE CONFIGURATION & DATABASE HELPER
+// For: Orders, Users, Admin Emails, Staff, Audit Logs, Instagram, Brands
+// Products & Images are now handled by Sanity (sanity-config.js)
 // ============================================
 const firebaseConfig = {
   apiKey: "AIzaSyDqh33t_bQw6DUlwmHuInLAqWtUb_T1A5I",
@@ -14,10 +16,11 @@ const firebaseConfig = {
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
-const storage = firebase.storage();
 
 // ============================================
 // NovaDB — Firestore wrapper with in-memory cache
+// Now handles: orders, users, admin emails, staff, audit logs, instagram, brands
+// Products & images moved to Sanity CMS
 // ============================================
 const NovaDB = {
   _cache: {},
@@ -40,14 +43,6 @@ const NovaDB = {
       });
       this._ready = true;
       console.log('[NovaDB] ✅ Loaded from Firestore:', Object.keys(this._cache));
-      
-      // Log products count specifically
-      const prods = this._cache['products'];
-      if (prods && prods.items) {
-        console.log('[NovaDB] Products in Firestore:', prods.items.length);
-      } else {
-        console.log('[NovaDB] No products document in Firestore yet');
-      }
     } catch (e) {
       console.error('[NovaDB] ❌ Failed to load from Firestore:', e);
       this._ready = false;
@@ -73,55 +68,12 @@ const NovaDB = {
       console.log(`[NovaDB] ✅ Saved '${docId}' to Firestore`);
     } catch (e) {
       console.error(`[NovaDB] ❌ FAILED to write '${docId}':`, e);
-      // Show visible error so user can report it
       if (typeof showToast === 'function') {
         showToast('DATABASE ERROR: ' + e.message);
       }
     } finally {
       this._pendingWrites--;
     }
-  },
-
-  // ---- PRODUCTS ----
-  getProducts() {
-    const doc = this.get('products');
-    return doc ? doc.items : null;
-  },
-
-  saveProducts(productsArray) {
-    // Explicitly pick known product fields only
-    const PRODUCT_FIELDS = ['id', 'name', 'scent_family', 'gender_id', 
-      'vibes', 'price', 'image', 'images', 'brand', 'tags', 'rating', 'reviewsCount',
-      'tagline', 'description', 'ingredients', 'notes', 'sizes', 'stock', 'featured', 'sku'];
-    
-    const clean = productsArray.map(p => {
-      const obj = {};
-      PRODUCT_FIELDS.forEach(key => {
-        if (p[key] !== undefined) {
-          obj[key] = p[key];
-        }
-      });
-      // CRITICAL: Strip base64 images to prevent exceeding Firestore 1MB doc limit
-      // Only keep URLs (http/https). Base64 data must be uploaded to Storage first.
-      if (obj.image && obj.image.startsWith('data:')) {
-        console.warn(`[NovaDB] ⚠️ Stripping base64 image from product "${obj.name}" — upload to Storage first`);
-        obj.image = '';
-      }
-      if (obj.images && Array.isArray(obj.images)) {
-        obj.images = obj.images.filter(img => !img.startsWith('data:'));
-      }
-      return obj;
-    });
-    const jsonStr = JSON.stringify({ items: clean });
-    const sizeKB = Math.round(jsonStr.length / 1024);
-    console.log(`[NovaDB] 📦 Saving ${clean.length} products (${sizeKB}KB)...`);
-    if (sizeKB > 900) {
-      console.error(`[NovaDB] ❌ Products data is ${sizeKB}KB — too close to Firestore 1MB limit!`);
-      if (typeof showToast === 'function') {
-        showToast('⚠️ WARNING: Product data is very large. Some images may need re-uploading.');
-      }
-    }
-    return this.set('products', { items: clean });
   },
 
   // ---- ORDERS ----
@@ -162,16 +114,6 @@ const NovaDB = {
 
   saveTrash(trashArray) {
     return this.set('trash', { items: trashArray });
-  },
-
-  // ---- PRODUCT TRANSLATIONS ----
-  getProductTranslations() {
-    const doc = this.get('product_translations');
-    return doc ? doc.data : null;
-  },
-
-  saveProductTranslations(translationsObj) {
-    return this.set('product_translations', { data: translationsObj });
   },
 
   // ---- STAFF PROFILES ----
@@ -215,101 +157,14 @@ const NovaDB = {
   },
 
   // ---- DEBUG HELPER ----
-  // Call from console: NovaDB.debug()
   async debug() {
     console.log('=== NovaDB Debug ===');
     console.log('Ready:', this._ready);
     console.log('Pending writes:', this._pendingWrites);
     console.log('Cache keys:', Object.keys(this._cache));
-    console.log('Products in cache:', this._cache['products']?.items?.length || 'none');
-    console.log('Products in AppState:', window.AppState?.products?.length || 'none');
-    console.log('Trash in cache:', this._cache['trash']?.items?.length || 'none');
-    
-    // Verify by reading directly from Firestore
-    try {
-      const doc = await db.collection(this._collection).doc('products').get();
-      if (doc.exists) {
-        const data = doc.data();
-        console.log('Products in Firestore (live):', data.items?.length || 'none');
-        console.log('Product IDs in Firestore:', data.items?.map(p => p.id));
-      } else {
-        console.log('Products document does NOT exist in Firestore!');
-      }
-    } catch(e) {
-      console.error('Failed to read from Firestore:', e);
-    }
-    
-    console.log('Products in AppState:', window.AppState?.products?.map(p => p.id));
     console.log('=== End Debug ===');
-  },
-
-  // Quick test: delete first product and save
-  async testDelete() {
-    console.log('=== Test Delete ===');
-    console.log('Before: AppState has', window.AppState.products.length, 'products');
-    const removed = window.AppState.products.splice(0, 1);
-    console.log('Removed:', removed[0]?.name);
-    console.log('After splice: AppState has', window.AppState.products.length, 'products');
-    
-    await this.saveProducts(window.AppState.products);
-    console.log('Save complete. Verifying...');
-    
-    // Read back from Firestore directly
-    const doc = await db.collection(this._collection).doc('products').get();
-    if (doc.exists) {
-      console.log('Firestore now has:', doc.data().items?.length, 'products');
-    }
-    console.log('=== End Test ===');
-  },
-
-  // ---- IMAGE STORAGE ----
-  // Upload a base64 data URL to Firebase Storage and return the download URL
-  // Falls back to base64 if Storage is not configured or times out
-  async uploadImage(dataUrl, productId, index) {
-    if (!dataUrl || !dataUrl.startsWith('data:')) {
-      // Already a URL (not base64), return as-is
-      return dataUrl;
-    }
-    try {
-      const filename = `img_${index}_${Date.now()}.webp`;
-      const path = `products/${productId}/${filename}`;
-      const ref = storage.ref().child(path);
-      // Convert data URL to blob
-      const response = await fetch(dataUrl);
-      const blob = await response.blob();
-      // Upload with 10-second timeout
-      const uploadPromise = ref.put(blob, { contentType: 'image/webp' }).then(async (snapshot) => {
-        const downloadUrl = await snapshot.ref.getDownloadURL();
-        console.log(`[NovaDB] ✅ Uploaded image to Storage: ${path}`);
-        return downloadUrl;
-      });
-      const timeoutPromise = new Promise((_, reject) =>
-        setTimeout(() => reject(new Error('Upload timed out (10s). Check Firebase Storage rules.')), 10000)
-      );
-      return await Promise.race([uploadPromise, timeoutPromise]);
-    } catch (e) {
-      console.warn('[NovaDB] ⚠️ Storage upload failed, saving base64 directly:', e.message);
-      if (typeof showToast === 'function') {
-        showToast('⚠️ Storage unavailable — saving image inline.');
-      }
-      // Fallback: return the data URL (will be stored as base64 in Firestore)
-      return dataUrl;
-    }
-  },
-
-  // Delete an image from Firebase Storage by its URL
-  async deleteImage(url) {
-    if (!url || !url.includes('firebasestorage.googleapis.com')) return;
-    try {
-      const ref = storage.refFromURL(url);
-      await ref.delete();
-      console.log('[NovaDB] \ud83d\uddd1\ufe0f Deleted image from Storage');
-    } catch (e) {
-      console.warn('[NovaDB] Could not delete image:', e.message);
-    }
   }
 };
 
 window.NovaDB = NovaDB;
 window.db = db;
-window.storage = storage;
