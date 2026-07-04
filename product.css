@@ -520,20 +520,21 @@ body:has(#product-page-body) {
 }
 
 .faq-item summary::after {
-  content: '+';
+  content: '';
   position: absolute;
   right: 0;
   top: 50%;
   transform: translateY(-50%);
-  font-size: 1.6rem;
-  font-weight: 300;
-  color: var(--color-sage);
+  width: 17px;
+  height: 17px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23888' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M9 5l7 7-7 7'/%3E%3C/svg%3E");
+  background-size: contain;
+  background-repeat: no-repeat;
   transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
 .faq-item[open] summary::after {
-  content: '−';
-  transform: translateY(-50%) rotate(180deg);
+  transform: translateY(-50%) rotate(90deg);
 }
 
 .faq-item-content {
