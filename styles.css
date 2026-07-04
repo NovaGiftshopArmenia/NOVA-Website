@@ -334,12 +334,12 @@ header {
 
 /* Floating hamburger: hidden on desktop, shown on mobile */
 .floating-hamburger {
-  display: none;
+  display: none !important;
 }
 
 @media (max-width: 768px) {
   .floating-hamburger {
-    display: flex;
+    display: flex !important;
     order: 2;
   }
   .floating-header .floating-nav,
