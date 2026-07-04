@@ -154,7 +154,7 @@ body:has(#product-page-body) {
 }
 
 .pp-title {
-  font-size: clamp(2.2rem, 3.5vw, 3rem);
+  font-size: 96px;
   line-height: 1.1;
   margin-bottom: var(--spacing-xs);
   color: var(--color-black);

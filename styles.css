@@ -82,6 +82,11 @@ img {
   padding: 0 var(--spacing-lg);
 }
 
+h1 {
+  font-size: 96px;
+  line-height: 1.05;
+}
+
 .serif-title {
   font-family: var(--font-serif);
   font-weight: 400;
@@ -1761,7 +1766,7 @@ header.header-scrolled .lang-dropdown-label {
 }
 
 .shop-title {
-  font-size: 2.2rem;
+  font-size: 96px;
 }
 
 .shop-controls {
@@ -3492,7 +3497,7 @@ textarea,
 }
 
 .about-hero h1 {
-  font-size: 3rem;
+  font-size: 96px;
   margin-bottom: 1.5rem;
 }
 
