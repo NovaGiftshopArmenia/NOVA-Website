@@ -1908,9 +1908,10 @@ window.changeLanguage = function (lang) {
       btn.classList.remove('active');
     }
   });
-  // Update the dropdown toggle text
-  const currentLabel = document.querySelector('.lang-dropdown-current');
-  if (currentLabel) currentLabel.textContent = lang.toUpperCase();
+  // Update the dropdown toggle text (all headers)
+  document.querySelectorAll('.lang-dropdown-current').forEach(el => {
+    el.textContent = lang.toUpperCase();
+  });
 
   // Loop through all data-trans elements and translate them
   document.querySelectorAll('[data-trans]').forEach(el => {
@@ -3434,6 +3435,12 @@ function updateCartUI() {
     mobileCartBadge.innerText = totalCount;
   }
 
+  // Sync floating header cart badge
+  const floatingCartBadge = document.querySelector('.floating-cart-count');
+  if (floatingCartBadge) {
+    floatingCartBadge.innerText = totalCount;
+  }
+
   // Fill Cart Items
   if (!DOM.cartItemsContainer) return;
   DOM.cartItemsContainer.innerHTML = '';
@@ -3614,6 +3621,12 @@ function updateWishlistUI() {
   const mobileWishlistBadge = document.getElementById('mobile-wishlist-count-badge');
   if (mobileWishlistBadge) {
     mobileWishlistBadge.innerText = count;
+  }
+
+  // Sync floating header wishlist badge
+  const floatingWishlistBadge = document.querySelector('.floating-wishlist-count');
+  if (floatingWishlistBadge) {
+    floatingWishlistBadge.innerText = count;
   }
 
   // Toggle header heart filled styling
