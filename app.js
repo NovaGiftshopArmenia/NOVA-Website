@@ -2434,22 +2434,45 @@ function initEventListeners() {
   // Language dropdown
   const langDropdown = document.getElementById('lang-dropdown');
   const langToggle = document.getElementById('lang-dropdown-toggle');
+  const floatingLangDropdown = document.getElementById('floating-lang-dropdown');
+  const floatingLangToggle = document.getElementById('floating-lang-toggle');
+
   if (langToggle && langDropdown) {
     langToggle.addEventListener('click', (e) => {
       e.stopPropagation();
       langDropdown.classList.toggle('open');
-    });
-    document.addEventListener('click', (e) => {
-      if (!langDropdown.contains(e.target)) {
-        langDropdown.classList.remove('open');
-      }
+      if (floatingLangDropdown) floatingLangDropdown.classList.remove('open');
     });
   }
+  if (floatingLangToggle && floatingLangDropdown) {
+    floatingLangToggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      floatingLangDropdown.classList.toggle('open');
+      if (langDropdown) langDropdown.classList.remove('open');
+    });
+  }
+  document.addEventListener('click', (e) => {
+    if (langDropdown && !langDropdown.contains(e.target)) {
+      langDropdown.classList.remove('open');
+    }
+    if (floatingLangDropdown && !floatingLangDropdown.contains(e.target)) {
+      floatingLangDropdown.classList.remove('open');
+    }
+  });
+
   document.querySelectorAll('.lang-dropdown-item').forEach(btn => {
     btn.addEventListener('click', (e) => {
       const selectedLang = e.currentTarget.getAttribute('data-lang');
       changeLanguage(selectedLang);
       if (langDropdown) langDropdown.classList.remove('open');
+      if (floatingLangDropdown) floatingLangDropdown.classList.remove('open');
+      // Sync active state across both dropdowns
+      document.querySelectorAll('.lang-dropdown-item').forEach(b => {
+        b.classList.toggle('active', b.getAttribute('data-lang') === selectedLang);
+      });
+      // Sync current label text
+      const label = selectedLang.toUpperCase();
+      document.querySelectorAll('.lang-dropdown-current').forEach(el => el.textContent = label);
     });
   });
   // Also bind lang-btn buttons (used on product.html)

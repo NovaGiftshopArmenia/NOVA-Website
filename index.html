@@ -313,10 +313,15 @@
           </ul>
         </div>
         <div class="lang-dropdown" id="floating-lang-dropdown">
-          <button class="lang-dropdown-toggle" aria-label="Language" onclick="document.getElementById('lang-dropdown-toggle').click()">
+          <button class="lang-dropdown-toggle" id="floating-lang-toggle" aria-label="Language">
             <span class="lang-dropdown-current">AM</span>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px;"><path d="M6 9l6 6 6-6"/></svg>
           </button>
+          <div class="lang-dropdown-menu" id="floating-lang-menu">
+            <button class="lang-dropdown-item active" data-lang="am">AM<span class="lang-dropdown-label">Հայերեն</span></button>
+            <button class="lang-dropdown-item" data-lang="ru">RU<span class="lang-dropdown-label">Русский</span></button>
+            <button class="lang-dropdown-item" data-lang="en">EN<span class="lang-dropdown-label">English</span></button>
+          </div>
         </div>
       </div>
     </div>
