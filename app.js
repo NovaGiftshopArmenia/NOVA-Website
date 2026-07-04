@@ -2557,7 +2557,7 @@ function createSliderProductCard(product, badgeText) {
         </button>
       </div>
     </div>
-    <div class="product-card-category">${translatedCategory} &bull; ${product.brand}</div>
+    <div class="product-card-category">${product.brand}</div>
     <h3 class="product-card-name serif-title">${product.name}</h3>
 
     <div class="product-card-footer">
@@ -3166,7 +3166,7 @@ function createProductCard(product) {
         </button>
       </div>
     </div>
-    <div class="product-card-category">${translatedCategory} &bull; ${product.brand}</div>
+    <div class="product-card-category">${product.brand}</div>
     <h3 class="product-card-name serif-title">${product.name}</h3>
 
     <div class="product-card-footer">
