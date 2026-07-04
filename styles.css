@@ -1157,9 +1157,9 @@ header.header-scrolled .mega-product-thumb {
 
 .hero-bg-text {
   font-size: 14vw;
-  top: 50%;
+  top: 5%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translateX(-50%);
 }
 
 .gender-bg-text {
