@@ -857,7 +857,15 @@ const TRANSLATIONS = {
     modal_btn_save: "Сохранить Изменения",
     home_video_title: "Искусство Изысканного Выбора",
     home_video_paragraph: "Каждая капля парфюма Nova — это манифест роскоши и безупречного вкуса. Мы отбираем самые редкие и ценные парфюмерные компоненты со всего мира, создавая многогранную, раскрывающуюся историю на вашей коже. Nova — это ведущий бренд нишевой парфюмерии в Армении, создающий стойкие шлейфовые ароматы, которые заявляют о вашем присутствии без единого слова.",
-    home_video_cta: "Подробнее"
+    home_video_cta: "Подробнее",
+    promise_title_1: "Эксклюзивные Коллекции",
+    promise_desc_1: "Тщательно отобранные престижные, редкие и оригинальные дизайнерские ароматы в Армении.",
+    promise_title_2: "Стойкие Авторские Ароматы",
+    promise_desc_2: "Нишевые коллекции ароматов с мастерской концентрацией масел, обеспечивающие стойкий шлейфовый аромат.",
+    promise_title_3: "Экологичная Упаковка",
+    promise_desc_3: "Экологичная упаковка с биоразлагаемыми FSC коробками, хлопковыми этикетками и перерабатываемыми стеклянными бутылками.",
+    promise_title_4: "Доставка",
+    promise_desc_4: "Доставка по всей Армении"
   },
   en: {
     nav_about: "About Us",
@@ -1284,7 +1292,15 @@ const TRANSLATIONS = {
     modal_btn_save: "Save Changes",
     home_video_title: "The Art of Rare Curation",
     home_video_paragraph: "Every drop of Nova is a masterpiece of precision and luxury. We source the world’s finest premium ingredients, seamlessly blending rare elements to create an evolving sensory journey on your skin. As a premier niche fragrance brand in Armenia, Nova doesn’t just offer a scent—it crafts an unforgettable identity that lingers beautifully.",
-    home_video_cta: "Learn More"
+    home_video_cta: "Learn More",
+    promise_title_1: "Exclusively Curated Collections",
+    promise_desc_1: "Expertly curated selection of the world's most prestigious, rare, and authentic designer perfumes in Armenia.",
+    promise_title_2: "Long-Lasting Signature Scents",
+    promise_desc_2: "Hand-selected niche fragrance collections with masterful oil concentrations, ensuring a breathtaking, long-lasting signature scent.",
+    promise_title_3: "Sustainable Packaging",
+    promise_desc_3: "Eco-friendly perfume packaging featuring 100% biodegradable FSC boxes, cotton labels, and recyclable glass bottles.",
+    promise_title_4: "Delivery",
+    promise_desc_4: "Delivery across all of Armenia"
   }
 };
 
