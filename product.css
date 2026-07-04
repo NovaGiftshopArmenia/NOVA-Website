@@ -437,6 +437,9 @@ body:has(#product-page-body) {
   color: var(--color-black);
   position: relative;
   overflow: visible;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .pp-promises-section .promise-card::before {
