@@ -1625,8 +1625,8 @@ header.header-scrolled .lang-dropdown-label {
   top: 16px;
   right: 16px;
   z-index: 3;
-  width: 40px;
-  height: 40px;
+  width: 30px;
+  height: 30px;
   border: 1.5px solid rgba(255,255,255,0.7);
   border-radius: 50%;
   background: transparent;
@@ -1637,8 +1637,8 @@ header.header-scrolled .lang-dropdown-label {
 }
 
 .promise-card-arrow svg {
-  width: 18px;
-  height: 18px;
+  width: 15px;
+  height: 15px;
   color: #fff;
   transition: color 0.3s ease;
 }
