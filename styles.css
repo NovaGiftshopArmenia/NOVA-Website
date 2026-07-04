@@ -2283,9 +2283,28 @@ header.header-scrolled .lang-dropdown-label {
 @media (max-width: 768px) {
   .cat-grid {
     grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
   }
   .cat-card {
     min-height: 160px;
+  }
+  .cat-card-content {
+    padding: 12px;
+  }
+  .cat-card-title {
+    font-size: 0.75rem;
+    word-break: break-word;
+    overflow-wrap: break-word;
+  }
+  .cat-card .promise-card-arrow {
+    width: 24px;
+    height: 24px;
+    top: 10px;
+    right: 10px;
+  }
+  .cat-card .promise-card-arrow svg {
+    width: 13px;
+    height: 13px;
   }
 }
 
