@@ -1643,12 +1643,14 @@ header.header-scrolled .lang-dropdown-label {
   transition: color 0.3s ease;
 }
 
-.promise-card:hover .promise-card-arrow {
+.promise-card:hover .promise-card-arrow,
+.cat-card:hover .promise-card-arrow {
   background: #fff;
   border-color: #fff;
 }
 
-.promise-card:hover .promise-card-arrow svg {
+.promise-card:hover .promise-card-arrow svg,
+.cat-card:hover .promise-card-arrow svg {
   color: #000;
 }
 
