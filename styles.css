@@ -1599,6 +1599,7 @@ header.header-scrolled .lang-dropdown-label {
   text-decoration: none;
   color: #fff;
   border-radius: 8px;
+  cursor: default;
 }
 
 /* Pseudo-element for the blurred background image */
