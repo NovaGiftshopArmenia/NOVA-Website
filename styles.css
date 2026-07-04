@@ -199,15 +199,15 @@ img {
 
 /* --- HEADER & NAVIGATION --- */
 header {
-  border-bottom: var(--border-width) solid var(--color-border);
+  border-bottom: none;
   position: absolute;
-  /* Set to absolute first, not sticky/fixed */
   top: 0;
   left: 0;
   width: 100%;
-  background-color: var(--color-white);
-  color: var(--color-black);
+  background-color: transparent;
+  color: var(--color-white);
   z-index: 100;
+  padding: 10px 0;
   transition: background-color 0.4s ease, color 0.4s ease, transform 0.4s ease, opacity 0.4s ease, box-shadow 0.4s ease;
 }
 
@@ -952,7 +952,26 @@ header.header-scrolled .mega-product-thumb {
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  background-color: var(--color-light-gray);
+  background-color: #252525;
+}
+
+/* Hero background video */
+.hero-video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+}
+
+/* Dark overlay on top of video */
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(37, 37, 37, 0.65);
+  z-index: 1;
 }
 
 .hero .container {
@@ -988,11 +1007,12 @@ header.header-scrolled .mega-product-thumb {
   line-height: 1.15;
   margin-bottom: var(--spacing-lg);
   word-break: keep-all;
+  color: #f3ede1;
 }
 
 .hero-description {
   font-size: 1rem;
-  color: var(--color-medium-gray);
+  color: rgba(243, 237, 225, 0.7);
   margin-bottom: var(--spacing-xl);
   font-weight: 500;
 }
@@ -1085,14 +1105,13 @@ header.header-scrolled .mega-product-thumb {
 
 /* --- BRAND SLIDER SECTION --- */
 .brand-slider-section {
-  position: absolute;
-  bottom: 0;
-  left: 0;
+  position: relative;
   width: 100%;
   overflow: hidden;
   background-color: var(--color-white);
   padding: 16px 0;
   border-top: var(--border-width) solid var(--color-border);
+  border-bottom: var(--border-width) solid var(--color-border);
   z-index: 10;
 }
 
@@ -3775,15 +3794,20 @@ h2 {
 
 /* --- MOBILE NAVIGATION DRAWER & BUTTONS --- */
 .mobile-menu-icon-btn {
-  display: none;
+  display: flex;
   background: none;
   border: none;
-  color: var(--color-black);
+  color: inherit;
   cursor: pointer;
   padding: 4px;
   align-items: center;
   justify-content: center;
   transition: color var(--transition-smooth);
+}
+
+/* Hide desktop nav — hamburger is used on all screens */
+nav {
+  display: none !important;
 }
 
 .mobile-menu-icon-btn svg {
