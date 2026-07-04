@@ -1741,12 +1741,16 @@ header.header-scrolled .lang-dropdown-label {
     grid-template-columns: 1fr;
     grid-template-rows: auto;
   }
-  .promise-card {
-    min-height: 260px;
-  }
+  .promise-grid-chaotic .promise-card:nth-child(1),
+  .promise-grid-chaotic .promise-card:nth-child(2),
   .promise-grid-chaotic .promise-card:nth-child(3),
   .promise-grid-chaotic .promise-card:nth-child(4) {
     grid-column: 1;
+    grid-row: auto;
+  }
+  .promise-card {
+    min-height: 200px;
+    border-radius: 12px;
   }
 }
 
