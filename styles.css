@@ -2168,69 +2168,89 @@ header.header-scrolled .lang-dropdown-label {
   border-bottom: var(--border-width) solid var(--color-border);
 }
 
-.icon-categories-grid {
+.cat-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: var(--spacing-lg);
+  grid-template-rows: 280px 280px;
+  gap: 16px;
 }
 
-.icon-category-card {
+.cat-card {
+  position: relative;
+  overflow: hidden;
+  background-size: cover;
+  background-position: center;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: var(--spacing-xl) var(--spacing-lg);
-  border: var(--border-width) solid var(--color-border);
-  transition: var(--transition-smooth);
-  background-color: var(--color-white);
+  align-items: flex-end;
+  text-decoration: none;
+  color: #fff;
+  border-radius: 8px;
 }
 
-.icon-wrapper {
-  width: 56px;
-  height: 56px;
-  margin-bottom: var(--spacing-md);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--color-sage);
-  transition: transform 0.4s ease;
+/* Blurred background pseudo-element */
+.cat-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: inherit;
+  background-size: cover;
+  background-position: center;
+  filter: blur(6px);
+  transition: filter 0.5s ease;
+  z-index: 0;
 }
 
-.icon-wrapper svg {
-  width: 40px;
-  height: 40px;
+.cat-card:hover::before {
+  filter: blur(0);
 }
 
-.icon-category-title {
-  font-size: 0.75rem;
+/* Dark overlay */
+.cat-card-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.15) 60%, rgba(0,0,0,0.05) 100%);
+  z-index: 1;
+  transition: background 0.4s ease;
+}
+
+.cat-card:hover .cat-card-overlay {
+  background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.1) 50%, transparent 100%);
+}
+
+/* Content at bottom */
+.cat-card-content {
+  position: relative;
+  z-index: 2;
+  padding: 24px;
+  width: 100%;
+}
+
+.cat-card-title {
+  font-size: 1rem;
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: var(--color-medium-gray);
-  transition: var(--transition-fast);
-}
-
-.icon-category-card:hover {
-  border-color: var(--color-black);
-  background-color: var(--color-black);
-}
-
-.icon-category-card:hover .icon-wrapper {
-  transform: translateY(-5px);
-}
-
-.icon-category-card:hover .icon-category-title {
-  color: var(--color-white);
+  letter-spacing: 0.06em;
+  color: #fff;
 }
 
 @media (max-width: 1024px) {
-  .icon-categories-grid {
+  .cat-grid {
     grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: auto;
+  }
+  .cat-card {
+    min-height: 220px;
   }
 }
 
-
-
+@media (max-width: 768px) {
+  .cat-grid {
+    grid-template-columns: 1fr;
+  }
+  .cat-card {
+    min-height: 200px;
+  }
+}
 
 
 /* --- CART DRAWER --- */
