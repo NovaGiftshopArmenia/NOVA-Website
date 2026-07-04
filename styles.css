@@ -332,6 +332,25 @@ header {
   color: var(--color-black);
 }
 
+/* Floating hamburger: hidden on desktop, shown on mobile */
+.floating-hamburger {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .floating-hamburger {
+    display: flex;
+  }
+  .floating-header .floating-nav,
+  .floating-header .header-actions {
+    display: none !important;
+  }
+  .floating-header-inner {
+    justify-content: flex-start;
+    gap: 16px;
+  }
+}
+
 .header-container {
   display: flex;
   justify-content: space-between;
