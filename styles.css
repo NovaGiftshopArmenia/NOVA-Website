@@ -211,6 +211,45 @@ header {
   transition: background-color 0.4s ease, color 0.4s ease, transform 0.4s ease, opacity 0.4s ease, box-shadow 0.4s ease;
 }
 
+/* Header dark mode (non-home pages) */
+.header-dark {
+  color: var(--color-black);
+}
+
+.header-dark .nav-menu>li>a {
+  color: var(--color-medium-gray);
+}
+
+.header-dark .nav-menu>li>a:hover,
+.header-dark .nav-menu>li>a.active {
+  color: var(--color-black);
+}
+
+.header-dark .search-input {
+  border-bottom-color: var(--color-black);
+  color: var(--color-black);
+}
+
+.header-dark .search-input::placeholder {
+  color: #999;
+}
+
+.header-dark .search-input:focus {
+  border-bottom-color: var(--color-black);
+}
+
+.header-dark .search-btn,
+.header-dark .wishlist-icon-btn,
+.header-dark .cart-icon-btn,
+.header-dark .account-icon-btn,
+.header-dark .mobile-menu-icon-btn {
+  color: var(--color-black);
+}
+
+.header-dark .lang-dropdown-toggle {
+  color: var(--color-black);
+}
+
 /* --- FLOATING SCROLL HEADER (separate element) --- */
 .floating-header {
   position: fixed;

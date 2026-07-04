@@ -2055,6 +2055,19 @@ function initRouter() {
     // Scroll to top on page change
     window.scrollTo(0, 0);
 
+    // Toggle header dark mode for non-home pages
+    const mainHeader = document.getElementById('main-header');
+    const headerLogo = mainHeader ? mainHeader.querySelector('.logo-img') : null;
+    if (mainHeader) {
+      if (route === 'home') {
+        mainHeader.classList.remove('header-dark');
+        if (headerLogo) headerLogo.src = 'assets/logo-light-transparent.png';
+      } else {
+        mainHeader.classList.add('header-dark');
+        if (headerLogo) headerLogo.src = 'assets/logo-dark-transparent.png';
+      }
+    }
+
     // If entering admin dashboard, verify session and redirect if needed
     if (route === 'admin') {
       checkAdminSession();
