@@ -6121,6 +6121,36 @@ window.toggleProductFeatured = function(productId) {
   showToast(`${product.name.toUpperCase()} ${product.featured ? 'MARKED AS FEATURED' : 'REMOVED FROM FEATURED'}.`);
 };
 
+window.deleteProduct = async function(productId) {
+  const product = AppState.products.find(p => p.id === productId);
+  if (!product) return;
+  
+  const confirmed = confirm(`Are you sure you want to delete "${product.name}"? This cannot be undone.`);
+  if (!confirmed) return;
+  
+  // Remove from AppState
+  AppState.products = AppState.products.filter(p => p.id !== productId);
+  
+  // Delete from Sanity CMS
+  try {
+    await NovaSanity.deleteProduct(productId);
+  } catch (e) {
+    console.warn('[NOVA] Failed to delete from Sanity:', e);
+  }
+  
+  // Update local storage and UI
+  saveProductsToStorage();
+  renderShop();
+  renderFeaturedProducts();
+  refreshAdminDashboard();
+  
+  const session = JSON.parse(sessionStorage.getItem('nova_admin_session'));
+  if (session) {
+    logAdminActivity(session.name, `Deleted product: ${product.name}`);
+  }
+  showToast(`"${product.name}" HAS BEEN DELETED.`);
+};
+
 window.filterInventoryTable = function(query) {
   const tbody = document.getElementById('admin-inventory-tbody');
   if (!tbody) return;
