@@ -2055,12 +2055,15 @@ header.header-scrolled .lang-dropdown-label {
   display: flex;
   gap: var(--spacing-lg);
   overflow-x: auto;
-  scroll-behavior: smooth;
   padding-top: 16px;
   margin-top: -16px;
   padding-bottom: var(--spacing-lg);
   scrollbar-width: none;
-  /* Firefox */
+  /* Performance: GPU-accelerated scrolling */
+  -webkit-overflow-scrolling: touch;
+  will-change: scroll-position;
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 .slider-track::-webkit-scrollbar {
