@@ -1926,8 +1926,7 @@ header.header-scrolled .lang-dropdown-label {
 .product-card-image {
   width: 100%;
   height: 100%;
-  object-fit: contain;
-  padding: 12px;
+  object-fit: cover;
   transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1), filter 0.5s ease;
 }
 
