@@ -211,42 +211,53 @@ header {
   transition: background-color 0.4s ease, color 0.4s ease, transform 0.4s ease, opacity 0.4s ease, box-shadow 0.4s ease;
 }
 
-/* Scroll Fade In state */
-header.header-out {
-  opacity: 0;
-  transform: translateY(-100%);
-  transition: none !important;
-}
-
-header.header-scrolled {
+/* --- FLOATING SCROLL HEADER (separate element) --- */
+.floating-header {
   position: fixed;
   top: 12px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: fit-content;
+  left: 20px;
+  right: 20px;
+  width: auto;
   background-color: #fff;
   color: var(--color-black);
   border: 1px solid rgba(0, 0, 0, 0.08);
   border-radius: 12px;
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
-  animation: slideDownFade 0.75s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+  z-index: 100;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+  padding: 0;
+}
+
+.floating-header.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.floating-header-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 50px;
   padding: 0 24px;
 }
 
-header.header-scrolled .header-container {
-  height: 50px;
+.floating-header .search-input {
+  border-bottom-color: var(--color-black);
+  color: var(--color-black);
 }
 
-@keyframes slideDownFade {
-  from {
-    transform: translateY(-100%);
-    opacity: 0;
-  }
+.floating-header .search-input::placeholder {
+  color: #999;
+}
 
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
+.floating-header .lang-dropdown-toggle {
+  color: var(--color-black);
+}
+
+.floating-header .mobile-menu-icon-btn {
+  color: var(--color-black);
 }
 
 .header-container {

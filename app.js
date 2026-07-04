@@ -2080,30 +2080,16 @@ function initRouter() {
 
 // SCROLL HEADER TRANSITION SYSTEM
 function initScrollHeader() {
-  const header = document.querySelector('header');
-  if (!header) return;
+  const floatingHeader = document.getElementById('floating-header');
+  if (!floatingHeader) return;
 
   window.addEventListener('scroll', () => {
     const currentScroll = window.scrollY;
 
-    // Trigger after leaving the hero section (around 400px down)
     if (currentScroll > 400) {
-      if (!header.classList.contains('header-scrolled')) {
-        // Hide instantly
-        header.classList.add('header-out');
-        // Force reflow
-        header.offsetHeight;
-        // Slide down styled header
-        header.classList.add('header-scrolled');
-        header.classList.remove('header-out');
-      }
-    }
-    // Only remove sticky header when scrolling back up near the top (below 100px)
-    else if (currentScroll < 100) {
-      if (header.classList.contains('header-scrolled')) {
-        header.classList.remove('header-scrolled');
-        header.classList.remove('header-out');
-      }
+      floatingHeader.classList.add('visible');
+    } else if (currentScroll < 100) {
+      floatingHeader.classList.remove('visible');
     }
   });
 }

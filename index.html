@@ -261,6 +261,49 @@
     </div>
   </header>
 
+  <!-- --- FLOATING SCROLL HEADER (separate element) --- -->
+  <header id="floating-header" class="floating-header">
+    <div class="floating-header-inner">
+      <a href="#/home" class="logo"><img src="assets/logo-dark-transparent.png" alt="NOVA" class="logo-img"></a>
+      <div class="header-actions">
+        <div class="search-container">
+          <input type="text" id="floating-search-input" class="search-input floating-search" placeholder="SEARCH">
+          <button class="search-btn" aria-label="Search">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+          </button>
+        </div>
+        <button class="wishlist-icon-btn" aria-label="Wishlist" onclick="document.getElementById('wishlist-toggle-btn').click()">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+          </svg>
+        </button>
+        <button class="cart-icon-btn" aria-label="Cart" onclick="document.getElementById('cart-toggle-btn').click()">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+          </svg>
+        </button>
+        <button class="account-icon-btn" aria-label="My Account" onclick="document.querySelector('.account-menu .account-icon-btn').click()">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width:20px; height:20px;">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+          </svg>
+        </button>
+        <div class="lang-dropdown" id="floating-lang-dropdown">
+          <button class="lang-dropdown-toggle" aria-label="Language" onclick="document.getElementById('lang-dropdown-toggle').click()">
+            <span class="lang-dropdown-current">AM</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px;"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+        </div>
+        <button class="mobile-menu-icon-btn" aria-label="Menu" onclick="openMobileMenu()">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
   <!-- --- MAIN VIEWS CONTAINER --- -->
   <main>
     
