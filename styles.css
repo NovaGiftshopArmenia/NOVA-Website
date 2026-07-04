@@ -1008,8 +1008,8 @@ header.header-scrolled .mega-product-thumb {
 }
 
 .hero-title {
-  font-size: clamp(2.2rem, 3.8vw, 3.5rem);
-  line-height: 1.15;
+  font-size: 96px;
+  line-height: 1.05;
   margin-bottom: var(--spacing-lg);
   word-break: keep-all;
   color: #f3ede1;
@@ -1020,6 +1020,17 @@ header.header-scrolled .mega-product-thumb {
   color: rgba(243, 237, 225, 0.7);
   margin-bottom: var(--spacing-xl);
   font-weight: 500;
+}
+
+.hero .btn-primary {
+  background-color: transparent;
+  border: 1px solid #fff;
+  color: #fff;
+}
+
+.hero .btn-primary:hover {
+  background-color: #fff;
+  color: #000;
 }
 
 .hero-image-container {
@@ -2984,7 +2995,7 @@ footer {
 /* --- RESPONSIVE DESIGN --- */
 @media (max-width: 1024px) {
   .hero-title {
-    font-size: 3rem;
+    font-size: 48px;
   }
 
   .products-grid {
