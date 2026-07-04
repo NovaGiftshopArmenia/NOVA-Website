@@ -2145,7 +2145,7 @@ function initMegaMenu() {
         <img src="${prod.image}" alt="${prod.name}" class="mega-product-thumb">
         <div class="mega-product-info">
           <span class="mega-product-name">${prod.name}</span>
-          <span class="mega-product-tagline">${prod.tagline}</span>
+
         </div>
       `;
       panel.appendChild(item);
@@ -2202,7 +2202,7 @@ function initBrandsMegaMenu() {
         <img src="${prod.image}" alt="${prod.name}" class="mega-product-thumb">
         <div class="mega-product-info">
           <span class="mega-product-name">${prod.name}</span>
-          <span class="mega-product-tagline">${prod.tagline}</span>
+
         </div>
       `;
       panel.appendChild(item);
@@ -2559,7 +2559,7 @@ function createSliderProductCard(product, badgeText) {
     </div>
     <div class="product-card-category">${translatedCategory} &bull; ${product.brand}</div>
     <h3 class="product-card-name serif-title">${product.name}</h3>
-    <p class="product-card-tagline">${tagline}</p>
+
     <div class="product-card-footer">
       <span class="product-card-price">֏${formatPrice(product.price)}</span>
       <div class="product-card-rating">
@@ -3168,7 +3168,7 @@ function createProductCard(product) {
     </div>
     <div class="product-card-category">${translatedCategory} &bull; ${product.brand}</div>
     <h3 class="product-card-name serif-title">${product.name}</h3>
-    <p class="product-card-tagline">${tagline}</p>
+
     <div class="product-card-footer">
       <span class="product-card-price">֏${formatPrice(product.price)}</span>
       <div class="product-card-rating">
@@ -3990,7 +3990,8 @@ function renderProductPage(productId) {
   ppImg.src = productImageSrc || "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400' fill='%23f5f5f5'%3E%3Crect width='400' height='400'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23ccc' font-size='14' font-family='sans-serif'%3ENo Image%3C/text%3E%3C/svg%3E";
   document.getElementById('pp-category').innerText = `${translatedCategory} • ${product.brand}`;
   document.getElementById('pp-name').innerText = product.name;
-  document.getElementById('pp-tagline').innerText = tagline;
+  const ppTagline = document.getElementById('pp-tagline');
+  if (ppTagline) ppTagline.style.display = 'none';
   
   // Description with "Read More" — split at section headers
   const descEl = document.getElementById('pp-desc');
@@ -4643,7 +4644,7 @@ function renderSearchDropdown(query, dropdown) {
         <img src="${prod.image}" alt="${prod.name}" class="search-result-thumb">
         <div class="search-result-info">
           <span class="search-result-name">${prod.name}</span>
-          <span class="search-result-tagline">${prod.tagline}</span>
+
         </div>
         <span class="search-result-price">֏${formatPrice(prod.price)}</span>
       `;
@@ -5824,7 +5825,7 @@ window.saveProductFromEditor = async function() {
     const newRating = parseFloat(document.getElementById('pe-rating').value) || 0;
     const newReviewsCount = parseInt(document.getElementById('pe-reviews').value, 10) || 0;
     const newFeatured = document.getElementById('pe-featured').checked;
-    if (!newName || !newBrand || !newTagline || !newDescription || newSizes.length === 0 || isNaN(newStock)) {
+    if (!newName || !newBrand || !newDescription || newSizes.length === 0 || isNaN(newStock)) {
       showToast("PLEASE FILL IN ALL REQUIRED FIELDS. AT LEAST ONE SIZE PRICE IS REQUIRED.");
       _restoreBtn();
       return;
