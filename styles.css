@@ -233,6 +233,10 @@ header.header-scrolled {
   padding: 0 24px;
 }
 
+header.header-scrolled .header-container {
+  height: 50px;
+}
+
 @keyframes slideDownFade {
   from {
     transform: translateY(-100%);
