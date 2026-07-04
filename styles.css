@@ -2996,18 +2996,14 @@ footer {
 
   .hero {
     height: auto;
-    padding: 140px 0 var(--spacing-lg) 0;
-    flex-direction: column;
-    text-align: center;
+    min-height: 70vh;
+    padding: 120px 0 60px 0;
   }
 
   .hero-content {
     width: 100%;
     max-width: 100%;
-    margin-bottom: var(--spacing-lg);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    padding: 0 24px;
   }
 
   .hero-content div[style*="display: flex"] {
@@ -3020,18 +3016,6 @@ footer {
   .hero-content .btn-secondary {
     width: 100% !important;
     justify-content: center;
-  }
-
-  .hero-image-container {
-    position: relative;
-    width: calc(100% - 32px) !important;
-    margin: 0 16px 50px 16px !important;
-    height: 380px !important;
-    mask-image: none !important;
-    -webkit-mask-image: none !important;
-    border-radius: 16px !important;
-    overflow: hidden !important;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08) !important;
   }
 
   .gender-grid {
