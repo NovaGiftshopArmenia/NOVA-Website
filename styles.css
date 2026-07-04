@@ -340,14 +340,17 @@ header {
 @media (max-width: 768px) {
   .floating-hamburger {
     display: flex;
+    order: 2;
   }
   .floating-header .floating-nav,
   .floating-header .header-actions {
     display: none !important;
   }
   .floating-header-inner {
-    justify-content: flex-start;
-    gap: 16px;
+    justify-content: space-between;
+  }
+  .floating-header-inner .logo {
+    order: 1;
   }
 }
 
