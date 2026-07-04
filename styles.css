@@ -5080,6 +5080,11 @@ header.header-scrolled .mobile-menu-icon-btn {
     margin-bottom: 0 !important;
   }
 
+  /* Featured products on home page should NOT have header clearance */
+  #home-view .shop-view {
+    padding-top: 20px !important;
+  }
+
   /* Additional specific inner spacers */
   .reviews-slider-wrap {
     margin-top: 15px !important;
