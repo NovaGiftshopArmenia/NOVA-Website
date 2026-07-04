@@ -1933,6 +1933,10 @@ window.changeLanguage = function (lang) {
   if (searchInput) {
     searchInput.placeholder = TRANSLATIONS[lang]['search_placeholder'] || 'Search olfactory note...';
   }
+  const floatingSearchInput = document.getElementById('floating-search-input');
+  if (floatingSearchInput) {
+    floatingSearchInput.placeholder = TRANSLATIONS[lang]['search_placeholder'] || 'Search olfactory note...';
+  }
 
   const newsletterInput = document.querySelector('.newsletter-input');
   if (newsletterInput) {
@@ -3810,6 +3814,86 @@ window.initProductPage = function () {
   initProductInteractiveFeatures();
 };
 
+// SEARCH POPUP SYSTEM
+function initSearch() {
+  const containers = document.querySelectorAll('.search-container');
+  if (!containers.length) return;
+
+  // Collect all search inputs so we can sync them
+  const allInputs = [];
+
+  containers.forEach(container => {
+    const input = container.querySelector('.search-input');
+    const btn = container.querySelector('.search-btn');
+    if (!input) return;
+
+    allInputs.push(input);
+
+    // Create dropdown element dynamically
+    let dropdown = container.querySelector('.search-results-dropdown');
+    if (!dropdown) {
+      dropdown = document.createElement('div');
+      dropdown.className = 'search-results-dropdown';
+      container.appendChild(dropdown);
+    }
+
+    // Toggle active on container when focused
+    input.addEventListener('focus', () => {
+      container.classList.add('active');
+      renderSearchDropdown(input.value, dropdown);
+    });
+
+    input.addEventListener('blur', () => {
+      setTimeout(() => {
+        if (document.activeElement !== input) {
+          container.classList.remove('active');
+          dropdown.classList.remove('active');
+        }
+      }, 200);
+    });
+
+    // Handle clicking the search button
+    if (btn) {
+      btn.addEventListener('click', (e) => {
+        if (!container.classList.contains('active')) {
+          e.preventDefault();
+          input.focus();
+        } else if (input.value.trim() === '') {
+          e.preventDefault();
+          input.blur();
+        }
+      });
+    }
+
+    // Handle input event (typing) — sync all inputs
+    input.addEventListener('input', (e) => {
+      const query = e.target.value.toLowerCase().trim();
+
+      // Sync other search inputs
+      allInputs.forEach(otherInput => {
+        if (otherInput !== input) {
+          otherInput.value = e.target.value;
+        }
+      });
+
+      AppState.filters.search = query;
+      const isProductPage = window.location.pathname.endsWith('/product') || window.location.pathname.endsWith('/product.html');
+      if (!isProductPage && typeof renderShop === 'function') {
+        renderShop();
+      }
+
+      renderSearchDropdown(query, dropdown);
+    });
+  });
+
+  // Close search on Escape key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      allInputs.forEach(input => input.blur());
+    }
+  });
+}
+
 function initProductInteractiveFeatures() {
   // 1. Hover Inspect Zoom Magnifier
   const zoomContainer = document.getElementById('pp-zoom-container');
@@ -4495,71 +4579,7 @@ window.addEventListener('scroll', () => {
   }
 });
 
-// SEARCH POPUP SYSTEM
-function initSearch() {
-  const container = document.querySelector('.search-container');
-  const input = document.getElementById('search-input');
-  const btn = document.querySelector('.search-btn');
-  if (!container || !input) return;
 
-  // Create dropdown element dynamically
-  let dropdown = container.querySelector('.search-results-dropdown');
-  if (!dropdown) {
-    dropdown = document.createElement('div');
-    dropdown.className = 'search-results-dropdown';
-    container.appendChild(dropdown);
-  }
-
-  // Toggle active on container when focused
-  input.addEventListener('focus', () => {
-    container.classList.add('active');
-    renderSearchDropdown(input.value, dropdown);
-  });
-
-  input.addEventListener('blur', () => {
-    // Delay blur slightly so clicks on dropdown items can register first
-    setTimeout(() => {
-      if (document.activeElement !== input) {
-        container.classList.remove('active');
-        dropdown.classList.remove('active');
-      }
-    }, 200);
-  });
-
-  // Handle clicking the search button to expand/focus or close
-  if (btn) {
-    btn.addEventListener('click', (e) => {
-      if (!container.classList.contains('active')) {
-        e.preventDefault();
-        input.focus();
-      } else if (input.value.trim() === '') {
-        e.preventDefault();
-        input.blur();
-      }
-    });
-  }
-
-  // Handle input event (typing)
-  input.addEventListener('input', (e) => {
-    const query = e.target.value.toLowerCase().trim();
-
-    // Also update AppState.filters.search for the shop page if we are on index
-    AppState.filters.search = query;
-    const isProductPage = window.location.pathname.endsWith('/product') || window.location.pathname.endsWith('/product.html');
-    if (!isProductPage && typeof renderShop === 'function') {
-      renderShop();
-    }
-
-    renderSearchDropdown(query, dropdown);
-  });
-
-  // Close search on Escape key
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') {
-      input.blur();
-    }
-  });
-}
 
 function renderSearchDropdown(query, dropdown) {
   if (!query) {
