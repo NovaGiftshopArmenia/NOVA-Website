@@ -2234,6 +2234,7 @@ header.header-scrolled .lang-dropdown-label {
   filter: blur(6px);
   transition: filter 0.5s ease;
   z-index: 0;
+  transform: scale(1.1);
 }
 
 .cat-card:hover::before {
