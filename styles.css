@@ -2096,7 +2096,7 @@ header.header-scrolled .lang-dropdown-label {
 
 /* Slider Badges */
 .card-badge {
-  position: absolute;
+  display: none;
   top: 15px;
   left: 15px;
   background: var(--color-white);
