@@ -1640,6 +1640,7 @@ header.header-scrolled .lang-dropdown-label {
   width: 18px;
   height: 18px;
   color: #fff;
+  transform: rotate(-45deg);
   transition: color 0.3s ease;
 }
 
