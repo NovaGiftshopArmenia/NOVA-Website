@@ -2281,10 +2281,10 @@ header.header-scrolled .lang-dropdown-label {
 
 @media (max-width: 768px) {
   .cat-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
   }
   .cat-card {
-    min-height: 200px;
+    min-height: 160px;
   }
 }
 
