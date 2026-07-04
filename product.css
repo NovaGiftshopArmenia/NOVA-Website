@@ -426,16 +426,24 @@ body:has(#product-page-body) {
   gap: var(--spacing-xl);
 }
 
-.promise-card {
+.pp-promises-section .promise-card {
   background: var(--color-light-gray);
   border-radius: 16px;
   padding: var(--spacing-xl) var(--spacing-lg);
   border: 1px solid var(--color-border);
   text-align: center;
   transition: var(--transition-smooth);
+  cursor: default;
+  color: var(--color-black);
+  position: relative;
+  overflow: visible;
 }
 
-.promise-card:hover {
+.pp-promises-section .promise-card::before {
+  display: none;
+}
+
+.pp-promises-section .promise-card:hover {
   transform: translateY(-8px);
   box-shadow: 0 20px 40px -20px rgba(0,0,0,0.08);
   border-color: var(--color-sage);
@@ -456,7 +464,7 @@ body:has(#product-page-body) {
   height: 100%;
 }
 
-.promise-card h3 {
+.pp-promises-section .promise-card h3 {
   font-family: var(--font-serif);
   font-size: 1.5rem;
   font-weight: 400;
@@ -464,7 +472,7 @@ body:has(#product-page-body) {
   color: var(--color-black);
 }
 
-.promise-card p {
+.pp-promises-section .promise-card p {
   font-size: 0.95rem;
   color: var(--color-medium-gray);
   line-height: 1.6;

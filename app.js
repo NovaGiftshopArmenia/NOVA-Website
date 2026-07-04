@@ -4163,7 +4163,7 @@ function renderProductPage(productId) {
     // prioritize same category
     let sameCat = recommendations.filter(p => p.category === product.category);
     let others = recommendations.filter(p => p.category !== product.category);
-    let finalRecs = [...sameCat, ...others].slice(0, 3);
+    let finalRecs = [...sameCat, ...others].slice(0, 4);
 
     finalRecs.forEach(rec => {
       suggestionsGrid.appendChild(createProductCard(rec));
