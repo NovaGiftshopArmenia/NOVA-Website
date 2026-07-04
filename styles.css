@@ -221,15 +221,16 @@ header.header-out {
 header.header-scrolled {
   position: fixed;
   top: 12px;
-  left: 20px;
-  right: 20px;
-  width: auto;
+  left: 50%;
+  transform: translateX(-50%);
+  width: fit-content;
   background-color: #fff;
   color: var(--color-black);
   border: 1px solid rgba(0, 0, 0, 0.08);
   border-radius: 12px;
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
   animation: slideDownFade 0.75s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+  padding: 0 24px;
 }
 
 @keyframes slideDownFade {
