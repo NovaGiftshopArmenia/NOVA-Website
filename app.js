@@ -2503,7 +2503,7 @@ function renderSliders() {
 
   if (bestSellersTrack) {
     bestSellersTrack.innerHTML = '';
-    const bestSellers = AppState.products.filter(p => p.tags && p.tags.includes('Best Seller'));
+    const bestSellers = AppState.products.filter(p => p.tags && (p.tags.includes('Best Seller') || p.tags.includes('best-seller')));
     const bsBadge = TRANSLATIONS[AppState.language]['badge_bestseller'] || 'BEST SELLER';
     bestSellers.forEach(product => {
       bestSellersTrack.appendChild(createSliderProductCard(product, bsBadge));
@@ -2512,7 +2512,7 @@ function renderSliders() {
 
   if (newArrivalsTrack) {
     newArrivalsTrack.innerHTML = '';
-    const newArrivals = AppState.products.filter(p => p.tags && p.tags.includes('New'));
+    const newArrivals = AppState.products.filter(p => p.tags && (p.tags.includes('New') || p.tags.includes('new')));
     const npBadge = TRANSLATIONS[AppState.language]['badge_new_product'] || 'NEW PRODUCT';
     newArrivals.forEach(product => {
       newArrivalsTrack.appendChild(createSliderProductCard(product, npBadge));
