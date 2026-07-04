@@ -3000,6 +3000,11 @@ footer {
     padding: 120px 0 0 0;
   }
 
+  .brand-slider-section {
+    position: relative;
+    bottom: auto;
+  }
+
   .hero-content {
     width: 100%;
     max-width: 100%;
