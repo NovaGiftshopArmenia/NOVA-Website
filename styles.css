@@ -2995,15 +2995,13 @@ footer {
   }
 
   .hero {
-    height: auto;
-    min-height: auto;
-    padding: 120px 0 0 0;
+    height: 100vh;
+    min-height: 550px;
+    padding: 0;
   }
 
   .brand-slider-section {
-    position: relative;
-    bottom: auto;
-    margin: 32px 0;
+    margin: 0;
   }
 
   .hero-content {
