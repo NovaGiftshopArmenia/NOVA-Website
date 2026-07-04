@@ -5088,6 +5088,22 @@ header.header-scrolled .mobile-menu-icon-btn {
   /* Featured products on home page should NOT have header clearance */
   #home-view .shop-view {
     padding-top: 20px !important;
+    padding-bottom: 20px !important;
+  }
+
+  /* Force ALL section-level elements on home to have 20px spacing */
+  #home-view > section,
+  #home-view > div {
+    padding-top: 20px !important;
+    padding-bottom: 20px !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+  }
+
+  /* Override inline margin-bottom/margin-top 48px on featured section wrappers */
+  #home-view .shop-view .text-center {
+    margin-top: 15px !important;
+    margin-bottom: 15px !important;
   }
 
   /* Additional specific inner spacers */
