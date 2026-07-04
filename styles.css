@@ -3003,6 +3003,7 @@ footer {
   .brand-slider-section {
     position: relative;
     bottom: auto;
+    margin: 32px 0;
   }
 
   .hero-content {
