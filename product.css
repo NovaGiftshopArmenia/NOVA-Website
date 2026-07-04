@@ -601,7 +601,7 @@ body:has(#product-page-body) {
     overflow-y: visible;
   }
   .pp-title {
-    font-size: 1.6rem;
+    font-size: 52px !important;
   }
   .pp-price {
     font-size: 1.3rem;

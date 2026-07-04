@@ -5054,6 +5054,11 @@ header.header-scrolled .mobile-menu-icon-btn {
     min-width: 100%;
   }
 
+  /* ALL h1 headings on mobile must be 52px */
+  h1 {
+    font-size: 52px !important;
+  }
+
   /* Collapsed mobile spacing between sections - reduced to exactly 20px */
   .reviews-section,
   .instagram-section,
