@@ -1696,6 +1696,31 @@ header.header-scrolled .lang-dropdown-label {
 .cat-card:hover .promise-card-arrow {
   background: #fff;
   border-color: #fff;
+  width: 22px;
+  height: 22px;
+}
+
+/* Number labels inside circles on hover (category grid) */
+.cat-grid .cat-card .promise-card-arrow::after {
+  content: '';
+  position: absolute;
+  font-family: var(--font-sans);
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--color-black);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.cat-grid .cat-card:nth-child(1) .promise-card-arrow::after { content: '1'; }
+.cat-grid .cat-card:nth-child(2) .promise-card-arrow::after { content: '2'; }
+.cat-grid .cat-card:nth-child(3) .promise-card-arrow::after { content: '3'; }
+.cat-grid .cat-card:nth-child(4) .promise-card-arrow::after { content: '4'; }
+.cat-grid .cat-card:nth-child(5) .promise-card-arrow::after { content: '5'; }
+.cat-grid .cat-card:nth-child(6) .promise-card-arrow::after { content: '6'; }
+
+.cat-grid .cat-card:hover .promise-card-arrow::after {
+  opacity: 1;
 }
 
 /* Dark overlay */
