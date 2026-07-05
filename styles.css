@@ -1687,21 +1687,13 @@ header.header-scrolled .lang-dropdown-label {
 }
 
 .promise-card-arrow svg {
-  width: 17px;
-  height: 17px;
-  color: #fff;
-  transition: color 0.3s ease;
+  display: none;
 }
 
 .promise-card:hover .promise-card-arrow,
 .cat-card:hover .promise-card-arrow {
   background: #fff;
   border-color: #fff;
-}
-
-.promise-card:hover .promise-card-arrow svg,
-.cat-card:hover .promise-card-arrow svg {
-  color: #000;
 }
 
 /* Dark overlay */
