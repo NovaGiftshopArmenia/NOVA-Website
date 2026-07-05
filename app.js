@@ -3649,14 +3649,38 @@ function closeCartDrawer() {
 }
 
 window.openMobileMenu = function () {
-  const overlay = document.getElementById('mobile-menu-drawer-overlay');
-  if (overlay) overlay.classList.add('active');
+  if (window.innerWidth > 768) {
+    openDesktopMenu();
+  } else {
+    const overlay = document.getElementById('mobile-menu-drawer-overlay');
+    if (overlay) overlay.classList.add('active');
+  }
 };
 
 window.closeMobileMenu = function () {
   const overlay = document.getElementById('mobile-menu-drawer-overlay');
   if (overlay) overlay.classList.remove('active');
 };
+
+window.openDesktopMenu = function () {
+  const overlay = document.getElementById('desktop-menu-overlay');
+  if (overlay) overlay.classList.add('active');
+};
+
+window.closeDesktopMenu = function () {
+  const overlay = document.getElementById('desktop-menu-overlay');
+  if (overlay) overlay.classList.remove('active');
+};
+
+// Close desktop menu on overlay click
+(function() {
+  const dOverlay = document.getElementById('desktop-menu-overlay');
+  if (dOverlay) {
+    dOverlay.addEventListener('click', function(e) {
+      if (e.target === dOverlay) closeDesktopMenu();
+    });
+  }
+})();
 
 // WISHLIST FUNCTIONAL SYSTEM
 window.toggleWishlist = function (productId) {
