@@ -5164,8 +5164,10 @@ header.header-scrolled .mobile-menu-icon-btn {
     font-size: 1.75rem !important;
   }
 
+  /* h1 titles must be 52px on mobile */
+  h1.serif-title,
   .shop-title.serif-title {
-    font-size: 2rem !important;
+    font-size: 52px !important;
   }
 }
 
