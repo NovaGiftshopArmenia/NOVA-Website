@@ -3,7 +3,8 @@
 /* --- DESIGN SYSTEM TOKENS --- */
 :root {
   --color-white: #FFFFFF;
-  --color-sage: #B5836B;
+  --color-sage: #C4BEAE;
+  --color-brown: #B5836B;
   --color-sage-light: #F0EEEA;
   --color-black: #252525;
   --color-dark-gray: #1E1E1E;
@@ -5879,7 +5880,7 @@ header.header-scrolled .mobile-menu-icon-btn {
 
 /* Floral color */
 .chart-bar-wrap:nth-child(3) .chart-bar {
-  background-color: #B5836B;
+  background-color: #C4BEAE;
 }
 
 /* Citrus color */
