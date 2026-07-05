@@ -2244,8 +2244,13 @@ function initBrandsMegaMenu() {
     });
   });
 
-  // Initial populate with NOVA
-  renderBrandsMegaCategory('NOVA');
+  // Initial populate with first available brand (skip NOVA)
+  const firstBrandEl = [...brandItems].find(i => (i.getAttribute('data-mega-brand') || '').toUpperCase() !== 'NOVA');
+  if (firstBrandEl) {
+    renderBrandsMegaCategory(firstBrandEl.getAttribute('data-mega-brand'));
+    brandItems.forEach(i => i.classList.remove('active'));
+    firstBrandEl.classList.add('active');
+  }
 }
 
 // EVENT LISTENERS SETUP
@@ -3024,7 +3029,8 @@ window.renderFilterWidgets = function (containerId, isMobile) {
   const brandList = document.createElement('div');
   brandList.className = 'swatches-wrap';
 
-  const allBrands = ["NOVA", "Byredo", "Le Labo"];
+  // Dynamically collect brands from actual products, excluding NOVA
+  const allBrands = [...new Set(AppState.products.map(p => p.brand).filter(b => b && b.toUpperCase() !== 'NOVA'))].sort((a, b) => a.localeCompare(b));
   allBrands.forEach(brand => {
     const isActive = filtersState.brands.some(b => b.toLowerCase() === brand.toLowerCase());
     const button = document.createElement('button');
@@ -5449,7 +5455,7 @@ function populateEditorBrandDropdown(selectedBrand) {
   // Collect brands from DB, existing products, and ensure selected is included
   const dbBrands = NovaDB.getBrands() || [];
   const brandSet = new Set(Array.isArray(dbBrands) ? dbBrands.map(b => typeof b === 'string' ? b : (b.name || b)) : []);
-  brandSet.add('NOVA');
+  // Note: NOVA brand excluded from public-facing areas but available in admin editor
   
   // Add brands from all existing products
   if (AppState.products && AppState.products.length > 0) {
@@ -6313,7 +6319,7 @@ window.deleteOrder = function(orderId) {
 // ============================================
 
 // Default brands
-const DEFAULT_BRANDS = ['NOVA', 'Dior', 'Chanel', 'Tom Ford', 'Versace', 'Paco Rabanne', 'Yves Saint Laurent', 'Giorgio Armani', 'Gucci', 'Burberry', 'Dolce & Gabbana', 'Hermès', 'Lancôme', 'Calvin Klein', 'Hugo Boss', 'Givenchy', 'Prada', 'Valentino', 'Bvlgari', 'Montblanc'];
+const DEFAULT_BRANDS = ['Dior', 'Chanel', 'Tom Ford', 'Versace', 'Paco Rabanne', 'Yves Saint Laurent', 'Giorgio Armani', 'Gucci', 'Burberry', 'Dolce & Gabbana', 'Hermès', 'Lancôme', 'Calvin Klein', 'Hugo Boss', 'Givenchy', 'Prada', 'Valentino', 'Bvlgari', 'Montblanc'];
 
 function getBrands() {
   const stored = NovaDB.getBrands();
@@ -6334,7 +6340,7 @@ function renderBrandSlider() {
   const list2 = document.getElementById('brand-slider-list-2');
   if (!list1 || !list2) return;
 
-  const brands = getBrands();
+  const brands = getBrands().filter(b => b.toUpperCase() !== 'NOVA');
   const buildItems = () => brands.map(brand => {
     const span = document.createElement('span');
     span.className = 'brand-slider-item';
