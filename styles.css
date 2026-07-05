@@ -3,13 +3,13 @@
 /* --- DESIGN SYSTEM TOKENS --- */
 :root {
   --color-white: #FFFFFF;
-  --color-sage: #C4BEAE;
+  --color-sage: #B5836B;
   --color-sage-light: #F0EEEA;
   --color-black: #252525;
   --color-dark-gray: #1E1E1E;
   --color-medium-gray: #767676;
   --color-light-gray: #F9F9F8;
-  --color-border: #E5E2DB;
+  --color-border: #B5836B;
 
   --font-serif: 'Cormorant Garamond', Georgia, serif;
   --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
@@ -5879,7 +5879,7 @@ header.header-scrolled .mobile-menu-icon-btn {
 
 /* Floral color */
 .chart-bar-wrap:nth-child(3) .chart-bar {
-  background-color: #C4BEAE;
+  background-color: #B5836B;
 }
 
 /* Citrus color */
