@@ -1705,6 +1705,9 @@ function addProductGetters(productsArray) {
   });
 }
 
+// Price range max for AMD currency (500,000 AMD)
+const PRICE_RANGE_MAX = 500000;
+
 // APP STATE
 const AppState = {
   products: [], // Empty by default; loaded from Firestore on init (DO NOT pre-fill with INITIAL_PRODUCTS)
@@ -1725,7 +1728,7 @@ const AppState = {
     vibes: [],
     sizes: [],
     brands: [],
-    priceRange: { min: 0, max: 400 }
+    priceRange: { min: 0, max: PRICE_RANGE_MAX }
   },
   selectedProduct: null,
   selectedSize: '100ml', // default size selection
@@ -2297,7 +2300,7 @@ function initEventListeners() {
       TempMobileFilters.vibes = [];
       TempMobileFilters.sizes = [];
       TempMobileFilters.brands = [];
-      TempMobileFilters.priceRange = { min: 0, max: 400 };
+      TempMobileFilters.priceRange = { min: 0, max: PRICE_RANGE_MAX };
       TempMobileFilters.search = '';
       renderFilterWidgets('mobile-drawer-filters', true);
     });
@@ -2681,8 +2684,8 @@ function renderShop() {
       );
     }
 
-    // Filter Price Range
-    if (AppState.filters.priceRange) {
+    // Filter Price Range (only apply when user has changed from defaults)
+    if (AppState.filters.priceRange && (AppState.filters.priceRange.min > 0 || AppState.filters.priceRange.max < PRICE_RANGE_MAX)) {
       filtered = filtered.filter(p => {
         return p.price >= AppState.filters.priceRange.min && p.price <= AppState.filters.priceRange.max;
       });
@@ -2809,7 +2812,7 @@ window.applyPresetFilter = function (type, value) {
   AppState.filters.vibes = [];
   AppState.filters.sizes = [];
   AppState.filters.brands = [];
-  AppState.filters.priceRange = { min: 0, max: 400 };
+  AppState.filters.priceRange = { min: 0, max: PRICE_RANGE_MAX };
   AppState.filters.search = '';
   AppState.filters.tag = '';
 
@@ -2863,7 +2866,7 @@ window.renderFilterWidgets = function (containerId, isMobile) {
       AppState.filters.vibes = [];
       AppState.filters.sizes = [];
       AppState.filters.brands = [];
-      AppState.filters.priceRange = { min: 0, max: 400 };
+      AppState.filters.priceRange = { min: 0, max: PRICE_RANGE_MAX };
       AppState.filters.search = '';
       AppState.filters.tag = '';
 
@@ -3060,12 +3063,12 @@ window.renderFilterWidgets = function (containerId, isMobile) {
   sliderContainer.innerHTML = `
     <div class="price-slider-track-wrap">
       <div class="price-slider-track" id="${isMobile ? 'm' : 'd'}-slider-track"></div>
-      <input type="range" min="0" max="400" value="${minVal}" class="min-price-slider" id="${isMobile ? 'm' : 'd'}-min-price-input" aria-label="Min price">
-      <input type="range" min="0" max="400" value="${maxVal}" class="max-price-slider" id="${isMobile ? 'm' : 'd'}-max-price-input" aria-label="Max price">
+      <input type="range" min="0" max="${PRICE_RANGE_MAX}" value="${minVal}" class="min-price-slider" id="${isMobile ? 'm' : 'd'}-min-price-input" aria-label="Min price">
+      <input type="range" min="0" max="${PRICE_RANGE_MAX}" value="${maxVal}" class="max-price-slider" id="${isMobile ? 'm' : 'd'}-max-price-input" aria-label="Max price">
     </div>
     <div class="price-range-values">
-      <span>$<span id="${isMobile ? 'm' : 'd'}-min-val">${minVal}</span></span>
-      <span>$<span id="${isMobile ? 'm' : 'd'}-max-val">${maxVal}</span></span>
+      <span>֏<span id="${isMobile ? 'm' : 'd'}-min-val">${formatPrice(minVal)}</span></span>
+      <span>֏<span id="${isMobile ? 'm' : 'd'}-max-val">${formatPrice(maxVal)}</span></span>
     </div>
   `;
 
@@ -3090,14 +3093,14 @@ window.renderFilterWidgets = function (containerId, isMobile) {
     const finalMin = Math.min(parseInt(minInput.value), parseInt(maxInput.value));
     const finalMax = Math.max(parseInt(minInput.value), parseInt(maxInput.value));
 
-    minText.innerText = finalMin;
-    maxText.innerText = finalMax;
+    minText.innerText = formatPrice(finalMin);
+    maxText.innerText = formatPrice(finalMax);
 
     filtersState.priceRange.min = finalMin;
     filtersState.priceRange.max = finalMax;
 
-    const pctMin = (finalMin / 400) * 100;
-    const pctMax = (finalMax / 400) * 100;
+    const pctMin = (finalMin / PRICE_RANGE_MAX) * 100;
+    const pctMax = (finalMax / PRICE_RANGE_MAX) * 100;
 
     track.style.left = `${pctMin}%`;
     track.style.width = `${pctMax - pctMin}%`;
