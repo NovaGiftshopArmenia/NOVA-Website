@@ -5099,6 +5099,13 @@ header.header-scrolled .mobile-menu-icon-btn {
     font-size: 52px !important;
   }
 
+  /* Hero must cover full viewport on mobile */
+  .hero {
+    height: 100vh !important;
+    height: 100dvh !important;
+    min-height: unset !important;
+  }
+
   /* Collapsed mobile spacing between sections - reduced to exactly 20px */
   .reviews-section,
   .instagram-section,
