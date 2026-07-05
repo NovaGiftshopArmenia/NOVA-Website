@@ -359,6 +359,28 @@ header {
   }
 }
 
+/* --- Floating Header Mega Menu Support --- */
+.floating-nav-menu > .menu-item-products,
+.floating-nav-menu > .menu-item-brands {
+  position: static;
+}
+
+.floating-nav-menu .mega-menu {
+  position: fixed;
+  top: 80px;
+  left: 0;
+  right: 0;
+  width: 100%;
+  border-top: none;
+}
+
+.floating-nav-menu .menu-item-products:hover > .mega-menu,
+.floating-nav-menu .menu-item-brands:hover > .mega-menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
 .header-container {
   display: flex;
   justify-content: space-between;

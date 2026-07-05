@@ -224,7 +224,7 @@ const TRANSLATIONS = {
     mobile_sec_languages: "Լեզուներ",
     nav_contact: "Հետադարձ Կապ",
     contact_header_title: "ՀԵՏԱԴԱՐՁ ԿԱՊ",
-    contact_subtitle: "Կապվեք Մեզ Հետ",
+    contact_subtitle: "Եկեք զրուցենք",
     contact_desc: "Ունե՞ք հարցեր կամ ցանկանում եք պատվիրել անհատական բույր։ Մեր կոնսյերժը սիրով կօգնի ձեզ։",
     contact_address_label: "Հասցե",
     contact_phone_label: "Հեռախոս",
@@ -651,7 +651,7 @@ const TRANSLATIONS = {
     mobile_sec_languages: "Языки",
     nav_contact: "Контакты",
     contact_header_title: "КОНТАКТЫ",
-    contact_subtitle: "Связаться с нами",
+    contact_subtitle: "Давайте Поговорим",
     contact_desc: "Есть вопросы или хотите заказать индивидуальный аромат? Наш консьерж будет рад помочь вам.",
     contact_address_label: "Адрес",
     contact_phone_label: "Телефон",
@@ -1086,7 +1086,7 @@ const TRANSLATIONS = {
     mobile_sec_languages: "Languages",
     nav_contact: "Contact",
     contact_header_title: "CONTACT US",
-    contact_subtitle: "Get In Touch",
+    contact_subtitle: "Let's Talk",
     contact_desc: "Have questions or want to request a bespoke fragrance consultation? Our concierge is here to assist you.",
     contact_address_label: "Address",
     contact_address_value: "C. Vedi, Armenia",
@@ -2135,9 +2135,17 @@ function initScrollHeader() {
 
 // PRODUCTS MEGA MENU HOVER SYSTEM
 function initMegaMenu() {
-  const catItems = document.querySelectorAll('.mega-cat-item');
-  const panel = document.getElementById('mega-products-panel');
-  if (!panel) return;
+  // Initialize for both main header and floating header
+  _initMegaMenuFor('#mega-categories', 'mega-products-panel');
+  _initMegaMenuFor('#floating-mega-categories', 'floating-mega-products-panel');
+}
+
+function _initMegaMenuFor(categoriesSelector, panelId) {
+  const container = document.querySelector(categoriesSelector);
+  const panel = document.getElementById(panelId);
+  if (!container || !panel) return;
+
+  const catItems = container.querySelectorAll('.mega-cat-item');
 
   const renderMegaCategory = (categoryName) => {
     panel.innerHTML = '';
@@ -2166,7 +2174,6 @@ function initMegaMenu() {
         <img src="${prod.image}" alt="${prod.name}" class="mega-product-thumb">
         <div class="mega-product-info">
           <span class="mega-product-name">${prod.name}</span>
-
         </div>
       `;
       panel.appendChild(item);
@@ -2199,9 +2206,17 @@ function initMegaMenu() {
 
 // BRANDS MEGA MENU HOVER SYSTEM
 function initBrandsMegaMenu() {
-  const brandItems = document.querySelectorAll('#brands-mega-categories .mega-cat-item');
-  const panel = document.getElementById('brands-mega-products-panel');
-  if (!panel) return;
+  // Initialize for both main header and floating header
+  _initBrandsMegaMenuFor('#brands-mega-categories', 'brands-mega-products-panel');
+  _initBrandsMegaMenuFor('#floating-brands-mega-categories', 'floating-brands-mega-products-panel');
+}
+
+function _initBrandsMegaMenuFor(categoriesSelector, panelId) {
+  const container = document.querySelector(categoriesSelector);
+  const panel = document.getElementById(panelId);
+  if (!container || !panel) return;
+
+  const brandItems = container.querySelectorAll('.mega-cat-item');
 
   const renderBrandsMegaCategory = (brandName) => {
     panel.innerHTML = '';
@@ -2223,7 +2238,6 @@ function initBrandsMegaMenu() {
         <img src="${prod.image}" alt="${prod.name}" class="mega-product-thumb">
         <div class="mega-product-info">
           <span class="mega-product-name">${prod.name}</span>
-
         </div>
       `;
       panel.appendChild(item);
