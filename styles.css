@@ -5127,9 +5127,10 @@ header.header-scrolled .mobile-menu-icon-btn {
   /* Hero must cover full viewport on mobile */
   .hero {
     height: 100vh !important;
-    height: -webkit-fill-available !important;
+    height: 100svh !important;
     min-height: 100vh !important;
-    min-height: -webkit-fill-available !important;
+    min-height: 100svh !important;
+    max-height: none !important;
   }
 
   /* Collapsed mobile spacing between sections - reduced to exactly 20px */
