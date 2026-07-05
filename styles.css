@@ -5091,7 +5091,11 @@ header.header-scrolled .mobile-menu-icon-btn {
   }
 
   /* ALL h1 headings on mobile must be 52px */
-  h1 {
+  h1,
+  .hero-title,
+  .shop-title,
+  .about-hero h1,
+  .about-first-heading {
     font-size: 52px !important;
   }
 
