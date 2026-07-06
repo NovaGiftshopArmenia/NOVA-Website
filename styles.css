@@ -6794,7 +6794,7 @@ header.header-scrolled .mobile-menu-icon-btn {
   background: transparent;
   color: var(--color-black);
   border: 1px solid var(--color-black);
-  border-radius: 0;
+  border-radius: 10px;
   transition: background 0.35s ease, color 0.35s ease;
 }
 
