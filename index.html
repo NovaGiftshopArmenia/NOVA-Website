@@ -554,6 +554,17 @@
       <section class="icon-categories-section">
         <div class="container">
           <div class="cat-grid">
+            <!-- Gifts (tall card spanning 2 rows) -->
+            <a href="#/shop" onclick="event.preventDefault(); applyPresetFilter('tag', 'Gift');" class="cat-card cat-card--tall" style="background-image: url('assets/gifts-filter.webp')">
+              <div class="cat-card-overlay"></div>
+              <span class="promise-card-arrow">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25"/></svg>
+              </span>
+              <div class="cat-card-content">
+                <h3 class="cat-card-title" data-trans="cat_gifts">Gifts</h3>
+              </div>
+            </a>
+
             <!-- Men -->
             <a href="#/shop" onclick="event.preventDefault(); applyPresetFilter('gender', 'men');" class="cat-card" style="background-image: url('assets/men-filter.webp')">
               <div class="cat-card-overlay"></div>
@@ -576,17 +587,6 @@
               </div>
             </a>
 
-            <!-- Gifts -->
-            <a href="#/shop" onclick="event.preventDefault(); applyPresetFilter('tag', 'Gift');" class="cat-card" style="background-image: url('assets/gifts-filter.webp')">
-              <div class="cat-card-overlay"></div>
-              <span class="promise-card-arrow">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25"/></svg>
-              </span>
-              <div class="cat-card-content">
-                <h3 class="cat-card-title" data-trans="cat_gifts">Gifts</h3>
-              </div>
-            </a>
-
             <!-- Best Sellers -->
             <a href="#/shop" onclick="event.preventDefault(); applyPresetFilter('tag', 'Best Seller');" class="cat-card" style="background-image: url('assets/bestsellers-filter.webp')">
               <div class="cat-card-overlay"></div>
@@ -606,17 +606,6 @@
               </span>
               <div class="cat-card-content">
                 <h3 class="cat-card-title" data-trans="cat_new">New Arrivals</h3>
-              </div>
-            </a>
-
-            <!-- For Home -->
-            <a href="#/shop" onclick="event.preventDefault(); applyPresetFilter('tag', 'Home');" class="cat-card" style="background-image: url('assets/for-home-filter.webp')">
-              <div class="cat-card-overlay"></div>
-              <span class="promise-card-arrow">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25"/></svg>
-              </span>
-              <div class="cat-card-content">
-                <h3 class="cat-card-title" data-trans="cat_home">For Home</h3>
               </div>
             </a>
 
@@ -1365,7 +1354,6 @@
                   <label class="pe-checkbox-item"><input type="checkbox" id="pe-tag-bestseller" value="Best Seller"> Best Seller</label>
                   <label class="pe-checkbox-item"><input type="checkbox" id="pe-tag-new" value="New"> New</label>
                   <label class="pe-checkbox-item"><input type="checkbox" id="pe-tag-gift" value="Gift"> Gift</label>
-                  <label class="pe-checkbox-item"><input type="checkbox" id="pe-tag-home" value="Home"> Home</label>
                 </div>
               </div>
             </div>

@@ -2222,9 +2222,13 @@ header.header-scrolled .lang-dropdown-label {
 
 .cat-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: 1fr 1fr 1fr;
   grid-template-rows: 280px 280px;
   gap: 16px;
+}
+
+.cat-card--tall {
+  grid-row: 1 / 3;
 }
 
 .cat-card {
@@ -2275,6 +2279,11 @@ header.header-scrolled .lang-dropdown-label {
   }
   .cat-card {
     min-height: 220px;
+  }
+  .cat-card--tall {
+    grid-column: 1 / -1;
+    grid-row: auto;
+    min-height: 280px;
   }
 }
 
