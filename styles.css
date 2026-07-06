@@ -6737,14 +6737,18 @@ header.header-scrolled .mobile-menu-icon-btn {
 }
 
 .video-showcase-card {
-  position: relative;
-  height: 400px;
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  align-items: stretch;
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 8px 40px rgba(0, 0, 0, 0.08);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  min-height: 480px;
+}
+
+.video-showcase-left {
+  position: relative;
+  overflow: hidden;
 }
 
 .video-showcase-bg {
@@ -6754,54 +6758,48 @@ header.header-scrolled .mobile-menu-icon-btn {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  z-index: 0;
 }
 
-.video-showcase-overlay {
-  position: absolute;
-  inset: 0;
-  background: rgba(37, 37, 37, 0.5);
-  z-index: 1;
-  border-radius: 12px;
-}
-
-.video-showcase-content {
-  position: relative;
-  z-index: 2;
+.video-showcase-right {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  text-align: center;
+  align-items: flex-start;
+  justify-content: center;
   gap: var(--spacing-md);
-  max-width: 640px;
-  padding: 0 24px;
+  padding: 50px 50px;
+  background-color: var(--color-sage-light);
 }
 
 .video-showcase-title {
-  font-size: 2.4rem;
+  font-size: 2.2rem;
   line-height: 1.2;
   margin: 0;
-  color: #fff;
+  color: var(--color-black);
 }
 
 .video-showcase-text {
   font-size: 0.9rem;
   line-height: 1.7;
-  color: rgba(255, 255, 255, 0.85);
+  color: var(--color-medium-gray);
   margin: 0;
   font-weight: 300;
 }
 
 .video-showcase-btn {
   margin-top: 8px;
+  padding: 12px 28px;
+  font-size: 0.8rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
   background: transparent;
-  color: #fff;
-  border: 1px solid #fff;
+  color: var(--color-black);
+  border: 1px solid var(--color-black);
+  transition: background 0.35s ease, color 0.35s ease;
 }
 
 .video-showcase-btn:hover {
-  background: #fff;
-  color: var(--color-black);
+  background: var(--color-black);
+  color: var(--color-white);
 }
 
 @media (max-width: 768px) {
@@ -6809,7 +6807,15 @@ header.header-scrolled .mobile-menu-icon-btn {
     padding: 60px 0;
   }
   .video-showcase-card {
-    height: 350px;
+    grid-template-columns: 1fr;
+    min-height: auto;
+  }
+  .video-showcase-left {
+    min-height: 280px;
+  }
+  .video-showcase-right {
+    padding: 30px 24px;
+    gap: 16px;
   }
   .video-showcase-title {
     font-size: 1.8rem;
