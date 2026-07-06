@@ -2228,6 +2228,32 @@ header.header-scrolled .lang-dropdown-label {
   color: #fff;
 }
 
+/* Arrow circle top-right */
+.promise-card-arrow {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 3;
+  width: 16px;
+  height: 16px;
+  border: 1.5px solid rgba(255,255,255,0.7);
+  border-radius: 50%;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.45s ease, border-color 0.45s ease;
+}
+
+.promise-card-arrow svg {
+  display: none;
+}
+
+.cat-card:hover .promise-card-arrow {
+  background: #fff;
+  border-color: #fff;
+}
+
 @media (max-width: 1024px) {
   .cat-grid {
     grid-template-columns: repeat(2, 1fr);
