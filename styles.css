@@ -6738,7 +6738,7 @@ header.header-scrolled .mobile-menu-icon-btn {
 
 .video-showcase-card {
   position: relative;
-  height: 500px;
+  height: 400px;
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 8px 40px rgba(0, 0, 0, 0.08);
@@ -6794,6 +6794,9 @@ header.header-scrolled .mobile-menu-icon-btn {
 
 .video-showcase-btn {
   margin-top: 8px;
+  background: #fff;
+  color: var(--color-black);
+  border-color: #fff;
 }
 
 @media (max-width: 768px) {
@@ -6801,7 +6804,7 @@ header.header-scrolled .mobile-menu-icon-btn {
     padding: 60px 0;
   }
   .video-showcase-card {
-    height: 420px;
+    height: 350px;
   }
   .video-showcase-title {
     font-size: 1.8rem;
