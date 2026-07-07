@@ -1917,31 +1917,36 @@ function initScrollAnimations() {
   if (!homeView) return;
 
   // Respect reduced motion preference
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    homeView.querySelectorAll('[data-anim]').forEach(el => el.classList.add('anim-in'));
+    return;
+  }
 
-  const animEls = homeView.querySelectorAll('[data-anim]');
-  if (!animEls.length) return;
+  // Wait for layout to settle before observing
+  requestAnimationFrame(() => {
+    const animEls = homeView.querySelectorAll('[data-anim]');
+    if (!animEls.length) return;
 
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        const el = entry.target;
-        // Apply delay if specified
-        const delay = el.getAttribute('data-anim-delay');
-        if (delay) {
-          setTimeout(() => el.classList.add('anim-in'), parseInt(delay));
-        } else {
-          el.classList.add('anim-in');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const el = entry.target;
+          const delay = el.getAttribute('data-anim-delay');
+          if (delay) {
+            setTimeout(() => el.classList.add('anim-in'), parseInt(delay));
+          } else {
+            el.classList.add('anim-in');
+          }
+          observer.unobserve(el);
         }
-        observer.unobserve(el); // Fire once only
-      }
+      });
+    }, {
+      threshold: 0.1,
+      rootMargin: '0px 0px -20px 0px'
     });
-  }, {
-    threshold: 0.15,
-    rootMargin: '0px 0px -40px 0px'
-  });
 
-  animEls.forEach(el => observer.observe(el));
+    animEls.forEach(el => observer.observe(el));
+  });
 }
 
 // LANGUAGE CHANGE ACTION
