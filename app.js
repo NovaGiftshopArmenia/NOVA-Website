@@ -1906,7 +1906,30 @@ window.addEventListener('DOMContentLoaded', async () => {
 
   // Initialize default language
   changeLanguage(AppState.language);
+
+  // === SCROLL ANIMATIONS ===
+  initScrollAnimations();
 });
+
+// Scroll Animations — Progressive Enhancement
+function initScrollAnimations() {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  // --- Brand Promise Cards ---
+  const promiseGrid = document.querySelector('#view-home .promise-grid-chaotic');
+  if (promiseGrid) {
+    promiseGrid.classList.add('scroll-reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('revealed');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.2 });
+    observer.observe(promiseGrid);
+  }
+}
 
 // LANGUAGE CHANGE ACTION
 window.changeLanguage = function (lang) {
