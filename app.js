@@ -1955,6 +1955,21 @@ function initScrollAnimations() {
     }, { threshold: 0.2 });
     pillarsObserver.observe(pillarsGrid);
   }
+
+  // --- Contact Info Cards ---
+  const contactInfo = document.querySelector('#view-contact .contact-info');
+  if (contactInfo) {
+    contactInfo.classList.add('scroll-reveal');
+    const contactObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('revealed');
+          contactObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.2 });
+    contactObserver.observe(contactInfo);
+  }
 }
 
 // LANGUAGE CHANGE ACTION
