@@ -7514,7 +7514,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Ensure super admin user account exists in auth system
     let users = NovaDB.getUsers() || [];
-    if (!users.find(u => u.email === SUPER_ADMIN)) {
+    console.log('[NOVA Admin] initAdminAccess: users count =', users.length, 'ready =', NovaDB._ready);
+    const superAdminExists = users.find(u => u.email === SUPER_ADMIN);
+    if (!superAdminExists) {
+      console.log('[NOVA Admin] Super admin not found, adding to users list of', users.length, 'existing users');
       users.push({
         id: 'superadmin',
         firstName: 'Norayr',
@@ -7525,6 +7528,8 @@ document.addEventListener('DOMContentLoaded', () => {
         billing: { street: '', city: '', zip: '' }
       });
       await NovaDB.saveUsers(users);
+    } else {
+      console.log('[NOVA Admin] Super admin already exists, skipping seed');
     }
 
     // Ensure admin emails list exists
