@@ -7283,7 +7283,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Override the admin login to check auth session first
   const origSubmitAdmin = window.submitAdminCredentials;
-  window.submitAdminCredentials = function(event) {
+  window.submitAdminCredentials = async function(event) {
     event.preventDefault();
     
     const emailInput = document.getElementById('admin-email-input');
