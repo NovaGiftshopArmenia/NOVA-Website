@@ -1944,6 +1944,21 @@ function initScrollAnimations() {
     }, { threshold: 0.15 });
     catObserver.observe(catGrid);
   }
+
+  // --- Pillars of Trust (About page) ---
+  const pillarsGrid = document.querySelector('#view-about .pillars-grid');
+  if (pillarsGrid) {
+    pillarsGrid.classList.add('scroll-reveal');
+    const pillarsObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('revealed');
+          pillarsObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.2 });
+    pillarsObserver.observe(pillarsGrid);
+  }
 }
 
 // LANGUAGE CHANGE ACTION
