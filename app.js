@@ -4388,7 +4388,7 @@ function updateCheckoutTotals() {
   document.getElementById('checkout-total-val').innerText = `֏${formatPrice(total)}`;
 }
 
-function processCheckout() {
+async function processCheckout() {
   const shippingSelect = document.getElementById('shipping-method');
   const subtotal = AppState.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
   const shippingCost = shippingSelect ? parseInt(shippingSelect.value) : 0;
@@ -4413,7 +4413,7 @@ function processCheckout() {
       prod.stock = Math.max(0, prod.stock - item.quantity);
     }
   });
-  saveProductsToStorage();
+  await saveProductsToStorage();
 
   // Record order in WooCommerce database
   const order = WooCommerceAdmin.addOrder(customerData, AppState.cart, total);
@@ -4584,7 +4584,7 @@ window.restoreCheckoutPage = function () {
 // (refreshAdminDashboard defined below with full implementation)
 
 // Global scope hooks for Admin edits
-window.saveProductInventory = function (productId) {
+window.saveProductInventory = async function (productId) {
   const product = AppState.products.find(p => p.id === productId);
   if (!product) return;
 
@@ -4617,13 +4617,24 @@ window.saveProductInventory = function (productId) {
       badge.innerText = newStock > 0 ? inStockText : outOfStockText;
     }
 
-    // Update size prices proportionally (base price changes)
-    product.sizes[0].price = Math.round(newPrice * 0.615); // 50ml price ratio
-    product.sizes[1].price = newPrice;                    // 100ml price
-    product.sizes[2].price = Math.round(newPrice * 1.59);  // 200ml price
+    // Update size prices proportionally (with safety checks)
+    if (product.sizes && product.sizes.length >= 3) {
+      product.sizes[0].price = Math.round(newPrice * 0.615); // 50ml price ratio
+      product.sizes[1].price = newPrice;                      // 100ml price
+      product.sizes[2].price = Math.round(newPrice * 1.59);   // 200ml price
+    } else if (product.sizes && product.sizes.length > 0) {
+      // For products with fewer than 3 sizes, update the first one
+      product.sizes[0].price = newPrice;
+    }
 
-    // Save to storage
-    saveProductsToStorage();
+    // Save to storage (await to ensure it persists to Sanity)
+    try {
+      await saveProductsToStorage();
+    } catch (e) {
+      console.error('[NOVA] Failed to save product inventory to Sanity:', e);
+      showToast("ERROR: FAILED TO SAVE TO DATABASE. PLEASE TRY AGAIN.");
+      return;
+    }
 
     // Re-render shop views
     renderFeaturedProducts();
