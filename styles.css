@@ -4821,12 +4821,62 @@ header.header-scrolled .mobile-menu-icon-btn {
   transition: transform 0.1s ease;
 }
 
-.price-range-values {
+.price-range-inputs {
   display: flex;
+  align-items: center;
   justify-content: space-between;
+  gap: 8px;
+}
+
+.price-input-wrap {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  padding: 4px 8px;
+  flex: 1;
+  background: var(--color-white);
+  transition: border-color 0.2s ease;
+}
+
+.price-input-wrap:focus-within {
+  border-color: var(--color-black);
+}
+
+.price-input-currency {
   font-size: 0.72rem;
   color: var(--color-medium-gray);
   font-weight: 500;
+  margin-right: 2px;
+  flex-shrink: 0;
+}
+
+.price-input-field {
+  width: 100%;
+  border: none;
+  outline: none;
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--color-black);
+  background: transparent;
+  font-family: inherit;
+  -moz-appearance: textfield;
+}
+
+.price-input-field::-webkit-outer-spin-button,
+.price-input-field::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.price-input-field::placeholder {
+  color: var(--color-medium-gray);
+}
+
+.price-input-dash {
+  color: var(--color-medium-gray);
+  font-size: 0.7rem;
+  flex-shrink: 0;
 }
 
 /* Mobile filter drawer overlay */

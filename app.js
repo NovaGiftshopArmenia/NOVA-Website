@@ -3132,35 +3132,31 @@ window.renderFilterWidgets = function (containerId, isMobile) {
       <input type="range" min="0" max="${PRICE_RANGE_MAX}" value="${minVal}" class="min-price-slider" id="${isMobile ? 'm' : 'd'}-min-price-input" aria-label="Min price">
       <input type="range" min="0" max="${PRICE_RANGE_MAX}" value="${maxVal}" class="max-price-slider" id="${isMobile ? 'm' : 'd'}-max-price-input" aria-label="Max price">
     </div>
-    <div class="price-range-values">
-      <span>֏<span id="${isMobile ? 'm' : 'd'}-min-val">${formatPrice(minVal)}</span></span>
-      <span>֏<span id="${isMobile ? 'm' : 'd'}-max-val">${formatPrice(maxVal)}</span></span>
+    <div class="price-range-inputs">
+      <div class="price-input-wrap">
+        <span class="price-input-currency">֏</span>
+        <input type="number" min="0" max="${PRICE_RANGE_MAX}" value="${minVal}" class="price-input-field" id="${isMobile ? 'm' : 'd'}-min-val-input" placeholder="Min" aria-label="Min price value">
+      </div>
+      <span class="price-input-dash">—</span>
+      <div class="price-input-wrap">
+        <span class="price-input-currency">֏</span>
+        <input type="number" min="0" max="${PRICE_RANGE_MAX}" value="${maxVal}" class="price-input-field" id="${isMobile ? 'm' : 'd'}-max-val-input" placeholder="Max" aria-label="Max price value">
+      </div>
     </div>
   `;
 
   const minInput = sliderContainer.querySelector('.min-price-slider');
   const maxInput = sliderContainer.querySelector('.max-price-slider');
-  const minText = sliderContainer.querySelector(`#${isMobile ? 'm' : 'd'}-min-val`);
-  const maxText = sliderContainer.querySelector(`#${isMobile ? 'm' : 'd'}-max-val`);
+  const minNumInput = sliderContainer.querySelector(`#${isMobile ? 'm' : 'd'}-min-val-input`);
+  const maxNumInput = sliderContainer.querySelector(`#${isMobile ? 'm' : 'd'}-max-val-input`);
   const track = sliderContainer.querySelector('.price-slider-track');
 
   function updateTrack() {
-    const val1 = parseInt(minInput.value);
-    const val2 = parseInt(maxInput.value);
-
-    if (val1 > val2) {
-      if (this === minInput) {
-        minInput.value = val2;
-      } else {
-        maxInput.value = val1;
-      }
-    }
-
     const finalMin = Math.min(parseInt(minInput.value), parseInt(maxInput.value));
     const finalMax = Math.max(parseInt(minInput.value), parseInt(maxInput.value));
 
-    minText.innerText = formatPrice(finalMin);
-    maxText.innerText = formatPrice(finalMax);
+    minNumInput.value = finalMin;
+    maxNumInput.value = finalMax;
 
     filtersState.priceRange.min = finalMin;
     filtersState.priceRange.max = finalMax;
@@ -3172,8 +3168,33 @@ window.renderFilterWidgets = function (containerId, isMobile) {
     track.style.width = `${pctMax - pctMin}%`;
   }
 
+  function updateFromInputs() {
+    let minV = parseInt(minNumInput.value) || 0;
+    let maxV = parseInt(maxNumInput.value) || 0;
+    minV = Math.max(0, Math.min(minV, PRICE_RANGE_MAX));
+    maxV = Math.max(0, Math.min(maxV, PRICE_RANGE_MAX));
+    if (minV > maxV) { const t = minV; minV = maxV; maxV = t; }
+
+    minInput.value = minV;
+    maxInput.value = maxV;
+    minNumInput.value = minV;
+    maxNumInput.value = maxV;
+
+    filtersState.priceRange.min = minV;
+    filtersState.priceRange.max = maxV;
+
+    const pctMin = (minV / PRICE_RANGE_MAX) * 100;
+    const pctMax = (maxV / PRICE_RANGE_MAX) * 100;
+    track.style.left = `${pctMin}%`;
+    track.style.width = `${pctMax - pctMin}%`;
+
+    if (!isMobile) renderShop();
+  }
+
   minInput.addEventListener('input', updateTrack);
   maxInput.addEventListener('input', updateTrack);
+  minNumInput.addEventListener('change', updateFromInputs);
+  maxNumInput.addEventListener('change', updateFromInputs);
 
   const handlePointerMove = (e) => {
     const rect = minInput.getBoundingClientRect();
