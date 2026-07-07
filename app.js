@@ -1906,56 +1906,7 @@ window.addEventListener('DOMContentLoaded', async () => {
 
   // Initialize default language
   changeLanguage(AppState.language);
-
-  // === ON-SCROLL ANIMATIONS (Home Page Only) ===
-  initScrollAnimations();
 });
-
-// Scroll Animation System — Progressive Enhancement
-// Elements start VISIBLE. JS adds .anim-ready to hide them, then .anim-in to reveal on scroll.
-function initScrollAnimations() {
-  const homeView = document.getElementById('view-home');
-  if (!homeView) return;
-
-  // Respect reduced motion preference
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-
-  const animEls = homeView.querySelectorAll('[data-anim]');
-  if (!animEls.length) return;
-
-  // Step 1: Add .anim-ready to set initial hidden state (progressive enhancement)
-  animEls.forEach(el => el.classList.add('anim-ready'));
-
-  // Step 2: Use IntersectionObserver to trigger .anim-in on scroll
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        const el = entry.target;
-        const delay = el.getAttribute('data-anim-delay');
-        if (delay) {
-          setTimeout(() => el.classList.add('anim-in'), parseInt(delay));
-        } else {
-          el.classList.add('anim-in');
-        }
-        observer.unobserve(el);
-      }
-    });
-  }, {
-    threshold: 0.08,
-    rootMargin: '0px 0px -10px 0px'
-  });
-
-  animEls.forEach(el => observer.observe(el));
-
-  // Step 3: Safety fallback — force reveal after 3s if observer fails
-  setTimeout(() => {
-    animEls.forEach(el => {
-      if (!el.classList.contains('anim-in')) {
-        el.classList.add('anim-in');
-      }
-    });
-  }, 3000);
-}
 
 // LANGUAGE CHANGE ACTION
 window.changeLanguage = function (lang) {
