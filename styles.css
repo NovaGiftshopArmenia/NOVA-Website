@@ -7178,3 +7178,124 @@ a {
     display: none !important;
   }
 }
+
+/* ========================================
+   ON-SCROLL ANIMATIONS (Home Page Only)
+   ======================================== */
+
+/* Base hidden state for all animated elements */
+[data-anim] {
+  opacity: 0;
+  will-change: transform, opacity, filter, clip-path;
+}
+
+/* --- 1. Reveal Up: slides up from below with blur-to-sharp --- */
+[data-anim="reveal-up"] {
+  transform: translateY(60px);
+  filter: blur(8px);
+  transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+              opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+              filter 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+}
+[data-anim="reveal-up"].anim-in {
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0);
+}
+
+/* --- 2. Clip Reveal: vertical curtain wipe --- */
+[data-anim="clip-reveal"] {
+  clip-path: inset(0 0 100% 0);
+  opacity: 1; /* visible but clipped */
+  transition: clip-path 1s cubic-bezier(0.77, 0, 0.175, 1);
+}
+[data-anim="clip-reveal"].anim-in {
+  clip-path: inset(0 0 0% 0);
+}
+
+/* --- 3. Scale Blur: zoomed-in & blurry → normal --- */
+[data-anim="scale-blur"] {
+  transform: scale(0.92);
+  filter: blur(12px);
+  transition: transform 1s cubic-bezier(0.16, 1, 0.3, 1),
+              opacity 1s cubic-bezier(0.16, 1, 0.3, 1),
+              filter 1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+[data-anim="scale-blur"].anim-in {
+  opacity: 1;
+  transform: scale(1);
+  filter: blur(0);
+}
+
+/* --- 4. Slide from left --- */
+[data-anim="slide-left"] {
+  transform: translateX(-80px);
+  filter: blur(6px);
+  transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+              opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+              filter 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+}
+[data-anim="slide-left"].anim-in {
+  opacity: 1;
+  transform: translateX(0);
+  filter: blur(0);
+}
+
+/* --- 5. Slide from right --- */
+[data-anim="slide-right"] {
+  transform: translateX(80px);
+  filter: blur(6px);
+  transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+              opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+              filter 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+}
+[data-anim="slide-right"].anim-in {
+  opacity: 1;
+  transform: translateX(0);
+  filter: blur(0);
+}
+
+/* --- 6. Stagger children: each child animates in sequence --- */
+[data-anim="stagger-children"] > * {
+  opacity: 0;
+  transform: translateY(40px);
+  filter: blur(6px);
+  transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+              opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+              filter 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+[data-anim="stagger-children"].anim-in > *:nth-child(1) { transition-delay: 0s; opacity: 1; transform: translateY(0); filter: blur(0); }
+[data-anim="stagger-children"].anim-in > *:nth-child(2) { transition-delay: 0.1s; opacity: 1; transform: translateY(0); filter: blur(0); }
+[data-anim="stagger-children"].anim-in > *:nth-child(3) { transition-delay: 0.2s; opacity: 1; transform: translateY(0); filter: blur(0); }
+[data-anim="stagger-children"].anim-in > *:nth-child(4) { transition-delay: 0.3s; opacity: 1; transform: translateY(0); filter: blur(0); }
+[data-anim="stagger-children"].anim-in > *:nth-child(5) { transition-delay: 0.4s; opacity: 1; transform: translateY(0); filter: blur(0); }
+[data-anim="stagger-children"].anim-in > *:nth-child(6) { transition-delay: 0.5s; opacity: 1; transform: translateY(0); filter: blur(0); }
+
+/* --- 7. Mask Slide: horizontal mask reveal --- */
+[data-anim="mask-slide"] {
+  clip-path: inset(0 100% 0 0);
+  opacity: 1;
+  transition: clip-path 1.1s cubic-bezier(0.77, 0, 0.175, 1);
+}
+[data-anim="mask-slide"].anim-in {
+  clip-path: inset(0 0% 0 0);
+}
+
+/* Animation delay utility */
+[data-anim-delay="100"] { transition-delay: 0.1s !important; }
+[data-anim-delay="200"] { transition-delay: 0.2s !important; }
+[data-anim-delay="300"] { transition-delay: 0.3s !important; }
+[data-anim-delay="400"] { transition-delay: 0.4s !important; }
+[data-anim-delay="500"] { transition-delay: 0.5s !important; }
+
+/* Reduced motion: disable all animations */
+@media (prefers-reduced-motion: reduce) {
+  [data-anim],
+  [data-anim="stagger-children"] > * {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+    clip-path: none !important;
+    transition: none !important;
+  }
+}

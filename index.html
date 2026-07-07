@@ -335,9 +335,9 @@
       </div>
 
       <!-- Brand Promise / Category Grid -->
-      <div class="brand-promise">
+      <div class="brand-promise" data-anim="reveal-up">
         <div class="container">
-          <div class="promise-grid-chaotic">
+          <div class="promise-grid-chaotic" data-anim="stagger-children">
             <!-- Row 1: Big + Small -->
             <div class="promise-card promise-card-big" style="background-image: url('assets/exclusively-curated-collections.webp')">
               <div class="promise-card-overlay"></div>
@@ -376,7 +376,7 @@
       <section class="horizontal-slider-section">
 
         <div class="container relative-container">
-          <div class="slider-header">
+          <div class="slider-header" data-anim="reveal-up">
             <h2 class="serif-title" style="font-size: 2.2rem; letter-spacing: 0.1em; text-transform: uppercase;" data-trans="nav_bestsellers">Best Sellers</h2>
             <div class="slider-controls">
               <button class="slider-arrow prev-arrow" onclick="scrollSlider('best-sellers-track', -300)" aria-label="Previous">
@@ -401,7 +401,7 @@
       <section class="horizontal-slider-section new-arrivals-slider" style="background-color: var(--color-light-gray);">
 
         <div class="container relative-container">
-          <div class="slider-header">
+          <div class="slider-header" data-anim="reveal-up">
             <h2 class="serif-title" style="font-size: 2.2rem; letter-spacing: 0.1em; text-transform: uppercase;" data-trans="nav_new">New Arrivals</h2>
             <div class="slider-controls">
               <button class="slider-arrow prev-arrow" onclick="scrollSlider('new-arrivals-track', -300)" aria-label="Previous">
@@ -425,7 +425,7 @@
       <!-- === ICON CATEGORIES === -->
       <section class="icon-categories-section">
         <div class="container">
-          <div class="cat-grid">
+          <div class="cat-grid" data-anim="stagger-children">
             <!-- Gifts (tall card spanning 2 rows) -->
             <a href="#/shop" onclick="event.preventDefault(); applyPresetFilter('tag', 'Gift');" class="cat-card cat-card--tall" style="background-image: url('assets/gifts-filter.webp')">
               <div class="cat-card-overlay"></div>
@@ -491,13 +491,13 @@
       <div class="shop-view">
 
         <div class="container">
-          <div class="text-center" style="margin-bottom: 48px; position: relative; z-index: 1;">
+          <div class="text-center" style="margin-bottom: 48px; position: relative; z-index: 1;" data-anim="reveal-up">
             <h2 class="serif-title" style="font-size: 2.5rem; margin-top: 8px;" data-trans="featured_title" data-trans="featured_title">The Fragrance Collective</h2>
           </div>
           <div id="featured-products-grid" class="products-grid" style="position: relative; z-index: 1;">
             <!-- Populated via Javascript -->
           </div>
-          <div class="text-center" style="margin-top: 48px; position: relative; z-index: 1;">
+          <div class="text-center" style="margin-top: 48px; position: relative; z-index: 1;" data-anim="reveal-up">
             <a href="#/shop" class="btn-primary" data-trans="view_full_collection_btn" data-trans="view_full_collection_btn">View Full Collection</a>
           </div>
         </div>
@@ -506,7 +506,7 @@
       <!-- Reviews Section -->
       <section class="reviews-section">
         <div class="container">
-          <div class="text-center" style="position: relative;">
+          <div class="text-center" style="position: relative;" data-anim="scale-blur">
             <h2 class="serif-title" style="font-size: 2.2rem;" data-trans="home_reviews_title">What Our Clients Say</h2>
             <div class="reviews-nav">
               <button id="review-prev" class="review-nav-btn" aria-label="Previous Review"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 19l-7-7 7-7" /></svg></button>
@@ -573,7 +573,7 @@
       <!-- Video Showcase Section -->
       <section class="home-video-showcase">
         <div class="container">
-          <div class="video-showcase-card">
+          <div class="video-showcase-card" data-anim="mask-slide">
             <!-- Left side: Video -->
             <div class="video-showcase-left">
               <video class="video-showcase-bg" autoplay muted loop playsinline>
@@ -595,12 +595,12 @@
       <section class="instagram-section instagram-live-section">
 
         <div class="container">
-          <div class="text-center">
+          <div class="text-center" data-anim="reveal-up">
             <h2 class="serif-title" style="font-size: 2.2rem;">@nova_giftshop</h2>
             <p style="color: var(--color-medium-gray); font-size: 0.95rem; margin-top: 8px; font-weight: 300;">Latest from our Instagram</p>
           </div>
           
-          <div class="instagram-live-grid" id="instagram-live-feed">
+          <div class="instagram-live-grid" id="instagram-live-feed" data-anim="scale-blur" data-anim-delay="200">
             <div class="instagram-live-loading" style="grid-column: 1 / -1; text-align: center; padding: 60px 20px;">
               <div class="ig-spinner"></div>
               <p style="color: var(--color-medium-gray); font-size: 0.85rem; margin-top: 16px; font-weight: 300;">Loading Instagram feed...</p>

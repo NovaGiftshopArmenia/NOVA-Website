@@ -1906,7 +1906,43 @@ window.addEventListener('DOMContentLoaded', async () => {
 
   // Initialize default language
   changeLanguage(AppState.language);
+
+  // === ON-SCROLL ANIMATIONS (Home Page Only) ===
+  initScrollAnimations();
 });
+
+// Scroll Animation System — IntersectionObserver-based
+function initScrollAnimations() {
+  const homeView = document.getElementById('view-home');
+  if (!homeView) return;
+
+  // Respect reduced motion preference
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  const animEls = homeView.querySelectorAll('[data-anim]');
+  if (!animEls.length) return;
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const el = entry.target;
+        // Apply delay if specified
+        const delay = el.getAttribute('data-anim-delay');
+        if (delay) {
+          setTimeout(() => el.classList.add('anim-in'), parseInt(delay));
+        } else {
+          el.classList.add('anim-in');
+        }
+        observer.unobserve(el); // Fire once only
+      }
+    });
+  }, {
+    threshold: 0.15,
+    rootMargin: '0px 0px -40px 0px'
+  });
+
+  animEls.forEach(el => observer.observe(el));
+}
 
 // LANGUAGE CHANGE ACTION
 window.changeLanguage = function (lang) {
