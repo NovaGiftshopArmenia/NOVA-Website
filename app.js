@@ -2206,7 +2206,40 @@ function _initMegaMenuFor(categoriesSelector, panelId) {
 
 // BRANDS MEGA MENU HOVER SYSTEM
 function initBrandsMegaMenu() {
-  // Initialize for both main header and floating header
+  // Extract unique brands from actual products (skip empty)
+  const brandSet = new Set();
+  AppState.products.forEach(p => {
+    if (p.brand && p.brand.trim()) brandSet.add(p.brand.trim());
+  });
+  const allBrands = [...brandSet].sort((a, b) => {
+    // Put NOVA first, then alphabetical
+    if (a.toUpperCase() === 'NOVA') return -1;
+    if (b.toUpperCase() === 'NOVA') return 1;
+    return a.localeCompare(b);
+  });
+
+  // Populate brand items into both containers
+  ['brands-mega-categories', 'floating-brands-mega-categories'].forEach(containerId => {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    container.innerHTML = '';
+    allBrands.forEach((brand, idx) => {
+      const div = document.createElement('div');
+      div.className = 'mega-cat-item' + (idx === 0 ? ' active' : '');
+      div.setAttribute('data-mega-brand', brand);
+      div.innerHTML = `
+        <div class="mega-cat-label">
+          <span>${brand}</span>
+        </div>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width:12px; height:12px;">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+        </svg>
+      `;
+      container.appendChild(div);
+    });
+  });
+
+  // Initialize hover/click for both main header and floating header
   _initBrandsMegaMenuFor('#brands-mega-categories', 'brands-mega-products-panel');
   _initBrandsMegaMenuFor('#floating-brands-mega-categories', 'floating-brands-mega-products-panel');
 }
