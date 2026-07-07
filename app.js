@@ -1929,6 +1929,21 @@ function initScrollAnimations() {
     }, { threshold: 0.2 });
     observer.observe(promiseGrid);
   }
+
+  // --- Category Grid Cards ---
+  const catGrid = document.querySelector('#view-home .cat-grid');
+  if (catGrid) {
+    catGrid.classList.add('scroll-reveal');
+    const catObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('revealed');
+          catObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+    catObserver.observe(catGrid);
+  }
 }
 
 // LANGUAGE CHANGE ACTION
