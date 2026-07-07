@@ -7,8 +7,8 @@ const WooCommerceAdmin = {
     return [];
   })(),
 
-  saveOrdersToStorage() {
-    NovaDB.saveOrders(this.orders);
+  async saveOrdersToStorage() {
+    return await NovaDB.saveOrders(this.orders);
   },
   
   // Calculate analytics metrics

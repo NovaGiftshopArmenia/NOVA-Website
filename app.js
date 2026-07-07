@@ -4686,9 +4686,11 @@ window.saveProductInventory = async function (productId) {
   }
 };
 
-window.updateOrderState = function (orderId, newStatus) {
+window.updateOrderState = async function (orderId, newStatus) {
   const success = WooCommerceAdmin.updateOrderStatus(orderId, newStatus);
   if (success) {
+    // Ensure the save completes before continuing
+    await WooCommerceAdmin.saveOrdersToStorage();
     refreshAdminDashboard();
     
     // Log admin activity
@@ -6379,7 +6381,7 @@ window.executeBulkAction = async function() {
 
 // --- ORDER MANAGEMENT ACTIONS ---
 
-window.deleteOrder = function(orderId) {
+window.deleteOrder = async function(orderId) {
   if (!confirm(`Are you sure you want to delete order #${orderId}? This action cannot be undone.`)) return;
   
   const session = JSON.parse(sessionStorage.getItem('nova_admin_session'));
@@ -6387,6 +6389,7 @@ window.deleteOrder = function(orderId) {
     const idx = WooCommerceAdmin.orders.findIndex(o => o.id === orderId);
     if (idx !== -1) {
       WooCommerceAdmin.orders.splice(idx, 1);
+      await WooCommerceAdmin.saveOrdersToStorage();
       refreshAdminDashboard();
       
       if (session) {
