@@ -1157,6 +1157,10 @@ header.header-scrolled .mega-product-thumb {
   color: #f3ede1;
 }
 
+.hero-highlight {
+  color: #C4956A;
+}
+
 .hero-description {
   font-size: 1rem;
   color: rgba(243, 237, 225, 0.7);
