@@ -1946,6 +1946,13 @@ function initScrollAnimations() {
     });
 
     animEls.forEach(el => observer.observe(el));
+
+    // Safety fallback: if any element is still hidden after 2s, force reveal
+    setTimeout(() => {
+      homeView.querySelectorAll('[data-anim]:not(.anim-in)').forEach(el => {
+        el.classList.add('anim-in');
+      });
+    }, 2000);
   });
 }
 
