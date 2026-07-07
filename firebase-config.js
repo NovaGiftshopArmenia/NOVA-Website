@@ -51,7 +51,12 @@ const NovaDB = {
 
   async whenReady() {
     if (this._ready) return;
-    if (this._initPromise) await this._initPromise;
+    if (this._initPromise) {
+      await this._initPromise;
+    } else {
+      // init() hasn't been called yet — call it now and wait
+      await this.init();
+    }
   },
 
   // ---- GET (synchronous, from cache) ----
