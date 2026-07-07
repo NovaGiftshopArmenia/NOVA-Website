@@ -2201,7 +2201,7 @@ function _initMegaMenuFor(categoriesSelector, panelId) {
   });
 
   // Initial populate with Woody notes
-  renderMegaCategory('Woody');
+  renderMegaCategory('New');
 }
 
 // BRANDS MEGA MENU HOVER SYSTEM
