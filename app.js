@@ -3049,7 +3049,20 @@ window.renderFilterWidgets = function (containerId, isMobile) {
   const sizeList = document.createElement('div');
   sizeList.className = 'swatches-wrap';
 
-  const allSizes = ["50ml", "100ml", "200ml"];
+  // Dynamically extract all unique sizes from products
+  const sizeSet = new Set();
+  (AppState.products || []).forEach(p => {
+    if (p.sizes && Array.isArray(p.sizes)) {
+      p.sizes.forEach(s => {
+        if (s.size && s.price && s.price > 0) sizeSet.add(s.size);
+      });
+    }
+  });
+  const allSizes = [...sizeSet].sort((a, b) => {
+    const numA = parseInt(a) || 0;
+    const numB = parseInt(b) || 0;
+    return numA - numB;
+  });
   allSizes.forEach(size => {
     const isActive = filtersState.sizes.includes(size);
     const button = document.createElement('button');
