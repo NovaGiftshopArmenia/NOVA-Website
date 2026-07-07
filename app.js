@@ -6845,8 +6845,8 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Save users array
-  function saveUsers(users) {
-    NovaDB.saveUsers(users);
+  async function saveUsers(users) {
+    await NovaDB.saveUsers(users);
   }
 
   // Get current session
@@ -6941,7 +6941,7 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   // Handle Sign Up
-  window.handleSignUp = function(event) {
+  window.handleSignUp = async function(event) {
     event.preventDefault();
     const firstName = document.getElementById('signup-first-name').value.trim();
     const lastName = document.getElementById('signup-last-name').value.trim();
@@ -6989,7 +6989,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     users.push(newUser);
-    saveUsers(users);
+    await saveUsers(users);
     saveSession(newUser);
     updateAuthUI(newUser);
 
@@ -7026,7 +7026,7 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   // Handle Sign In
-  window.handleSignIn = function(event) {
+  window.handleSignIn = async function(event) {
     event.preventDefault();
     const email = document.getElementById('signin-email').value.trim().toLowerCase();
     const password = document.getElementById('signin-password').value;
@@ -7119,7 +7119,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Also update when saving account details
   const origSave = window.saveCustomerDetails;
-  window.saveCustomerDetails = function(event) {
+  window.saveCustomerDetails = async function(event) {
     if (origSave) origSave(event);
     // Sync changes back to stored user
     const session = getSession();
@@ -7130,7 +7130,7 @@ document.addEventListener('DOMContentLoaded', () => {
         users[idx].firstName = AppState.customer.firstName;
         users[idx].lastName = AppState.customer.lastName;
         users[idx].billing = AppState.customer.billing;
-        saveUsers(users);
+        await saveUsers(users);
         saveSession(users[idx]);
         updateAuthUI(users[idx]);
       }
@@ -7192,11 +7192,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }).join('');
   };
 
-  window.deleteClient = function(userId) {
+  window.deleteClient = async function(userId) {
     if (!confirm('Remove this client?')) return;
     let users = NovaDB.getUsers() || [];
     users = users.filter(u => u.id !== userId);
-    NovaDB.saveUsers(users);
+    await NovaDB.saveUsers(users);
     renderAdminClients();
     showToast('CLIENT REMOVED.');
   };
@@ -7364,7 +7364,7 @@ document.addEventListener('DOMContentLoaded', () => {
       // Also ensure this user exists in nova_users
       if (!authUser) {
         users.push(sessionData);
-        NovaDB.saveUsers(users);
+        await NovaDB.saveUsers(users);
       }
 
       // Update header greeting
@@ -7524,7 +7524,7 @@ document.addEventListener('DOMContentLoaded', () => {
         createdAt: new Date().toISOString(),
         billing: { street: '', city: '', zip: '' }
       });
-      NovaDB.saveUsers(users);
+      await NovaDB.saveUsers(users);
     }
 
     // Ensure admin emails list exists
