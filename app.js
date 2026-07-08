@@ -222,6 +222,9 @@ const TRANSLATIONS = {
     mobile_sec_actions: "Գնումներ",
     mobile_sec_languages: "Լեզուներ",
     nav_contact: "Հետադարձ Կապ",
+    nav_blog: "ՆՈՐՈՒԹՅՈՒՆՆԵՐ",
+    blog_page_title: "Նոտաներ։ Բուրմունք, Արվեստ և Մոտեցում",
+    blog_page_subtitle: "Պատմություններ նիշային օծանության աշխարհից \u2014 բաղկացութիցները, ռիտուալները և յուրաքանչյուր շշի հետևում արվեստը:",
     contact_header_title: "ՀԵՏԱԴԱՐՁ ԿԱՊ",
     contact_subtitle: "Եկեք <span style='color: var(--color-brown); font-style: italic'>զրուցենք</span>",
     contact_lead: "Հարց ունե՞ք։ Սիրով կսպասենք Ձեր արձագանքին։",
@@ -648,6 +651,9 @@ const TRANSLATIONS = {
     mobile_sec_actions: "Покупки",
     mobile_sec_languages: "Языки",
     nav_contact: "Контакты",
+    nav_blog: "НОВОСТИ",
+    blog_page_title: "Заметки о ароматах, мастерстве и курации",
+    blog_page_subtitle: "Истории из мира нишевой парфюмерии \u2014 ингредиенты, ритуалы и искусство, стоящее за каждым флаконом.",
     contact_header_title: "КОНТАКТЫ",
     contact_subtitle: "Давайте <span style='color: var(--color-brown); font-style: italic'>Поговорим</span>",
     contact_lead: "У вас есть вопросы? Мы будем рады получить от вас сообщение.",
@@ -1082,6 +1088,9 @@ const TRANSLATIONS = {
     mobile_sec_actions: "Shopping",
     mobile_sec_languages: "Languages",
     nav_contact: "Contact",
+    nav_blog: "Blog",
+    blog_page_title: "Notes on Scent, Craft & Curation",
+    blog_page_subtitle: "Stories from the world of niche perfumery \u2014 the ingredients, the rituals, and the artistry behind every bottle.",
     contact_header_title: "CONTACT US",
     contact_subtitle: "Let's <span style='color: var(--color-brown); font-style: italic'>Talk</span>",
     contact_lead: "Have a question? We would be pleased to hear from you",
@@ -1797,6 +1806,8 @@ const DOM = {
     'policy-privacy': document.getElementById('view-policy-privacy'),
     wishlist: document.getElementById('view-wishlist'),
     'my-account': document.getElementById('view-my-account'),
+    blog: document.getElementById('view-blog'),
+    'blog-post': document.getElementById('view-blog-post'),
     '404': document.getElementById('view-404')
   },
 
@@ -2153,6 +2164,14 @@ const SEO_META = {
   '404': {
     title: 'Page Not Found | NOVA',
     description: 'The page you\'re looking for doesn\'t exist.',
+  },
+  blog: {
+    title: 'Blog | NOVA',
+    description: 'Stories, tips, and insights from the world of niche perfumery at NOVA.',
+  },
+  'blog-post': {
+    title: 'Blog | NOVA',
+    description: 'Read the latest from the NOVA Journal.',
   }
 };
 
@@ -2203,6 +2222,11 @@ function handleRouteChange() {
 
   const pathname = window.location.pathname;
   let route = pathname === '/' ? 'home' : pathname.replace(/^\//, '').replace(/\/$/, '');
+
+  // Handle blog post routes: /blog?post=slug
+  if (route === 'blog' && window.location.search.includes('post=')) {
+    route = 'blog-post';
+  }
 
   // Fallback if route does not exist
   if (!DOM.routeViews[route]) {
@@ -2270,6 +2294,11 @@ function handleRouteChange() {
       renderFilterWidgets('desktop-sidebar-filters', false);
     }
     renderShop();
+  }
+
+  // If entering blog, render it
+  if (route === 'blog') {
+    renderBlogListing();
   }
 }
 
@@ -5343,6 +5372,9 @@ window.switchAdminTab = function(tabId) {
   
   if (tabId === 'logs') {
     renderAuditLogsTable();
+  }
+  if (tabId === 'blog') {
+    loadAdminBlogPosts();
   }
 };
 
@@ -8418,3 +8450,468 @@ window.handleCSVImport = async function(input) {
   input.value = ''; // Reset file input
 };
 
+// =====================================================================
+// BLOG SYSTEM
+// =====================================================================
+
+// Blog state
+if (!AppState.blogPosts) AppState.blogPosts = [];
+if (!AppState.blogActiveCategory) AppState.blogActiveCategory = 'All';
+
+// Fetch blog posts from Firestore
+async function fetchBlogPosts() {
+  try {
+    const snapshot = await firebase.firestore().collection('blogPosts')
+      .orderBy('publishedAt', 'desc').get();
+    AppState.blogPosts = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  } catch (e) {
+    console.error('[NOVA Blog] Error fetching posts:', e);
+    AppState.blogPosts = [];
+  }
+}
+
+// Get localized blog field
+function getBlogField(post, field) {
+  const lang = AppState.language;
+  if (lang === 'hy' && post[field + 'Am']) return post[field + 'Am'];
+  if (lang === 'ru' && post[field + 'Ru']) return post[field + 'Ru'];
+  return post[field] || '';
+}
+
+// Render Blog Listing
+async function renderBlogListing() {
+  await fetchBlogPosts();
+  const posts = AppState.blogPosts.filter(p => p.status === 'published');
+
+  // Featured post
+  const featuredContainer = document.getElementById('blog-featured-post');
+  const featured = posts.find(p => p.featured) || posts[0];
+  if (featured && featuredContainer) {
+    featuredContainer.innerHTML = `
+      <div class="blog-featured-card" onclick="openBlogPost('${featured.slug}')">
+        <img src="${featured.image}" alt="${getBlogField(featured, 'title')}" class="blog-featured-img" loading="lazy">
+        <div>
+          <div class="blog-featured-category">${featured.category}</div>
+          <div class="blog-featured-title">${getBlogField(featured, 'title')}</div>
+          <div class="blog-featured-excerpt">${getBlogField(featured, 'excerpt')}</div>
+          <div class="blog-featured-meta">${featured.author} &middot; ${featured.date} &middot; ${featured.readTime}</div>
+        </div>
+      </div>
+    `;
+  }
+
+  // Category filters
+  const filtersContainer = document.getElementById('blog-category-filters');
+  const categories = ['All', ...new Set(posts.map(p => p.category))];
+  if (filtersContainer) {
+    filtersContainer.innerHTML = categories.map(cat =>
+      `<button class="blog-filter-chip ${cat === AppState.blogActiveCategory ? 'active' : ''}" onclick="filterBlogCategory('${cat}')">${cat}</button>`
+    ).join('');
+  }
+
+  // Post grid
+  renderBlogGrid(posts);
+}
+
+function renderBlogGrid(allPosts) {
+  const grid = document.getElementById('blog-posts-grid');
+  if (!grid) return;
+
+  const filtered = AppState.blogActiveCategory === 'All'
+    ? allPosts
+    : allPosts.filter(p => p.category === AppState.blogActiveCategory);
+
+  grid.innerHTML = filtered.map(post => `
+    <div class="blog-card" onclick="openBlogPost('${post.slug}')">
+      <img src="${post.image}" alt="${getBlogField(post, 'title')}" class="blog-card-img" loading="lazy">
+      <div class="blog-card-category">${post.category}</div>
+      <div class="blog-card-title">${getBlogField(post, 'title')}</div>
+      <div class="blog-card-excerpt">${getBlogField(post, 'excerpt')}</div>
+      <div class="blog-card-meta">${post.date} &middot; ${post.readTime}</div>
+    </div>
+  `).join('');
+}
+
+window.filterBlogCategory = function(cat) {
+  AppState.blogActiveCategory = cat;
+  const posts = AppState.blogPosts.filter(p => p.status === 'published');
+  // Update active chip
+  document.querySelectorAll('.blog-filter-chip').forEach(btn => {
+    btn.classList.toggle('active', btn.textContent === cat);
+  });
+  renderBlogGrid(posts);
+};
+
+window.openBlogPost = function(slug) {
+  history.pushState(null, '', '/blog?post=' + slug);
+  handleRouteChange();
+  renderBlogArticle(slug);
+};
+
+// Render Single Blog Post
+async function renderBlogArticle(slug) {
+  if (AppState.blogPosts.length === 0) await fetchBlogPosts();
+  const post = AppState.blogPosts.find(p => p.slug === slug);
+  if (!post) { navigateTo('/blog'); return; }
+
+  const container = document.getElementById('blog-article-content');
+  if (!container) return;
+
+  const title = getBlogField(post, 'title');
+  const p1 = getBlogField(post, 'paragraph1');
+  const p2 = getBlogField(post, 'paragraph2');
+  const p3 = getBlogField(post, 'paragraph3');
+  const quote = getBlogField(post, 'pullQuote');
+  const tags = (post.tags || []).map(t => `<span class="blog-article-tag">${t}</span>`).join('');
+
+  // Related posts (3 random, excluding current)
+  const others = AppState.blogPosts.filter(p => p.slug !== slug && p.status === 'published').slice(0, 3);
+  const relatedHtml = others.map(p => `
+    <div class="blog-card" onclick="openBlogPost('${p.slug}')">
+      <img src="${p.image}" alt="${getBlogField(p, 'title')}" class="blog-card-img" loading="lazy">
+      <div class="blog-card-category">${p.category}</div>
+      <div class="blog-card-title">${getBlogField(p, 'title')}</div>
+      <div class="blog-card-meta">${p.date} &middot; ${p.readTime}</div>
+    </div>
+  `).join('');
+
+  // Update page title
+  document.title = title + ' | NOVA';
+
+  const currentUrl = window.location.href;
+
+  container.innerHTML = `
+    <a href="/blog" class="blog-back-link" onclick="event.preventDefault(); navigateTo('/blog');">&larr; Back to Blog</a>
+    <div class="blog-article-category">${post.category}</div>
+    <h1 class="blog-article-title">${title}</h1>
+    <div class="blog-article-byline">BY ${post.author} &middot; ${post.date} &middot; ${post.readTime}</div>
+
+    <div class="blog-article-layout">
+      <div class="blog-article-main">
+        <img src="${post.image}" alt="${title}" class="blog-article-hero" loading="lazy">
+        <div class="blog-article-body" id="blog-section-intro">
+          <p>${p1}</p>
+          ${p2 ? `<p id="blog-section-notes">${p2}</p>` : ''}
+        </div>
+        ${quote ? `<blockquote class="blog-article-quote" id="blog-section-quote">"${quote}"</blockquote>` : ''}
+        ${post.imageArticle ? `<img src="${post.imageArticle}" alt="In-article image" class="blog-article-inline-img" loading="lazy">` : ''}
+        ${p3 ? `<div class="blog-article-body" id="blog-section-closing"><p>${p3}</p></div>` : ''}
+        ${tags ? `<div class="blog-article-tags">${tags}</div>` : ''}
+        <div class="blog-author-card">
+          <div class="blog-author-avatar"></div>
+          <div>
+            <div class="blog-author-name">${post.author}</div>
+            <div class="blog-author-bio">${post.authorBio || 'Contributing writer at the NOVA Journal, exploring the artistry of niche perfumery.'}</div>
+          </div>
+        </div>
+      </div>
+
+      <aside class="blog-sidebar">
+        <div class="blog-sidebar-section">
+          <div class="blog-sidebar-title">Share</div>
+          <a class="blog-share-item" href="https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(currentUrl)}" target="_blank" rel="noopener">
+            <span class="blog-share-icon">f</span> Facebook
+          </a>
+          <a class="blog-share-item" href="https://twitter.com/intent/tweet?url=${encodeURIComponent(currentUrl)}&text=${encodeURIComponent(title)}" target="_blank" rel="noopener">
+            <span class="blog-share-icon">x</span> X
+          </a>
+          <div class="blog-share-item" onclick="copyBlogLink()">
+            <span class="blog-share-icon">~</span> Copy Link
+          </div>
+        </div>
+        <div class="blog-sidebar-section">
+          <div class="blog-sidebar-title">On This Page</div>
+          <a href="#blog-section-intro" class="blog-onpage-link">Introduction</a>
+          ${p2 ? '<a href="#blog-section-notes" class="blog-onpage-link">Notes & Composition</a>' : ''}
+          ${quote ? '<a href="#blog-section-quote" class="blog-onpage-link">Key Quote</a>' : ''}
+          ${p3 ? '<a href="#blog-section-closing" class="blog-onpage-link">Closing Thoughts</a>' : ''}
+        </div>
+      </aside>
+    </div>
+
+    <div class="blog-continue-reading">
+      <h2 class="blog-continue-title">Continue Reading</h2>
+      <div class="blog-grid">${relatedHtml}</div>
+    </div>
+  `;
+
+  window.scrollTo(0, 0);
+}
+
+window.copyBlogLink = function() {
+  navigator.clipboard.writeText(window.location.href).then(() => {
+    showToast('LINK COPIED TO CLIPBOARD.');
+  });
+};
+
+// Handle blog-post route on page load
+if (AppState.currentRoute === 'blog-post') {
+  const params = new URLSearchParams(window.location.search);
+  const slug = params.get('post');
+  if (slug) renderBlogArticle(slug);
+}
+
+// =====================================================================
+// BLOG ADMIN FUNCTIONS
+// =====================================================================
+
+window.resetBlogForm = function() {
+  document.getElementById('blog-admin-form').reset();
+  document.getElementById('blog-edit-id').value = '';
+  document.getElementById('blog-form-title').textContent = 'New Blog Post';
+  document.getElementById('blog-author').value = 'NOVA';
+  document.getElementById('blog-author-bio').value = 'Contributing writer at the NOVA Journal.';
+};
+
+// Save blog post
+document.getElementById('blog-admin-form')?.addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const editId = document.getElementById('blog-edit-id').value;
+  const titleEn = document.getElementById('blog-title-en').value.trim();
+  let slug = document.getElementById('blog-slug').value.trim();
+  if (!slug) {
+    slug = titleEn.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+  }
+
+  const data = {
+    title: titleEn,
+    titleAm: document.getElementById('blog-title-am').value.trim(),
+    titleRu: document.getElementById('blog-title-ru').value.trim(),
+    slug: slug,
+    category: document.getElementById('blog-category').value,
+    readTime: document.getElementById('blog-readtime').value.trim() || '5 min read',
+    status: document.getElementById('blog-status').value,
+    image: document.getElementById('blog-image').value.trim(),
+    imageArticle: document.getElementById('blog-image-article').value.trim(),
+    excerpt: document.getElementById('blog-excerpt-en').value.trim(),
+    excerptAm: document.getElementById('blog-excerpt-am').value.trim(),
+    excerptRu: document.getElementById('blog-excerpt-ru').value.trim(),
+    paragraph1: document.getElementById('blog-p1-en').value.trim(),
+    paragraph1Am: document.getElementById('blog-p1-am').value.trim(),
+    paragraph1Ru: document.getElementById('blog-p1-ru').value.trim(),
+    paragraph2: document.getElementById('blog-p2-en').value.trim(),
+    paragraph2Am: document.getElementById('blog-p2-am').value.trim(),
+    paragraph2Ru: document.getElementById('blog-p2-ru').value.trim(),
+    pullQuote: document.getElementById('blog-quote-en').value.trim(),
+    pullQuoteAm: document.getElementById('blog-quote-am').value.trim(),
+    pullQuoteRu: document.getElementById('blog-quote-ru').value.trim(),
+    paragraph3: document.getElementById('blog-p3-en').value.trim(),
+    paragraph3Am: document.getElementById('blog-p3-am').value.trim(),
+    paragraph3Ru: document.getElementById('blog-p3-ru').value.trim(),
+    author: document.getElementById('blog-author').value.trim() || 'NOVA',
+    authorBio: document.getElementById('blog-author-bio').value.trim(),
+    tags: document.getElementById('blog-tags').value.split(',').map(t => t.trim()).filter(Boolean),
+    featured: document.getElementById('blog-featured').checked,
+    date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).toUpperCase(),
+    publishedAt: firebase.firestore.FieldValue.serverTimestamp()
+  };
+
+  try {
+    if (editId) {
+      await firebase.firestore().collection('blogPosts').doc(editId).update(data);
+      showToast('BLOG POST UPDATED.');
+    } else {
+      await firebase.firestore().collection('blogPosts').add(data);
+      showToast('BLOG POST CREATED.');
+    }
+    resetBlogForm();
+    loadAdminBlogPosts();
+  } catch (err) {
+    console.error('[NOVA Blog Admin]', err);
+    showToast('ERROR SAVING POST: ' + err.message);
+  }
+});
+
+// Load admin blog posts table
+window.loadAdminBlogPosts = async function() {
+  try {
+    const snapshot = await firebase.firestore().collection('blogPosts')
+      .orderBy('publishedAt', 'desc').get();
+    const tbody = document.getElementById('admin-blog-tbody');
+    if (!tbody) return;
+    tbody.innerHTML = snapshot.docs.map(doc => {
+      const d = doc.data();
+      const statusBadge = d.status === 'published'
+        ? '<span style="color:#2d8a4e; font-weight:500;">Published</span>'
+        : '<span style="color:var(--color-medium-gray);">Draft</span>';
+      return `<tr>
+        <td style="font-weight:500;">${d.title}</td>
+        <td>${d.category}</td>
+        <td>${statusBadge}</td>
+        <td>${d.date || '—'}</td>
+        <td>
+          <button onclick="editBlogPost('${doc.id}')" style="background:none; border:none; cursor:pointer; color:var(--color-brown); font-size:0.85rem; margin-right:8px;">Edit</button>
+          <button onclick="deleteBlogPost('${doc.id}')" style="background:none; border:none; cursor:pointer; color:#c0392b; font-size:0.85rem;">Delete</button>
+        </td>
+      </tr>`;
+    }).join('');
+  } catch (e) {
+    console.error('[NOVA Blog Admin] Load error:', e);
+  }
+};
+
+window.editBlogPost = async function(id) {
+  try {
+    const doc = await firebase.firestore().collection('blogPosts').doc(id).get();
+    if (!doc.exists) return;
+    const d = doc.data();
+    document.getElementById('blog-edit-id').value = id;
+    document.getElementById('blog-form-title').textContent = 'Edit Blog Post';
+    document.getElementById('blog-title-en').value = d.title || '';
+    document.getElementById('blog-title-am').value = d.titleAm || '';
+    document.getElementById('blog-title-ru').value = d.titleRu || '';
+    document.getElementById('blog-slug').value = d.slug || '';
+    document.getElementById('blog-category').value = d.category || 'Fragrance Notes';
+    document.getElementById('blog-readtime').value = d.readTime || '';
+    document.getElementById('blog-status').value = d.status || 'published';
+    document.getElementById('blog-image').value = d.image || '';
+    document.getElementById('blog-image-article').value = d.imageArticle || '';
+    document.getElementById('blog-excerpt-en').value = d.excerpt || '';
+    document.getElementById('blog-excerpt-am').value = d.excerptAm || '';
+    document.getElementById('blog-excerpt-ru').value = d.excerptRu || '';
+    document.getElementById('blog-p1-en').value = d.paragraph1 || '';
+    document.getElementById('blog-p1-am').value = d.paragraph1Am || '';
+    document.getElementById('blog-p1-ru').value = d.paragraph1Ru || '';
+    document.getElementById('blog-p2-en').value = d.paragraph2 || '';
+    document.getElementById('blog-p2-am').value = d.paragraph2Am || '';
+    document.getElementById('blog-p2-ru').value = d.paragraph2Ru || '';
+    document.getElementById('blog-quote-en').value = d.pullQuote || '';
+    document.getElementById('blog-quote-am').value = d.pullQuoteAm || '';
+    document.getElementById('blog-quote-ru').value = d.pullQuoteRu || '';
+    document.getElementById('blog-p3-en').value = d.paragraph3 || '';
+    document.getElementById('blog-p3-am').value = d.paragraph3Am || '';
+    document.getElementById('blog-p3-ru').value = d.paragraph3Ru || '';
+    document.getElementById('blog-author').value = d.author || 'NOVA';
+    document.getElementById('blog-author-bio').value = d.authorBio || '';
+    document.getElementById('blog-tags').value = (d.tags || []).join(', ');
+    document.getElementById('blog-featured').checked = d.featured || false;
+    // Scroll to form
+    document.getElementById('blog-admin-form-wrap').scrollIntoView({ behavior: 'smooth' });
+  } catch (e) {
+    console.error('[NOVA Blog Admin] Edit error:', e);
+  }
+};
+
+window.deleteBlogPost = async function(id) {
+  if (!confirm('Delete this blog post?')) return;
+  try {
+    await firebase.firestore().collection('blogPosts').doc(id).delete();
+    showToast('BLOG POST DELETED.');
+    loadAdminBlogPosts();
+  } catch (e) {
+    console.error('[NOVA Blog Admin] Delete error:', e);
+    showToast('ERROR DELETING POST.');
+  }
+};
+
+// =====================================================================
+// SEED MOCK BLOG POSTS (if collection is empty)
+// =====================================================================
+async function seedMockBlogPosts() {
+  try {
+    const snap = await firebase.firestore().collection('blogPosts').limit(1).get();
+    if (!snap.empty) return; // Already has posts
+
+    const mockPosts = [
+      {
+        title: "The Anatomy of a Scent: Top, Heart & Base",
+        titleAm: "Բույրի անատոdelays: Վերին, Սdelays և Ստdelays նdelays",
+        titleRu: "Анатомия аромата: Верхние, Сердечные и Базовые ноты",
+        slug: "the-anatomy-of-a-scent",
+        category: "Fragrance Notes",
+        excerpt: "Understanding the three-act structure behind every great fragrance, from the first spray to the final dry-down.",
+        excerptAm: "Յուdelays",
+        excerptRu: "Понимание трёхактной структуры каждого великого аромата.",
+        image: "https://images.unsplash.com/photo-1541643600914-78b084683601?w=800",
+        imageArticle: "https://images.unsplash.com/photo-1615634260167-c8cdede054de?w=800",
+        paragraph1: "Every fragrance unfolds like a piece of music, composed in three distinct movements. The top notes greet you first — bright, volatile, gone within minutes. They are the introduction, the handshake.",
+        paragraph2: "Beneath them, the heart notes emerge: florals, spices, the soul of the composition. They linger for hours, defining the character most people associate with the scent.",
+        paragraph3: "Finally, the base notes settle in — woods, musks, resins — anchoring everything that came before. This is what remains on your skin, and often on your memory, long after the bottle is capped.",
+        pullQuote: "A fragrance is a story told in evaporation.",
+        author: "NOVA",
+        authorBio: "Contributing writer at the NOVA Journal, exploring the artistry of niche perfumery.",
+        tags: ["Perfumery 101", "Notes", "Education"],
+        featured: true,
+        readTime: "6 min read",
+        date: "JUN 2, 2026",
+        status: "published",
+        publishedAt: firebase.firestore.FieldValue.serverTimestamp()
+      },
+      {
+        title: "Inside Our Sourcing: What \"Niche\" Really Means",
+        titleRu: "Как мы отбираем: что на самом деле значит «нишевая» парфюмерия",
+        slug: "inside-our-sourcing",
+        category: "Curation",
+        excerpt: "A look at how NOVA selects the rare houses and independent perfumers behind our collection.",
+        excerptRu: "Как NOVA отбирает редкие дома и независимых парфюмеров для нашей коллекции.",
+        image: "https://images.unsplash.com/photo-1594035910387-fbd1a485b12e?w=800",
+        imageArticle: "https://images.unsplash.com/photo-1585386959984-a4155224a1ad?w=800",
+        paragraph1: "The word 'niche' has been stretched and diluted by the mainstream fragrance industry. At NOVA, we return it to its original meaning: small-batch, artisan-crafted scents created without compromise.",
+        paragraph2: "We personally visit the ateliers. We speak with the noses. We test each composition across seasons and skin types before adding it to our shelves.",
+        paragraph3: "Our promise is simple: every bottle at NOVA tells a story worth wearing.",
+        pullQuote: "Niche is not a price point. It is a philosophy.",
+        author: "NOVA",
+        authorBio: "Contributing writer at the NOVA Journal, exploring the artistry of niche perfumery.",
+        tags: ["Curation", "Sourcing", "Behind the Scenes"],
+        featured: false,
+        readTime: "5 min read",
+        date: "MAY 24, 2026",
+        status: "published",
+        publishedAt: firebase.firestore.FieldValue.serverTimestamp()
+      },
+      {
+        title: "A Gifting Guide for the Scent-Obsessed",
+        titleRu: "Гdelays подарков для ценителей ароматов",
+        slug: "gifting-guide-scent-obsessed",
+        category: "Gifting",
+        excerpt: "Pairing personality with perfume — how to choose a fragrance gift someone will actually wear.",
+        excerptRu: "Сdelays",
+        image: "https://images.unsplash.com/photo-1563170351-be82bc888aa4?w=800",
+        paragraph1: "Gifting a fragrance is an intimate act. Unlike clothes or accessories, a scent lives on someone's skin — it becomes part of their identity.",
+        paragraph2: "Start with what you know about the recipient. Do they gravitate toward freshness or warmth? Are they minimalists or maximalists? The answers will guide you toward the right scent family.",
+        paragraph3: "At NOVA, we offer complimentary gift consultations. Bring us the personality; we'll find the bottle.",
+        pullQuote: "The right fragrance is the most personal gift you can give.",
+        author: "NOVA",
+        authorBio: "Contributing writer at the NOVA Journal, exploring the artistry of niche perfumery.",
+        tags: ["Gifting", "Guide", "Recommendations"],
+        featured: false,
+        readTime: "4 min read",
+        date: "MAY 15, 2026",
+        status: "published",
+        publishedAt: firebase.firestore.FieldValue.serverTimestamp()
+      },
+      {
+        title: "Layering Scents: A Beginner's Ritual",
+        titleRu: "Наслоение ароматов: ритуал для начинающих",
+        slug: "layering-scents-beginners-ritual",
+        category: "Lifestyle",
+        excerpt: "How to combine two or more fragrances to create a scent that is uniquely yours.",
+        excerptRu: "Как комбинировать два или более аромата, чтобы создать запах, уникальный именно для вас.",
+        image: "https://images.unsplash.com/photo-1547887538-e3a2f32cb1cc?w=800",
+        imageArticle: "https://images.unsplash.com/photo-1588405748880-12d1d2a59f75?w=800",
+        paragraph1: "Fragrance layering is the art of wearing more than one scent at a time. Done well, it creates a signature that no single bottle can replicate.",
+        paragraph2: "The key rule: layer from heaviest to lightest. Apply your base fragrance first — something rich with woods or amber — then mist a brighter, fresher scent on top.",
+        paragraph3: "Experiment without fear. Some of the most iconic scent combinations were accidents. Your skin chemistry is the final ingredient.",
+        pullQuote: "Layering is not mixing — it is composing.",
+        author: "NOVA",
+        authorBio: "Contributing writer at the NOVA Journal, exploring the artistry of niche perfumery.",
+        tags: ["Layering", "Lifestyle", "Tips"],
+        featured: false,
+        readTime: "5 min read",
+        date: "MAY 8, 2026",
+        status: "published",
+        publishedAt: firebase.firestore.FieldValue.serverTimestamp()
+      }
+    ];
+
+    for (const post of mockPosts) {
+      await firebase.firestore().collection('blogPosts').add(post);
+    }
+    console.log('[NOVA Blog] Seeded 4 mock blog posts.');
+  } catch (e) {
+    console.error('[NOVA Blog] Seed error:', e);
+  }
+}
+
+// Seed on load (runs once, only if collection empty)
+seedMockBlogPosts();

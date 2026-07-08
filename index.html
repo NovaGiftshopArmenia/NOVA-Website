@@ -143,6 +143,7 @@
           </li>
           
           <li><a href="/about" data-trans="nav_about" data-route="about">About Us</a></li>
+          <li><a href="/blog" data-trans="nav_blog" data-route="blog">Blog</a></li>
           <li><a href="/contact" data-trans="nav_contact" data-route="contact">Contact</a></li>
           <!-- Brands Mega Menu -->
           <li class="menu-item-brands">
@@ -290,6 +291,7 @@
             </div>
           </li>
           <li><a href="/about" data-trans="nav_about">About Us</a></li>
+          <li><a href="/blog" data-trans="nav_blog">Blog</a></li>
           <li><a href="/contact" data-trans="nav_contact">Contact</a></li>
           <!-- Brands Mega Menu -->
           <li class="menu-item-brands">
@@ -925,6 +927,12 @@
                 </svg>
                 <span data-trans="admin_nav_logs">Activity Logs</span>
               </div>
+              <div class="admin-nav-item" data-admin-tab="blog">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width:16px; height:16px;">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
+                </svg>
+                <span data-trans="admin_nav_blog">Blog Manager</span>
+              </div>
             </aside>
 
             <!-- Core Admin Content Screen -->
@@ -1182,6 +1190,183 @@
                       </tbody>
                     </table>
                   </div>
+                </div>
+              </div>
+
+            </div>
+
+              <!-- F. BLOG MANAGER TAB PANEL -->
+              <div id="admin-sec-blog" class="admin-panel-sub hidden">
+                <h3 style="font-size:1.4rem; font-weight:600; margin-bottom:20px;">Blog Manager</h3>
+
+                <!-- Blog Post Form -->
+                <div id="blog-admin-form-wrap" style="background:var(--color-light-gray); border-radius:10px; padding:24px; margin-bottom:30px;">
+                  <h4 style="font-size:1rem; font-weight:600; margin-bottom:16px;" id="blog-form-title">New Blog Post</h4>
+                  <form id="blog-admin-form" autocomplete="off">
+                    <input type="hidden" id="blog-edit-id" value="">
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px;">
+                      <div>
+                        <label style="font-size:0.75rem; text-transform:uppercase; letter-spacing:1px; color:var(--color-medium-gray); display:block; margin-bottom:4px;">Title (EN) *</label>
+                        <input type="text" id="blog-title-en" required style="width:100%; padding:10px 12px; border:1px solid var(--color-border); border-radius:6px; font-size:0.9rem;">
+                      </div>
+                      <div>
+                        <label style="font-size:0.75rem; text-transform:uppercase; letter-spacing:1px; color:var(--color-medium-gray); display:block; margin-bottom:4px;">Title (AM)</label>
+                        <input type="text" id="blog-title-am" style="width:100%; padding:10px 12px; border:1px solid var(--color-border); border-radius:6px; font-size:0.9rem;">
+                      </div>
+                      <div>
+                        <label style="font-size:0.75rem; text-transform:uppercase; letter-spacing:1px; color:var(--color-medium-gray); display:block; margin-bottom:4px;">Title (RU)</label>
+                        <input type="text" id="blog-title-ru" style="width:100%; padding:10px 12px; border:1px solid var(--color-border); border-radius:6px; font-size:0.9rem;">
+                      </div>
+                      <div>
+                        <label style="font-size:0.75rem; text-transform:uppercase; letter-spacing:1px; color:var(--color-medium-gray); display:block; margin-bottom:4px;">Slug</label>
+                        <input type="text" id="blog-slug" placeholder="auto-generated" style="width:100%; padding:10px 12px; border:1px solid var(--color-border); border-radius:6px; font-size:0.9rem;">
+                      </div>
+                    </div>
+                    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; margin-bottom:12px;">
+                      <div>
+                        <label style="font-size:0.75rem; text-transform:uppercase; letter-spacing:1px; color:var(--color-medium-gray); display:block; margin-bottom:4px;">Category *</label>
+                        <select id="blog-category" required style="width:100%; padding:10px 12px; border:1px solid var(--color-border); border-radius:6px; font-size:0.9rem;">
+                          <option value="Fragrance Notes">Fragrance Notes</option>
+                          <option value="Curation">Curation</option>
+                          <option value="Gifting">Gifting</option>
+                          <option value="Lifestyle">Lifestyle</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label style="font-size:0.75rem; text-transform:uppercase; letter-spacing:1px; color:var(--color-medium-gray); display:block; margin-bottom:4px;">Read Time</label>
+                        <input type="text" id="blog-readtime" placeholder="6 min read" style="width:100%; padding:10px 12px; border:1px solid var(--color-border); border-radius:6px; font-size:0.9rem;">
+                      </div>
+                      <div>
+                        <label style="font-size:0.75rem; text-transform:uppercase; letter-spacing:1px; color:var(--color-medium-gray); display:block; margin-bottom:4px;">Status</label>
+                        <select id="blog-status" style="width:100%; padding:10px 12px; border:1px solid var(--color-border); border-radius:6px; font-size:0.9rem;">
+                          <option value="published">Published</option>
+                          <option value="draft">Draft</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px;">
+                      <div>
+                        <label style="font-size:0.75rem; text-transform:uppercase; letter-spacing:1px; color:var(--color-medium-gray); display:block; margin-bottom:4px;">Featured Image URL *</label>
+                        <input type="url" id="blog-image" required style="width:100%; padding:10px 12px; border:1px solid var(--color-border); border-radius:6px; font-size:0.9rem;">
+                      </div>
+                      <div>
+                        <label style="font-size:0.75rem; text-transform:uppercase; letter-spacing:1px; color:var(--color-medium-gray); display:block; margin-bottom:4px;">In-Article Image URL</label>
+                        <input type="url" id="blog-image-article" style="width:100%; padding:10px 12px; border:1px solid var(--color-border); border-radius:6px; font-size:0.9rem;">
+                      </div>
+                    </div>
+                    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; margin-bottom:12px;">
+                      <div>
+                        <label style="font-size:0.75rem; text-transform:uppercase; letter-spacing:1px; color:var(--color-medium-gray); display:block; margin-bottom:4px;">Excerpt (EN) *</label>
+                        <textarea id="blog-excerpt-en" required rows="3" style="width:100%; padding:10px 12px; border:1px solid var(--color-border); border-radius:6px; font-size:0.9rem; resize:vertical;"></textarea>
+                      </div>
+                      <div>
+                        <label style="font-size:0.75rem; text-transform:uppercase; letter-spacing:1px; color:var(--color-medium-gray); display:block; margin-bottom:4px;">Excerpt (AM)</label>
+                        <textarea id="blog-excerpt-am" rows="3" style="width:100%; padding:10px 12px; border:1px solid var(--color-border); border-radius:6px; font-size:0.9rem; resize:vertical;"></textarea>
+                      </div>
+                      <div>
+                        <label style="font-size:0.75rem; text-transform:uppercase; letter-spacing:1px; color:var(--color-medium-gray); display:block; margin-bottom:4px;">Excerpt (RU)</label>
+                        <textarea id="blog-excerpt-ru" rows="3" style="width:100%; padding:10px 12px; border:1px solid var(--color-border); border-radius:6px; font-size:0.9rem; resize:vertical;"></textarea>
+                      </div>
+                    </div>
+                    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; margin-bottom:12px;">
+                      <div>
+                        <label style="font-size:0.75rem; text-transform:uppercase; letter-spacing:1px; color:var(--color-medium-gray); display:block; margin-bottom:4px;">Paragraph 1 (EN)</label>
+                        <textarea id="blog-p1-en" rows="4" style="width:100%; padding:10px 12px; border:1px solid var(--color-border); border-radius:6px; font-size:0.9rem; resize:vertical;"></textarea>
+                      </div>
+                      <div>
+                        <label style="font-size:0.75rem; text-transform:uppercase; letter-spacing:1px; color:var(--color-medium-gray); display:block; margin-bottom:4px;">Paragraph 1 (AM)</label>
+                        <textarea id="blog-p1-am" rows="4" style="width:100%; padding:10px 12px; border:1px solid var(--color-border); border-radius:6px; font-size:0.9rem; resize:vertical;"></textarea>
+                      </div>
+                      <div>
+                        <label style="font-size:0.75rem; text-transform:uppercase; letter-spacing:1px; color:var(--color-medium-gray); display:block; margin-bottom:4px;">Paragraph 1 (RU)</label>
+                        <textarea id="blog-p1-ru" rows="4" style="width:100%; padding:10px 12px; border:1px solid var(--color-border); border-radius:6px; font-size:0.9rem; resize:vertical;"></textarea>
+                      </div>
+                    </div>
+                    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; margin-bottom:12px;">
+                      <div>
+                        <label style="font-size:0.75rem; text-transform:uppercase; letter-spacing:1px; color:var(--color-medium-gray); display:block; margin-bottom:4px;">Paragraph 2 (EN)</label>
+                        <textarea id="blog-p2-en" rows="4" style="width:100%; padding:10px 12px; border:1px solid var(--color-border); border-radius:6px; font-size:0.9rem; resize:vertical;"></textarea>
+                      </div>
+                      <div>
+                        <label style="font-size:0.75rem; text-transform:uppercase; letter-spacing:1px; color:var(--color-medium-gray); display:block; margin-bottom:4px;">Paragraph 2 (AM)</label>
+                        <textarea id="blog-p2-am" rows="4" style="width:100%; padding:10px 12px; border:1px solid var(--color-border); border-radius:6px; font-size:0.9rem; resize:vertical;"></textarea>
+                      </div>
+                      <div>
+                        <label style="font-size:0.75rem; text-transform:uppercase; letter-spacing:1px; color:var(--color-medium-gray); display:block; margin-bottom:4px;">Paragraph 2 (RU)</label>
+                        <textarea id="blog-p2-ru" rows="4" style="width:100%; padding:10px 12px; border:1px solid var(--color-border); border-radius:6px; font-size:0.9rem; resize:vertical;"></textarea>
+                      </div>
+                    </div>
+                    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; margin-bottom:12px;">
+                      <div>
+                        <label style="font-size:0.75rem; text-transform:uppercase; letter-spacing:1px; color:var(--color-medium-gray); display:block; margin-bottom:4px;">Pull Quote (EN)</label>
+                        <textarea id="blog-quote-en" rows="2" style="width:100%; padding:10px 12px; border:1px solid var(--color-border); border-radius:6px; font-size:0.9rem; resize:vertical;"></textarea>
+                      </div>
+                      <div>
+                        <label style="font-size:0.75rem; text-transform:uppercase; letter-spacing:1px; color:var(--color-medium-gray); display:block; margin-bottom:4px;">Pull Quote (AM)</label>
+                        <textarea id="blog-quote-am" rows="2" style="width:100%; padding:10px 12px; border:1px solid var(--color-border); border-radius:6px; font-size:0.9rem; resize:vertical;"></textarea>
+                      </div>
+                      <div>
+                        <label style="font-size:0.75rem; text-transform:uppercase; letter-spacing:1px; color:var(--color-medium-gray); display:block; margin-bottom:4px;">Pull Quote (RU)</label>
+                        <textarea id="blog-quote-ru" rows="2" style="width:100%; padding:10px 12px; border:1px solid var(--color-border); border-radius:6px; font-size:0.9rem; resize:vertical;"></textarea>
+                      </div>
+                    </div>
+                    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; margin-bottom:12px;">
+                      <div>
+                        <label style="font-size:0.75rem; text-transform:uppercase; letter-spacing:1px; color:var(--color-medium-gray); display:block; margin-bottom:4px;">Paragraph 3 (EN)</label>
+                        <textarea id="blog-p3-en" rows="4" style="width:100%; padding:10px 12px; border:1px solid var(--color-border); border-radius:6px; font-size:0.9rem; resize:vertical;"></textarea>
+                      </div>
+                      <div>
+                        <label style="font-size:0.75rem; text-transform:uppercase; letter-spacing:1px; color:var(--color-medium-gray); display:block; margin-bottom:4px;">Paragraph 3 (AM)</label>
+                        <textarea id="blog-p3-am" rows="4" style="width:100%; padding:10px 12px; border:1px solid var(--color-border); border-radius:6px; font-size:0.9rem; resize:vertical;"></textarea>
+                      </div>
+                      <div>
+                        <label style="font-size:0.75rem; text-transform:uppercase; letter-spacing:1px; color:var(--color-medium-gray); display:block; margin-bottom:4px;">Paragraph 3 (RU)</label>
+                        <textarea id="blog-p3-ru" rows="4" style="width:100%; padding:10px 12px; border:1px solid var(--color-border); border-radius:6px; font-size:0.9rem; resize:vertical;"></textarea>
+                      </div>
+                    </div>
+                    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; margin-bottom:12px;">
+                      <div>
+                        <label style="font-size:0.75rem; text-transform:uppercase; letter-spacing:1px; color:var(--color-medium-gray); display:block; margin-bottom:4px;">Author Name</label>
+                        <input type="text" id="blog-author" value="NOVA" style="width:100%; padding:10px 12px; border:1px solid var(--color-border); border-radius:6px; font-size:0.9rem;">
+                      </div>
+                      <div>
+                        <label style="font-size:0.75rem; text-transform:uppercase; letter-spacing:1px; color:var(--color-medium-gray); display:block; margin-bottom:4px;">Author Bio</label>
+                        <input type="text" id="blog-author-bio" value="Contributing writer at the NOVA Journal." style="width:100%; padding:10px 12px; border:1px solid var(--color-border); border-radius:6px; font-size:0.9rem;">
+                      </div>
+                      <div>
+                        <label style="font-size:0.75rem; text-transform:uppercase; letter-spacing:1px; color:var(--color-medium-gray); display:block; margin-bottom:4px;">Tags (comma-separated)</label>
+                        <input type="text" id="blog-tags" placeholder="Perfumery, Notes, Education" style="width:100%; padding:10px 12px; border:1px solid var(--color-border); border-radius:6px; font-size:0.9rem;">
+                      </div>
+                    </div>
+                    <div style="display:flex; align-items:center; gap:16px; margin-bottom:16px;">
+                      <label style="display:flex; align-items:center; gap:6px; cursor:pointer; font-size:0.85rem;">
+                        <input type="checkbox" id="blog-featured"> Mark as Featured Post
+                      </label>
+                    </div>
+                    <div style="display:flex; gap:10px;">
+                      <button type="submit" class="btn-primary" style="padding:10px 28px;">Save Post</button>
+                      <button type="button" class="btn-secondary" style="padding:10px 28px;" onclick="resetBlogForm()">Clear</button>
+                    </div>
+                  </form>
+                </div>
+
+                <!-- Blog Posts List -->
+                <h4 style="font-size:1rem; font-weight:600; margin-bottom:12px;">All Posts</h4>
+                <div class="admin-table-wrap">
+                  <table class="admin-table text-left">
+                    <thead>
+                      <tr>
+                        <th>Title</th>
+                        <th>Category</th>
+                        <th>Status</th>
+                        <th>Date</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody id="admin-blog-tbody">
+                      <!-- Populated dynamically -->
+                    </tbody>
+                  </table>
                 </div>
               </div>
 
@@ -1889,6 +2074,32 @@
     </div>
   </section>
   
+  <!-- === BLOG LISTING VIEW === -->
+  <div id="view-blog" class="route-view hidden">
+    <div class="blog-page" style="padding-top: 120px;">
+      <!-- Intro -->
+      <div class="blog-intro">
+        <h1 class="blog-intro-title serif-title" data-trans="blog_page_title">Notes on Scent, Craft & Curation</h1>
+        <p class="blog-intro-subtitle" data-trans="blog_page_subtitle">Stories from the world of niche perfumery — the ingredients, the rituals, and the artistry behind every bottle.</p>
+      </div>
+      <!-- Featured Post -->
+      <div id="blog-featured-post" class="blog-featured"></div>
+      <!-- Divider -->
+      <hr class="blog-divider">
+      <!-- Category Filters -->
+      <div id="blog-category-filters" class="blog-filters"></div>
+      <!-- Post Grid -->
+      <div id="blog-posts-grid" class="blog-grid"></div>
+    </div>
+  </div>
+
+  <!-- === BLOG SINGLE POST VIEW === -->
+  <div id="view-blog-post" class="route-view hidden">
+    <div class="blog-article-page" style="padding-top: 120px;">
+      <div id="blog-article-content"></div>
+    </div>
+  </div>
+
   <!-- === 404 NOT FOUND VIEW === -->
   <div id="view-404" class="route-view contact-view hidden">
     <div class="container" style="position: relative; z-index: 2;">
@@ -1968,6 +2179,7 @@
         <li><a href="/" onclick="closeDesktopMenu();" data-trans="nav_home">Home</a></li>
         <li><a href="/shop" onclick="closeDesktopMenu();" data-trans="nav_products">Products</a></li>
         <li><a href="/about" onclick="closeDesktopMenu();" data-trans="nav_about">About Us</a></li>
+        <li><a href="/blog" onclick="closeDesktopMenu();" data-trans="nav_blog">Blog</a></li>
         <li class="admin-only-link" style="display:none;"><a href="/admin" onclick="closeDesktopMenu();" data-trans="nav_admin">Admin</a></li>
         <li><a href="/contact" onclick="closeDesktopMenu();" data-trans="nav_contact">Contact</a></li>
       </ul>
@@ -1994,6 +2206,7 @@
             <li><a href="/" onclick="closeMobileMenu();" data-trans="nav_home">Գլխավոր</a></li>
             <li><a href="/shop" onclick="closeMobileMenu();" data-trans="nav_products">Ապրանքներ</a></li>
             <li><a href="/about" onclick="closeMobileMenu();" data-trans="nav_about">About Us</a></li>
+            <li><a href="/blog" onclick="closeMobileMenu();" data-trans="nav_blog">Blog</a></li>
             <li class="admin-only-link" style="display:none;"><a href="/admin" onclick="closeMobileMenu();" data-trans="nav_admin">WooCommerce Կառավարում</a></li>
             <li><a href="/contact" onclick="closeMobileMenu();" data-trans="nav_contact">Contact</a></li>
           </ul>
@@ -2101,6 +2314,7 @@
             <li><a href="/" data-trans="nav_home">Home</a></li>
             <li><a href="/shop" data-trans="footer_shop_link">Shop Collection</a></li>
             <li><a href="/about" data-trans="nav_about">About Us</a></li>
+            <li><a href="/blog" data-trans="nav_blog">Blog</a></li>
           </ul>
         </div>
         <div>
