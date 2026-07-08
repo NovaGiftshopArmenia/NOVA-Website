@@ -1,4 +1,8 @@
 {
+  "rewrites": [
+    { "source": "/product", "destination": "/product.html" },
+    { "source": "/(shop|about|contact|checkout|admin|wishlist|my-account|policy-shipping|policy-privacy|home)", "destination": "/index.html" }
+  ],
   "headers": [
     {
       "source": "/(.*)",

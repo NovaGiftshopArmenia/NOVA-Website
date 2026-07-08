@@ -2106,78 +2106,105 @@ window.changeLanguage = function (lang) {
 };
 
 
-// ROUTING SYSTEM (Hash-based)
+// ROUTING SYSTEM (History API - Clean URLs)
+// Global navigation helper — use this instead of window.location.hash
+window.navigateTo = function (path) {
+  history.pushState(null, '', path);
+  handleRouteChange();
+};
+
+function handleRouteChange() {
+  // Backward compatibility: redirect old #/ URLs to clean URLs
+  if (window.location.hash.startsWith('#/')) {
+    const oldRoute = window.location.hash.replace('#/', '');
+    const cleanPath = oldRoute === 'home' ? '/' : '/' + oldRoute;
+    history.replaceState(null, '', cleanPath);
+  }
+
+  const pathname = window.location.pathname;
+  let route = pathname === '/' ? 'home' : pathname.replace(/^\//, '').replace(/\/$/, '');
+
+  // Fallback if route does not exist
+  if (!DOM.routeViews[route]) {
+    route = 'home';
+  }
+
+  AppState.currentRoute = route;
+
+  // Toggle View Sections
+  Object.keys(DOM.routeViews).forEach(key => {
+    if (key === route) {
+      DOM.routeViews[key].classList.remove('hidden');
+    } else {
+      DOM.routeViews[key].classList.add('hidden');
+    }
+  });
+
+  // Update Nav Active States
+  const expectedHref = route === 'home' ? '/' : `/${route}`;
+  DOM.navLinks.forEach(link => {
+    if (link.getAttribute('href') === expectedHref) {
+      link.classList.add('active');
+    } else {
+      link.classList.remove('active');
+    }
+  });
+
+  // Scroll to top on page change
+  window.scrollTo(0, 0);
+
+  // Toggle header dark mode for non-home pages
+  const mainHeader = document.getElementById('main-header');
+  const headerLogo = mainHeader ? mainHeader.querySelector('.logo-img') : null;
+  if (mainHeader) {
+    if (route === 'home') {
+      mainHeader.classList.remove('header-dark');
+      if (headerLogo) headerLogo.src = 'assets/logo-light-transparent.png';
+    } else {
+      mainHeader.classList.add('header-dark');
+      if (headerLogo) headerLogo.src = 'assets/logo-dark-transparent.png';
+    }
+  }
+
+  // If entering admin dashboard, verify session and redirect if needed
+  if (route === 'admin') {
+    checkAdminSession();
+  }
+
+  // If entering wishlist page, populate it
+  if (route === 'wishlist') {
+    renderWishlistPage();
+  }
+
+  // If entering customer account dashboard, refresh it
+  if (route === 'my-account') {
+    renderMyAccount();
+  }
+
+  // If entering shop page, populate sidebar filters
+  if (route === 'shop') {
+    if (typeof renderFilterWidgets === 'function') {
+      renderFilterWidgets('desktop-sidebar-filters', false);
+    }
+    renderShop();
+  }
+}
+
 function initRouter() {
-  const handleRouteChange = () => {
-    const hash = window.location.hash || '#/home';
-    let route = hash.replace('#/', '');
-
-    // Fallback if route does not exist
-    if (!DOM.routeViews[route]) {
-      route = 'home';
+  // Intercept clicks on internal links for SPA navigation
+  document.addEventListener('click', (e) => {
+    const link = e.target.closest('a[href]');
+    if (!link) return;
+    const href = link.getAttribute('href');
+    // Only intercept internal clean URLs (starting with /) that are not external or asset links
+    if (href && href.startsWith('/') && !href.startsWith('//') && !href.match(/\.\w+$/)) {
+      e.preventDefault();
+      // Execute any onclick handler that was on the link (e.g., closeMobileMenu)
+      navigateTo(href);
     }
+  });
 
-    AppState.currentRoute = route;
-
-    // Toggle View Sections
-    Object.keys(DOM.routeViews).forEach(key => {
-      if (key === route) {
-        DOM.routeViews[key].classList.remove('hidden');
-      } else {
-        DOM.routeViews[key].classList.add('hidden');
-      }
-    });
-
-    // Update Nav Active States
-    DOM.navLinks.forEach(link => {
-      if (link.getAttribute('href') === `#/${route}`) {
-        link.classList.add('active');
-      } else {
-        link.classList.remove('active');
-      }
-    });
-
-    // Scroll to top on page change
-    window.scrollTo(0, 0);
-
-    // Toggle header dark mode for non-home pages
-    const mainHeader = document.getElementById('main-header');
-    const headerLogo = mainHeader ? mainHeader.querySelector('.logo-img') : null;
-    if (mainHeader) {
-      if (route === 'home') {
-        mainHeader.classList.remove('header-dark');
-        if (headerLogo) headerLogo.src = 'assets/logo-light-transparent.png';
-      } else {
-        mainHeader.classList.add('header-dark');
-        if (headerLogo) headerLogo.src = 'assets/logo-dark-transparent.png';
-      }
-    }
-
-    // If entering admin dashboard, verify session and redirect if needed
-    if (route === 'admin') {
-      checkAdminSession();
-    }
-
-    // If entering wishlist page, populate it
-    if (route === 'wishlist') {
-      renderWishlistPage();
-    }
-
-    // If entering customer account dashboard, refresh it
-    if (route === 'my-account') {
-      renderMyAccount();
-    }
-
-    // If entering shop page, populate sidebar filters
-    if (route === 'shop') {
-      if (typeof renderFilterWidgets === 'function') {
-        renderFilterWidgets('desktop-sidebar-filters', false);
-      }
-      renderShop();
-    }
-  };
-
-  window.addEventListener('hashchange', handleRouteChange);
+  window.addEventListener('popstate', handleRouteChange);
   handleRouteChange(); // Trigger on initial load
 }
 
@@ -2942,7 +2969,7 @@ window.applyPresetFilter = function (type, value) {
     AppState.filters.tag = value;
   }
 
-  window.location.hash = '#/shop';
+  navigateTo('/shop');
 
   if (AppState.currentRoute === 'shop') {
     renderFilterWidgets('desktop-sidebar-filters', false);
@@ -3662,7 +3689,7 @@ function updateCartUI() {
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
         </svg>
         <p style="font-weight: 300; font-size: 0.9rem; letter-spacing: 0.05em;">${cartEmptyMsg}</p>
-        <button class="btn-primary" onclick="closeCartDrawer(); window.location.hash='#/shop';">${goShopBtnText}</button>
+        <button class="btn-primary" onclick="closeCartDrawer(); navigateTo('/shop');">${goShopBtnText}</button>
       </div>
     `;
     DOM.cartSubtotal.innerText = '֏0';
@@ -3883,7 +3910,7 @@ function updateWishlistUI() {
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
         </svg>
         <p style="font-weight: 300; font-size: 0.9rem; letter-spacing: 0.05em;">${wishlistEmptyMsg}</p>
-        <button class="btn-primary" onclick="closeWishlistDrawer(); window.location.hash='#/shop';">${browseShopBtnText}</button>
+        <button class="btn-primary" onclick="closeWishlistDrawer(); navigateTo('/shop');">${browseShopBtnText}</button>
       </div>
     `;
     return;
@@ -3997,7 +4024,7 @@ window.renderWishlistPage = function () {
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
         </svg>
         <p style="font-weight: 300; font-size: 1.1rem; letter-spacing: 0.05em;">${wishlistEmptyMsg}</p>
-        <button class="btn-primary" onclick="window.location.hash='#/shop';" style="padding: 12px 30px; border-radius: 8px;">${browseShopBtnText}</button>
+        <button class="btn-primary" onclick="navigateTo('/shop');" style="padding: 12px 30px; border-radius: 8px;">${browseShopBtnText}</button>
       </div>
     `;
     return;
@@ -4045,14 +4072,14 @@ window.renderWishlistPage = function () {
 
 // PRODUCT DETAILS PAGE VIEW
 window.openProductModal = function (productId) {
-  window.location.href = 'product.html?id=' + productId;
+  window.location.href = '/product?id=' + productId;
 };
 
 window.initProductPage = function () {
   const params = new URLSearchParams(window.location.search);
   const productId = params.get('id');
   if (!productId) {
-    window.location.href = 'index.html';
+    window.location.href = '/';
     return;
   }
   renderProductPage(productId);
@@ -4457,10 +4484,10 @@ window.goToCheckout = function () {
   // If on product page, redirect to main page checkout
   const isProductPage = window.location.pathname.endsWith('/product') || window.location.pathname.endsWith('/product.html');
   if (isProductPage) {
-    window.location.href = 'index.html#/checkout';
+    window.location.href = '/checkout';
     return;
   }
-  window.location.hash = '#/checkout';
+  navigateTo('/checkout');
   renderCheckoutPage();
 };
 
@@ -4584,7 +4611,7 @@ async function processCheckout() {
             <div style="display:flex; justify-content:space-between; font-weight: 600;"><span>${orderTotalPaidLabel}</span><span>֏${formatPrice(order.total)}</span></div>
           </div>
         </div>
-        <button class="btn-primary" onclick="restoreCheckoutPage(); window.location.hash='#/shop';">${continueShoppingBtnText}</button>
+        <button class="btn-primary" onclick="restoreCheckoutPage(); navigateTo('/shop');">${continueShoppingBtnText}</button>
       </div>
     </div>
   `;
@@ -6529,7 +6556,7 @@ function renderBrandSlider() {
     span.className = 'brand-slider-item';
     span.textContent = brand;
     span.addEventListener('click', () => {
-      window.location.hash = '#/shop';
+      navigateTo('/shop');
       if (typeof applyPresetFilter === 'function') applyPresetFilter('brand', brand);
     });
     return span;

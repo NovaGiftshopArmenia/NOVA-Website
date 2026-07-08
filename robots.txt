@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /checkout
+Disallow: /my-account
+Disallow: /wishlist
+
+Sitemap: https://nova-website-ashen.vercel.app/sitemap.xml
