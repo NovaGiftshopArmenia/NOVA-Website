@@ -1796,7 +1796,8 @@ const DOM = {
     'policy-shipping': document.getElementById('view-policy-shipping'),
     'policy-privacy': document.getElementById('view-policy-privacy'),
     wishlist: document.getElementById('view-wishlist'),
-    'my-account': document.getElementById('view-my-account')
+    'my-account': document.getElementById('view-my-account'),
+    '404': document.getElementById('view-404')
   },
 
   // Shop Elements
@@ -1977,6 +1978,10 @@ window.changeLanguage = function (lang) {
   AppState.language = lang;
   localStorage.setItem('nova_lang_choice', lang);
 
+  // Update html lang attribute
+  const langMap = { am: 'hy', ru: 'ru', en: 'en' };
+  document.documentElement.lang = langMap[lang] || 'hy';
+
   // Update active state on language dropdown items
   document.querySelectorAll('.lang-dropdown-item').forEach(btn => {
     if (btn.getAttribute('data-lang') === lang) {
@@ -2107,6 +2112,81 @@ window.changeLanguage = function (lang) {
 
 
 // ROUTING SYSTEM (History API - Clean URLs)
+// --- DYNAMIC SEO META UPDATES ---
+const SEO_META = {
+  home: {
+    title: 'NOVA | Luxury Perfumery in Armenia',
+    description: 'Discover exclusive designer perfumes and niche fragrances at NOVA — Armenia\'s premier luxury gift shop.',
+  },
+  shop: {
+    title: 'Shop Collection | NOVA',
+    description: 'Browse our curated collection of luxury fragrances. Filter by scent family, brand, and price.',
+  },
+  about: {
+    title: 'About Us | NOVA',
+    description: 'Learn about NOVA — our story, our commitment to authenticity, and our passion for rare, curated fragrances.',
+  },
+  contact: {
+    title: 'Contact | NOVA',
+    description: 'Get in touch with NOVA. We deliver across all of Armenia. Phone, email, and message form available.',
+  },
+  'policy-shipping': {
+    title: 'Shipping & Returns | NOVA',
+    description: 'Shipping and return policies for NOVA. Free Yerevan delivery, regional and international shipping options.',
+  },
+  'policy-privacy': {
+    title: 'Privacy & Terms | NOVA',
+    description: 'NOVA privacy policy and terms of service. Learn how we protect your data and transaction security.',
+  },
+  checkout: {
+    title: 'Checkout | NOVA',
+    description: 'Complete your order at NOVA.',
+  },
+  wishlist: {
+    title: 'My Wishlist | NOVA',
+    description: 'Your saved fragrances at NOVA.',
+  },
+  'my-account': {
+    title: 'My Account | NOVA',
+    description: 'Manage your NOVA account, orders, and scent wardrobe.',
+  },
+  '404': {
+    title: 'Page Not Found | NOVA',
+    description: 'The page you\'re looking for doesn\'t exist.',
+  }
+};
+
+function updatePageSEO(route) {
+  const baseUrl = window.location.origin;
+  const meta = SEO_META[route] || SEO_META['home'];
+  const canonicalPath = route === 'home' ? '/' : '/' + route;
+
+  // Update title
+  document.title = meta.title;
+
+  // Update meta description
+  const descTag = document.querySelector('meta[name="description"]');
+  if (descTag) descTag.setAttribute('content', meta.description);
+
+  // Update OG tags
+  const ogTitle = document.querySelector('meta[property="og:title"]');
+  if (ogTitle) ogTitle.setAttribute('content', meta.title);
+  const ogDesc = document.querySelector('meta[property="og:description"]');
+  if (ogDesc) ogDesc.setAttribute('content', meta.description);
+  const ogUrl = document.querySelector('meta[property="og:url"]');
+  if (ogUrl) ogUrl.setAttribute('content', baseUrl + canonicalPath);
+
+  // Update Twitter tags
+  const twTitle = document.querySelector('meta[name="twitter:title"]');
+  if (twTitle) twTitle.setAttribute('content', meta.title);
+  const twDesc = document.querySelector('meta[name="twitter:description"]');
+  if (twDesc) twDesc.setAttribute('content', meta.description);
+
+  // Update canonical
+  const canonical = document.querySelector('link[rel="canonical"]');
+  if (canonical) canonical.setAttribute('href', baseUrl + canonicalPath);
+}
+
 // Global navigation helper — use this instead of window.location.hash
 window.navigateTo = function (path) {
   history.pushState(null, '', path);
@@ -2126,7 +2206,7 @@ function handleRouteChange() {
 
   // Fallback if route does not exist
   if (!DOM.routeViews[route]) {
-    route = 'home';
+    route = '404';
   }
 
   AppState.currentRoute = route;
@@ -2152,6 +2232,9 @@ function handleRouteChange() {
 
   // Scroll to top on page change
   window.scrollTo(0, 0);
+
+  // Update page SEO metadata for current route
+  updatePageSEO(route);
 
   // Toggle header dark mode for non-home pages
   const mainHeader = document.getElementById('main-header');

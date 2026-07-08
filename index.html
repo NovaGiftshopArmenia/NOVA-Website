@@ -1,20 +1,83 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hy">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>NOVA | Լյուքս օծանելիքի խանութ Հայաստանում</title>
   <meta name="description" content="Explore NOVA, an elegant and minimalist luxury perfumery. Experience high-end olfactory creations and seamless WooCommerce-style shopping.">
-  <link rel="stylesheet" href="styles.css?v=40">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="NOVA | Luxury Perfumery in Armenia">
+  <meta property="og:description" content="Discover exclusive designer perfumes and niche fragrances at NOVA — Armenia's premier luxury gift shop.">
+  <meta property="og:image" content="https://nova-website-ashen.vercel.app/assets/hero.webp">
+  <meta property="og:url" content="https://nova-website-ashen.vercel.app/">
+  <meta property="og:locale" content="hy_AM">
+  <meta property="og:locale:alternate" content="ru_RU">
+  <meta property="og:locale:alternate" content="en_US">
+  <meta property="og:site_name" content="NOVA">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="NOVA | Luxury Perfumery in Armenia">
+  <meta name="twitter:description" content="Discover exclusive designer perfumes and niche fragrances at NOVA.">
+  <meta name="twitter:image" content="https://nova-website-ashen.vercel.app/assets/hero.webp">
+
+  <!-- Canonical -->
+  <link rel="canonical" href="https://nova-website-ashen.vercel.app/">
+
+  <!-- Preconnect for performance -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://cdn.sanity.io">
+  <link rel="preconnect" href="https://www.gstatic.com">
+
+  <link rel="stylesheet" href="styles.css?v=41">
   <link rel="icon" type="image/png" href="assets/logo-favicon.png">
+  <link rel="apple-touch-icon" href="assets/logo-favicon.png">
+  <link rel="manifest" href="manifest.json">
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
+  <!-- Structured Data: Organization -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "NOVA",
+    "url": "https://nova-website-ashen.vercel.app",
+    "logo": "https://nova-website-ashen.vercel.app/assets/logo-dark-transparent.png",
+    "description": "Armenia's premier luxury perfumery offering exclusive designer fragrances, niche scents, and curated gift sets.",
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "telephone": "+374-98-019-250",
+      "contactType": "customer service",
+      "email": "novagiftshoparmenia@gmail.com",
+      "availableLanguage": ["Armenian", "Russian", "English"]
+    },
+    "sameAs": [
+      "https://www.instagram.com/nova_giftshop/",
+      "https://www.facebook.com/profile.php?id=61583498680064"
+    ]
+  }
+  </script>
 </head>
 <body>
+
+  <!-- Skip to content (accessibility) -->
+  <a href="#main-content" class="skip-to-content">Skip to main content</a>
+
+  <!-- Noscript fallback -->
+  <noscript>
+    <div style="padding: 40px; text-align: center; font-family: sans-serif; background: #f9f9f8; border-bottom: 1px solid #e5e2db;">
+      <h2>JavaScript Required</h2>
+      <p>NOVA requires JavaScript to display products and process orders. Please enable JavaScript in your browser settings.</p>
+    </div>
+  </noscript>
 
   <!-- --- HEADER & NAVIGATION --- -->
   <header id="main-header">
     <div class="container header-container">
-      <a href="/" class="logo"><img src="assets/logo-light-transparent.png" alt="NOVA" class="logo-img"></a>
+      <a href="/" class="logo"><img src="assets/logo-light-transparent.png" alt="NOVA — Luxury Perfumery" class="logo-img"></a>
       
       <nav>
         <ul class="nav-menu">
@@ -182,7 +245,7 @@
       <button class="mobile-menu-icon-btn floating-hamburger" aria-label="Menu" onclick="openMobileMenu()">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6h16M4 12h16M4 18h16"/></svg>
       </button>
-      <a href="/" class="logo"><img src="assets/logo-dark-transparent.png" alt="NOVA" class="logo-img"></a>
+      <a href="/" class="logo"><img src="assets/logo-dark-transparent.png" alt="NOVA — Luxury Perfumery" class="logo-img"></a>
       <nav class="floating-nav">
         <ul class="floating-nav-menu">
           <!-- Products Mega Menu -->
@@ -492,13 +555,13 @@
 
         <div class="container">
           <div class="text-center" style="margin-bottom: 48px; position: relative; z-index: 1;">
-            <h2 class="serif-title" style="font-size: 2.5rem; margin-top: 8px;" data-trans="featured_title" data-trans="featured_title">The Fragrance Collective</h2>
+            <h2 class="serif-title" style="font-size: 2.5rem; margin-top: 8px;" data-trans="featured_title">The Fragrance Collective</h2>
           </div>
           <div id="featured-products-grid" class="products-grid" style="position: relative; z-index: 1;">
             <!-- Populated via Javascript -->
           </div>
           <div class="text-center" style="margin-top: 48px; position: relative; z-index: 1;">
-            <a href="/shop" class="btn-primary" data-trans="view_full_collection_btn" data-trans="view_full_collection_btn">View Full Collection</a>
+            <a href="/shop" class="btn-primary" data-trans="view_full_collection_btn">View Full Collection</a>
           </div>
         </div>
       </div>
@@ -617,8 +680,8 @@
         <!-- Shop Header & Filters -->
         <div class="shop-header">
           <div>
-            <h1 class="shop-title serif-title" data-trans="shop_title" data-trans="shop_title">The Collection</h1>
-            <p style="font-size: 0.85rem; color: var(--color-medium-gray); font-weight: 300; margin-top: 4px;" data-trans="shop_subtitle" data-trans="shop_subtitle">Refine your search by notes profile or olfactory family.</p>
+            <h2 class="shop-title serif-title" data-trans="shop_title">The Collection</h2>
+            <p style="font-size: 0.85rem; color: var(--color-medium-gray); font-weight: 300; margin-top: 4px;" data-trans="shop_subtitle">Refine your search by notes profile or olfactory family.</p>
           </div>
           
           <div class="shop-controls">
@@ -701,7 +764,7 @@
               </div>
               <div class="form-group">
                 <label for="billing-address" data-trans="checkout_street">Street Address *</label>
-                <input type="text" id="billing-address" placeholder="House number and street name" required value="221B Baker St">
+                <input type="text" id="billing-address" placeholder="House number and street name" required>
               </div>
               <div class="form-row">
                 <div class="form-group">
@@ -1292,7 +1355,7 @@
           <!-- Single Image with Overlay -->
           <div class="about-hero-gallery about-hero-gallery--single">
             <div class="about-hero-single-img">
-              <img src="assets/about-hero-image.webp" alt="NOVA Perfumery" class="gallery-img" loading="lazy">
+              <img src="assets/about-hero-image.webp" alt="NOVA luxury perfume bottles and packaging" class="gallery-img" loading="lazy">
             </div>
           </div>
         </div>
@@ -1416,7 +1479,7 @@
 
     <div class="container" style="position: relative; z-index: 2;">
       <div style="margin-bottom: var(--spacing-xl);">
-        <h1 class="serif-title" style="font-size: clamp(3rem, 8vw, 96px);" data-trans="contact_subtitle">Let's <span style="color: var(--color-brown); font-style: italic">talk</span></h1>
+        <h2 class="serif-title" style="font-size: clamp(3rem, 8vw, 96px);" data-trans="contact_subtitle">Let's <span style="color: var(--color-brown); font-style: italic">talk</span></h2>
         <p class="body-text" style="margin-top: 12px; color: var(--color-medium-gray); max-width: 480px;" data-trans="contact_lead">Have a question? We would be pleased to hear from you</p>
       </div>
       
@@ -1780,32 +1843,32 @@
               <div class="form-row">
                 <div class="form-group">
                   <label for="acc-first-name" data-trans="checkout_first_name">First Name *</label>
-                  <input type="text" id="acc-first-name" required value="Emma" class="admin-input" style="width: 100%; border: 1px solid var(--color-border); border-radius: 4px; padding: 10px;">
+                  <input type="text" id="acc-first-name" required class="admin-input" style="width: 100%; border: 1px solid var(--color-border); border-radius: 4px; padding: 10px;">
                 </div>
                 <div class="form-group">
                   <label for="acc-last-name" data-trans="checkout_last_name">Last Name *</label>
-                  <input type="text" id="acc-last-name" required value="Watson" class="admin-input" style="width: 100%; border: 1px solid var(--color-border); border-radius: 4px; padding: 10px;">
+                  <input type="text" id="acc-last-name" required class="admin-input" style="width: 100%; border: 1px solid var(--color-border); border-radius: 4px; padding: 10px;">
                 </div>
               </div>
               <div class="form-group" style="margin-top: 12px;">
                 <label for="acc-email" data-trans="checkout_email">Email Address *</label>
-                <input type="email" id="acc-email" required value="emma.w@example.com" class="admin-input" style="width: 100%; border: 1px solid var(--color-border); border-radius: 4px; padding: 10px;">
+                <input type="email" id="acc-email" required class="admin-input" style="width: 100%; border: 1px solid var(--color-border); border-radius: 4px; padding: 10px;">
               </div>
               
               <div style="margin: 24px 0 16px 0; border-top: 1px solid var(--color-border); padding-top: 16px;">
                 <h4 class="serif-title" style="font-size: 1.2rem; margin-bottom: 12px;" data-trans="checkout_billing_title">Billing Address</h4>
                 <div class="form-group">
                   <label for="acc-billing-street" data-trans="checkout_street">Street Address *</label>
-                  <input type="text" id="acc-billing-street" required value="221B Baker St" class="admin-input" style="width: 100%; border: 1px solid var(--color-border); border-radius: 4px; padding: 10px;">
+                  <input type="text" id="acc-billing-street" required class="admin-input" style="width: 100%; border: 1px solid var(--color-border); border-radius: 4px; padding: 10px;">
                 </div>
                 <div class="form-row" style="margin-top: 12px;">
                   <div class="form-group">
                     <label for="acc-billing-city" data-trans="checkout_city">City *</label>
-                    <input type="text" id="acc-billing-city" required value="London" class="admin-input" style="width: 100%; border: 1px solid var(--color-border); border-radius: 4px; padding: 10px;">
+                    <input type="text" id="acc-billing-city" required class="admin-input" style="width: 100%; border: 1px solid var(--color-border); border-radius: 4px; padding: 10px;">
                   </div>
                   <div class="form-group">
                     <label for="acc-billing-zip" data-trans="checkout_zip">ZIP / Postal Code *</label>
-                    <input type="text" id="acc-billing-zip" required value="NW1 6XE" class="admin-input" style="width: 100%; border: 1px solid var(--color-border); border-radius: 4px; padding: 10px;">
+                    <input type="text" id="acc-billing-zip" required class="admin-input" style="width: 100%; border: 1px solid var(--color-border); border-radius: 4px; padding: 10px;">
                   </div>
                 </div>
               </div>
@@ -1826,6 +1889,18 @@
     </div>
   </section>
   
+  <!-- === 404 NOT FOUND VIEW === -->
+  <div id="view-404" class="route-view contact-view hidden">
+    <div class="container" style="position: relative; z-index: 2;">
+      <div class="text-center" style="min-height: 50vh; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+        <h2 class="serif-title" style="font-size: clamp(4rem, 10vw, 120px); color: var(--color-border);">404</h2>
+        <h3 class="serif-title" style="font-size: 1.8rem; margin-top: 8px;">Page Not Found</h3>
+        <p style="color: var(--color-medium-gray); font-size: 0.95rem; margin-top: 12px; max-width: 400px;">The page you're looking for doesn't exist or has been moved.</p>
+        <a href="/" class="btn-primary" style="margin-top: 32px;">Return Home</a>
+      </div>
+    </div>
+  </div>
+
   </main>
 
   <!-- --- WOOCOMMERCE CART DRAWER SLIDE-IN --- -->
@@ -2017,7 +2092,7 @@
     <div class="container">
       <div class="footer-grid">
         <div>
-          <div class="footer-logo"><a href="/"><img src="assets/logo-light-transparent.png" alt="NOVA" class="logo-img"></a></div>
+          <div class="footer-logo"><a href="/"><img src="assets/logo-light-transparent.png" alt="NOVA — Luxury Perfumery" class="logo-img"></a></div>
           <p class="footer-about" data-trans="footer_about">An architectural study of pure botanical scents, handcrafted for the modern aesthetic enthusiast.</p>
         </div>
         <div>
@@ -2033,7 +2108,7 @@
           <ul class="footer-links">
             <li><a href="/contact" data-trans="nav_contact">Contact</a></li>
             <li><a href="/policy-shipping" data-trans="footer_policy_shipping">Shipping & Returns</a></li>
-            <li><a href="#/policy-privacy" data-trans="footer_policy_privacy">Privacy & Terms</a></li>
+            <li><a href="/policy-privacy" data-trans="footer_policy_privacy">Privacy & Terms</a></li>
           </ul>
         </div>
         <div>
@@ -2080,7 +2155,7 @@
   <!-- --- APPLICATION SCRIPTS --- -->
   <script src="products.js?v=12"></script>
   <script src="admin.js?v=13"></script>
-  <script src="app.js?v=41"></script>
+  <script src="app.js?v=42"></script>
 </body>
 </html>
 
