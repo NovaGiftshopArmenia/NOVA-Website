@@ -1,7 +1,8 @@
 {
   "rewrites": [
     { "source": "/product", "destination": "/product.html" },
-    { "source": "/(shop|about|contact|checkout|admin|wishlist|my-account|policy-shipping|policy-privacy|home)", "destination": "/index.html" }
+    { "source": "/(shop|about|contact|checkout|admin|wishlist|my-account|policy-shipping|policy-privacy|home)", "destination": "/index.html" },
+    { "source": "/((?!assets|.*\\.js|.*\\.css|.*\\.png|.*\\.webp|.*\\.mp4|.*\\.json|.*\\.xml|.*\\.txt|.*\\.ico).*)", "destination": "/index.html" }
   ],
   "headers": [
     {
