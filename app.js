@@ -3943,6 +3943,11 @@ window.toggleWishlist = function (productId) {
   renderFeaturedProducts();
   renderShop();
 
+  // Re-render wishlist page if currently on it
+  if (AppState.currentRoute === 'wishlist') {
+    renderWishlistPage();
+  }
+
   // If details modal is open on this product, toggle button class too
   if (AppState.selectedProduct && AppState.selectedProduct.id === productId) {
     const isWishlisted = AppState.wishlist.includes(productId);
