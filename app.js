@@ -652,7 +652,7 @@ const TRANSLATIONS = {
     mobile_sec_languages: "Языки",
     nav_contact: "Контакты",
     nav_blog: "НОВОСТИ",
-    blog_page_title: "Заметки о ароматах, мастерстве и курации",
+    blog_page_title: "Заметки о ароматах, мастерстве <span style='color: var(--color-brown)'>и</span> курации",
     blog_page_subtitle: "Истории из мира нишевой парфюмерии \u2014 ингредиенты, ритуалы и искусство, стоящее за каждым флаконом.",
     contact_header_title: "КОНТАКТЫ",
     contact_subtitle: "Давайте <span style='color: var(--color-brown); font-style: italic'>Поговорим</span>",
@@ -1089,7 +1089,7 @@ const TRANSLATIONS = {
     mobile_sec_languages: "Languages",
     nav_contact: "Contact",
     nav_blog: "Blog",
-    blog_page_title: "Notes on Scent, Craft & Curation",
+    blog_page_title: "Notes on Scent, Craft <span style='color: var(--color-brown)'>&</span> Curation",
     blog_page_subtitle: "Stories from the world of niche perfumery \u2014 the ingredients, the rituals, and the artistry behind every bottle.",
     contact_header_title: "CONTACT US",
     contact_subtitle: "Let's <span style='color: var(--color-brown); font-style: italic'>Talk</span>",
@@ -8483,23 +8483,6 @@ async function renderBlogListing() {
   await fetchBlogPosts();
   const posts = AppState.blogPosts.filter(p => p.status === 'published');
 
-  // Featured post
-  const featuredContainer = document.getElementById('blog-featured-post');
-  const featured = posts.find(p => p.featured) || posts[0];
-  if (featured && featuredContainer) {
-    featuredContainer.innerHTML = `
-      <div class="blog-featured-card" onclick="openBlogPost('${featured.slug}')">
-        <img src="${featured.image}" alt="${getBlogField(featured, 'title')}" class="blog-featured-img" loading="lazy">
-        <div>
-          <div class="blog-featured-category">${featured.category}</div>
-          <div class="blog-featured-title">${getBlogField(featured, 'title')}</div>
-          <div class="blog-featured-excerpt">${getBlogField(featured, 'excerpt')}</div>
-          <div class="blog-featured-meta">${featured.author} &middot; ${featured.date} &middot; ${featured.readTime}</div>
-        </div>
-      </div>
-    `;
-  }
-
   // Category filters
   const filtersContainer = document.getElementById('blog-category-filters');
   const categories = ['All', ...new Set(posts.map(p => p.category))];
@@ -8513,6 +8496,25 @@ async function renderBlogListing() {
   renderBlogGrid(posts);
 }
 
+// Fallback blog images from home page assets
+const BLOG_FALLBACK_IMAGES = [
+  'assets/exclusively-curated-collections.webp',
+  'assets/long-lasting-signature-scents.webp',
+  'assets/sustainable-packaging.webp',
+  'assets/delivery.webp',
+  'assets/card-fragrance.webp',
+  'assets/card-gift.webp',
+  'assets/card-scent.webp',
+  'assets/card-beauty.webp',
+  'assets/hero.webp',
+  'assets/about-hero-image.webp'
+];
+
+function styleBlogTitle(title) {
+  return title.replace(/&amp;/g, '<span style="color: var(--color-brown)">&amp;</span>')
+              .replace(/&(?!amp;|lt;|gt;|quot;|#)/g, '<span style="color: var(--color-brown)">&</span>');
+}
+
 function renderBlogGrid(allPosts) {
   const grid = document.getElementById('blog-posts-grid');
   if (!grid) return;
@@ -8521,15 +8523,19 @@ function renderBlogGrid(allPosts) {
     ? allPosts
     : allPosts.filter(p => p.category === AppState.blogActiveCategory);
 
-  grid.innerHTML = filtered.map(post => `
+  grid.innerHTML = filtered.map((post, idx) => {
+    const imgSrc = post.image || BLOG_FALLBACK_IMAGES[idx % BLOG_FALLBACK_IMAGES.length];
+    const title = styleBlogTitle(getBlogField(post, 'title'));
+    return `
     <div class="blog-card" onclick="openBlogPost('${post.slug}')">
-      <img src="${post.image}" alt="${getBlogField(post, 'title')}" class="blog-card-img" loading="lazy">
+      <img src="${imgSrc}" alt="${getBlogField(post, 'title')}" class="blog-card-img" loading="lazy">
       <div class="blog-card-category">${post.category}</div>
-      <div class="blog-card-title">${getBlogField(post, 'title')}</div>
+      <div class="blog-card-title">${title}</div>
       <div class="blog-card-excerpt">${getBlogField(post, 'excerpt')}</div>
       <div class="blog-card-meta">${post.date} &middot; ${post.readTime}</div>
     </div>
-  `).join('');
+  `;
+  }).join('');
 }
 
 window.filterBlogCategory = function(cat) {
@@ -8809,34 +8815,27 @@ window.deleteBlogPost = async function(id) {
 // =====================================================================
 async function seedMockBlogPosts() {
   try {
-    const snap = await firebase.firestore().collection('blogPosts').limit(1).get();
-    if (!snap.empty) return; // Already has posts
+    const snap = await firebase.firestore().collection('blogPosts').get();
+    
+    // Check if we need to clean up/migrate
+    let needsReset = false;
+    snap.forEach(doc => {
+      const data = doc.data();
+      if (data.slug === 'the-anatomy-of-a-scent') needsReset = true;
+      if (data.image && data.image.includes('unsplash.com')) needsReset = true;
+      if (data.imageArticle && data.imageArticle.includes('unsplash.com')) needsReset = true;
+    });
+
+    if (needsReset) {
+      console.log('[NOVA Blog] Running database reset migration for blog posts...');
+      for (const doc of snap.docs) {
+        await doc.ref.delete();
+      }
+    } else if (!snap.empty) {
+      return; // Already populated with correct local posts
+    }
 
     const mockPosts = [
-      {
-        title: "The Anatomy of a Scent: Top, Heart & Base",
-        titleAm: "Բույրի անատոdelays: Վերին, Սdelays և Ստdelays նdelays",
-        titleRu: "Анатомия аромата: Верхние, Сердечные и Базовые ноты",
-        slug: "the-anatomy-of-a-scent",
-        category: "Fragrance Notes",
-        excerpt: "Understanding the three-act structure behind every great fragrance, from the first spray to the final dry-down.",
-        excerptAm: "Յուdelays",
-        excerptRu: "Понимание трёхактной структуры каждого великого аромата.",
-        image: "https://images.unsplash.com/photo-1541643600914-78b084683601?w=800",
-        imageArticle: "https://images.unsplash.com/photo-1615634260167-c8cdede054de?w=800",
-        paragraph1: "Every fragrance unfolds like a piece of music, composed in three distinct movements. The top notes greet you first — bright, volatile, gone within minutes. They are the introduction, the handshake.",
-        paragraph2: "Beneath them, the heart notes emerge: florals, spices, the soul of the composition. They linger for hours, defining the character most people associate with the scent.",
-        paragraph3: "Finally, the base notes settle in — woods, musks, resins — anchoring everything that came before. This is what remains on your skin, and often on your memory, long after the bottle is capped.",
-        pullQuote: "A fragrance is a story told in evaporation.",
-        author: "NOVA",
-        authorBio: "Contributing writer at the NOVA Journal, exploring the artistry of niche perfumery.",
-        tags: ["Perfumery 101", "Notes", "Education"],
-        featured: true,
-        readTime: "6 min read",
-        date: "JUN 2, 2026",
-        status: "published",
-        publishedAt: firebase.firestore.FieldValue.serverTimestamp()
-      },
       {
         title: "Inside Our Sourcing: What \"Niche\" Really Means",
         titleRu: "Как мы отбираем: что на самом деле значит «нишевая» парфюмерия",
@@ -8844,8 +8843,8 @@ async function seedMockBlogPosts() {
         category: "Curation",
         excerpt: "A look at how NOVA selects the rare houses and independent perfumers behind our collection.",
         excerptRu: "Как NOVA отбирает редкие дома и независимых парфюмеров для нашей коллекции.",
-        image: "https://images.unsplash.com/photo-1594035910387-fbd1a485b12e?w=800",
-        imageArticle: "https://images.unsplash.com/photo-1585386959984-a4155224a1ad?w=800",
+        image: "assets/exclusively-curated-collections.webp",
+        imageArticle: "assets/long-lasting-signature-scents.webp",
         paragraph1: "The word 'niche' has been stretched and diluted by the mainstream fragrance industry. At NOVA, we return it to its original meaning: small-batch, artisan-crafted scents created without compromise.",
         paragraph2: "We personally visit the ateliers. We speak with the noses. We test each composition across seasons and skin types before adding it to our shelves.",
         paragraph3: "Our promise is simple: every bottle at NOVA tells a story worth wearing.",
@@ -8866,7 +8865,8 @@ async function seedMockBlogPosts() {
         category: "Gifting",
         excerpt: "Pairing personality with perfume — how to choose a fragrance gift someone will actually wear.",
         excerptRu: "Сdelays",
-        image: "https://images.unsplash.com/photo-1563170351-be82bc888aa4?w=800",
+        image: "assets/card-gift.webp",
+        imageArticle: "assets/gifts-filter.webp",
         paragraph1: "Gifting a fragrance is an intimate act. Unlike clothes or accessories, a scent lives on someone's skin — it becomes part of their identity.",
         paragraph2: "Start with what you know about the recipient. Do they gravitate toward freshness or warmth? Are they minimalists or maximalists? The answers will guide you toward the right scent family.",
         paragraph3: "At NOVA, we offer complimentary gift consultations. Bring us the personality; we'll find the bottle.",
@@ -8887,8 +8887,8 @@ async function seedMockBlogPosts() {
         category: "Lifestyle",
         excerpt: "How to combine two or more fragrances to create a scent that is uniquely yours.",
         excerptRu: "Как комбинировать два или более аромата, чтобы создать запах, уникальный именно для вас.",
-        image: "https://images.unsplash.com/photo-1547887538-e3a2f32cb1cc?w=800",
-        imageArticle: "https://images.unsplash.com/photo-1588405748880-12d1d2a59f75?w=800",
+        image: "assets/card-scent.webp",
+        imageArticle: "assets/about-hero-image.webp",
         paragraph1: "Fragrance layering is the art of wearing more than one scent at a time. Done well, it creates a signature that no single bottle can replicate.",
         paragraph2: "The key rule: layer from heaviest to lightest. Apply your base fragrance first — something rich with woods or amber — then mist a brighter, fresher scent on top.",
         paragraph3: "Experiment without fear. Some of the most iconic scent combinations were accidents. Your skin chemistry is the final ingredient.",
@@ -8907,7 +8907,7 @@ async function seedMockBlogPosts() {
     for (const post of mockPosts) {
       await firebase.firestore().collection('blogPosts').add(post);
     }
-    console.log('[NOVA Blog] Seeded 4 mock blog posts.');
+    console.log('[NOVA Blog] Seeded 3 mock blog posts with local assets.');
   } catch (e) {
     console.error('[NOVA Blog] Seed error:', e);
   }
