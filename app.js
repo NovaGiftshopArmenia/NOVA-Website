@@ -223,7 +223,7 @@ const TRANSLATIONS = {
     mobile_sec_languages: "Լեզուներ",
     nav_contact: "Հետադարձ Կապ",
     nav_blog: "ՆՈՐՈՒԹՅՈՒՆՆԵՐ",
-    blog_page_title: "Նոտաներ։ Բուրմունք, Արվեստ և Մոտեցում",
+    blog_page_title: "Նոտաներ։ Բուրմունք, Արվեստ <span style='color: var(--color-brown); font-style: italic'>և</span> Մոտեցում",
     blog_page_subtitle: "Պատմություններ նիշային օծանության աշխարհից \u2014 բաղկացութիցները, ռիտուալները և յուրաքանչյուր շշի հետևում արվեստը:",
     contact_header_title: "ՀԵՏԱԴԱՐՁ ԿԱՊ",
     contact_subtitle: "Եկեք <span style='color: var(--color-brown); font-style: italic'>զրուցենք</span>",
