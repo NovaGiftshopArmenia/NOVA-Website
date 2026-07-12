@@ -4375,6 +4375,29 @@ function renderProductPage(productId) {
     const canonical = document.querySelector('link[rel="canonical"]');
     if (canonical) canonical.setAttribute('href', productUrl);
 
+    // 5b. Meta Keywords — inject product-specific keywords
+    const keywordsArr = [
+      p.name,
+      p.brand,
+      `${p.brand} ${p.name}`,
+      `${p.name} buy Armenia`,
+      `${p.brand} eau de parfum`,
+      'niche perfume Armenia',
+      'buy perfume Armenia',
+      'perfume online Armenia',
+      'NOVA perfumery',
+      ...(p.tags || []),
+      p.scent_family ? `${p.scent_family} fragrance` : '',
+      p.gender_id ? `${p.gender_id === 'unisex' ? 'unisex' : p.gender_id} perfume` : '',
+      'eau de parfum'
+    ].filter(Boolean).join(', ');
+    const keywordsMeta = document.querySelector('meta[name="keywords"]');
+    if (keywordsMeta) keywordsMeta.setAttribute('content', keywordsArr);
+
+    // 5c. Meta Robots — ensure page is indexable
+    const robotsMeta = document.querySelector('meta[name="robots"]');
+    if (robotsMeta) robotsMeta.setAttribute('content', 'index, follow');
+
     // 6. JSON-LD — Product + BreadcrumbList + FAQPage schema
     const existingSchema = document.getElementById('nova-product-schema');
     if (existingSchema) existingSchema.remove();
