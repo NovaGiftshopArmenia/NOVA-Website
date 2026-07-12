@@ -354,15 +354,6 @@
             <span class="stars">★★★★★</span> <span id="pp-rating-val"></span>
           </div>
           <p id="pp-tagline" class="pp-tagline"></p>
-          <div id="pp-desc-wrapper" class="pp-desc-wrapper">
-            <span id="pp-desc" class="pp-description"></span><button id="pp-read-more-btn" class="pp-read-more-btn" style="display:none;">Read More</button>
-          </div>
-          
-          <div class="pp-pyramid" style="display:none;">
-            <div class="pp-pyramid-tier"><span class="pp-pyramid-label" data-trans="modal_top">Top</span><span id="pp-top"></span></div>
-            <div class="pp-pyramid-tier"><span class="pp-pyramid-label" data-trans="modal_heart">Heart</span><span id="pp-heart"></span></div>
-            <div class="pp-pyramid-tier"><span class="pp-pyramid-label" data-trans="modal_base">Base</span><span id="pp-base"></span></div>
-          </div>
           
           <div class="pp-sizes" id="pp-sizes"></div>
           
@@ -373,6 +364,16 @@
               <button id="pp-qty-plus" class="qty-btn">+</button>
             </div>
             <button id="pp-add-btn" class="btn-primary pp-add-btn" data-trans="modal_add_to_cart">Add to Cart</button>
+          </div>
+
+          <div id="pp-desc-wrapper" class="pp-desc-wrapper">
+            <span id="pp-desc" class="pp-description"></span><button id="pp-read-more-btn" class="pp-read-more-btn" style="display:none;">Read More</button>
+          </div>
+          
+          <div class="pp-pyramid" style="display:none;">
+            <div class="pp-pyramid-tier"><span class="pp-pyramid-label" data-trans="modal_top">Top</span><span id="pp-top"></span></div>
+            <div class="pp-pyramid-tier"><span class="pp-pyramid-label" data-trans="modal_heart">Heart</span><span id="pp-heart"></span></div>
+            <div class="pp-pyramid-tier"><span class="pp-pyramid-label" data-trans="modal_base">Base</span><span id="pp-base"></span></div>
           </div>
         </div>
       </div>
@@ -598,6 +599,28 @@
         <button class="btn-primary cart-checkout-btn" onclick="addAllWishlistToCart()" data-trans="wishlist_add_all_btn">Add All to Bag</button>
         <a href="index.html#/wishlist" class="btn-secondary" onclick="closeWishlistDrawer()" style="text-align: center; border: 1px solid var(--color-border); padding: 12px; border-radius: 8px; font-weight: 500;" data-trans="wishlist_view_page_btn">View Wishlist Page</a>
       </div>
+    </div>
+  </div>
+
+  <!-- --- DESKTOP MENU POPUP (for hamburger on desktop) --- -->
+  <div id="desktop-menu-overlay" class="desktop-menu-overlay">
+    <div class="desktop-menu-panel">
+      <div class="desktop-menu-header">
+        <span class="logo"><img src="assets/logo-dark-transparent.png" alt="NOVA" class="logo-img" style="height: 40px; width: auto;"></span>
+        <button class="cart-drawer-close" aria-label="Close menu" onclick="closeDesktopMenu()">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      <ul class="desktop-menu-links">
+        <li><a href="index.html#/home" onclick="closeDesktopMenu();" data-trans="nav_home">Home</a></li>
+        <li><a href="index.html#/shop" onclick="closeDesktopMenu();" data-trans="nav_products">Products</a></li>
+        <li><a href="index.html#/about" onclick="closeDesktopMenu();" data-trans="nav_about">About Us</a></li>
+        <li><a href="/blog" onclick="closeDesktopMenu();" data-trans="nav_blog">Blog</a></li>
+        <li class="admin-only-link" style="display:none;"><a href="index.html#/admin" onclick="closeDesktopMenu();" data-trans="nav_admin">Admin</a></li>
+        <li><a href="index.html#/contact" onclick="closeDesktopMenu();" data-trans="nav_contact">Contact</a></li>
+      </ul>
     </div>
   </div>
 
