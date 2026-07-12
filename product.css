@@ -1,5 +1,9 @@
 /* product.css - Premium Standalone Product Page Styling */
 
+.pp-desc-wrapper {
+  margin-top: 24px;
+}
+
 /* Override global background for a cohesive editorial look */
 body:has(#product-page-body) {
   background-color: #fdfdfd;
