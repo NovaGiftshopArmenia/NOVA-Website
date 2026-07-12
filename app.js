@@ -4332,6 +4332,173 @@ function renderProductPage(productId) {
   const product = AppState.products.find(p => p.id === productId);
   if (!product) return;
 
+  // ============================================================
+  // SEO / GEO — Dynamic Per-Product Meta Injection
+  // Injects: title, description, OG, Twitter, canonical, JSON-LD
+  // ============================================================
+  (function injectProductSEO(p) {
+    const baseUrl = 'https://nova-website-ashen.vercel.app';
+    const productUrl = `${baseUrl}/product?id=${p.id}`;
+    const productImage = p.image || (p.images && p.images[0]) || `${baseUrl}/assets/hero.webp`;
+
+    // Build concise meta description (150-155 chars)
+    const taglineText = p.tagline || '';
+    const brandText = p.brand || 'MANCERA';
+    const familyText = p.scent_family ? ` ${p.scent_family} fragrance.` : '.';
+    const rawMetaDesc = `${taglineText} ${brandText} Eau de Parfum — a premium${familyText} Buy now at NOVA, Armenia's premier niche perfumery.`;
+    const metaDesc = rawMetaDesc.length > 155 ? rawMetaDesc.substring(0, 152) + '...' : rawMetaDesc;
+
+    // Title tag: Primary Keyword – Brand | NOVA
+    const pageTitle = `${p.name} | Buy in Armenia — NOVA Perfumery`;
+
+    // 1. Title
+    document.title = pageTitle;
+
+    // 2. Meta description
+    const descTag = document.querySelector('meta[name="description"]');
+    if (descTag) descTag.setAttribute('content', metaDesc);
+
+    // 3. Open Graph
+    const setMeta = (sel, val) => { const el = document.querySelector(sel); if (el) el.setAttribute('content', val); };
+    setMeta('meta[property="og:title"]', pageTitle);
+    setMeta('meta[property="og:description"]', metaDesc);
+    setMeta('meta[property="og:image"]', productImage);
+    setMeta('meta[property="og:url"]', productUrl);
+    setMeta('meta[property="og:type"]', 'product');
+
+    // 4. Twitter Card
+    setMeta('meta[name="twitter:title"]', pageTitle);
+    setMeta('meta[name="twitter:description"]', metaDesc);
+    setMeta('meta[name="twitter:image"]', productImage);
+
+    // 5. Canonical
+    const canonical = document.querySelector('link[rel="canonical"]');
+    if (canonical) canonical.setAttribute('href', productUrl);
+
+    // 6. JSON-LD — Product + BreadcrumbList + FAQPage schema
+    const existingSchema = document.getElementById('nova-product-schema');
+    if (existingSchema) existingSchema.remove();
+
+    const topNotesSEO = (p.notes && p.notes.top) ? p.notes.top.join(' ') : '';
+    const heartNotesSEO = (p.notes && p.notes.heart) ? p.notes.heart.join(' ') : '';
+    const baseNotesSEO = (p.notes && p.notes.base) ? p.notes.base.join(' ') : '';
+    const allNotesText = [topNotesSEO, heartNotesSEO, baseNotesSEO].filter(Boolean).join(' ');
+
+    const priceAMD = p.price || 0;
+    const priceUSD = Math.round(priceAMD / 390); // approximate AMD→USD
+
+    const schemaGraph = {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Product",
+          "@id": `${productUrl}#product`,
+          "name": p.name,
+          "description": (p.description || '').substring(0, 500),
+          "brand": {
+            "@type": "Brand",
+            "name": p.brand || 'MANCERA',
+            "url": "https://manceraparis.com"
+          },
+          "image": [productImage],
+          "sku": p.sku || p.id,
+          "category": `Perfume > ${p.scent_family || 'Fragrance'} > ${p.gender_id || 'Unisex'}`,
+          "keywords": (p.tags || []).join(', '),
+          "offers": {
+            "@type": "Offer",
+            "url": productUrl,
+            "priceCurrency": "AMD",
+            "price": priceAMD,
+            "priceValidUntil": new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString().split('T')[0],
+            "availability": p.stock > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
+            "itemCondition": "https://schema.org/NewCondition",
+            "seller": {
+              "@type": "Organization",
+              "name": "NOVA Perfumery Armenia",
+              "url": baseUrl
+            }
+          },
+          "aggregateRating": p.rating && p.reviewsCount ? {
+            "@type": "AggregateRating",
+            "ratingValue": p.rating,
+            "reviewCount": p.reviewsCount,
+            "bestRating": "5",
+            "worstRating": "1"
+          } : undefined,
+          "additionalProperty": [
+            { "@type": "PropertyValue", "name": "Concentration", "value": "Eau de Parfum" },
+            { "@type": "PropertyValue", "name": "Fragrance Family", "value": p.scent_family || '' },
+            { "@type": "PropertyValue", "name": "Gender", "value": p.gender_id || 'Unisex' },
+            { "@type": "PropertyValue", "name": "Top Notes", "value": topNotesSEO },
+            { "@type": "PropertyValue", "name": "Heart Notes", "value": heartNotesSEO },
+            { "@type": "PropertyValue", "name": "Base Notes", "value": baseNotesSEO }
+          ].filter(a => a.value)
+        },
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Home", "item": baseUrl },
+            { "@type": "ListItem", "position": 2, "name": "Shop", "item": `${baseUrl}/shop` },
+            { "@type": "ListItem", "position": 3, "name": p.brand || 'MANCERA', "item": `${baseUrl}/shop?brand=${encodeURIComponent(p.brand || '')}` },
+            { "@type": "ListItem", "position": 4, "name": p.name, "item": productUrl }
+          ]
+        },
+        {
+          "@type": "FAQPage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": `What does ${p.name} smell like?`,
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": `${p.name} is a ${p.scent_family || 'niche'} Eau de Parfum by ${p.brand || 'MANCERA'}. ${allNotesText}`
+              }
+            },
+            {
+              "@type": "Question",
+              "name": `How long does ${p.name} last?`,
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": `${p.name} is an Eau de Parfum (EDP) with 15-20% aromatic concentration, offering strong longevity typically ranging from 8 to 12+ hours on skin, with notable sillage.`
+              }
+            },
+            {
+              "@type": "Question",
+              "name": `What is the price of ${p.name} in Armenia?`,
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": `${p.name} is available at NOVA Perfumery Armenia for ֏${priceAMD.toLocaleString()} AMD (approximately $${priceUSD} USD) for 120ml. Shop online at nova-website-ashen.vercel.app with fast delivery across Armenia.`
+              }
+            },
+            {
+              "@type": "Question",
+              "name": `Is ${p.name} suitable for men or women?`,
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": `${p.name} is classified as ${p.gender_id === 'unisex' ? 'a unisex fragrance, suitable for all genders' : `a ${p.gender_id}'s fragrance`}. It belongs to the ${p.scent_family || 'niche'} fragrance family.`
+              }
+            }
+          ]
+        }
+      ]
+    };
+
+    // Remove undefined fields (aggregateRating)
+    schemaGraph['@graph'] = schemaGraph['@graph'].map(node => {
+      return Object.fromEntries(Object.entries(node).filter(([, v]) => v !== undefined));
+    });
+
+    const schemaScript = document.createElement('script');
+    schemaScript.id = 'nova-product-schema';
+    schemaScript.type = 'application/ld+json';
+    schemaScript.textContent = JSON.stringify(schemaGraph, null, 0);
+    document.head.appendChild(schemaScript);
+
+  })(product);
+  // ============================================================
+  // END SEO INJECTION
+  // ============================================================
+
   // Determine available sizes and select first available
   const availableSizes = (product.sizes || []).filter(s => s.price && s.price > 0);
   AppState.selectedProduct = product;
