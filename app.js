@@ -4533,44 +4533,46 @@ function renderProductPage(productId) {
 
     const priceAMD = p.price || 0;
     const priceUSD = Math.round(priceAMD / 390);
-    const topNotes = (p.notes && p.notes.top) ? p.notes.top.join(' ') : '';
-    const heartNotes = (p.notes && p.notes.heart) ? p.notes.heart.join(' ') : '';
-    const baseNotes = (p.notes && p.notes.base) ? p.notes.base.join(' ') : '';
-    const allNotes = [topNotes, heartNotes, baseNotes].filter(Boolean).join(' ');
+    const topNotes = (p.notes && p.notes.top) ? p.notes.top.join(', ') : '';
+    const heartNotes = (p.notes && p.notes.heart) ? p.notes.heart.join(', ') : '';
+    const baseNotes = (p.notes && p.notes.base) ? p.notes.base.join(', ') : '';
     const genderText = p.gender_id === 'unisex'
       ? 'both men and women — it is a unisex fragrance'
       : `${p.gender_id === 'men' ? 'men' : 'women'} primarily, though many wear it regardless of gender`;
     const familyText = p.scent_family || 'niche';
-    const vibesText = (p.vibes || []).join(', ');
+    const vibesText = (p.vibes || []).slice(0, 3).join(', ');
+    // Synonym rotation — vary scent vocabulary across products (fragrance / parfum / scent / eau de parfum)
+    const faqScentSynonyms = ['fragrance', 'parfum', 'scent', 'eau de parfum'];
+    const scentWord = faqScentSynonyms[Math.abs(p.id.length % faqScentSynonyms.length)] || 'fragrance';
 
     const faqs = [
       {
         q: `What does ${p.name} smell like?`,
-        a: `${p.name} is a ${familyText} Eau de Parfum by ${p.brand || 'MANCERA'} with a rich, multi-layered olfactive profile. ${allNotes ? `The fragrance opens with ${topNotes}, evolves into ${heartNotes}, and settles into a base of ${baseNotes}.` : ''} ${p.tagline || ''}`
+        a: `A ${familyText} ${scentWord} that opens with ${topNotes || 'bold spices'}, deepens through ${heartNotes || 'a rich heart'}, and closes on ${baseNotes || 'a warm base'}. ${p.tagline || ''}`
       },
       {
-        q: `How long does ${p.name} last on skin?`,
-        a: `${p.name} is an Eau de Parfum (EDP) with a 15–20% aromatic concentration — the highest tier before Extrait de Parfum. Longevity is typically 8–12+ hours on skin, with sillage remaining detectable on clothing and hair beyond that. Skin chemistry, humidity, and application point all affect performance. For maximum longevity, apply to warm pulse points: wrists, neck, and the inside of the elbows.`
+        q: `How long does ${p.name} last?`,
+        a: `As an Eau de Parfum, expect 8–12+ hours of longevity. Apply 2–3 sprays to pulse points — wrists and neck — and let the scent develop.`
       },
       {
-        q: `When is the best time to wear ${p.name}?`,
-        a: `${p.name} is best suited for ${vibesText ? `${vibesText} occasions` : 'evening and cooler-weather occasions'}. The ${familyText} character of this fragrance projects beautifully in autumn and winter, when cold air amplifies its depth and sillage. It is bold enough for evening events, formal dinners, and high-stakes environments where a commanding presence is an asset.`
+        q: `When should I wear ${p.name}?`,
+        a: `Best for ${vibesText || 'evening and cooler-weather'} occasions. The ${familyText} character projects beautifully in autumn and winter.`
       },
       {
-        q: `How many sprays of ${p.name} should I use?`,
-        a: `As an Eau de Parfum, ${p.name} is highly concentrated — 2 to 3 sprays are sufficient for most situations. Apply to pulse points and allow 60 seconds for the top notes to develop before making a final judgement. Overapplication can be overwhelming for those nearby. Start conservatively and increase based on the occasion and environment.`
+        q: `How many sprays should I use?`,
+        a: `2–3 sprays maximum. This is a highly concentrated ${scentWord} — less is more. Apply to pulse points and allow 60 seconds for the top notes to open.`
       },
       {
-        q: `What is the price of ${p.name} in Armenia?`,
-        a: `${p.name} is available at NOVA Perfumery Armenia for ֏${priceAMD.toLocaleString()} AMD (approximately $${priceUSD} USD) for a 120ml bottle. NOVA is Armenia's premier niche fragrance destination, offering 100% authentic, directly sourced bottles with fast delivery across Yerevan and Armenia. Shop online at nova-website-ashen.vercel.app.`
+        q: `What is the price in Yerevan, Armenia?`,
+        a: `${p.name} is available at NOVA Perfumery in Yerevan for ֏${priceAMD.toLocaleString()} AMD (~$${priceUSD} USD). Shop online with fast delivery across Armenia.`
       },
       {
-        q: `Is ${p.name} suitable for men or women?`,
-        a: `${p.name} was designed for ${genderText}. In the niche perfume world, fragrance transcends traditional gender categories — this scent is defined by its character, not the wearer's gender. The ${familyText} profile resonates with those who appreciate depth, complexity, and a confident olfactive signature.`
+        q: `Is it for men or women?`,
+        a: `${p.name} is designed for ${genderText}. In niche perfumery, ${scentWord} transcends gender — this scent is defined by character, not category.`
       },
       {
-        q: `Is ${p.name} from ${p.brand || 'MANCERA'} authentic at NOVA?`,
-        a: `Yes — every bottle at NOVA is 100% authentic and sourced directly from official ${p.brand || 'MANCERA'} distribution channels. ${p.brand || 'MANCERA'} is a Paris-based niche fragrance house founded by Pierre Montale. NOVA Perfumery Armenia carries only genuine, sealed bottles with full manufacturer quality guarantees. We do not stock counterfeits, testers, or decants under full-bottle pricing.`
+        q: `Is it authentic at NOVA?`,
+        a: `Yes — 100% authentic, sourced directly from ${p.brand || 'the brand'}. NOVA is Armenia's premier niche fragrance destination. No counterfeits, no testers, no compromises.`
       }
     ];
 
