@@ -4341,15 +4341,16 @@ function renderProductPage(productId) {
     const productUrl = `${baseUrl}/product?id=${p.id}`;
     const productImage = p.image || (p.images && p.images[0]) || `${baseUrl}/assets/hero.webp`;
 
-    // Build concise meta description (150-155 chars)
-    const taglineText = p.tagline || '';
-    const brandText = p.brand || 'MANCERA';
-    const familyText = p.scent_family ? ` ${p.scent_family} fragrance.` : '.';
-    const rawMetaDesc = `${taglineText} ${brandText} Eau de Parfum — a premium${familyText} Buy now at NOVA, Armenia's premier niche perfumery.`;
+    // Build concise meta description — lead with Armenia/Yerevan, use scent vocabulary variety
+    // Synonyms: perfume | fragrance | parfum | scent | eau de parfum | cologne | aroma
+    const scentSynonyms = ['fragrance', 'parfum', 'scent', 'eau de parfum'];
+    const scentWord = scentSynonyms[Math.abs(p.id.length % scentSynonyms.length)] || 'fragrance';
+    const shortDesc = (p.description || '').split('.')[0] || p.tagline || '';
+    const rawMetaDesc = `${p.name} — ${shortDesc}. Shop authentic ${scentWord} in Yerevan at NOVA, Armenia's premier niche perfumery.`;
     const metaDesc = rawMetaDesc.length > 155 ? rawMetaDesc.substring(0, 152) + '...' : rawMetaDesc;
 
-    // Title tag: Primary Keyword – Brand | NOVA
-    const pageTitle = `${p.name} | Buy in Armenia — NOVA Perfumery`;
+    // Title: Product identity + Armenia signal
+    const pageTitle = `${p.name} | Perfume in Yerevan — NOVA Armenia`;
 
     // 1. Title
     document.title = pageTitle;
@@ -4375,19 +4376,22 @@ function renderProductPage(productId) {
     const canonical = document.querySelector('link[rel="canonical"]');
     if (canonical) canonical.setAttribute('href', productUrl);
 
-    // 5b. Meta Keywords — Laser-focused product page SEO (per strategy v2)
-    // Rule: 1 primary + 1-2 secondary ONLY. Broad terms go on blog posts, not here.
-    // Primary: [Brand] + [Product Name] + [Concentration] — exact product identity
-    // Secondary 1: [Size] + [Dominant Note] + fragrance — size/note intent
-    // Secondary 2: buy + [Brand] + [Product Name] + Armenia — purchase intent
+    // 5b. Meta Keywords — Focused strategy v3
+    // MAIN FOCUS: Yerevan, Armenia, fragrance, perfume, parfum — and their synonyms
+    // Product brand/name is primary identity only. Local + category terms are the real targets.
+    // Rule: 1 primary (product identity) + 2 secondary (always anchored to Armenia/Yerevan/perfume/fragrance)
     const primaryKeyword = p.name; // e.g. "MANCERA Red Tobacco Eau de Parfum"
-    const _vol = (p.sizes && p.sizes[0]) ? p.sizes[0].size : '120ml';
-    const _dominantNote = (p.tags || []).find(t =>
-      ['tobacco','oud','vanilla','rose','amber','cedar','musk','patchouli',
-       'bergamot','vetiver','jasmine','sandalwood','citrus','iris'].includes(t.toLowerCase())
-    ) || p.scent_family || '';
-    const secondary1 = _dominantNote ? `${_vol} ${_dominantNote} fragrance` : `${_vol} eau de parfum`;
-    const secondary2 = `buy ${p.brand || ''} ${p.name || ''} Armenia`.replace(/\s+/g, ' ').trim();
+    // Rotate through scent vocabulary synonyms so pages don't all repeat "perfume"
+    const localTerms = [
+      'perfume Yerevan',
+      'fragrance Armenia',
+      'parfum Yerevan',
+      'scent Armenia',
+      'buy perfume Armenia',
+      'niche fragrance Yerevan'
+    ];
+    const secondary1 = localTerms[Math.abs(p.id.length % localTerms.length)];
+    const secondary2 = `${p.brand || ''} ${localTerms[(Math.abs(p.id.length) + 1) % localTerms.length]}`.trim();
     const keywordsArr = [primaryKeyword, secondary1, secondary2].filter(Boolean).join(', ');
     const keywordsMeta = document.querySelector('meta[name="keywords"]');
     if (keywordsMeta) keywordsMeta.setAttribute('content', keywordsArr);
