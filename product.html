@@ -50,7 +50,7 @@
   <!-- --- HEADER & NAVIGATION --- -->
   <header class="header-dark">
     <div class="container header-container">
-      <a href="index.html#/home" class="logo"><img src="assets/logo-dark-transparent.png" alt="NOVA" class="logo-img" width="120" height="40"></a>
+      <a href="index.html#/home" class="logo"><img src="assets/logo-dark-transparent.png" alt="NOVA" class="logo-img" width="67" height="40"></a>
       
       <nav>
         <ul class="nav-menu">
@@ -290,7 +290,7 @@
       <button class="mobile-menu-icon-btn floating-hamburger" aria-label="Menu" onclick="openMobileMenu()">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6h16M4 12h16M4 18h16"/></svg>
       </button>
-      <a href="index.html#/home" class="logo"><img src="assets/logo-dark-transparent.png" alt="NOVA" class="logo-img" width="120" height="40"></a>
+      <a href="index.html#/home" class="logo"><img src="assets/logo-dark-transparent.png" alt="NOVA" class="logo-img" width="67" height="40"></a>
       <nav class="floating-nav">
         <ul class="floating-nav-menu">
           <li><a href="index.html#/shop" data-trans="nav_products">Products</a></li>
@@ -587,7 +587,7 @@
   <div id="desktop-menu-overlay" class="desktop-menu-overlay">
     <div class="desktop-menu-panel">
       <div class="desktop-menu-header">
-        <span class="logo"><img src="assets/logo-dark-transparent.png" alt="NOVA" class="logo-img" style="height: 40px; width: auto;" width="120" height="40"></span>
+        <span class="logo"><img src="assets/logo-dark-transparent.png" alt="NOVA" class="logo-img" style="height: 40px; width: auto;" width="67" height="40"></span>
         <button class="cart-drawer-close" aria-label="Close menu" onclick="closeDesktopMenu()">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12" />
@@ -609,7 +609,7 @@
   <div id="mobile-menu-drawer-overlay" class="cart-drawer-overlay">
     <div class="cart-drawer mobile-menu-drawer">
       <div class="cart-drawer-header">
-        <span class="logo"><img src="assets/logo-light-transparent.png" alt="NOVA" class="logo-img" style="height: 40px; width: auto;" width="120" height="40"></span>
+        <span class="logo"><img src="assets/logo-light-transparent.png" alt="NOVA" class="logo-img" style="height: 40px; width: auto;" width="67" height="40"></span>
         <button id="mobile-menu-drawer-close" class="cart-drawer-close" aria-label="Close menu" onclick="closeMobileMenu()">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12" />
@@ -925,16 +925,16 @@
   </div>
 
   <!-- --- FIREBASE SDK (for orders, users, admin data) --- -->
-  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
-  <script src="firebase-config.js?v=4"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js" defer></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js" defer></script>
+  <script src="firebase-config.js?v=4" defer></script>
 
   <!-- --- SANITY CMS (for products, images, translations) --- -->
-  <script src="sanity-config.js?v=2"></script>
+  <script src="sanity-config.js?v=2" defer></script>
 
   <!-- --- APPLICATION SCRIPTS --- -->
-  <script src="products.js?v=12"></script>
-  <script src="admin.js?v=13"></script>
-  <script src="app.js?v=44"></script>
+  <script src="products.js?v=12" defer></script>
+  <script src="admin.js?v=13" defer></script>
+  <script src="app.js?v=44" defer></script>
 </body>
 </html>

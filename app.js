@@ -7307,7 +7307,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <a href="https://www.instagram.com/${INSTAGRAM_USERNAME}/" target="_blank" rel="noopener noreferrer" style="text-decoration: none; color: inherit;">
             <svg style="width: 48px; height: 48px; margin-bottom: 12px; color: var(--color-sage);" fill="currentColor" viewBox="0 0 24 24"><path d="M7.8 2h8.4C19.4 2 22 4.6 22 7.8v8.4a5.8 5.8 0 0 1-5.8 5.8H7.8C4.6 22 2 19.4 2 16.2V7.8A5.8 5.8 0 0 1 7.8 2m-.2 2A3.6 3.6 0 0 0 4 7.6v8.8C4 18.39 5.61 20 7.6 20h8.8a3.6 3.6 0 0 0 3.6-3.6V7.6C20 5.61 18.39 4 16.4 4H7.6m9.65 1.5a1.25 1.25 0 0 1 1.25 1.25A1.25 1.25 0 0 1 17.25 8 1.25 1.25 0 0 1 16 6.75a1.25 1.25 0 0 1 1.25-1.25M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3z"/></svg>
             <p style="font-size: 1rem;">Follow us <strong>@${INSTAGRAM_USERNAME}</strong></p>
-            <p style="font-size: 0.8rem; margin-top: 6px; color: #9CA3AF;">View our latest posts on Instagram</p>
+            <p style="font-size: 0.8rem; margin-top: 6px; color: #6B7280;">View our latest posts on Instagram</p>
           </a>
         </div>
       `;
@@ -9174,3 +9174,32 @@ async function seedMockBlogPosts() {
 
 // Seed on load (runs once, only if collection empty)
 seedMockBlogPosts();
+
+// === MOBILE VIDEO LAZY LOADING ===
+// On mobile, defer video loading until near viewport to save ~2.2MB
+(function() {
+  if (window.innerWidth > 768) return;
+  var videos = document.querySelectorAll("video[autoplay]");
+  videos.forEach(function(video) {
+    video.removeAttribute("autoplay");
+    video.pause();
+    var sources = video.querySelectorAll("source");
+    var srcData = [];
+    sources.forEach(function(s) {
+      srcData.push({ src: s.getAttribute("src"), type: s.getAttribute("type") });
+      s.removeAttribute("src");
+    });
+    video.load();
+    var observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          sources.forEach(function(s, i) { s.setAttribute("src", srcData[i].src); });
+          video.load();
+          video.play().catch(function() {});
+          observer.unobserve(video);
+        }
+      });
+    }, { rootMargin: "200px" });
+    observer.observe(video);
+  });
+})();
