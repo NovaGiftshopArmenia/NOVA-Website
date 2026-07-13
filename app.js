@@ -4575,7 +4575,7 @@ function renderProductPage(productId) {
     faqContainer.innerHTML = faqs.map((faq, i) => `
       <details class="faq-item" ${i === 0 ? 'open' : ''}>
         <summary>${faq.q}</summary>
-        <div class="faq-item-content">
+        <div class="faq-item-content"${i === 0 ? ' style="grid-template-rows:1fr"' : ''}>
           <div class="faq-item-inner">
             <p>${faq.a}</p>
           </div>
