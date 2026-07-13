@@ -2135,7 +2135,7 @@ window.changeLanguage = function (lang) {
 // --- DYNAMIC SEO META UPDATES ---
 const SEO_META = {
   home: {
-    title: 'NOVA | Luxury Perfumery in Armenia',
+    title: 'Buy Perfume in Yerevan | NOVA Fragrance Store',
     description: 'Discover exclusive designer perfumes and niche fragrances at NOVA — Armenia\'s premier luxury gift shop.',
   },
   shop: {
