@@ -3,6 +3,15 @@ function formatPrice(num) {
   return Number(num).toLocaleString('en-US');
 }
 
+// Optimize Sanity CDN image URLs with width/quality/format params
+// Reduces download size by ~40% for product grid thumbnails
+function sanityImageUrl(url, width) {
+  if (!url || !url.includes('cdn.sanity.io')) return url;
+  const w = width || 400;
+  const sep = url.includes('?') ? '&' : '?';
+  return `${url}${sep}w=${w}&q=80&fit=max&auto=format`;
+}
+
 // LOCALIZATION DICTIONARIES
 const TRANSLATIONS = {
   am: {
@@ -2749,6 +2758,8 @@ function initEventListeners() {
       // Sync current label text
       const label = selectedLang.toUpperCase();
       document.querySelectorAll('.lang-dropdown-current').forEach(el => el.textContent = label);
+      // Update aria-label to match visible text (accessibility: label-content-name-mismatch)
+      document.querySelectorAll('.lang-dropdown-toggle').forEach(el => el.setAttribute('aria-label', label));
     });
   });
   // Also bind lang-btn buttons (used on product.html)
@@ -2842,7 +2853,7 @@ function createSliderProductCard(product, badgeText) {
   card.innerHTML = `
     <div class="product-card-image-wrap">
       ${badgeText ? `<div class="card-badge ${badgeClass}">${badgeText}</div>` : ''}
-      <img src="${product.image}" alt="${product.name}" class="product-card-image" loading="lazy">
+      <img src="${sanityImageUrl(product.image)}" alt="${product.name}" class="product-card-image" loading="lazy" width="400" height="400">
       
       <button class="card-wishlist ${wishlistClass}" onclick="event.stopPropagation(); toggleWishlist('${product.id}'); this.classList.toggle('active');" aria-label="Add to Wishlist">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -3485,7 +3496,7 @@ function createProductCard(product) {
   card.innerHTML = `
     <div class="product-card-image-wrap">
       ${badgeText ? `<div class="card-badge ${badgeClass}">${badgeText}</div>` : ''}
-      <img src="${product.image}" alt="${product.name}" class="product-card-image" loading="lazy">
+      <img src="${sanityImageUrl(product.image)}" alt="${product.name}" class="product-card-image" loading="lazy" width="400" height="400">
       
       <!-- Floating Card Wishlist Toggle -->
       <button class="product-card-wishlist-btn ${wishlistClass}" onclick="event.stopPropagation(); toggleWishlist('${product.id}')" aria-label="Add to Wishlist">
@@ -4563,8 +4574,8 @@ function renderProductPage(productId) {
         a: `2–3 sprays maximum. This is a highly concentrated ${scentWord} — less is more. Apply to pulse points and allow 60 seconds for the top notes to open.`
       },
       {
-        q: `What is the price in Yerevan, Armenia?`,
-        a: `${p.name} is available at NOVA Perfumery in Yerevan for ֏${priceAMD.toLocaleString()} AMD (~$${priceUSD} USD). Shop online with fast delivery across Armenia.`
+        q: `What is the price in Yerevan?`,
+        a: `${p.name} is ֏${priceAMD.toLocaleString()} AMD (~$${priceUSD} USD) at NOVA Yerevan. Fast delivery available.`
       },
       {
         q: `Is it for men or women?`,
@@ -4572,7 +4583,7 @@ function renderProductPage(productId) {
       },
       {
         q: `Is it authentic at NOVA?`,
-        a: `Yes — 100% authentic, sourced directly from ${p.brand || 'the brand'}. NOVA is Armenia's premier niche fragrance destination. No counterfeits, no testers, no compromises.`
+        a: `Yes — 100% authentic, sourced directly from ${p.brand || 'the brand'}. NOVA Armenia carries only genuine, sealed bottles. No counterfeits, no compromises.`
       }
     ];
 
@@ -7223,43 +7234,9 @@ document.addEventListener('DOMContentLoaded', () => {
   // Method 2: Proxy approach (no auth needed)
   async function fetchViaProxy(grids) {
     try {
-      // Try multiple proxy endpoints
-      const proxyUrls = [
-        `https://www.instagram.com/${INSTAGRAM_USERNAME}/?__a=1&__d=dis`,
-        `https://instagram-media-api.herokuapp.com/user/${INSTAGRAM_USERNAME}`,
-      ];
-
-      let posts = null;
-
-      // Try fetching via Instagram's public JSON endpoint
-      try {
-        const res = await fetch(`https://www.instagram.com/${INSTAGRAM_USERNAME}/?__a=1`, {
-          headers: { 'User-Agent': 'Mozilla/5.0' }
-        });
-        if (res.ok) {
-          const data = await res.json();
-          const edges = data?.graphql?.user?.edge_owner_to_timeline_media?.edges;
-          if (edges) {
-            posts = edges.slice(0, FEED_COUNT).map(e => ({
-              id: e.node.id,
-              media_url: e.node.display_url,
-              thumbnail_url: e.node.thumbnail_src,
-              permalink: `https://www.instagram.com/p/${e.node.shortcode}/`,
-              caption: e.node.edge_media_to_caption?.edges?.[0]?.node?.text || '',
-              media_type: e.node.is_video ? 'VIDEO' : 'IMAGE',
-              likes: e.node.edge_liked_by?.count || 0,
-              comments: e.node.edge_media_to_comment?.count || 0,
-            }));
-          }
-        }
-      } catch(e) { /* silent */ }
-
-      if (posts && posts.length > 0) {
-        grids.forEach(g => renderFeed(g, posts));
-      } else {
-        // Fallback: render placeholder cards with link to profile
-        grids.forEach(g => renderFallback(g));
-      }
+      // Instagram's public __a=1 endpoint is blocked by CORS/login walls.
+      // Skip it entirely to avoid console errors and go straight to fallback.
+      grids.forEach(g => renderFallback(g));
     } catch (e) {
       grids.forEach(g => renderFallback(g));
     }
@@ -7330,7 +7307,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <a href="https://www.instagram.com/${INSTAGRAM_USERNAME}/" target="_blank" rel="noopener noreferrer" style="text-decoration: none; color: inherit;">
             <svg style="width: 48px; height: 48px; margin-bottom: 12px; color: var(--color-sage);" fill="currentColor" viewBox="0 0 24 24"><path d="M7.8 2h8.4C19.4 2 22 4.6 22 7.8v8.4a5.8 5.8 0 0 1-5.8 5.8H7.8C4.6 22 2 19.4 2 16.2V7.8A5.8 5.8 0 0 1 7.8 2m-.2 2A3.6 3.6 0 0 0 4 7.6v8.8C4 18.39 5.61 20 7.6 20h8.8a3.6 3.6 0 0 0 3.6-3.6V7.6C20 5.61 18.39 4 16.4 4H7.6m9.65 1.5a1.25 1.25 0 0 1 1.25 1.25A1.25 1.25 0 0 1 17.25 8 1.25 1.25 0 0 1 16 6.75a1.25 1.25 0 0 1 1.25-1.25M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3z"/></svg>
             <p style="font-size: 1rem;">Follow us <strong>@${INSTAGRAM_USERNAME}</strong></p>
-            <p style="font-size: 0.8rem; margin-top: 6px; opacity: 0.7;">View our latest posts on Instagram</p>
+            <p style="font-size: 0.8rem; margin-top: 6px; color: #9CA3AF;">View our latest posts on Instagram</p>
           </a>
         </div>
       `;

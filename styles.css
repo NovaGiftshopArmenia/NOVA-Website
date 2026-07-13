@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600;700&display=swap');
+/* Google Fonts loaded via <link preload> in HTML for non-render-blocking behavior */
 
 /* --- DESIGN SYSTEM TOKENS --- */
 :root {
@@ -53,8 +53,8 @@ body {
 /* --- SKIP TO CONTENT (Accessibility) --- */
 .skip-to-content {
   position: absolute;
-  top: -100%;
   left: 16px;
+  top: -100%;
   z-index: 100000;
   padding: 12px 24px;
   background: var(--color-black);
@@ -64,9 +64,15 @@ body {
   text-decoration: none;
   border-radius: 0 0 6px 6px;
   transition: top 0.2s ease;
+  /* Ensure element is in tab order even when visually hidden */
+  clip: rect(0, 0, 0, 0);
+  overflow: hidden;
 }
-.skip-to-content:focus {
+.skip-to-content:focus,
+.skip-to-content:focus-visible {
   top: 0;
+  clip: auto;
+  overflow: visible;
 }
 
 /* --- FOCUS INDICATORS (Accessibility) --- */
@@ -577,14 +583,17 @@ header.header-scrolled .search-input:focus {
 
 .search-btn {
   position: absolute;
-  right: 4px;
+  right: 0;
   display: flex;
   align-items: center;
+  justify-content: center;
   color: inherit;
   background: none;
   border: none;
   cursor: pointer;
-  padding: 0;
+  padding: 8px;
+  min-width: 44px;
+  min-height: 44px;
 }
 
 .search-btn svg {
@@ -1680,15 +1689,18 @@ header.header-scrolled .lang-dropdown-label {
 /* Card base */
 .promise-card {
   position: relative;
-  overflow: hidden;
   background-size: cover;
   background-position: center;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  cursor: pointer;
+  min-height: 240px;
+  will-change: transform, opacity;
+  transform: translateZ(0);
   display: flex;
   align-items: flex-end;
   text-decoration: none;
   color: #fff;
-  border-radius: 8px;
-  cursor: default;
 }
 
 /* Dark overlay - same as category filter cards */
@@ -2243,6 +2255,8 @@ header.header-scrolled .lang-dropdown-label {
   text-decoration: none;
   color: #fff;
   border-radius: 8px;
+  will-change: transform, opacity;
+  transform: translateZ(0);
 }
 
 /* Dark overlay */
@@ -3307,7 +3321,7 @@ footer {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  color: var(--color-medium-gray);
+  color: #9CA3AF;
   font-size: 0.75rem;
 }
 
@@ -6897,9 +6911,9 @@ header.header-scrolled .mobile-menu-icon-btn {
 .video-showcase-text {
   font-size: 0.9rem;
   line-height: 1.7;
-  color: var(--color-medium-gray);
+  color: #595959;
   margin: 0;
-  font-weight: 300;
+  font-weight: 400;
 }
 
 .video-showcase-btn {

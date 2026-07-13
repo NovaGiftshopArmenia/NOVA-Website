@@ -31,9 +31,16 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://cdn.sanity.io">
+  <link rel="preconnect" href="https://www.gstatic.com">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 
-  <link rel="stylesheet" href="styles.css?v=41">
-  <link rel="stylesheet" href="product.css?v=8">
+  <!-- Non-render-blocking Google Fonts -->
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600;700&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600;700&display=swap" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600;700&display=swap"></noscript>
+
+  <link rel="stylesheet" href="styles.min.css?v=43">
+  <link rel="stylesheet" href="product.min.css?v=9">
   <link rel="icon" type="image/png" href="assets/logo-favicon.png">
   <link rel="apple-touch-icon" href="assets/logo-favicon.png">
   <link rel="manifest" href="manifest.json">
@@ -43,7 +50,7 @@
   <!-- --- HEADER & NAVIGATION --- -->
   <header class="header-dark">
     <div class="container header-container">
-      <a href="index.html#/home" class="logo"><img src="assets/logo-dark-transparent.png" alt="NOVA" class="logo-img"></a>
+      <a href="index.html#/home" class="logo"><img src="assets/logo-dark-transparent.png" alt="NOVA" class="logo-img" width="120" height="40"></a>
       
       <nav>
         <ul class="nav-menu">
@@ -228,7 +235,7 @@
         </button>
 
         <!-- WooCommerce Cart Icon Trigger -->
-        <button id="cart-toggle-btn" class="cart-icon-btn" aria-label="Cart">
+        <button id="cart-toggle-btn" class="cart-icon-btn" aria-label="Shopping bag">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
           </svg>
@@ -256,7 +263,7 @@
         
         <!-- Language Dropdown -->
         <div class="lang-dropdown" id="lang-dropdown">
-          <button class="lang-dropdown-toggle" id="lang-dropdown-toggle" aria-label="Language">
+          <button class="lang-dropdown-toggle" id="lang-dropdown-toggle" aria-label="AM">
             <span class="lang-dropdown-current">AM</span>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px;"><path d="M6 9l6 6 6-6"/></svg>
           </button>
@@ -283,7 +290,7 @@
       <button class="mobile-menu-icon-btn floating-hamburger" aria-label="Menu" onclick="openMobileMenu()">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6h16M4 12h16M4 18h16"/></svg>
       </button>
-      <a href="index.html#/home" class="logo"><img src="assets/logo-dark-transparent.png" alt="NOVA" class="logo-img"></a>
+      <a href="index.html#/home" class="logo"><img src="assets/logo-dark-transparent.png" alt="NOVA" class="logo-img" width="120" height="40"></a>
       <nav class="floating-nav">
         <ul class="floating-nav-menu">
           <li><a href="index.html#/shop" data-trans="nav_products">Products</a></li>
@@ -322,7 +329,7 @@
           </button>
         </div>
         <div class="lang-dropdown" id="floating-lang-dropdown">
-          <button class="lang-dropdown-toggle" id="floating-lang-toggle" aria-label="Language">
+          <button class="lang-dropdown-toggle" id="floating-lang-toggle" aria-label="AM">
             <span class="lang-dropdown-current">AM</span>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px;"><path d="M6 9l6 6 6-6"/></svg>
           </button>
@@ -580,7 +587,7 @@
   <div id="desktop-menu-overlay" class="desktop-menu-overlay">
     <div class="desktop-menu-panel">
       <div class="desktop-menu-header">
-        <span class="logo"><img src="assets/logo-dark-transparent.png" alt="NOVA" class="logo-img" style="height: 40px; width: auto;"></span>
+        <span class="logo"><img src="assets/logo-dark-transparent.png" alt="NOVA" class="logo-img" style="height: 40px; width: auto;" width="120" height="40"></span>
         <button class="cart-drawer-close" aria-label="Close menu" onclick="closeDesktopMenu()">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12" />
@@ -602,7 +609,7 @@
   <div id="mobile-menu-drawer-overlay" class="cart-drawer-overlay">
     <div class="cart-drawer mobile-menu-drawer">
       <div class="cart-drawer-header">
-        <span class="logo"><img src="assets/logo-light-transparent.png" alt="NOVA" class="logo-img" style="height: 40px; width: auto;"></span>
+        <span class="logo"><img src="assets/logo-light-transparent.png" alt="NOVA" class="logo-img" style="height: 40px; width: auto;" width="120" height="40"></span>
         <button id="mobile-menu-drawer-close" class="cart-drawer-close" aria-label="Close menu" onclick="closeMobileMenu()">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12" />
@@ -928,6 +935,6 @@
   <!-- --- APPLICATION SCRIPTS --- -->
   <script src="products.js?v=12"></script>
   <script src="admin.js?v=13"></script>
-  <script src="app.js?v=43"></script>
+  <script src="app.min.js?v=44"></script>
 </body>
 </html>
