@@ -4375,22 +4375,20 @@ function renderProductPage(productId) {
     const canonical = document.querySelector('link[rel="canonical"]');
     if (canonical) canonical.setAttribute('href', productUrl);
 
-    // 5b. Meta Keywords — inject product-specific keywords
-    const keywordsArr = [
-      p.name,
-      p.brand,
-      `${p.brand} ${p.name}`,
-      `${p.name} buy Armenia`,
-      `${p.brand} eau de parfum`,
-      'niche perfume Armenia',
-      'buy perfume Armenia',
-      'perfume online Armenia',
-      'NOVA perfumery',
-      ...(p.tags || []),
-      p.scent_family ? `${p.scent_family} fragrance` : '',
-      p.gender_id ? `${p.gender_id === 'unisex' ? 'unisex' : p.gender_id} perfume` : '',
-      'eau de parfum'
-    ].filter(Boolean).join(', ');
+    // 5b. Meta Keywords — Laser-focused product page SEO (per strategy v2)
+    // Rule: 1 primary + 1-2 secondary ONLY. Broad terms go on blog posts, not here.
+    // Primary: [Brand] + [Product Name] + [Concentration] — exact product identity
+    // Secondary 1: [Size] + [Dominant Note] + fragrance — size/note intent
+    // Secondary 2: buy + [Brand] + [Product Name] + Armenia — purchase intent
+    const primaryKeyword = p.name; // e.g. "MANCERA Red Tobacco Eau de Parfum"
+    const _vol = (p.sizes && p.sizes[0]) ? p.sizes[0].size : '120ml';
+    const _dominantNote = (p.tags || []).find(t =>
+      ['tobacco','oud','vanilla','rose','amber','cedar','musk','patchouli',
+       'bergamot','vetiver','jasmine','sandalwood','citrus','iris'].includes(t.toLowerCase())
+    ) || p.scent_family || '';
+    const secondary1 = _dominantNote ? `${_vol} ${_dominantNote} fragrance` : `${_vol} eau de parfum`;
+    const secondary2 = `buy ${p.brand || ''} ${p.name || ''} Armenia`.replace(/\s+/g, ' ').trim();
+    const keywordsArr = [primaryKeyword, secondary1, secondary2].filter(Boolean).join(', ');
     const keywordsMeta = document.querySelector('meta[name="keywords"]');
     if (keywordsMeta) keywordsMeta.setAttribute('content', keywordsArr);
 
