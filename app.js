@@ -2230,7 +2230,7 @@ function handleRouteChange() {
   }
 
   const pathname = window.location.pathname;
-  let route = pathname === '/' ? 'home' : pathname.replace(/^\//, '').replace(/\/$/, '');
+  let route = pathname === '/' ? 'home' : pathname.replace(new RegExp('^/'), '').replace(new RegExp('/$'), '');
 
   // Handle blog post routes: /blog?post=slug
   if (route === 'blog' && window.location.search.includes('post=')) {
@@ -9174,6 +9174,35 @@ async function seedMockBlogPosts() {
 
 // Seed on load (runs once, only if collection empty)
 seedMockBlogPosts();
+
+// === MOBILE VIDEO LAZY LOADING ===
+// On mobile, defer video loading until near viewport to save ~2.2MB
+(function() {
+  if (window.innerWidth > 768) return;
+  var videos = document.querySelectorAll("video[autoplay]");
+  videos.forEach(function(video) {
+    video.removeAttribute("autoplay");
+    video.pause();
+    var sources = video.querySelectorAll("source");
+    var srcData = [];
+    sources.forEach(function(s) {
+      srcData.push({ src: s.getAttribute("src"), type: s.getAttribute("type") });
+      s.removeAttribute("src");
+    });
+    video.load();
+    var observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          sources.forEach(function(s, i) { s.setAttribute("src", srcData[i].src); });
+          video.load();
+          video.play().catch(function() {});
+          observer.unobserve(video);
+        }
+      });
+    }, { rootMargin: "200px" });
+    observer.observe(video);
+  });
+})();
 
 // === MOBILE VIDEO LAZY LOADING ===
 // On mobile, defer video loading until near viewport to save ~2.2MB

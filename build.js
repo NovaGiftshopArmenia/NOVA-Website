@@ -136,27 +136,33 @@ console.log('NOVA Build — Minifying assets...\n');
 cssFiles.forEach(file => {
   const filePath = path.join(__dirname, file);
   if (!fs.existsSync(filePath)) return;
-  
+
   const original = fs.readFileSync(filePath, 'utf8');
   const minified = minifyCSS(original);
   const outPath = filePath.replace('.css', '.min.css');
   fs.writeFileSync(outPath, minified, 'utf8');
-  
+
   const savings = ((1 - minified.length / original.length) * 100).toFixed(1);
-  console.log(`  ✓ ${file}: ${(original.length/1024).toFixed(1)}KB → ${(minified.length/1024).toFixed(1)}KB (${savings}% reduction)`);
+  console.log(`  ✓ ${file}: ${(original.length / 1024).toFixed(1)}KB → ${(minified.length / 1024).toFixed(1)}KB (${savings}% reduction)`);
 });
+
+const { execSync } = require('child_process');
 
 jsFiles.forEach(file => {
   const filePath = path.join(__dirname, file);
   if (!fs.existsSync(filePath)) return;
-  
-  const original = fs.readFileSync(filePath, 'utf8');
-  const minified = minifyJS(original);
+
   const outPath = filePath.replace('.js', '.min.js');
-  fs.writeFileSync(outPath, minified, 'utf8');
-  
-  const savings = ((1 - minified.length / original.length) * 100).toFixed(1);
-  console.log(`  ✓ ${file}: ${(original.length/1024).toFixed(1)}KB → ${(minified.length/1024).toFixed(1)}KB (${savings}% reduction)`);
+  try {
+    execSync(`npx terser "${filePath}" -o "${outPath}" --compress --mangle`);
+    
+    const original = fs.readFileSync(filePath, 'utf8');
+    const minified = fs.readFileSync(outPath, 'utf8');
+    const savings = ((1 - minified.length / original.length) * 100).toFixed(1);
+    console.log(`  ✓ ${file}: ${(original.length / 1024).toFixed(1)}KB → ${(minified.length / 1024).toFixed(1)}KB (${savings}% reduction)`);
+  } catch (error) {
+    console.error(`  ✗ Failed to minify ${file} with terser:`, error.message);
+  }
 });
 
 console.log('\nBuild complete! Minified files created.');

@@ -28,24 +28,24 @@
   <link rel="canonical" href="https://nova-website-ashen.vercel.app/product">
 
   <!-- Preconnect -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://cdn.sanity.io">
-  <link rel="preconnect" href="https://www.gstatic.com">
-  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 
   <!-- Non-render-blocking Google Fonts -->
   <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600;700&display=swap">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600;700&display=swap" media="print" onload="this.media='all'">
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600;700&display=swap"></noscript>
 
-  <link rel="stylesheet" href="styles.css?v=43">
-  <link rel="stylesheet" href="product.css?v=9">
+  <link rel="stylesheet" href="styles.min.css?v=43">
+  <link rel="stylesheet" href="product.min.css?v=9">
   <link rel="icon" type="image/png" href="assets/logo-favicon.png">
   <link rel="apple-touch-icon" href="assets/logo-favicon.png">
   <link rel="manifest" href="manifest.json">
 </head>
 <body>
+
+  <!-- Skip to content (accessibility) -->
+  <a href="#product-page-body" class="skip-to-content">Skip to main content</a>
 
   <!-- --- HEADER & NAVIGATION --- -->
   <header class="header-dark">
@@ -344,7 +344,7 @@
   </header>
 
     <!-- --- MAIN VIEWS CONTAINER --- -->
-  <main id="product-page-body">
+  <main id="product-page-body" tabindex="-1">
     <section class="premium-product-hero">
       <div class="hero-split">
         <div class="hero-split-left">
@@ -935,6 +935,6 @@
   <!-- --- APPLICATION SCRIPTS --- -->
   <script src="products.js?v=12" defer></script>
   <script src="admin.js?v=13" defer></script>
-  <script src="app.js?v=44" defer></script>
+  <script src="app.min.js?v=44" defer></script>
 </body>
 </html>
