@@ -566,15 +566,26 @@ body:has(#product-page-body) {
 }
 
 @media (max-width: 768px) {
-  .pp-buy h1 { font-size: 36px }
-  .pp-tagline { font-size: 20px }
-  .pp-pricerow .pp-price-val { font-size: 32px }
+  .pp-buy h1 { font-size: 32px }
+  .pp-tagline { font-size: 18px }
+  .pp-pricerow .pp-price-val { font-size: 28px }
   .pp-sizes { grid-template-columns: 1fr }
-  .pp-actions { flex-direction: column }
+  .pp-actions { flex-direction: row; flex-wrap: wrap }
+  .pp-qty { flex-shrink: 0 }
+  .pp-cart-btn { min-width: 0 }
+  .pp-wish-btn { width: 50px; height: 50px; flex-shrink: 0 }
+  .pp-qty button { width: 40px; height: 50px }
+  .pp-cart-btn { height: 50px }
+  .pp-rule { margin: 20px 0 }
   .pp-trust { grid-template-columns: 1fr }
   .pp-band h2 { font-size: 32px }
   .pp-about h2,
   .pp-head h2,
   .pp-faq-grid h2 { font-size: 28px }
   .suggestions-grid { grid-template-columns: 1fr }
+  .pp-crumbs,
+  .pp-top,
+  .pp-about,
+  .pp-ritual,
+  .pp-faq-grid { padding-left: 20px; padding-right: 20px }
 }
