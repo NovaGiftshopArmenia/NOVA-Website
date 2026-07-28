@@ -2049,7 +2049,6 @@ window.changeLanguage = function (lang) {
     floatingSearchInput.placeholder = TRANSLATIONS[lang]['search_placeholder'] || 'Search olfactory note...';
   }
 
-
   const newsletterInput = document.querySelector('.newsletter-input');
   if (newsletterInput) {
     newsletterInput.placeholder = TRANSLATIONS[lang]['newsletter_placeholder'] || 'Your email address';
@@ -2071,11 +2070,6 @@ window.changeLanguage = function (lang) {
   updateWishlistUI();
   initMegaMenu(); // Re-seed mega menu elements so their product names/taglines translate!
   initBrandsMegaMenu();
-
-  const isProductPage = window.location.pathname.endsWith('/product') || window.location.pathname.endsWith('/product.html');
-  if ((isProductPage || AppState.selectedProduct) && typeof initProductPage === 'function') {
-    initProductPage();
-  }
 
   // Update header dropdown greeting with actual customer name
   document.querySelectorAll('[data-trans="hello_user"]').forEach(el => {
@@ -2123,6 +2117,7 @@ window.changeLanguage = function (lang) {
   }
 
   // If we are on product page, refresh product details translation dynamically
+  const isProductPage = window.location.pathname.endsWith('/product') || window.location.pathname.endsWith('/product.html');
   if (isProductPage) {
     const params = new URLSearchParams(window.location.search);
     const productId = params.get('id');
@@ -2847,13 +2842,12 @@ function createSliderProductCard(product, badgeText) {
     <div class="nv-card">
       <img class="nv-card__img" src="${sanityImageUrl(product.image)}" alt="${product.name}" loading="lazy" width="400" height="528">
       <div class="nv-card__scrim"></div>
-      ${badgeText ? `<div class="nv-card__badge">${badgeText}</div>` : ''}
-      <div class="nv-card__rating"><span>?</span>${product.rating || ''}</div>
+      <div class="nv-card__rating"><span>★</span>${product.rating || ''}</div>
       <div class="nv-card__meta">
         <div class="nv-card__brand">${product.brand || ''}</div>
         <div class="nv-card__name">${product.name}</div>
         <div class="nv-card__foot">
-          <span class="nv-card__price">? ${formatPrice(product.price)}</span>
+          <span class="nv-card__price">֏ ${formatPrice(product.price)}</span>
           ${sizeLabel ? `<span class="nv-card__size">${sizeLabel}</span>` : ''}
         </div>
       </div>
@@ -3444,19 +3438,11 @@ window.renderFilterWidgets = function (containerId, isMobile) {
   setTimeout(updateTrack, 0);
 };
 
+// CREATE COMPONENT FOR PRODUCT CARD
 function createProductCard(product) {
   const card = document.createElement('div');
   card.className = 'product-card';
   card.onclick = () => openProductModal(product.id);
-
-  let badgeText = product.tags && product.tags.length > 0 ? product.tags[0] : '';
-  if (badgeText) {
-    if (badgeText.toLowerCase().includes('best seller') || badgeText.toLowerCase().includes('bestseller')) {
-      badgeText = TRANSLATIONS[AppState.language]['badge_bestseller'] || 'BEST SELLER';
-    } else if (badgeText.toLowerCase().includes('new')) {
-      badgeText = TRANSLATIONS[AppState.language]['badge_new_product'] || 'NEW';
-    }
-  }
 
   const sizeLabel = (product.sizes && product.sizes.length > 0)
     ? product.sizes[0].label || product.sizes[0].size || ''
@@ -3466,13 +3452,12 @@ function createProductCard(product) {
     <div class="nv-card">
       <img class="nv-card__img" src="${sanityImageUrl(product.image)}" alt="${product.name}" loading="lazy" width="400" height="528">
       <div class="nv-card__scrim"></div>
-      ${badgeText ? `<div class="nv-card__badge">${badgeText}</div>` : ''}
-      <div class="nv-card__rating"><span>?</span>${product.rating || ''}</div>
+      <div class="nv-card__rating"><span>★</span>${product.rating || ''}</div>
       <div class="nv-card__meta">
         <div class="nv-card__brand">${product.brand || ''}</div>
         <div class="nv-card__name">${product.name}</div>
         <div class="nv-card__foot">
-          <span class="nv-card__price">? ${formatPrice(product.price)}</span>
+          <span class="nv-card__price">֏ ${formatPrice(product.price)}</span>
           ${sizeLabel ? `<span class="nv-card__size">${sizeLabel}</span>` : ''}
         </div>
       </div>
@@ -3736,74 +3721,6 @@ function addToCart(product, size, qty) {
 
   showToast(`${product.name.toUpperCase()} (${size}) ADDED TO CART.`);
   openCartDrawer();
-}
-
-function renderProductFAQ(p) {
-  const faqContainer = document.getElementById('pp-faq-accordion');
-  if (!faqContainer) return;
-
-  const transProd = typeof getTranslatedProduct === 'function' ? getTranslatedProduct(p.id) : null;
-  let faqs = (transProd && transProd.faq && Array.isArray(transProd.faq) && transProd.faq.length > 0)
-    ? transProd.faq
-    : null;
-
-  if (!faqs) {
-    const priceAMD = p.price || 0;
-    const priceUSD = Math.round(priceAMD / 390);
-    const topNotes = (p.notes && p.notes.top) ? p.notes.top.join(', ') : '';
-    const heartNotes = (p.notes && p.notes.heart) ? p.notes.heart.join(', ') : '';
-    const baseNotes = (p.notes && p.notes.base) ? p.notes.base.join(', ') : '';
-    const genderText = p.gender_id === 'unisex'
-      ? 'both men and women — it is a unisex fragrance'
-      : `${p.gender_id === 'men' ? 'men' : 'women'} primarily, though many wear it regardless of gender`;
-    const familyText = p.scent_family || 'niche';
-    const vibesText = (p.vibes || []).slice(0, 3).join(', ');
-    // Synonym rotation — vary scent vocabulary across products (fragrance / parfum / scent / eau de parfum)
-    const faqScentSynonyms = ['fragrance', 'parfum', 'scent', 'eau de parfum'];
-    const scentWord = faqScentSynonyms[Math.abs(p.id.length % faqScentSynonyms.length)] || 'fragrance';
-
-    faqs = [
-      {
-        q: `What does ${p.name} smell like?`,
-        a: `A ${familyText} ${scentWord} that opens with ${topNotes || 'bold spices'}, deepens through ${heartNotes || 'a rich heart'}, and closes on ${baseNotes || 'a warm base'}. ${p.tagline || ''}`
-      },
-      {
-        q: `How long does ${p.name} last?`,
-        a: `As an Eau de Parfum, expect 8–12+ hours of longevity. Apply 2–3 sprays to pulse points — wrists and neck — and let the scent develop.`
-      },
-      {
-        q: `When should I wear ${p.name}?`,
-        a: `Best for ${vibesText || 'evening and cooler-weather'} occasions. The ${familyText} character projects beautifully in autumn and winter.`
-      },
-      {
-        q: `How many sprays should I use?`,
-        a: `2–3 sprays maximum. This is a highly concentrated ${scentWord} — less is more. Apply to pulse points and allow 60 seconds for the top notes to open.`
-      },
-      {
-        q: `What is the price in Yerevan?`,
-        a: `${p.name} is ֏${priceAMD.toLocaleString()} AMD (~$${priceUSD} USD) at NOVA Yerevan. Fast delivery available.`
-      },
-      {
-        q: `Is it for men or women?`,
-        a: `${p.name} is designed for ${genderText}. In niche perfumery, ${scentWord} transcends gender — this scent is defined by character, not category.`
-      },
-      {
-        q: `Is it authentic at NOVA?`,
-        a: `Yes — 100% authentic, sourced directly from ${p.brand || 'the brand'}. NOVA Armenia carries only genuine, sealed bottles. No counterfeits, no compromises.`
-      }
-    ];
-  }
-
-  faqContainer.innerHTML = faqs.map((faq, i) => `
-    <details class="faq-item" ${i === 0 ? 'open' : ''}>
-      <summary>${faq.q || faq.question}</summary>
-      <div class="faq-item-content"${i === 0 ? ' style="grid-template-rows:1fr"' : ''}>
-        <div class="faq-item-inner">
-          <p>${faq.a || faq.answer}</p>
-        </div>
-      </div>
-    </details>
-  `).join('');
 }
 
 // CART SYSTEM UI UPDATES
