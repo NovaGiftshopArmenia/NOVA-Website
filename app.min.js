@@ -129,7 +129,17 @@ const TRANSLATIONS = {
     checkout_street: "Հասցե *",
     checkout_city: "Քաղաք *",
     checkout_zip: "Փոստային ինդեքս *",
-    checkout_shipping: "Առաքում *",
+    checkout_region: "Մարզ / Քաղաք (Հայաստան) *",
+    checkout_return_policy_title: "Վերադարձի Քաղաքականություն",
+    region_yerevan: "Երևան",
+    region_ararat: "Արարատ",
+    region_armavir: "Արմավիր",
+    region_aragatsotn: "Արագածոտն",
+    region_gegharkunik: "Գեղարքունիք",
+    region_kotayk: "Կոտայք",
+    region_lori: "Լոռի",
+    region_shirak: "Շիրակ",
+    region_syunik: "Սյունիք",
     checkout_payment_title: "Վճարում",
     checkout_payment_desc: "Դեմո վճարում. Սիմուլյացիոն ռեժիմ: Իրական քարտերից գանձում չի կատարվի:",
     checkout_place_order: "Կատարել Պատվեր",
@@ -258,11 +268,11 @@ const TRANSLATIONS = {
     policy_shipping_subtitle: "ԱՋԱԿՑՈՒԹՅՈՒՆ",
     policy_shipping_title: "Առաքման և Վերադարձի Պայմաններ",
     policy_shipping_sec1_title: "1. Առաքում և Հանձնում",
-    policy_shipping_sec1_desc1: "NOVA-ում յուրաքանչյուր բույր խնամքով փաթեթավորվում է՝ պահպանելու իր նուրբ բուսական բաղադրությունը։ Մենք առաքում ենք ինչպես Հայաստանի ողջ տարածքում, այնպես էլ միջազգային մակարդակով։",
-    policy_shipping_sec1_desc2: "<strong>Առաքում Երևանում:</strong> 1-2 աշխատանքային օր (անվճար 20,000 AMD-ից բարձր պատվերների դեպքում):<br><strong>ՀՀ մարզեր:</strong> 2-4 աշխատանքային օր:<br><strong>Միջազգային առաքում:</strong> 7-14 աշխատանքային օր գրանցված փոստով:",
+    policy_shipping_sec1_desc1: "NOVA-ում յուրաքանչյուր բույր խնամքով փաթեթավորվում է՝ պահպանելու իր նուրբ բաղադրությունը։ Մենք առաքում ենք բացառապես Հայաստանի տարածքում։",
+    policy_shipping_sec1_desc2: "<strong>Առաքում Երևանում:</strong> 1-2 աշխատանքային օր (անվճար 100,000 AMD-ից բարձր պատվերների դեպքում):<br><strong>ՀՀ մարզեր:</strong> 2-4 աշխատանքային օր:",
     policy_shipping_sec2_title: "2. Վերադարձի և Փոխանակման Պայմաններ",
     policy_shipping_sec2_desc1: "Հաշվի առնելով խորշային օծանելիքների անձնական բնույթը, մենք կարող ենք ընդունել միայն այն ապրանքների վերադարձը, որոնք լիովին չբացված են, չօգտագործված և գտնվում են իրենց օրիգինալ փակ փաթեթավորման մեջ՝ առաքումից հետո 14 օրվա ընթացքում:",
-    policy_shipping_sec2_desc2: "Եթե ցանկանում եք վերադարձ կատարել, խնդրում ենք կապվել մեր կոնսյերժ թիմի հետ concierge@novafragrances.com հասցեով՝ նախքան ծրարը հետ ուղարկելը:",
+    policy_shipping_sec2_desc2: "Եթե ցանկանում եք վերադարձ կատարել, խնդրում ենք կապվել մեր թիմի հետ novagiftshoparmenia@gmail.com հասցեով՝ նախքան ծրարը հետ ուղարկելը:",
     policy_shipping_sec3_title: "3. Վնասված Ապրանքներ",
     policy_shipping_sec3_desc1: "Եթե ձեր սրվակը վնասված է կամ արտահոսում է, խնդրում ենք անմիջապես լուսանկարել այն և կապվել մեզ հետ ստանալուց հետո 48 ժամվա ընթացքում։ Մենք անմիջապես կկազմակերպենք փոխարինում կամ լիարժեք վերադարձ:",
     policy_privacy_header_title: "ՕՐԵՆՔ",
@@ -558,7 +568,17 @@ const TRANSLATIONS = {
     checkout_street: "Адрес *",
     checkout_city: "Город *",
     checkout_zip: "Почтовый индекс *",
-    checkout_shipping: "Доставка *",
+    checkout_region: "Регион (Армения) *",
+    checkout_return_policy_title: "Правила возврата",
+    region_yerevan: "Ереван",
+    region_ararat: "Арарат",
+    region_armavir: "Армавир",
+    region_aragatsotn: "Арагацотн",
+    region_gegharkunik: "Гегаркуник",
+    region_kotayk: "Котайк",
+    region_lori: "Лори",
+    region_shirak: "Ширак",
+    region_syunik: "Сюник",
     checkout_payment_title: "Оплата",
     checkout_payment_desc: "Демо-платеж: режим симулятора. Реальные карты не будут использоваться.",
     checkout_place_order: "Разместить заказ",
@@ -687,11 +707,11 @@ const TRANSLATIONS = {
     policy_shipping_subtitle: "ПОДДЕРЖКА КЛИЕНТОВ",
     policy_shipping_title: "Правила доставки и возврата",
     policy_shipping_sec1_title: "1. Доставка и получение",
-    policy_shipping_sec1_desc1: "В NOVA каждый аромат тщательно упаковывается для сохранения его тонкой растительной композиции. Мы осуществляем доставку как по Армении, так и по всему миру.",
-    policy_shipping_sec1_desc2: "<strong>Доставка по Еревану:</strong> 1-2 рабочих дня (бесплатно при заказе на сумму более 20 000 AMD).<br><strong>Регионы Армении:</strong> 2-4 рабочих дня.<br><strong>Международная доставка:</strong> 7-14 рабочих дней заказной почтой.",
+    policy_shipping_sec1_desc1: "В NOVA каждый аромат тщательно упаковывается для сохранения его тонкой композиции. Мы осуществляем доставку исключительно по Армении.",
+    policy_shipping_sec1_desc2: "<strong>Доставка по Еревану:</strong> 1-2 рабочих дня (бесплатно при заказе на сумму более 100 000 AMD).<br><strong>Регионы Армении:</strong> 2-4 рабочих дня.",
     policy_shipping_sec2_title: "2. Правила возврата и обмена",
     policy_shipping_sec2_desc1: "В связи с индивидуальным и гигиеническим характером нишевой парфюмерии, мы можем принять возврат только полностью запечатанной, неиспользованной продукции в оригинальной упаковке в течение 14 дней с момента доставки.",
-    policy_shipping_sec2_desc2: "Если вы хотите оформить возврат, пожалуйста, свяжитесь с нашей службой поддержки по адресу concierge@novafragrances.com перед отправкой товара назад.",
+    policy_shipping_sec2_desc2: "Если вы хотите оформить возврат, пожалуйста, свяжитесь с нашей службой поддержки по адресу novagiftshoparmenia@gmail.com перед отправкой товара назад.",
     policy_shipping_sec3_title: "3. Поврежденные товары",
     policy_shipping_sec3_desc1: "Если флакон пришел поврежденным или протекает, немедленно сделайте фотографию и свяжитесь с нами в течение 48 часов с момента получения. Мы организуем замену или полный возврат средств.",
     policy_privacy_header_title: "ЗАКОН",
@@ -995,7 +1015,17 @@ const TRANSLATIONS = {
     checkout_street: "Street Address *",
     checkout_city: "City *",
     checkout_zip: "ZIP / Postal Code *",
-    checkout_shipping: "Shipping *",
+    checkout_region: "Region (Armenia) *",
+    checkout_return_policy_title: "Return Policy",
+    region_yerevan: "Yerevan",
+    region_ararat: "Ararat",
+    region_armavir: "Armavir",
+    region_aragatsotn: "Aragatsotn",
+    region_gegharkunik: "Gegharkunik",
+    region_kotayk: "Kotayk",
+    region_lori: "Lori",
+    region_shirak: "Shirak",
+    region_syunik: "Syunik",
     checkout_payment_title: "Payment",
     checkout_payment_desc: "Demo payment: Simulator mode. No real cards will be charged.",
     checkout_place_order: "Place Order",
@@ -1123,11 +1153,11 @@ const TRANSLATIONS = {
     policy_shipping_subtitle: "CUSTOMER SUPPORT",
     policy_shipping_title: "Shipping & Returns Policy",
     policy_shipping_sec1_title: "1. Shipping & Delivery",
-    policy_shipping_sec1_desc1: "At NOVA, each fragrance is carefully packed to preserve its delicate botanical composition. We ship both locally across Armenia and internationally.",
-    policy_shipping_sec1_desc2: "<strong>Yerevan Delivery:</strong> 1-2 business days (Free for orders over 20,000 AMD).<br><strong>Regional Armenia:</strong> 2-4 business days.<br><strong>International Delivery:</strong> 7-14 business days via registered postal service.",
+    policy_shipping_sec1_desc1: "At NOVA, each fragrance is carefully packed to preserve its delicate composition. We deliver exclusively within Armenia.",
+    policy_shipping_sec1_desc2: "<strong>Yerevan Delivery:</strong> 1-2 business days (Free for orders over 100,000 AMD).<br><strong>Regional Armenia:</strong> 2-4 business days.",
     policy_shipping_sec2_title: "2. Return & Exchange Policy",
     policy_shipping_sec2_desc1: "Due to the personal and cosmetic nature of niche perfumery, we are only able to accept returns on products that are completely unopened, unused, and in their original sealed cellophane packaging within 14 days of delivery.",
-    policy_shipping_sec2_desc2: "If you wish to initiate a return, please contact our concierge team at concierge@novafragrances.com before sending the package back.",
+    policy_shipping_sec2_desc2: "If you wish to initiate a return, please contact our team at novagiftshoparmenia@gmail.com before sending the package back.",
     policy_shipping_sec3_title: "3. Damaged or Faulty Items",
     policy_shipping_sec3_desc1: "If your bottle arrives damaged or leaking, please take a photograph immediately and contact us within 48 hours of receipt. We will arrange a replacement or full refund immediately.",
     policy_privacy_header_title: "PRIVACY",
@@ -1852,17 +1882,45 @@ const DOM = {
 
 // INITIALIZATION
 window.addEventListener('DOMContentLoaded', async () => {
-  // --- FIREBASE: Load all shared data from Firestore before rendering ---
+  // Synchronous cache load: eliminate 5-second delay and empty sections on page load
+  if (window.NovaSanity) {
+    const cachedProds = NovaSanity.getCachedProducts();
+    if (cachedProds && cachedProds.length > 0) {
+      AppState.products = cachedProds;
+      addProductGetters(AppState.products);
+      console.log('[NOVA] Instantly loaded', AppState.products.length, 'products from local cache');
+    }
+  }
+
+  // Render page structure immediately using cached data
+  const isProductPage = window.location.pathname.endsWith('/product') || window.location.pathname.endsWith('/product.html');
+  if (isProductPage) {
+    initProductPage();
+  } else {
+    initRouter();
+  }
+  initScrollHeader();
+  initMegaMenu();
+  initBrandsMegaMenu();
+  initEventListeners();
+
+  // Async background fetch from Sanity & Firestore
   try {
     await NovaDB.init();
-    console.log('[NOVA] Firestore data loaded successfully');
 
     // Load products from Sanity CMS
     const sanityProducts = await NovaSanity.init();
-    console.log('[NOVA] Sanity products:', sanityProducts ? sanityProducts.length : 'null');
-    AppState.products = sanityProducts || [];
-    addProductGetters(AppState.products);
-    console.log('[NOVA] Loaded', AppState.products.length, 'products from Sanity CMS');
+    if (sanityProducts && sanityProducts.length > 0) {
+      AppState.products = sanityProducts;
+      addProductGetters(AppState.products);
+      // Re-render UI with fresh Sanity data if page already initialized
+      if (isProductPage) {
+        initProductPage();
+      } else {
+        renderFeaturedProducts();
+        renderSliders();
+      }
+    }
 
     // ONE-TIME MIGRATION: Fix all MANCERA product brands
     let brandFixCount = 0;
@@ -1908,16 +1966,6 @@ window.addEventListener('DOMContentLoaded', async () => {
     console.warn('[NOVA] Firestore init failed, using defaults:', e);
   }
 
-  const isProductPage = window.location.pathname.endsWith('/product') || window.location.pathname.endsWith('/product.html');
-  if (isProductPage) {
-    initProductPage();
-  } else {
-    initRouter();
-  }
-  initScrollHeader();
-  initMegaMenu();
-  initBrandsMegaMenu();
-  initEventListeners();
   loadCartFromStorage();
   loadWishlistFromStorage();
 
@@ -4497,7 +4545,7 @@ function renderProductPage(productId) {
     const faqScentSynonyms = ['fragrance', 'parfum', 'scent', 'eau de parfum'];
     const scentWord = faqScentSynonyms[Math.abs(p.id.length % faqScentSynonyms.length)] || 'fragrance';
 
-    const faqs = [
+    const defaultFaqs = [
       {
         q: `What does ${p.name} smell like?`,
         a: `A ${familyText} ${scentWord} that opens with ${topNotes || 'bold spices'}, deepens through ${heartNotes || 'a rich heart'}, and closes on ${baseNotes || 'a warm base'}. ${p.tagline || ''}`
@@ -4527,6 +4575,8 @@ function renderProductPage(productId) {
         a: `Yes — 100% authentic, sourced directly from ${p.brand || 'the brand'}. NOVA Armenia carries only genuine, sealed bottles. No counterfeits, no compromises.`
       }
     ];
+
+    const faqs = (p.faqs && p.faqs.length > 0) ? p.faqs : defaultFaqs;
 
     faqContainer.innerHTML = faqs.map((faq, i) => `
       <details class="faq-item" ${i === 0 ? 'open' : ''}>
@@ -4785,6 +4835,46 @@ function renderProductPage(productId) {
     }
   };
 
+  // Populate Specification List
+  const specList = document.getElementById('pp-spec-list');
+  if (specList) {
+    const lang = AppState.language;
+    const bLabel = lang === 'am' ? 'Ապրանքանիշ' : lang === 'ru' ? 'Бренд' : 'Brand';
+    const fLabel = lang === 'am' ? 'Օլֆակտորիկ Ընտանիք' : lang === 'ru' ? 'Семейство ароматов' : 'Scent Family';
+    const cLabel = lang === 'am' ? 'Խտություն' : lang === 'ru' ? 'Концентрация' : 'Concentration';
+    const oLabel = lang === 'am' ? 'Ծագում' : lang === 'ru' ? 'Происхождение' : 'Origin';
+
+    specList.innerHTML = `
+      <div><dt>${bLabel}</dt><dd>${product.brand || 'MANCERA'}</dd></div>
+      <div><dt>${fLabel}</dt><dd>${product.scent_family || 'Niche'}</dd></div>
+      <div><dt>${cLabel}</dt><dd>${product.concentration || 'Eau de Parfum'}</dd></div>
+      <div><dt>${oLabel}</dt><dd>France / Armenia</dd></div>
+    `;
+  }
+
+  // Populate Ingredients
+  const ingEl = document.getElementById('pp-ingredients');
+  if (ingEl) {
+    ingEl.textContent = product.ingredients || 'Alcohol Denat., Parfum (Fragrance), Aqua (Water), Limonene, Linalool, Coumarin, Citral, Eugenol, Geraniol, Farnesol.';
+  }
+
+  // Bind Wishlist button on product page
+  const wishBtn = document.getElementById('pp-wish-btn');
+  if (wishBtn) {
+    const updateWishState = () => {
+      const isWish = AppState.wishlist.includes(product.id);
+      wishBtn.classList.toggle('active', isWish);
+      wishBtn.innerHTML = isWish ? '♥' : '♡';
+      wishBtn.style.color = isWish ? 'var(--color-brown)' : '';
+    };
+    updateWishState();
+    wishBtn.onclick = (e) => {
+      e.stopPropagation();
+      toggleWishlist(product.id);
+      updateWishState();
+    };
+  }
+
   plusBtn.onclick = () => {
     let q = parseInt(qtyInput.value) || 1;
     if (q < product.stock) {
@@ -4887,27 +4977,31 @@ function prefillCheckoutForm() {
 
 function updateCheckoutTotals() {
   const subtotal = AppState.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-
-  const shippingSelect = document.getElementById('shipping-method');
-  const shippingCost = shippingSelect ? parseInt(shippingSelect.value) : 0;
+  const shippingCost = 3000;
   const total = subtotal + shippingCost;
 
-  document.getElementById('checkout-subtotal-val').innerText = `֏${formatPrice(subtotal)}`;
-  document.getElementById('checkout-shipping-val').innerText = shippingCost === 0 ? 'Free' : `֏${formatPrice(shippingCost)}`;
-  document.getElementById('checkout-total-val').innerText = `֏${formatPrice(total)}`;
+  const subtotalEl = document.getElementById('checkout-subtotal-val');
+  const shippingValEl = document.getElementById('checkout-shipping-val');
+  const totalEl = document.getElementById('checkout-total-val');
+
+  if (subtotalEl) subtotalEl.innerText = `֏${formatPrice(subtotal)}`;
+  if (shippingValEl) shippingValEl.innerText = `֏${formatPrice(shippingCost)}`;
+  if (totalEl) totalEl.innerText = `֏${formatPrice(total)}`;
 }
 
 async function processCheckout() {
-  const shippingSelect = document.getElementById('shipping-method');
   const subtotal = AppState.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-  const shippingCost = shippingSelect ? parseInt(shippingSelect.value) : 0;
+  const shippingCost = 3000;
   const total = subtotal + shippingCost;
+  const regionSelect = document.getElementById('billing-region');
+  const regionValue = regionSelect ? regionSelect.value : 'yerevan';
 
   const customerData = {
     firstName: document.getElementById('billing-first-name').value,
     lastName: document.getElementById('billing-last-name').value,
     email: document.getElementById('billing-email').value,
     address: document.getElementById('billing-address').value,
+    region: regionValue,
     city: document.getElementById('billing-city').value,
     zip: document.getElementById('billing-zip').value
   };
@@ -5034,21 +5128,18 @@ window.restoreCheckoutPage = function () {
               </div>
             </div>
             <div class="form-group">
-              <label for="shipping-method">Shipping *</label>
-              <select id="shipping-method" style="display: none;">
-                <option value="0">Standard Shipping (Free)</option>
-                <option value="15">Express Delivery (֏15)</option>
+              <label for="billing-region" data-trans="checkout_region">Region (Armenia) *</label>
+              <select id="billing-region" class="checkout-region-select" required style="width: 100%; padding: 12px 14px; border: 1px solid var(--color-border); border-radius: 8px; font-size: 0.9rem; background-color: var(--color-white); color: var(--color-black);">
+                <option value="yerevan" data-trans="region_yerevan">Yerevan</option>
+                <option value="ararat" data-trans="region_ararat">Ararat</option>
+                <option value="armavir" data-trans="region_armavir">Armavir</option>
+                <option value="aragatsotn" data-trans="region_aragatsotn">Aragatsotn</option>
+                <option value="gegharkunik" data-trans="region_gegharkunik">Gegharkunik</option>
+                <option value="kotayk" data-trans="region_kotayk">Kotayk</option>
+                <option value="lori" data-trans="region_lori">Lori</option>
+                <option value="shirak" data-trans="region_shirak">Shirak</option>
+                <option value="syunik" data-trans="region_syunik">Syunik</option>
               </select>
-              <div class="custom-dropdown" id="checkout-shipping-dropdown">
-                <button type="button" class="dropdown-trigger" id="checkout-shipping-trigger">
-                  <span id="checkout-shipping-value" data-value="0">Standard Shipping (Free)</span>
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="chevron-icon" style="width: 10px; height: 10px; transition: transform 0.2s;"><polyline points="6 9 12 15 18 9"></polyline></svg>
-                </button>
-                <ul class="dropdown-menu" id="checkout-shipping-menu">
-                  <li class="dropdown-item active" data-value="0">Standard Shipping (Free)</li>
-                  <li class="dropdown-item" data-value="15">Express Delivery (֏15)</li>
-                </ul>
-              </div>
             </div>
             <div style="margin-top: var(--spacing-lg);">
               <h3 style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px;">Payment</h3>
@@ -5074,12 +5165,18 @@ window.restoreCheckoutPage = function () {
             </div>
             <div style="display:flex; justify-content:space-between;">
               <span>Shipping:</span>
-              <strong id="checkout-shipping-val">Free</strong>
+              <strong id="checkout-shipping-val">֏3,000</strong>
             </div>
             <div class="order-summary-total-row">
               <span>Total:</span>
               <strong id="checkout-total-val" style="font-size: 1.3rem;">֏0</strong>
             </div>
+          </div>
+
+          <!-- Return Policy Box -->
+          <div class="checkout-return-policy-box" style="margin-top: 20px; padding: 18px; border: 1px solid var(--color-border); border-radius: 8px; background-color: var(--color-light-gray);">
+            <h4 style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; margin-bottom: 6px;" data-trans="checkout_return_policy_title">Return Policy</h4>
+            <p style="font-size: 0.8rem; color: var(--color-medium-gray); line-height: 1.5; margin: 0;" data-trans="policy_shipping_sec2_desc1">Due to the personal and cosmetic nature of niche perfumery, we are only able to accept returns on products that are completely unopened, unused, and in their original sealed cellophane packaging within 14 days of delivery.</p>
           </div>
         </div>
       </div>
@@ -8121,8 +8218,7 @@ window.applyDiscountCode = function() {
 const _originalUpdateCheckoutTotals = updateCheckoutTotals;
 window.updateCheckoutTotals = function() {
   const subtotal = AppState.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-  const shippingSelect = document.getElementById('shipping-method');
-  const shippingCost = shippingSelect ? parseInt(shippingSelect.value) : 0;
+  const shippingCost = 3000;
 
   let discountAmount = 0;
   if (appliedDiscount) {
@@ -8141,7 +8237,7 @@ window.updateCheckoutTotals = function() {
   if (!subtotalEl || !totalEl) return;
 
   subtotalEl.innerText = `֏${formatPrice(subtotal)}`;
-  if (shippingValEl) shippingValEl.innerText = shippingCost === 0 ? 'Free' : `֏${formatPrice(shippingCost)}`;
+  if (shippingValEl) shippingValEl.innerText = `֏${formatPrice(shippingCost)}`;
   totalEl.innerText = `֏${formatPrice(total)}`;
 
   const discountRow = document.getElementById('checkout-discount-row');

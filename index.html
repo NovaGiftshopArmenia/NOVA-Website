@@ -777,21 +777,18 @@
                 </div>
               </div>
               <div class="form-group">
-                <label for="shipping-method" data-trans="checkout_shipping">Shipping *</label>
-                <select id="shipping-method" style="display: none;">
-                  <option value="0">Standard Shipping (Free)</option>
-                  <option value="15">Express Delivery (֏15)</option>
+                <label for="billing-region" data-trans="checkout_region">Region (Armenia) *</label>
+                <select id="billing-region" class="checkout-region-select" required style="width: 100%; padding: 12px 14px; border: 1px solid var(--color-border); border-radius: 8px; font-size: 0.9rem; background-color: var(--color-white); color: var(--color-black);">
+                  <option value="yerevan" data-trans="region_yerevan">Yerevan</option>
+                  <option value="ararat" data-trans="region_ararat">Ararat</option>
+                  <option value="armavir" data-trans="region_armavir">Armavir</option>
+                  <option value="aragatsotn" data-trans="region_aragatsotn">Aragatsotn</option>
+                  <option value="gegharkunik" data-trans="region_gegharkunik">Gegharkunik</option>
+                  <option value="kotayk" data-trans="region_kotayk">Kotayk</option>
+                  <option value="lori" data-trans="region_lori">Lori</option>
+                  <option value="shirak" data-trans="region_shirak">Shirak</option>
+                  <option value="syunik" data-trans="region_syunik">Syunik</option>
                 </select>
-                <div class="custom-dropdown" id="checkout-shipping-dropdown">
-                  <button type="button" class="dropdown-trigger" id="checkout-shipping-trigger">
-                    <span id="checkout-shipping-value" data-value="0">Standard Shipping (Free)</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="chevron-icon" style="width: 10px; height: 10px; transition: transform 0.2s;"><polyline points="6 9 12 15 18 9"></polyline></svg>
-                  </button>
-                  <ul class="dropdown-menu" id="checkout-shipping-menu">
-                    <li class="dropdown-item active" data-value="0">Standard Shipping (Free)</li>
-                    <li class="dropdown-item" data-value="15">Express Delivery (֏15)</li>
-                  </ul>
-                </div>
               </div>
               
               <div style="margin-top: var(--spacing-lg);">
@@ -840,6 +837,12 @@
                 <span data-trans="checkout_total">Total:</span>
                 <strong id="checkout-total-val" style="font-size: 1.3rem;">֏0</strong>
               </div>
+            </div>
+
+            <!-- Return Policy Box -->
+            <div class="checkout-return-policy-box" style="margin-top: 20px; padding: 18px; border: 1px solid var(--color-border); border-radius: 8px; background-color: var(--color-light-gray);">
+              <h4 style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; margin-bottom: 6px;" data-trans="checkout_return_policy_title">Return Policy</h4>
+              <p style="font-size: 0.8rem; color: var(--color-medium-gray); line-height: 1.5; margin: 0;" data-trans="policy_shipping_sec2_desc1">Due to the personal and cosmetic nature of niche perfumery, we are only able to accept returns on products that are completely unopened, unused, and in their original sealed cellophane packaging within 14 days of delivery.</p>
             </div>
           </div>
         </div>
@@ -1737,12 +1740,12 @@
       
       <div style="max-width: 800px; margin: 0 auto; color: var(--color-black); font-weight: 300; line-height: 1.8; font-size: 1.05rem;">
         <h3 class="serif-title" style="font-size: 1.6rem; margin: 24px 0 12px 0;" data-trans="policy_shipping_sec1_title">1. Shipping & Delivery</h3>
-        <p style="margin-bottom: 16px;" data-trans="policy_shipping_sec1_desc1">At NOVA, each fragrance is carefully packed to preserve its delicate botanical composition. We ship both locally across Armenia and internationally.</p>
-        <p style="margin-bottom: 24px;" data-trans="policy_shipping_sec1_desc2"><strong>Yerevan Delivery:</strong> 1-2 business days (Free for orders over 20,000 AMD).<br><strong>Regional Armenia:</strong> 2-4 business days.<br><strong>International Delivery:</strong> 7-14 business days via registered postal service.</p>
+        <p style="margin-bottom: 16px;" data-trans="policy_shipping_sec1_desc1">At NOVA, each fragrance is carefully packed to preserve its delicate composition. We deliver exclusively within Armenia.</p>
+        <p style="margin-bottom: 24px;" data-trans="policy_shipping_sec1_desc2"><strong>Yerevan Delivery:</strong> 1-2 business days (Free for orders over 100,000 AMD).<br><strong>Regional Armenia:</strong> 2-4 business days.</p>
         
         <h3 class="serif-title" style="font-size: 1.6rem; margin: 24px 0 12px 0;" data-trans="policy_shipping_sec2_title">2. Return & Exchange Policy</h3>
         <p style="margin-bottom: 16px;" data-trans="policy_shipping_sec2_desc1">Due to the personal and cosmetic nature of niche perfumery, we are only able to accept returns on products that are completely unopened, unused, and in their original sealed cellophane packaging within 14 days of delivery.</p>
-        <p style="margin-bottom: 16px;" data-trans="policy_shipping_sec2_desc2">If you wish to initiate a return, please contact our concierge team at concierge@novafragrances.com before sending the package back.</p>
+        <p style="margin-bottom: 16px;" data-trans="policy_shipping_sec2_desc2">If you wish to initiate a return, please contact our team at novagiftshoparmenia@gmail.com before sending the package back.</p>
         
         <h3 class="serif-title" style="font-size: 1.6rem; margin: 24px 0 12px 0;" data-trans="policy_shipping_sec3_title">3. Damaged or Faulty Items</h3>
         <p style="margin-bottom: 16px;" data-trans="policy_shipping_sec3_desc1">If your bottle arrives damaged or leaking, please take a photograph immediately and contact us within 48 hours of receipt. We will arrange a replacement or full refund immediately.</p>

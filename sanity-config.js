@@ -58,7 +58,8 @@ const NovaSanity = {
         notes,
         "image": mainImage.asset->url,
         "images": galleryImages[].asset->url,
-        translations
+        translations,
+        faqs
       }`;
 
       const url = `${SANITY_API}/query/${SANITY_CONFIG.dataset}?query=${encodeURIComponent(query)}`;
@@ -73,6 +74,11 @@ const NovaSanity = {
 
       // Transform Sanity documents to match AppState.products format
       this._products = products.map(doc => this._transformFromSanity(doc));
+
+      // Cache products locally to eliminate 5-second fetch delay on page load
+      try {
+        localStorage.setItem('nova_sanity_cache', JSON.stringify(this._products));
+      } catch (err) {}
 
       // Extract translations from products
       this._translations = { am: {}, ru: {} };
@@ -92,11 +98,19 @@ const NovaSanity = {
       return this._products;
     } catch (e) {
       console.error('[NovaSanity] ❌ Failed to initialize:', e);
-      this._products = [];
+      this._products = this.getCachedProducts() || [];
       this._translations = { am: {}, ru: {} };
       this._ready = false;
-      return [];
+      return this._products;
     }
+  },
+
+  getCachedProducts() {
+    try {
+      const saved = localStorage.getItem('nova_sanity_cache');
+      if (saved) return JSON.parse(saved);
+    } catch (e) {}
+    return null;
   },
 
   // Get all products (synchronous, from cache)
@@ -132,7 +146,11 @@ const NovaSanity = {
       featured: doc.featured || false,
       notes: doc.notes || { top: [], heart: [], base: [] },
       image: doc.image || '',
-      images: (doc.images || []).filter(Boolean)
+      images: (doc.images || []).filter(Boolean),
+      faqs: (doc.faqs || []).map(f => ({
+        q: f.q || f.question || '',
+        a: f.a || f.answer || ''
+      })).filter(f => f.q && f.a)
     };
   },
 
