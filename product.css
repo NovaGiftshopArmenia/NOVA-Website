@@ -294,7 +294,7 @@ body:has(#product-page-body) {
 /* --- OLFACTORY BAND --- */
 .pp-band {
   position: relative;
-  height: 660px;
+  min-height: 660px;
   overflow: hidden;
 }
 .pp-band .pp-band-bg {
@@ -558,8 +558,8 @@ body:has(#product-page-body) {
   .pp-gallery { position: relative !important; top: auto !important; height: auto !important; }
   .pp-buy { position: static }
   .pp-buy h1 { font-size: 44px }
-  .pp-band { height: auto; padding: 80px 0 }
-  .pp-band .pp-band-inner { position: static; padding: 0 32px }
+  .pp-band { height: auto; min-height: auto; padding: 80px 32px }
+  .pp-band .pp-band-inner { position: relative; padding: 0 }
   .pp-pyramid-display { grid-template-columns: 1fr; gap: 32px }
   .pp-pyramid-display > div { border-right: 0; padding: 0 }
   .suggestions-grid { grid-template-columns: repeat(2, 1fr) }

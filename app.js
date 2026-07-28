@@ -1,4 +1,4 @@
-// Format price with comma separators (23000 → "23,000")
+﻿// Format price with comma separators (23000 → "23,000")
 function formatPrice(num) {
   return Number(num).toLocaleString('en-US');
 }
@@ -184,6 +184,7 @@ const TRANSLATIONS = {
     footer_rights: "&copy; 2026 NOVA Inc. Բոլոր իրավունքները պաշտպանված են:",
     footer_tagline: "ԷԼԵԳԱՆՏՈՒԹՅՈՒՆ &bull; ՄԻՆԻՄԱԼԻԶՄ &bull; ՄԱՔՐՈՒԹՅՈՒՆ",
     home_reviews_title: "Հաճախորդների Կարծիքներ",
+    home_reviews_subtitle: "4.8 միջին · 126 կարծիք",
     home_instagram_title: "Հետևեք մեզ Instagram-ում",
     home_instagram_shortcode_title: "Ինստագրամ Լրահոս (Shortcode)",
     scroll_text: "Սահեցնել &rarr;",
@@ -642,6 +643,7 @@ const TRANSLATIONS = {
     footer_rights: "&copy; 2026 NOVA Inc. Все права защищены.",
     footer_tagline: "ЭЛЕГАНТНОСТЬ &bull; МИНИМАЛИЗМ &bull; ЧИСТОТА",
     home_reviews_title: "Отзывы Клиентов",
+    home_reviews_subtitle: "4.8 среднее · 126 отзывов",
     home_instagram_title: "Следите за нами в Instagram",
     home_instagram_shortcode_title: "Лента Instagram (Шорткод)",
     scroll_text: "ПРОКРУТКА &rarr;",
@@ -1108,6 +1110,7 @@ const TRANSLATIONS = {
     footer_rights: "&copy; 2026 NOVA Inc. All rights reserved.",
     footer_tagline: "ELEGANCE &bull; MINIMALISM &bull; PURITY",
     home_reviews_title: "What Our Clients Say",
+    home_reviews_subtitle: "4.8 average · 126 reviews",
     home_instagram_title: "Follow Us @NovaFragrances",
     home_instagram_shortcode_title: "Instagram Feed (Shortcode)",
     scroll_text: "SCROLL &rarr;",
@@ -4976,9 +4979,16 @@ function renderProductPage(productId) {
     }
   };
 
-  // Re-run language translation for all data-trans elements on product page
-  if (typeof changeLanguage === 'function') {
-    changeLanguage(AppState.language);
+  // Lightweight translation pass — only translate data-trans elements on this page
+  // (Do NOT call changeLanguage() here as it re-renders all sliders/shop/menus causing 10-15s delay)
+  const lang = AppState.language;
+  if (TRANSLATIONS[lang]) {
+    document.querySelectorAll('[data-trans]').forEach(el => {
+      const key = el.getAttribute('data-trans');
+      if (TRANSLATIONS[lang][key]) {
+        el.innerHTML = TRANSLATIONS[lang][key];
+      }
+    });
   }
 
   // Re-bind pan/zoom hover and FAQ interactive features on product page
