@@ -449,7 +449,7 @@
     </div>
 
     <!-- Reviews Section -->
-    <div class="pp-reviews-wrap" style="max-width:1440px;margin:0 auto;padding:0 72px;">
+    <div class="pp-reviews-wrap" style="max-width:1440px;margin:0 auto;padding:0 var(--spacing-lg);">
       <div class="pp-head">
         <h2 data-trans="home_reviews_title">What Our <span class="em">Clients</span> Say</h2>
         <span class="pp-label">4.8 average · 126 reviews</span>
@@ -505,14 +505,27 @@
       </div>
     </section>
 
-    <!-- Suggested Products -->
-    <section class="pp-ritual">
-      <div class="pp-head">
-        <h2 data-trans="suggestions_title">Complete the <span class="em">Ritual</span></h2>
-        <a href="index.html#/shop" class="pp-label" data-trans="pp_view_collection">View full collection</a>
-      </div>
-      <div class="suggestions-grid" id="pp-suggestions-grid">
-        <!-- Dynamically populated suggested products via app.js -->
+    <!-- Suggested Products (Slider matching home page) -->
+    <section class="horizontal-slider-section" style="padding: 96px 0;">
+      <div class="container relative-container">
+        <div class="slider-header">
+          <h2 class="serif-title" style="font-size: 2.2rem; letter-spacing: 0.1em; text-transform: uppercase;" data-trans="suggestions_title">Complete the Ritual</h2>
+          <div class="slider-controls">
+            <button class="slider-arrow prev-arrow" onclick="scrollSlider('pp-suggestions-track', -300)" aria-label="Previous">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 19l-7-7 7-7" />
+              </svg>
+            </button>
+            <button class="slider-arrow next-arrow" onclick="scrollSlider('pp-suggestions-track', 300)" aria-label="Next">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
+          </div>
+        </div>
+        <div class="slider-track" id="pp-suggestions-track">
+          <!-- Dynamically populated suggested products via app.js -->
+        </div>
       </div>
     </section>
 

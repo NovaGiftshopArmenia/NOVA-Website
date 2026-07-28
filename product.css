@@ -2,7 +2,7 @@
 
 /* --- LOCAL DESIGN TOKENS (mapped to existing site vars) --- */
 :root {
-  --pp-ink: var(--color-black);
+  --pp-ink: #252525;
   --pp-muted: var(--color-medium-gray);
   --pp-faint: #9A968F;
   --pp-line: var(--color-border);
@@ -32,8 +32,8 @@ body:has(#product-page-body) {
   color: var(--pp-faint);
   max-width: 1440px;
   margin: 0 auto;
-  padding-left: 72px;
-  padding-right: 72px;
+  padding-left: var(--spacing-lg);
+  padding-right: var(--spacing-lg);
 }
 .pp-crumbs .sep { color: #D8D4CE }
 .pp-crumbs .now { color: var(--pp-ink) }
@@ -49,12 +49,19 @@ body:has(#product-page-body) {
   align-items: start;
   max-width: 1440px;
   margin: 0 auto;
-  padding-left: 72px;
-  padding-right: 72px;
+  padding-left: var(--spacing-lg);
+  padding-right: var(--spacing-lg);
 }
 
 /* Gallery */
-.pp-gallery { display: flex; flex-direction: column; gap: 16px }
+.pp-gallery {
+  position: sticky;
+  top: calc(var(--header-height) + 24px);
+  align-self: start;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
 .pp-shot {
   position: relative;
   width: 100%;
@@ -301,7 +308,7 @@ body:has(#product-page-body) {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 0 72px;
+  padding: 0 var(--spacing-lg);
   color: #fff;
   text-align: center;
 }
@@ -355,8 +362,8 @@ body:has(#product-page-body) {
   align-items: start;
   max-width: 1440px;
   margin: 0 auto;
-  padding-left: 72px;
-  padding-right: 72px;
+  padding-left: var(--spacing-lg);
+  padding-right: var(--spacing-lg);
 }
 .pp-about h2 {
   font-family: var(--font-sans);
@@ -453,8 +460,8 @@ body:has(#product-page-body) {
   align-items: start;
   max-width: 1440px;
   margin: 0 auto;
-  padding-left: 72px;
-  padding-right: 72px;
+  padding-left: var(--spacing-lg);
+  padding-right: var(--spacing-lg);
 }
 .pp-faq-grid h2 {
   font-family: var(--font-sans);
@@ -490,14 +497,25 @@ body:has(#product-page-body) {
   color: var(--pp-muted);
   max-width: 66ch;
 }
+.faq-item-content {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows .35s ease;
+}
+.faq-item[open] .faq-item-content {
+  grid-template-rows: 1fr;
+}
+.faq-item-inner {
+  overflow: hidden;
+}
 
 /* --- SUGGESTED PRODUCTS (Complete the Ritual) --- */
 .pp-ritual {
   padding: 96px 0;
   max-width: 1440px;
   margin: 0 auto;
-  padding-left: 72px;
-  padding-right: 72px;
+  padding-left: var(--spacing-lg);
+  padding-right: var(--spacing-lg);
 }
 .pp-head {
   display: flex;
