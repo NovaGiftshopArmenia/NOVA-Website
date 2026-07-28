@@ -43,7 +43,7 @@ body:has(#product-page-body) {
 /* --- TOP SECTION (Gallery + Buy) --- */
 .pp-top {
   display: grid;
-  grid-template-columns: 0.85fr 1fr;
+  grid-template-columns: 0.7fr 1fr;
   gap: 60px;
   padding: 44px 0 96px;
   align-items: start;
@@ -294,7 +294,7 @@ body:has(#product-page-body) {
 .pp-band .pp-band-bg {
   position: absolute;
   inset: 0;
-  background: #1A1A1A;
+  background: #252525;
 }
 .pp-band .pp-band-scrim {
   position: absolute;

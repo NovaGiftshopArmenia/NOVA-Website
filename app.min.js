@@ -4856,7 +4856,7 @@ function renderProductPage(productId) {
     let finalRecs = [...sameCat, ...others].slice(0, 8);
 
     finalRecs.forEach(rec => {
-      suggestionsGrid.appendChild(createProductCard(rec));
+      suggestionsGrid.appendChild(createSliderProductCard(rec, ''));
     });
   }
 
