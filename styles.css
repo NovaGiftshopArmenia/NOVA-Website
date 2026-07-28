@@ -1938,22 +1938,99 @@ h2.promise-card-title,
 
 .product-card {
   position: relative;
-  background-color: var(--color-white);
-  border: none;
-  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.08);
-  transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.4s ease;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  border-radius: 16px;
-  overflow: hidden;
   cursor: pointer;
 }
 
-.product-card:hover {
-  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
-  transform: translateY(-6px);
+/* ── New overlay-tile card ─────────────────────────────────────────── */
+.nv-card {
+  --nv-copper: var(--color-brown);
+  position: relative;
+  display: block;
+  aspect-ratio: 1/1.32;
+  border-radius: 6px;
+  overflow: hidden;
+  background: #EFECE7;
+  color: #fff;
+  text-decoration: none;
+  transition: box-shadow .25s ease;
 }
+.nv-card:hover { box-shadow: 0 16px 40px rgba(20,19,17,.16); text-decoration: none }
+.nv-card:focus-visible { outline: 2px solid var(--color-brown); outline-offset: 3px }
+
+.nv-card__img {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform .6s ease;
+}
+.nv-card:hover .nv-card__img { transform: scale(1.03) }
+
+.nv-card__scrim {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(12,11,10,.82), rgba(12,11,10,0) 56%);
+  pointer-events: none;
+}
+
+.nv-card__rating {
+  position: absolute; top: 16px; right: 16px;
+  display: flex; align-items: center; gap: 6px;
+  padding: 7px 11px; border-radius: 999px;
+  background: rgba(255,255,255,.92);
+  font: 400 11.5px/1 var(--font-sans);
+  color: #252525;
+}
+.nv-card__rating span { color: var(--color-brown) }
+
+.nv-card__badge {
+  position: absolute; top: 16px; left: 16px;
+  padding: 7px 11px; border-radius: 999px;
+  background: rgba(12,11,10,.62); backdrop-filter: blur(6px);
+  font: 400 9.5px/1 var(--font-sans);
+  letter-spacing: .22em; text-transform: uppercase; color: #fff;
+}
+
+.nv-card__meta {
+  position: absolute; left: 22px; right: 22px; bottom: 20px;
+  pointer-events: none;
+}
+.nv-card__brand {
+  font: 400 10px/1 var(--font-sans);
+  letter-spacing: .26em; text-transform: uppercase;
+  color: var(--nv-copper);
+}
+.nv-card__name {
+  margin-top: 10px;
+  font: 400 21px/1.25 var(--font-sans);
+  letter-spacing: -.018em;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.nv-card__foot {
+  display: flex; align-items: baseline;
+  justify-content: space-between; gap: 10px;
+  margin-top: 12px;
+}
+.nv-card__price {
+  font: 400 15px/1 var(--font-sans);
+  letter-spacing: -.018em; color: rgba(255,255,255,.9);
+}
+.nv-card__size {
+  font: 400 10px/1 var(--font-sans);
+  letter-spacing: .2em; text-transform: uppercase;
+  color: rgba(255,255,255,.66);
+}
+
+/* Legacy card parts — hidden since nv-card replaces them */
+.product-card-image-wrap,
+.product-card-actions,
+.product-card-category,
+.product-card-name,
+.product-card-tagline,
+.product-card-footer { display: none }
+
 
 .product-card-image-wrap {
   position: relative;

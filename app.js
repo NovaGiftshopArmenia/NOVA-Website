@@ -2049,6 +2049,7 @@ window.changeLanguage = function (lang) {
     floatingSearchInput.placeholder = TRANSLATIONS[lang]['search_placeholder'] || 'Search olfactory note...';
   }
 
+
   const newsletterInput = document.querySelector('.newsletter-input');
   if (newsletterInput) {
     newsletterInput.placeholder = TRANSLATIONS[lang]['newsletter_placeholder'] || 'Your email address';
@@ -2837,48 +2838,24 @@ function renderSliders() {
 function createSliderProductCard(product, badgeText) {
   const card = document.createElement('div');
   card.className = 'product-card slider-product-card';
-  card.onclick = () => openProductModal(product.id);
 
-  const isWishlisted = AppState.wishlist.includes(product.id);
-  const wishlistClass = isWishlisted ? 'active' : '';
-
-  const transProd = getTranslatedProduct(product.id);
-  const tagline = transProd ? transProd.tagline : product.tagline;
-  const translatedCategory = getTranslatedCategory(product.category);
-
-  const exploreLabel = TRANSLATIONS[AppState.language]['card_explore'] || 'Explore';
-  const cartLabel = product.stock > 0
-    ? (TRANSLATIONS[AppState.language]['card_add_to_cart'] || 'Add to Cart')
-    : (TRANSLATIONS[AppState.language]['card_sold_out'] || 'Sold Out');
-
-  const bsBadge = TRANSLATIONS[AppState.language]['badge_bestseller'] || 'BEST SELLER';
-  const badgeClass = badgeText === bsBadge ? 'tag-bestseller' : 'tag-new';
+  const sizeLabel = (product.sizes && product.sizes.length > 0)
+    ? product.sizes[0].label || product.sizes[0].size || ''
+    : '';
 
   card.innerHTML = `
-    <div class="product-card-image-wrap">
-      ${badgeText ? `<div class="card-badge ${badgeClass}">${badgeText}</div>` : ''}
-      <img src="${sanityImageUrl(product.image)}" alt="${product.name}" class="product-card-image" loading="lazy" width="400" height="400">
-      
-      <button class="card-wishlist ${wishlistClass}" onclick="event.stopPropagation(); toggleWishlist('${product.id}'); this.classList.toggle('active');" aria-label="Add to Wishlist">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-        </svg>
-      </button>
-
-      <div class="product-card-actions">
-        <button class="btn-secondary product-card-action-btn" onclick="event.stopPropagation(); quickAddToCart('${product.id}')" ${product.stock <= 0 ? 'disabled' : ''}>
-          ${cartLabel}
-        </button>
-      </div>
-    </div>
-    <div class="product-card-category">${product.brand}</div>
-    <h3 class="product-card-name serif-title">${product.name}</h3>
-
-    <div class="product-card-footer">
-      <span class="product-card-price">֏${formatPrice(product.price)}</span>
-      <div class="product-card-rating">
-        <span class="rating-star">★</span>
-        <span>${product.rating}</span>
+    <div class="nv-card">
+      <img class="nv-card__img" src="${sanityImageUrl(product.image)}" alt="${product.name}" loading="lazy" width="400" height="528">
+      <div class="nv-card__scrim"></div>
+      ${badgeText ? `<div class="nv-card__badge">${badgeText}</div>` : ''}
+      <div class="nv-card__rating"><span>?</span>${product.rating || ''}</div>
+      <div class="nv-card__meta">
+        <div class="nv-card__brand">${product.brand || ''}</div>
+        <div class="nv-card__name">${product.name}</div>
+        <div class="nv-card__foot">
+          <span class="nv-card__price">? ${formatPrice(product.price)}</span>
+          ${sizeLabel ? `<span class="nv-card__size">${sizeLabel}</span>` : ''}
+        </div>
       </div>
     </div>
   `;
@@ -3467,62 +3444,37 @@ window.renderFilterWidgets = function (containerId, isMobile) {
   setTimeout(updateTrack, 0);
 };
 
-// CREATE COMPONENT FOR PRODUCT CARD
 function createProductCard(product) {
   const card = document.createElement('div');
   card.className = 'product-card';
   card.onclick = () => openProductModal(product.id);
-  const isWishlisted = AppState.wishlist.includes(product.id);
-  const wishlistClass = isWishlisted ? 'wishlist-filled' : '';
-
-  // Get translations
-  const transProd = getTranslatedProduct(product.id);
-  const tagline = transProd ? transProd.tagline : product.tagline;
-  const translatedCategory = getTranslatedCategory(product.category);
-
-  const exploreLabel = TRANSLATIONS[AppState.language]['card_explore'] || 'Explore';
-  const cartLabel = product.stock > 0
-    ? (TRANSLATIONS[AppState.language]['card_add_to_cart'] || 'Add to Cart')
-    : (TRANSLATIONS[AppState.language]['card_sold_out'] || 'Sold Out');
 
   let badgeText = product.tags && product.tags.length > 0 ? product.tags[0] : '';
-  let badgeClass = '';
   if (badgeText) {
     if (badgeText.toLowerCase().includes('best seller') || badgeText.toLowerCase().includes('bestseller')) {
       badgeText = TRANSLATIONS[AppState.language]['badge_bestseller'] || 'BEST SELLER';
-      badgeClass = 'tag-bestseller';
     } else if (badgeText.toLowerCase().includes('new')) {
       badgeText = TRANSLATIONS[AppState.language]['badge_new_product'] || 'NEW';
-      badgeClass = 'tag-new';
     }
   }
 
+  const sizeLabel = (product.sizes && product.sizes.length > 0)
+    ? product.sizes[0].label || product.sizes[0].size || ''
+    : '';
+
   card.innerHTML = `
-    <div class="product-card-image-wrap">
-      ${badgeText ? `<div class="card-badge ${badgeClass}">${badgeText}</div>` : ''}
-      <img src="${sanityImageUrl(product.image)}" alt="${product.name}" class="product-card-image" loading="lazy" width="400" height="400">
-      
-      <!-- Floating Card Wishlist Toggle -->
-      <button class="product-card-wishlist-btn ${wishlistClass}" onclick="event.stopPropagation(); toggleWishlist('${product.id}')" aria-label="Add to Wishlist">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-        </svg>
-      </button>
-
-      <div class="product-card-actions">
-        <button class="btn-secondary product-card-action-btn" onclick="event.stopPropagation(); quickAddToCart('${product.id}')" ${product.stock <= 0 ? 'disabled' : ''}>
-          ${cartLabel}
-        </button>
-      </div>
-    </div>
-    <div class="product-card-category">${product.brand}</div>
-    <h3 class="product-card-name serif-title">${product.name}</h3>
-
-    <div class="product-card-footer">
-      <span class="product-card-price">֏${formatPrice(product.price)}</span>
-      <div class="product-card-rating">
-        <span class="rating-star">★</span>
-        <span>${product.rating}</span>
+    <div class="nv-card">
+      <img class="nv-card__img" src="${sanityImageUrl(product.image)}" alt="${product.name}" loading="lazy" width="400" height="528">
+      <div class="nv-card__scrim"></div>
+      ${badgeText ? `<div class="nv-card__badge">${badgeText}</div>` : ''}
+      <div class="nv-card__rating"><span>?</span>${product.rating || ''}</div>
+      <div class="nv-card__meta">
+        <div class="nv-card__brand">${product.brand || ''}</div>
+        <div class="nv-card__name">${product.name}</div>
+        <div class="nv-card__foot">
+          <span class="nv-card__price">? ${formatPrice(product.price)}</span>
+          ${sizeLabel ? `<span class="nv-card__size">${sizeLabel}</span>` : ''}
+        </div>
       </div>
     </div>
   `;
