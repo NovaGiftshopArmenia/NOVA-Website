@@ -22,7 +22,7 @@ body:has(#product-page-body) {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding-top: calc(var(--header-height) + 30px);
+  padding-top: calc(var(--header-height) + 50px);
   font: 400 11px/1 var(--font-sans);
   letter-spacing: .2em;
   text-transform: uppercase;
@@ -55,8 +55,9 @@ body:has(#product-page-body) {
 .pp-shot {
   position: relative;
   width: 100%;
-  aspect-ratio: 1/1.08;
+  aspect-ratio: 1/1;
   background: var(--pp-img);
+  max-height: 520px;
   border-radius: 6px;
   overflow: hidden;
   cursor: crosshair;
