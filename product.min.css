@@ -81,7 +81,7 @@ body:has(#product-page-body) {
   display: block;
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  object-fit: cover;
   transition: transform 0.25s cubic-bezier(0.25, 1, 0.5, 1);
   transform-origin: center center;
 }
