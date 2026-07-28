@@ -345,193 +345,184 @@
 
     <!-- --- MAIN VIEWS CONTAINER --- -->
   <main id="product-page-body" tabindex="-1">
-    <section class="premium-product-hero">
-      <div class="hero-split">
-        <div class="hero-split-left">
-          <div class="pp-image-gallery">
-            <div class="zoom-image-container" id="pp-zoom-container">
-              <img id="pp-img" src="" alt="Product Image">
-            </div>
-            <div class="pp-thumbnails-grid" id="pp-thumbnails">
-              <!-- Dynamically populated via app.js -->
-            </div>
-          </div>
-        </div>
-        <div class="hero-split-right">
-          <span id="pp-category" class="pp-category"></span>
-          <h1 id="pp-name" class="pp-title serif-title"></h1>
-          <p id="pp-price" class="pp-price"></p>
-          <div class="pp-rating-row">
-            <span class="stars">★★★★★</span> <span id="pp-rating-val"></span>
-          </div>
-          <p id="pp-tagline" class="pp-tagline"></p>
-          
-          <div class="pp-sizes" id="pp-sizes"></div>
-          
-          <div class="pp-actions">
-            <div class="qty-selector">
-              <button id="pp-qty-minus" class="qty-btn">−</button>
-              <input type="text" id="pp-qty-input" class="qty-input" value="1" readonly>
-              <button id="pp-qty-plus" class="qty-btn">+</button>
-            </div>
-            <button id="pp-add-btn" class="btn-primary pp-add-btn" data-trans="modal_add_to_cart">Add to Cart</button>
-          </div>
 
-          <div id="pp-desc-wrapper" class="pp-desc-wrapper">
-            <span id="pp-desc" class="pp-description"></span><button id="pp-read-more-btn" class="pp-read-more-btn" style="display:none;">Read More</button>
-          </div>
-          
-          <div class="pp-pyramid" style="display:none;">
-            <div class="pp-pyramid-tier"><span class="pp-pyramid-label" data-trans="modal_top">Top</span><span id="pp-top"></span></div>
-            <div class="pp-pyramid-tier"><span class="pp-pyramid-label" data-trans="modal_heart">Heart</span><span id="pp-heart"></span></div>
-            <div class="pp-pyramid-tier"><span class="pp-pyramid-label" data-trans="modal_base">Base</span><span id="pp-base"></span></div>
-          </div>
+    <!-- Breadcrumbs -->
+    <nav class="pp-crumbs" aria-label="Breadcrumb">
+      <a href="index.html#/home" data-trans="nav_home">Home</a><span class="sep">—</span>
+      <a href="index.html#/shop" data-trans="nav_products">Products</a><span class="sep">—</span>
+      <span id="pp-crumb-category"></span><span class="sep">—</span>
+      <span class="now" id="pp-crumb-name"></span>
+    </nav>
+
+    <!-- Top: Gallery + Buy Panel -->
+    <div class="pp-top">
+      <div class="pp-gallery">
+        <figure class="pp-shot" style="margin:0" id="pp-zoom-container">
+          <img id="pp-img" src="" alt="Product Image">
+        </figure>
+        <div class="pp-thumbs" id="pp-thumbnails">
+          <!-- Dynamically populated via app.js -->
         </div>
+      </div>
+
+      <div class="pp-buy">
+        <h1 id="pp-name"></h1>
+        <div class="pp-tagline" id="pp-tagline"></div>
+
+        <div id="pp-desc-wrapper" class="pp-desc-wrapper">
+          <span id="pp-desc" class="pp-description"></span><button id="pp-read-more-btn" class="pp-read-more-btn" style="display:none;">Read More</button>
+        </div>
+
+        <div class="pp-rating-row">
+          <span class="pp-stars">★★★★★</span>
+          <span id="pp-rating-val"></span>
+        </div>
+
+        <div class="pp-rule"></div>
+
+        <div class="pp-pricerow">
+          <span class="pp-price-val" id="pp-price"></span>
+        </div>
+
+        <p class="pp-label" style="margin:34px 0 14px" data-trans="pp_select_volume">Select volume</p>
+        <div class="pp-sizes" id="pp-sizes">
+          <!-- Dynamically populated via app.js -->
+        </div>
+
+        <div class="pp-actions">
+          <div class="pp-qty">
+            <button type="button" id="pp-qty-minus" aria-label="Decrease quantity">−</button>
+            <input type="text" id="pp-qty-input" value="1" readonly>
+            <button type="button" id="pp-qty-plus" aria-label="Increase quantity">+</button>
+          </div>
+          <button class="pp-cart-btn" type="button" id="pp-add-btn" data-trans="modal_add_to_cart">Add to Cart</button>
+          <button class="pp-wish-btn" type="button" id="pp-wish-btn" aria-label="Add to wishlist">♡</button>
+        </div>
+
+        <p class="pp-stock" id="pp-stock"><span class="pp-dot"></span><span data-trans="pp_in_stock">In stock</span></p>
+
+        <dl class="pp-trust">
+          <div><dt data-trans="pp_delivery">Delivery</dt><dd data-trans="pp_delivery_desc">Yerevan 1–2 days · free over ֏ 20,000</dd></div>
+          <div><dt data-trans="pp_returns">Returns</dt><dd data-trans="pp_returns_desc">14 days on unopened, sealed bottles</dd></div>
+          <div><dt data-trans="pp_authenticity">Authenticity</dt><dd data-trans="pp_authenticity_desc">Authorized distributors only</dd></div>
+          <div><dt data-trans="pp_packaging">Packaging</dt><dd data-trans="pp_packaging_desc">FSC box, cotton label, recyclable glass</dd></div>
+        </dl>
+      </div>
+    </div>
+
+    <!-- Olfactory Narrative Band -->
+    <section class="pp-band">
+      <div class="pp-band-bg"></div>
+      <div class="pp-band-scrim"></div>
+      <div class="pp-band-inner">
+        <h2 data-trans="exp_title">The Olfactory <span class="em">Narrative</span></h2>
+        <p data-trans="exp_desc">Every NOVA fragrance is a living composition that evolves on the skin over several hours. We follow the traditional three-tiered structure of French high perfumery.</p>
+        <dl class="pp-pyramid-display">
+          <div><dt data-trans="pp_top_time">Top · 0–30 min</dt><dd id="exp-top-notes"></dd></div>
+          <div><dt data-trans="pp_heart_time">Heart · 30 min–4 h</dt><dd id="exp-heart-notes"></dd></div>
+          <div><dt data-trans="pp_base_time">Base · 4 h +</dt><dd id="exp-base-notes"></dd></div>
+        </dl>
       </div>
     </section>
 
-    <!-- Olfactory Experience Section -->
-    <section class="pp-experience-section">
-      <div class="container">
-        <div class="experience-grid">
-          <div class="experience-text">
-            <span class="section-subtitle" data-trans="exp_subtitle">Olfactive Science</span>
-            <h2 class="serif-title" data-trans="exp_title">The Olfactory Narrative</h2>
-            <p data-trans="exp_desc">Every NOVA fragrance is a dynamic, living composition that evolves on the skin over several hours. We follow the traditional three-tiered structure of French high perfumery, enhanced with botanical ingredients gathered from sustainable sources worldwide.</p>
+    <!-- About + Specification -->
+    <div class="pp-about">
+      <div>
+        <h2 id="pp-about-title" data-trans="pp_about_title">An architectural study in scent</h2>
+        <div id="pp-desc-wrapper-full" class="pp-desc-wrapper">
+          <span id="pp-desc-full" class="pp-description"></span>
+        </div>
+        <ul class="pp-vibes" id="pp-vibes">
+          <!-- Dynamically populated: mood/occasion tags -->
+        </ul>
+      </div>
+      <div class="pp-spec">
+        <p class="pp-label" style="margin:0" data-trans="pp_specification">Specification</p>
+        <dl id="pp-spec-list">
+          <!-- Dynamically populated: brand, family, concentration, etc. -->
+        </dl>
+        <div class="pp-rule"></div>
+        <p class="pp-label" style="margin:0" data-trans="pp_ingredients">Ingredients</p>
+        <p id="pp-ingredients"></p>
+      </div>
+    </div>
+
+    <!-- Reviews Section -->
+    <div class="pp-reviews-wrap" style="max-width:1440px;margin:0 auto;padding:0 72px;">
+      <div class="pp-head">
+        <h2 data-trans="home_reviews_title">What Our <span class="em">Clients</span> Say</h2>
+        <span class="pp-label">4.8 average · 126 reviews</span>
+      </div>
+      <div class="nova-reviews-slider" style="position:relative;">
+        <div class="nova-reviews-track" id="reviews-slider">
+          <div class="nova-review-card">
+            <div class="nova-review-stars">★★★★★</div>
+            <blockquote data-trans="review_1_text">"An absolute masterpiece of modern perfumery. I constantly get stopped and asked what I'm wearing."</blockquote>
+            <cite data-trans="review_1_author">Elena V.</cite>
           </div>
-          <div class="experience-pyramid-visual">
-            <div class="visual-tier">
-              <div class="tier-label">
-                <h4 data-trans="modal_top">Top Notes</h4>
-                <p data-trans="top_desc">First impression (0-30 mins)</p>
-              </div>
-              <div class="tier-value" id="exp-top-notes"></div>
-            </div>
-            <div class="visual-tier">
-              <div class="tier-label">
-                <h4 data-trans="modal_heart">Heart Notes</h4>
-                <p data-trans="heart_desc">Core personality (30 mins - 4 hours)</p>
-              </div>
-              <div class="tier-value" id="exp-heart-notes"></div>
-            </div>
-            <div class="visual-tier">
-              <div class="tier-label">
-                <h4 data-trans="modal_base">Base Notes</h4>
-                <p data-trans="base_desc">Sillage & longevity (4+ hours)</p>
-              </div>
-              <div class="tier-value" id="exp-base-notes"></div>
-            </div>
+          <div class="nova-review-card">
+            <div class="nova-review-stars">★★★★★</div>
+            <blockquote data-trans="review_2_text">"Minimalist perfection. The scent is complex, evolving beautifully throughout the day on my skin."</blockquote>
+            <cite data-trans="review_2_author">Marcus T.</cite>
+          </div>
+          <div class="nova-review-card">
+            <div class="nova-review-stars">★★★★★</div>
+            <blockquote data-trans="review_3_text">"I have finally found my signature scent. Subtle yet incredibly long-lasting."</blockquote>
+            <cite data-trans="review_3_author">Sarah L.</cite>
+          </div>
+          <div class="nova-review-card">
+            <div class="nova-review-stars">★★★★★</div>
+            <blockquote data-trans="review_4_text">"The customer service and unboxing experience were as luxurious as the perfume itself."</blockquote>
+            <cite data-trans="review_4_author">David K.</cite>
+          </div>
+          <div class="nova-review-card">
+            <div class="nova-review-stars">★★★★★</div>
+            <blockquote data-trans="review_5_text">"It feels like wearing a customized piece of art. The sillage is just right."</blockquote>
+            <cite data-trans="review_5_author">Mia R.</cite>
+          </div>
+          <div class="nova-review-card">
+            <div class="nova-review-stars">★★★★★</div>
+            <blockquote data-trans="review_6_text">"A truly unique olfactive experience. The dry down is powdery and sophisticated."</blockquote>
+            <cite data-trans="review_6_author">Julian M.</cite>
           </div>
         </div>
-      </div>
-    </section>
-
-    <!-- Eco-Luxury Principles Section -->
-    <section class="pp-promises-section">
-      <div class="container">
-        <h2 class="serif-title text-center" style="margin-bottom: var(--spacing-xxl);" data-trans="promises_title">Conscious Luxury Principles</h2>
-        <div class="promises-grid">
-          <div class="promise-card">
-            <div class="promise-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-            </div>
-            <h3 data-trans="promise_title_1">Exclusively Curated Collections</h3>
-            <p data-trans="promise_desc_1">Expertly curated selection of the world's most prestigious, rare, and authentic designer perfumes in Armenia.</p>
-          </div>
-          <div class="promise-card">
-            <div class="promise-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1.5a2.5 2.5 0 005 0V3M12 3a2.5 2.5 0 000 5v1.5a2.5 2.5 0 005 0V8M6 21h12a2 2 0 002-2V5a2 2 0 00-2-2H6a2 2 0 00-2 2v14a2 2 0 002 2z" />
-              </svg>
-            </div>
-            <h3 data-trans="promise_title_2">Long-Lasting Signature Scents</h3>
-            <p data-trans="promise_desc_2">Hand-selected niche fragrance collections with masterful oil concentrations, ensuring a breathtaking, long-lasting signature scent.</p>
-          </div>
-          <div class="promise-card">
-            <div class="promise-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-              </svg>
-            </div>
-            <h3 data-trans="promise_title_3">Sustainable Packaging</h3>
-            <p data-trans="promise_desc_3">100% biodegradable FSC certified packaging, cotton labels, and recyclable glass.</p>
-          </div>
+        <div class="nova-reviews-nav">
+          <button type="button" id="review-prev" class="nova-review-arrow" aria-label="Previous Review">‹</button>
+          <div class="nova-reviews-dots" id="review-dots"></div>
+          <button type="button" id="review-next" class="nova-review-arrow" aria-label="Next Review">›</button>
         </div>
       </div>
-    </section>
+    </div>
 
-    <!-- FAQ Accordion Section -->
+    <!-- FAQ Section -->
     <section class="pp-faq-section">
-      <div class="container">
-        <h2 class="serif-title text-center" style="margin-bottom: var(--spacing-xl);" data-trans="pp_faq_title">Frequently Asked Questions</h2>
-        <div class="faq-accordion" id="pp-faq-accordion">
+      <div class="pp-faq-grid">
+        <h2 data-trans="pp_faq_title">Frequently Asked Questions</h2>
+        <div id="pp-faq-accordion">
           <!-- Dynamically populated per-product by app.js SEO engine -->
         </div>
       </div>
     </section>
 
-
-    <!-- Suggested Products Section -->
-    <section class="pp-suggestions-section">
-      <div class="container">
-        <h2 class="serif-title text-center" style="margin-bottom: var(--spacing-xl);" data-trans="suggestions_title">Complete the Ritual</h2>
-        <div class="suggestions-grid" id="pp-suggestions-grid">
-          <!-- Dynamically populated suggested products via app.js -->
-        </div>
+    <!-- Suggested Products -->
+    <section class="pp-ritual">
+      <div class="pp-head">
+        <h2 data-trans="suggestions_title">Complete the <span class="em">Ritual</span></h2>
+        <a href="index.html#/shop" class="pp-label" data-trans="pp_view_collection">View full collection</a>
+      </div>
+      <div class="suggestions-grid" id="pp-suggestions-grid">
+        <!-- Dynamically populated suggested products via app.js -->
       </div>
     </section>
+
+  <!-- Hidden data elements for app.js compatibility -->
+  <span id="pp-category" style="display:none;"></span>
+  <span id="pp-top" style="display:none;"></span>
+  <span id="pp-heart" style="display:none;"></span>
+  <span id="pp-base" style="display:none;"></span>
+
   </main>
 
-    <!-- Reviews Section -->
-    <section class="reviews-section" style="background-color: var(--color-white); border-top: 1px solid var(--color-border);">
-      <div class="container">
-        <div class="text-center" style="position: relative;">
-          <h2 class="serif-title" style="font-size: 2.2rem;" data-trans="home_reviews_title">What Our Clients Say</h2>
-          <div class="reviews-nav">
-            <button id="review-prev" class="review-nav-btn" aria-label="Previous Review"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 19l-7-7 7-7" /></svg></button>
-            <button id="review-next" class="review-nav-btn" aria-label="Next Review"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5l7 7-7 7" /></svg></button>
-          </div>
-        </div>
-        
-        <div class="reviews-slider-wrap">
-          <div id="reviews-slider" class="reviews-slider">
-            <div class="review-card">
-              <div class="review-stars">★★★★★</div>
-              <p class="review-text" data-trans="review_1_text">"An absolute masterpiece of modern perfumery. The sandalwood note is so creamy and elegant, I constantly get stopped and asked what I'm wearing."</p>
-              <span class="review-author" data-trans="review_1_author">Elena V.</span>
-            </div>
-            <div class="review-card">
-              <div class="review-stars">★★★★★</div>
-              <p class="review-text" data-trans="review_2_text">"Minimalist perfection. The packaging is gorgeous, but the scent itself is complex, evolving beautifully throughout the day on my skin."</p>
-              <span class="review-author" data-trans="review_2_author">Marcus T.</span>
-            </div>
-            <div class="review-card">
-              <div class="review-stars">★★★★★</div>
-              <p class="review-text" data-trans="review_3_text">"I have finally found my signature scent. It's subtle yet incredibly long-lasting. The botanical purity really shines through in every spray."</p>
-              <span class="review-author" data-trans="review_3_author">Sarah L.</span>
-            </div>
-            <div class="review-card">
-              <div class="review-stars">★★★★★</div>
-              <p class="review-text" data-trans="review_4_text">"The customer service and unboxing experience were as luxurious as the perfume itself. Highly recommend to any niche fragrance lover."</p>
-              <span class="review-author" data-trans="review_4_author">David K.</span>
-            </div>
-            <div class="review-card">
-              <div class="review-stars">★★★★★</div>
-              <p class="review-text" data-trans="review_5_text">"It feels like wearing a customized piece of art. The sillage is just right—noticeable but never overwhelming."</p>
-              <span class="review-author" data-trans="review_5_author">Mia R.</span>
-            </div>
-            <div class="review-card">
-              <div class="review-stars">★★★★★</div>
-              <p class="review-text" data-trans="review_6_text">"A truly unique olfactive experience. The dry down is powdery and sophisticated. I cannot wait to try the rest of the collection."</p>
-              <span class="review-author" data-trans="review_6_author">Julian M.</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  </main>
 
   <!-- --- WOOCOMMERCE CART DRAWER SLIDE-IN --- -->
   <div id="cart-drawer-overlay" class="cart-drawer-overlay">
@@ -942,5 +933,50 @@
   <script src="products.js?v=12" defer></script>
   <script src="admin.js?v=13" defer></script>
   <script src="app.min.js?v=44" defer></script>
+
+  <!-- Review Slider Dots Initialization -->
+  <script>
+  document.addEventListener('DOMContentLoaded', function() {
+    function initReviewDots(trackId, dotsId, prevId, nextId) {
+      var track = document.getElementById(trackId);
+      var dotsC = document.getElementById(dotsId);
+      var prev = document.getElementById(prevId);
+      var next = document.getElementById(nextId);
+      if (!track || !dotsC) return;
+      var cards = track.querySelectorAll('.nova-review-card');
+      var perPage = window.innerWidth > 1180 ? 3 : window.innerWidth > 768 ? 2 : 1;
+      var pages = Math.ceil(cards.length / perPage);
+      dotsC.innerHTML = '';
+      for (var i = 0; i < pages; i++) {
+        var d = document.createElement('span');
+        d.className = 'dot' + (i === 0 ? ' active' : '');
+        d.dataset.page = i;
+        d.addEventListener('click', function() {
+          var p = +this.dataset.page;
+          var cardW = cards[0].offsetWidth + 24;
+          track.scrollTo({ left: p * perPage * cardW, behavior: 'smooth' });
+        });
+        dotsC.appendChild(d);
+      }
+      track.addEventListener('scroll', function() {
+        var cardW = cards[0].offsetWidth + 24;
+        var idx = Math.round(track.scrollLeft / (perPage * cardW));
+        dotsC.querySelectorAll('.dot').forEach(function(d, i) {
+          d.classList.toggle('active', i === idx);
+        });
+      });
+      if (prev) prev.addEventListener('click', function() {
+        var cardW = cards[0].offsetWidth + 24;
+        track.scrollBy({ left: -perPage * cardW, behavior: 'smooth' });
+      });
+      if (next) next.addEventListener('click', function() {
+        var cardW = cards[0].offsetWidth + 24;
+        track.scrollBy({ left: perPage * cardW, behavior: 'smooth' });
+      });
+    }
+    initReviewDots('reviews-slider', 'review-dots', 'review-prev', 'review-next');
+    initReviewDots('about-reviews-slider', 'about-review-dots', 'about-review-prev', 'about-review-next');
+  });
+  </script>
 </body>
 </html>

@@ -3077,6 +3077,100 @@ h2.promise-card-title,
   }
 }
 
+/* --- NEW NOVA REVIEW CARDS (bordered card slider with pagination) --- */
+.nova-reviews-slider {
+  margin: 40px 0 96px;
+}
+.nova-reviews-track {
+  display: flex;
+  gap: 24px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+  padding-bottom: 8px;
+}
+.nova-reviews-track::-webkit-scrollbar { display: none }
+.nova-review-card {
+  flex: 0 0 calc(33.333% - 16px);
+  scroll-snap-align: start;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  padding: 34px 30px;
+  display: flex;
+  flex-direction: column;
+}
+.nova-review-stars {
+  font: 400 14px/1 var(--font-sans);
+  letter-spacing: .28em;
+  color: var(--color-brown);
+}
+.nova-review-card blockquote {
+  margin: 20px 0 0;
+  font-family: var(--font-sans);
+  font-size: 19px;
+  line-height: 1.6;
+  flex-grow: 1;
+}
+.nova-review-card cite {
+  display: block;
+  margin-top: 24px;
+  font: 400 11px/1 var(--font-sans);
+  font-style: normal;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: #9A968F;
+}
+.nova-reviews-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 32px;
+}
+.nova-review-arrow {
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--color-border);
+  border-radius: 50%;
+  background: transparent;
+  font-size: 20px;
+  color: var(--color-black);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+.nova-review-arrow:hover {
+  background: var(--color-black);
+  color: var(--color-white);
+  border-color: var(--color-black);
+}
+.nova-reviews-dots {
+  display: flex;
+  gap: 8px;
+}
+.nova-reviews-dots .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-border);
+  cursor: pointer;
+  transition: background .2s;
+}
+.nova-reviews-dots .dot.active {
+  background: var(--color-brown);
+}
+
+@media (max-width: 1180px) {
+  .nova-review-card { flex: 0 0 calc(50% - 12px) }
+}
+@media (max-width: 768px) {
+  .nova-review-card { flex: 0 0 85% }
+  .nova-review-card blockquote { font-size: 16px }
+  .pp-reviews-wrap { padding: 0 20px !important }
+}
+
 /* --- INSTAGRAM SECTION --- */
 .instagram-section {
   padding: var(--spacing-xxl) 0;
