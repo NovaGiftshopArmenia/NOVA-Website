@@ -777,18 +777,24 @@
                 </div>
               </div>
               <div class="form-group">
-                <label for="billing-region" data-trans="checkout_region">Region (Armenia) *</label>
-                <select id="billing-region" class="checkout-region-select" required style="width: 100%; padding: 12px 14px; border: 1px solid var(--color-border); border-radius: 8px; font-size: 0.9rem; background-color: var(--color-white); color: var(--color-black);">
-                  <option value="yerevan" data-trans="region_yerevan">Yerevan</option>
-                  <option value="ararat" data-trans="region_ararat">Ararat</option>
-                  <option value="armavir" data-trans="region_armavir">Armavir</option>
-                  <option value="aragatsotn" data-trans="region_aragatsotn">Aragatsotn</option>
-                  <option value="gegharkunik" data-trans="region_gegharkunik">Gegharkunik</option>
-                  <option value="kotayk" data-trans="region_kotayk">Kotayk</option>
-                  <option value="lori" data-trans="region_lori">Lori</option>
-                  <option value="shirak" data-trans="region_shirak">Shirak</option>
-                  <option value="syunik" data-trans="region_syunik">Syunik</option>
-                </select>
+                <label for="region-dropdown-trigger" data-trans="checkout_region">Region (Armenia) *</label>
+                <div class="custom-dropdown" id="custom-region-dropdown" style="width: 100%;">
+                  <button type="button" class="dropdown-trigger" id="region-dropdown-trigger" aria-haspopup="listbox" aria-expanded="false" style="width: 100%; justify-content: space-between;">
+                    <span id="region-dropdown-value" data-value="yerevan" data-trans="region_yerevan">Yerevan</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="chevron-icon" style="width: 10px; height: 10px; margin-left: 10px; transition: transform 0.2s;"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                  </button>
+                  <ul class="dropdown-menu" id="region-dropdown-menu" role="listbox" aria-label="Select Region" style="width: 100%;">
+                    <li class="dropdown-item active" data-value="yerevan" data-trans="region_yerevan" role="option">Yerevan</li>
+                    <li class="dropdown-item" data-value="ararat" data-trans="region_ararat" role="option">Ararat</li>
+                    <li class="dropdown-item" data-value="armavir" data-trans="region_armavir" role="option">Armavir</li>
+                    <li class="dropdown-item" data-value="aragatsotn" data-trans="region_aragatsotn" role="option">Aragatsotn</li>
+                    <li class="dropdown-item" data-value="gegharkunik" data-trans="region_gegharkunik" role="option">Gegharkunik</li>
+                    <li class="dropdown-item" data-value="kotayk" data-trans="region_kotayk" role="option">Kotayk</li>
+                    <li class="dropdown-item" data-value="lori" data-trans="region_lori" role="option">Lori</li>
+                    <li class="dropdown-item" data-value="shirak" data-trans="region_shirak" role="option">Shirak</li>
+                    <li class="dropdown-item" data-value="syunik" data-trans="region_syunik" role="option">Syunik</li>
+                  </ul>
+                </div>
               </div>
               
               <div style="margin-top: var(--spacing-lg);">

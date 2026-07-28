@@ -122,6 +122,25 @@ const TRANSLATIONS = {
     modal_select_size: "Ընտրեք Չափսը",
     modal_view_ingredients: "Դիտել Բաղադրությունը",
     modal_add_to_cart: "Ավելացնել Զամբյուղ",
+    pp_select_volume: "ԸՆՏՐԵՔ ՉԱՓՍԸ",
+    pp_in_stock: "Առկա է",
+    pp_delivery: "ԱՌԱՔՈՒՄ",
+    pp_delivery_desc: "Երևան 1–2 օր · անվճար ֏ 100,000-ից բարձր",
+    pp_returns: "ՎԵՐԱԴԱՐՁ",
+    pp_returns_desc: "14 օր չբացված, կնքված շշերի համար",
+    pp_authenticity: "ԻՍԿՈՒԹՅՈՒՆ",
+    pp_authenticity_desc: "Միայն պաշտոնական ներկայացուցիչներից",
+    pp_packaging: "ՓԱԹԵԹԱՎՈՐՈՒՄ",
+    pp_packaging_desc: "FSC տուփ, բամբակյա պիտակ, վերամշակվող ապակի",
+    pp_about_title: "Ճարտարապետական ուսումնասիրություն բույրի մեջ",
+    pp_specification: "ԲՆՈՒԹԱԳԻՐ",
+    pp_ingredients: "ԲԱՂԱԴՐՈՒԹՅՈՒՆ",
+    pp_top_time: "Վերին · 0–30 րոպե",
+    pp_heart_time: "Սրտի · 30 րոպե–4 ժամ",
+    pp_base_time: "Հիմնային · 4 ժամ +",
+    exp_title: "Հոտառական <span class=\"em\">Պատմություն</span>",
+    read_more: "Կարդալ ավելին",
+    read_less: "Փակել",
     checkout_billing_title: "Հաշվարկային տվյալներ",
     checkout_first_name: "Անուն *",
     checkout_last_name: "Ազգանուն *",
@@ -561,6 +580,25 @@ const TRANSLATIONS = {
     modal_select_size: "Выберите объем",
     modal_view_ingredients: "Посмотреть состав",
     modal_add_to_cart: "Добавить в корзину",
+    pp_select_volume: "ВЫБЕРИТЕ ОБЪЕМ",
+    pp_in_stock: "В наличии",
+    pp_delivery: "ДОСТАВКА",
+    pp_delivery_desc: "Ереван 1–2 дня · бесплатно от ֏ 100,000",
+    pp_returns: "ВОЗВРАТ",
+    pp_returns_desc: "14 дней для нераспечатанных флаконов",
+    pp_authenticity: "ПОДЛИННОСТЬ",
+    pp_authenticity_desc: "Только официальные дистрибьюторы",
+    pp_packaging: "УПАКоВКА",
+    pp_packaging_desc: "FSC коробка, хлопковая этикетка, перерабатываемое стекло",
+    pp_about_title: "Архитектурное исследование в мире ароматов",
+    pp_specification: "СПЕЦИФИКАЦИЯ",
+    pp_ingredients: "СОСТАВ",
+    pp_top_time: "Верхние · 0–30 мин",
+    pp_heart_time: "Сердце · 30 мин–4 ч",
+    pp_base_time: "Базовые · 4 ч +",
+    exp_title: "Ольфакторная <span class=\"em\">История</span>",
+    read_more: "Читать далее",
+    read_less: "Свернуть",
     checkout_billing_title: "Детали оплаты",
     checkout_first_name: "Имя *",
     checkout_last_name: "Фамилия *",
@@ -1008,6 +1046,25 @@ const TRANSLATIONS = {
     modal_select_size: "Select Size",
     modal_view_ingredients: "View Ingredients",
     modal_add_to_cart: "Add to Cart",
+    pp_select_volume: "SELECT VOLUME",
+    pp_in_stock: "In stock",
+    pp_delivery: "DELIVERY",
+    pp_delivery_desc: "Yerevan 1–2 days · free over ֏ 100,000",
+    pp_returns: "RETURNS",
+    pp_returns_desc: "14 days on unopened, sealed bottles",
+    pp_authenticity: "AUTHENTICITY",
+    pp_authenticity_desc: "Authorized distributors only",
+    pp_packaging: "PACKAGING",
+    pp_packaging_desc: "FSC box, cotton label, recyclable glass",
+    pp_about_title: "An architectural study in scent",
+    pp_specification: "SPECIFICATION",
+    pp_ingredients: "INGREDIENTS",
+    pp_top_time: "Top · 0–30 min",
+    pp_heart_time: "Heart · 30 min–4 h",
+    pp_base_time: "Base · 4 h +",
+    exp_title: "The Olfactory <span class=\"em\">Narrative</span>",
+    read_more: "Read More",
+    read_less: "Read Less",
     checkout_billing_title: "Billing Details",
     checkout_first_name: "First Name *",
     checkout_last_name: "Last Name *",
@@ -2652,6 +2709,39 @@ function initEventListeners() {
         renderShop();
       });
     });
+  const regionDropdown = document.getElementById('custom-region-dropdown');
+  if (regionDropdown) {
+    const trigger = regionDropdown.querySelector('#region-dropdown-trigger');
+    const valueSpan = regionDropdown.querySelector('#region-dropdown-value');
+    const items = regionDropdown.querySelectorAll('.dropdown-item');
+
+    if (trigger && valueSpan) {
+      trigger.addEventListener('click', (e) => {
+        e.stopPropagation();
+        regionDropdown.classList.toggle('active');
+      });
+
+      document.addEventListener('click', () => {
+        regionDropdown.classList.remove('active');
+      });
+
+      items.forEach(item => {
+        item.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const value = item.getAttribute('data-value');
+          const transKey = item.getAttribute('data-trans');
+
+          items.forEach(i => i.classList.remove('active'));
+          item.classList.add('active');
+
+          valueSpan.setAttribute('data-value', value);
+          valueSpan.setAttribute('data-trans', transKey);
+          valueSpan.innerText = (TRANSLATIONS[AppState.language] && TRANSLATIONS[AppState.language][transKey]) || item.innerText;
+
+          regionDropdown.classList.remove('active');
+        });
+      });
+    }
   }
 
   // Init search popup system
@@ -4883,6 +4973,11 @@ function renderProductPage(productId) {
       showToast(`ONLY ${product.stock} ITEMS AVAILABLE IN STOCK.`);
     }
   };
+
+  // Re-run language translation for all data-trans elements on product page
+  if (typeof changeLanguage === 'function') {
+    changeLanguage(AppState.language);
+  }
 }
 
 function closeProductModal() { }
@@ -4993,8 +5088,8 @@ async function processCheckout() {
   const subtotal = AppState.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
   const shippingCost = 3000;
   const total = subtotal + shippingCost;
-  const regionSelect = document.getElementById('billing-region');
-  const regionValue = regionSelect ? regionSelect.value : 'yerevan';
+  const regionValSpan = document.getElementById('region-dropdown-value');
+  const regionValue = regionValSpan ? (regionValSpan.getAttribute('data-value') || 'yerevan') : 'yerevan';
 
   const customerData = {
     firstName: document.getElementById('billing-first-name').value,
@@ -5128,18 +5223,24 @@ window.restoreCheckoutPage = function () {
               </div>
             </div>
             <div class="form-group">
-              <label for="billing-region" data-trans="checkout_region">Region (Armenia) *</label>
-              <select id="billing-region" class="checkout-region-select" required style="width: 100%; padding: 12px 14px; border: 1px solid var(--color-border); border-radius: 8px; font-size: 0.9rem; background-color: var(--color-white); color: var(--color-black);">
-                <option value="yerevan" data-trans="region_yerevan">Yerevan</option>
-                <option value="ararat" data-trans="region_ararat">Ararat</option>
-                <option value="armavir" data-trans="region_armavir">Armavir</option>
-                <option value="aragatsotn" data-trans="region_aragatsotn">Aragatsotn</option>
-                <option value="gegharkunik" data-trans="region_gegharkunik">Gegharkunik</option>
-                <option value="kotayk" data-trans="region_kotayk">Kotayk</option>
-                <option value="lori" data-trans="region_lori">Lori</option>
-                <option value="shirak" data-trans="region_shirak">Shirak</option>
-                <option value="syunik" data-trans="region_syunik">Syunik</option>
-              </select>
+              <label for="region-dropdown-trigger" data-trans="checkout_region">Region (Armenia) *</label>
+              <div class="custom-dropdown" id="custom-region-dropdown" style="width: 100%;">
+                <button type="button" class="dropdown-trigger" id="region-dropdown-trigger" aria-haspopup="listbox" aria-expanded="false" style="width: 100%; justify-content: space-between;">
+                  <span id="region-dropdown-value" data-value="yerevan" data-trans="region_yerevan">Yerevan</span>
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="chevron-icon" style="width: 10px; height: 10px; margin-left: 10px; transition: transform 0.2s;"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </button>
+                <ul class="dropdown-menu" id="region-dropdown-menu" role="listbox" aria-label="Select Region" style="width: 100%;">
+                  <li class="dropdown-item active" data-value="yerevan" data-trans="region_yerevan" role="option">Yerevan</li>
+                  <li class="dropdown-item" data-value="ararat" data-trans="region_ararat" role="option">Ararat</li>
+                  <li class="dropdown-item" data-value="armavir" data-trans="region_armavir" role="option">Armavir</li>
+                  <li class="dropdown-item" data-value="aragatsotn" data-trans="region_aragatsotn" role="option">Aragatsotn</li>
+                  <li class="dropdown-item" data-value="gegharkunik" data-trans="region_gegharkunik" role="option">Gegharkunik</li>
+                  <li class="dropdown-item" data-value="kotayk" data-trans="region_kotayk" role="option">Kotayk</li>
+                  <li class="dropdown-item" data-value="lori" data-trans="region_lori" role="option">Lori</li>
+                  <li class="dropdown-item" data-value="shirak" data-trans="region_shirak" role="option">Shirak</li>
+                  <li class="dropdown-item" data-value="syunik" data-trans="region_syunik" role="option">Syunik</li>
+                </ul>
+              </div>
             </div>
             <div style="margin-top: var(--spacing-lg);">
               <h3 style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px;">Payment</h3>

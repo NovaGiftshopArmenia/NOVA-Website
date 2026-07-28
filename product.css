@@ -551,6 +551,7 @@ body:has(#product-page-body) {
   .pp-top,
   .pp-about,
   .pp-faq-grid { grid-template-columns: 1fr; gap: 48px }
+  .pp-gallery { position: relative !important; top: auto !important; height: auto !important; }
   .pp-buy { position: static }
   .pp-buy h1 { font-size: 44px }
   .pp-band { height: auto; padding: 80px 0 }
