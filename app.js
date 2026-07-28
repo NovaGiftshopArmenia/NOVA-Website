@@ -2709,6 +2709,8 @@ function initEventListeners() {
         renderShop();
       });
     });
+  }
+
   const regionDropdown = document.getElementById('custom-region-dropdown');
   if (regionDropdown) {
     const trigger = regionDropdown.querySelector('#region-dropdown-trigger');
