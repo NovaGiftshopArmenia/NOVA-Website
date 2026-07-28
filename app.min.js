@@ -4980,6 +4980,11 @@ function renderProductPage(productId) {
   if (typeof changeLanguage === 'function') {
     changeLanguage(AppState.language);
   }
+
+  // Re-bind pan/zoom hover and FAQ interactive features on product page
+  if (typeof initProductInteractiveFeatures === 'function') {
+    initProductInteractiveFeatures();
+  }
 }
 
 function closeProductModal() { }

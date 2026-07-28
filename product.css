@@ -2,13 +2,13 @@
 
 /* --- LOCAL DESIGN TOKENS (mapped to existing site vars) --- */
 :root {
-  --pp-ink: #252525;
+  --pp-ink: var(--color-black);
   --pp-muted: var(--color-medium-gray);
   --pp-faint: #9A968F;
   --pp-line: var(--color-border);
   --pp-line-2: #E4E1DB;
   --pp-wash: var(--color-light-gray);
-  --pp-img: var(--color-sage-light);
+  --pp-img: #ffffff;
   --pp-copper: var(--color-brown);
   --pp-copper-light: #D5B192;
 }
@@ -68,21 +68,25 @@ body:has(#product-page-body) {
   position: relative;
   width: 100%;
   aspect-ratio: 1/1;
-  background: var(--pp-img);
+  background: #ffffff;
   border-radius: 6px;
   overflow: hidden;
-  cursor: crosshair;
+  cursor: zoom-in;
+  transition: box-shadow 0.3s ease;
+}
+.pp-shot:hover {
+  box-shadow: 0 12px 32px rgba(0,0,0,0.06);
 }
 .pp-shot img {
   display: block;
   width: 100%;
   height: 100%;
   object-fit: contain;
-  transition: transform 0.2s ease-out;
+  transition: transform 0.25s cubic-bezier(0.25, 1, 0.5, 1);
   transform-origin: center center;
 }
 .pp-shot.is-zoomed img {
-  transform: scale(1.4);
+  transform: scale(1.5);
 }
 .pp-thumbs {
   display: grid;
