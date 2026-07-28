@@ -16,13 +16,16 @@
 body:has(#product-page-body) {
   background-color: #fff;
 }
+#product-page-body {
+  padding-top: calc(var(--header-height) + 40px);
+}
 
 /* --- BREADCRUMBS --- */
 .pp-crumbs {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding-top: calc(var(--header-height) + 80px);
+  padding-top: 0;
   font: 400 11px/1 var(--font-sans);
   letter-spacing: .2em;
   text-transform: uppercase;
