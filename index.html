@@ -391,7 +391,7 @@
       </div>
 
       <!-- Infinite Brand Slider -->
-      <div class="brand-slider-section" style="display:none;">
+      <div class="brand-slider-section" id="brand-slider-section" style="display:none;">
         <div class="brand-slider-track">
           <div class="brand-slider-list" id="brand-slider-list-1">
             <!-- Populated dynamically from admin brands -->
@@ -584,43 +584,43 @@
             <div class="nova-reviews-track" id="reviews-slider">
               <div class="nova-review-card">
                 <div class="nova-review-stars">★★★★★</div>
-                <blockquote data-trans="review_1_text">"An absolute masterpiece of modern perfumery. I constantly get stopped and asked what I'm wearing."</blockquote>
-                <cite data-trans="review_1_author">Elena V.</cite>
+                <blockquote data-trans="review_1_text">"Ամբողջ Երևանում ոչ մի տեղ չէի կարող գտնել Mancera-ն: NOVA-ն ոչ միայն ուներ, այլ առաքեցին հաջորդ օրը: Կատարյալ ծառայություն:"</blockquote>
+                <cite data-trans="review_1_author">Անի Մ., Երևան</cite>
               </div>
               <div class="nova-review-card">
                 <div class="nova-review-stars">★★★★★</div>
-                <blockquote data-trans="review_2_text">"Minimalist perfection. The scent is complex, evolving beautifully throughout the day on my skin."</blockquote>
-                <cite data-trans="review_2_author">Marcus T.</cite>
+                <blockquote data-trans="review_2_text">"Купил Byredo в подарок жене — она была в восторге. Упаковка безупречная, доставка быстрая. Однозначно рекомендую!"</blockquote>
+                <cite data-trans="review_2_author">Артём Г., Ереван</cite>
               </div>
               <div class="nova-review-card">
                 <div class="nova-review-stars">★★★★★</div>
-                <blockquote data-trans="review_3_text">"I have finally found my signature scent. Subtle yet incredibly long-lasting."</blockquote>
-                <cite data-trans="review_3_author">Sarah L.</cite>
+                <blockquote data-trans="review_3_text">"Վերջապես գտա իմ ստորագրության հոտը: Mancera Black Vanilla-ն ամբողջ օրը մնում է: Շնորհակալ եմ NOVA-ի թիմին:"</blockquote>
+                <cite data-trans="review_3_author">Նարե Հ., Երևան</cite>
               </div>
               <div class="nova-review-card">
                 <div class="nova-review-stars">★★★★★</div>
-                <blockquote data-trans="review_4_text">"The customer service and unboxing experience were as luxurious as the perfume itself."</blockquote>
-                <cite data-trans="review_4_author">David K.</cite>
+                <blockquote data-trans="review_4_text">"Отличный магазин с оригинальными ароматами. Заказывал Montale — всё пришло быстро и в идеальном состоянии."</blockquote>
+                <cite data-trans="review_4_author">Давид К., Ереван</cite>
               </div>
               <div class="nova-review-card">
                 <div class="nova-review-stars">★★★★★</div>
-                <blockquote data-trans="review_5_text">"It feels like wearing a customized piece of art. The sillage is just right."</blockquote>
-                <cite data-trans="review_5_author">Mia R.</cite>
+                <blockquote data-trans="review_5_text">"Bought Amberful as a birthday gift — the scent is stunning and the packaging was immaculate. Will definitely order again."</blockquote>
+                <cite data-trans="review_5_author">Lilit A., Yerevan</cite>
               </div>
               <div class="nova-review-card">
                 <div class="nova-review-stars">★★★★★</div>
-                <blockquote data-trans="review_6_text">"A truly unique olfactive experience. The dry down is powdery and sophisticated."</blockquote>
-                <cite data-trans="review_6_author">Julian M.</cite>
+                <blockquote data-trans="review_6_text">"Շատ բարձր որակ և արագ առաքում: Գնացի Կոտայք, ստացա 2 օրում: Ամպուլ հոտ, 100% օրիգինալ:"</blockquote>
+                <cite data-trans="review_6_author">Վահե Ս., Կոտայք</cite>
               </div>
               <div class="nova-review-card">
                 <div class="nova-review-stars">★★★★★</div>
-                <blockquote data-trans="review_7_text">"I am in love with the minimalist aesthetic and the pure, non-toxic ingredients."</blockquote>
-                <cite data-trans="review_7_author">Chloe T.</cite>
+                <blockquote data-trans="review_7_text">"Очень рада, что нашла этот магазин. Парфюм оригинальный, цена честная, а сервис на высшем уровне."</blockquote>
+                <cite data-trans="review_7_author">Карине П., Ереван</cite>
               </div>
               <div class="nova-review-card">
                 <div class="nova-review-stars">★★★★★</div>
-                <blockquote data-trans="review_8_text">"Bought this as a gift for my wife and she was completely blown away."</blockquote>
-                <cite data-trans="review_8_author">James B.</cite>
+                <blockquote data-trans="review_8_text">"Ordered Cedrat Boise for my husband — he loved it immediately. Great price compared to international sites and it arrived the next day."</blockquote>
+                <cite data-trans="review_8_author">Marietta V., Yerevan</cite>
               </div>
             </div>
             <div class="nova-reviews-nav">
@@ -654,20 +654,16 @@
       </section>
 
 
-      <!-- Live Instagram Feed Section -->
+      <!-- Instagram CTA Section -->
       <section class="instagram-section instagram-live-section">
-
         <div class="container">
           <div class="text-center">
             <h2 class="serif-title" style="font-size: 2.2rem;">@nova_giftshop</h2>
-            <p style="color: var(--color-medium-gray); font-size: 0.95rem; margin-top: 8px; font-weight: 300;">Latest from our Instagram</p>
-          </div>
-          
-          <div class="instagram-live-grid" id="instagram-live-feed">
-            <div class="instagram-live-loading" style="grid-column: 1 / -1; text-align: center; padding: 60px 20px;">
-              <div class="ig-spinner"></div>
-              <p style="color: var(--color-medium-gray); font-size: 0.85rem; margin-top: 16px; font-weight: 300;">Loading Instagram feed...</p>
-            </div>
+            <p style="color: var(--color-medium-gray); font-size: 0.95rem; margin-top: 8px; font-weight: 300;" data-trans="home_instagram_follow_desc">Follow us on Instagram for the latest arrivals, stories, and fragrance inspiration.</p>
+            <a href="https://www.instagram.com/nova_giftshop/" target="_blank" rel="noopener noreferrer" class="btn-primary" style="display: inline-flex; align-items: center; gap: 10px; margin-top: 28px;">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="width: 18px; height: 18px;"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+              <span data-trans="home_instagram_follow_btn">Follow on Instagram</span>
+            </a>
           </div>
         </div>
       </section>
@@ -761,6 +757,10 @@
               <div class="form-group">
                 <label for="billing-email" data-trans="checkout_email">Email Address *</label>
                 <input type="email" id="billing-email" required placeholder="john@example.com">
+              </div>
+              <div class="form-group">
+                <label for="billing-phone" data-trans="checkout_phone">Phone Number *</label>
+                <input type="tel" id="billing-phone" required placeholder="+374 XX XXX XXX">
               </div>
               <div class="form-group">
                 <label for="billing-address" data-trans="checkout_street">Street Address *</label>
@@ -1589,43 +1589,43 @@
           <div class="nova-reviews-track" id="about-reviews-slider">
             <div class="nova-review-card">
               <div class="nova-review-stars">★★★★★</div>
-              <blockquote data-trans="review_1_text">"An absolute masterpiece of modern perfumery. I constantly get stopped and asked what I'm wearing."</blockquote>
-              <cite data-trans="review_1_author">Elena V.</cite>
+              <blockquote data-trans="review_1_text">"Ամբողջ Երևանում ոչ մի տեղ չէի կարող գտնել Mancera-ն: NOVA-ն ոչ միայն ուներ, այլ առաքեցին հաջորդ օրը: Կատարյալ ծառայություն:"</blockquote>
+              <cite data-trans="review_1_author">Անի Մ., Երևան</cite>
             </div>
             <div class="nova-review-card">
               <div class="nova-review-stars">★★★★★</div>
-              <blockquote data-trans="review_2_text">"Minimalist perfection. The scent is complex, evolving beautifully throughout the day on my skin."</blockquote>
-              <cite data-trans="review_2_author">Marcus T.</cite>
+              <blockquote data-trans="review_2_text">"Купил Byredo в подарок жене — она была в восторге. Упаковка безупречная, доставка быстрая. Однозначно рекомендую!"</blockquote>
+              <cite data-trans="review_2_author">Артём Г., Ереван</cite>
             </div>
             <div class="nova-review-card">
               <div class="nova-review-stars">★★★★★</div>
-              <blockquote data-trans="review_3_text">"I have finally found my signature scent. Subtle yet incredibly long-lasting."</blockquote>
-              <cite data-trans="review_3_author">Sarah L.</cite>
+              <blockquote data-trans="review_3_text">"Վերջապես գտա իմ ստորագրության հոտը: Mancera Black Vanilla-ն ամբողջ օրը մնում է: Շնորհակալ եմ NOVA-ի թիմին:"</blockquote>
+              <cite data-trans="review_3_author">Նարե Հ., Երևան</cite>
             </div>
             <div class="nova-review-card">
               <div class="nova-review-stars">★★★★★</div>
-              <blockquote data-trans="review_4_text">"The customer service and unboxing experience were as luxurious as the perfume itself."</blockquote>
-              <cite data-trans="review_4_author">David K.</cite>
+              <blockquote data-trans="review_4_text">"Отличный магазин с оригинальными ароматами. Заказывал Montale — всё пришло быстро и в идеальном состоянии."</blockquote>
+              <cite data-trans="review_4_author">Давид К., Ереван</cite>
             </div>
             <div class="nova-review-card">
               <div class="nova-review-stars">★★★★★</div>
-              <blockquote data-trans="review_5_text">"It feels like wearing a customized piece of art. The sillage is just right."</blockquote>
-              <cite data-trans="review_5_author">Mia R.</cite>
+              <blockquote data-trans="review_5_text">"Bought Amberful as a birthday gift — the scent is stunning and the packaging was immaculate. Will definitely order again."</blockquote>
+              <cite data-trans="review_5_author">Lilit A., Yerevan</cite>
             </div>
             <div class="nova-review-card">
               <div class="nova-review-stars">★★★★★</div>
-              <blockquote data-trans="review_6_text">"A truly unique olfactive experience. The dry down is powdery and sophisticated."</blockquote>
-              <cite data-trans="review_6_author">Julian M.</cite>
+              <blockquote data-trans="review_6_text">"Շատ բարձր որակ և արագ առաքում: Գնացի Կոտայք, ստացա 2 օրում: Ամպուլ հոտ, 100% օրիգինալ:"</blockquote>
+              <cite data-trans="review_6_author">Վահե Ս., Կոտայք</cite>
             </div>
             <div class="nova-review-card">
               <div class="nova-review-stars">★★★★★</div>
-              <blockquote data-trans="review_7_text">"I am in love with the minimalist aesthetic and the pure, non-toxic ingredients."</blockquote>
-              <cite data-trans="review_7_author">Chloe T.</cite>
+              <blockquote data-trans="review_7_text">"Очень рада, что нашла этот магазин. Парфюм оригинальный, цена честная, а сервис на высшем уровне."</blockquote>
+              <cite data-trans="review_7_author">Карине П., Ереван</cite>
             </div>
             <div class="nova-review-card">
               <div class="nova-review-stars">★★★★★</div>
-              <blockquote data-trans="review_8_text">"Bought this as a gift for my wife and she was completely blown away."</blockquote>
-              <cite data-trans="review_8_author">James B.</cite>
+              <blockquote data-trans="review_8_text">"Ordered Cedrat Boise for my husband — he loved it immediately. Great price compared to international sites and it arrived the next day."</blockquote>
+              <cite data-trans="review_8_author">Marietta V., Yerevan</cite>
             </div>
           </div>
           <div class="nova-reviews-nav">
@@ -1638,14 +1638,17 @@
     </section>
 
 
-    <!-- Live Instagram Feed -->
+    <!-- Instagram CTA Section (About) -->
     <section class="instagram-section instagram-live-section">
         <div class="container">
           <div class="text-center">
             <h2 class="serif-title" style="font-size: 2.2rem;">@nova_giftshop</h2>
-            <p style="color: var(--color-medium-gray); font-size: 0.95rem; margin-top: 8px; font-weight: 300;">Latest from our Instagram</p>
+            <p style="color: var(--color-medium-gray); font-size: 0.95rem; margin-top: 8px; font-weight: 300;" data-trans="home_instagram_follow_desc">Follow us on Instagram for the latest arrivals, stories, and fragrance inspiration.</p>
+            <a href="https://www.instagram.com/nova_giftshop/" target="_blank" rel="noopener noreferrer" class="btn-primary" style="display: inline-flex; align-items: center; gap: 10px; margin-top: 28px;">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="width: 18px; height: 18px;"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+              <span data-trans="home_instagram_follow_btn">Follow on Instagram</span>
+            </a>
           </div>
-          <div class="instagram-live-grid" id="instagram-live-feed-about"></div>
         </div>
       </section>
 
@@ -1680,7 +1683,7 @@
             </div>
             <div class="contact-card-content">
               <span class="contact-card-label" data-trans="contact_phone_label">Phone</span>
-              <span class="contact-card-value">098 019 250</span>
+              <a href="tel:+37498019250" class="contact-card-value" style="color: inherit; text-decoration: none;">098 019 250</a>
             </div>
           </div>
 

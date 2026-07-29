@@ -145,6 +145,7 @@ const TRANSLATIONS = {
     checkout_first_name: "Անուն *",
     checkout_last_name: "Ազգանուն *",
     checkout_email: "Էլ. Փոստ *",
+    checkout_phone: "Հեռ. Համար *",
     checkout_street: "Հասցե *",
     checkout_city: "Քաղաք *",
     checkout_zip: "Փոստային ինդեքս *",
@@ -187,6 +188,8 @@ const TRANSLATIONS = {
     home_reviews_subtitle: "4.8 միջին · 126 կարծիք",
     home_instagram_title: "Հետևեք մեզ Instagram-ում",
     home_instagram_shortcode_title: "Ինստագրամ Լրահոս (Shortcode)",
+    home_instagram_follow_desc: "Հետևեք մեզ Instagram-ում՝ նոր ժամանումների, պատմությունների և բույրի ոգեշնչման համար:",
+    home_instagram_follow_btn: "Հետևել Instagram-ում",
     scroll_text: "Սահեցնել &rarr;",
     brand_nova: "NOVA",
     brand_le_labo: "Le Labo",
@@ -604,6 +607,7 @@ const TRANSLATIONS = {
     checkout_first_name: "Имя *",
     checkout_last_name: "Фамилия *",
     checkout_email: "Электронная почта *",
+    checkout_phone: "Телефон *",
     checkout_street: "Адрес *",
     checkout_city: "Город *",
     checkout_zip: "Почтовый индекс *",
@@ -646,6 +650,8 @@ const TRANSLATIONS = {
     home_reviews_subtitle: "4.8 среднее · 126 отзывов",
     home_instagram_title: "Следите за нами в Instagram",
     home_instagram_shortcode_title: "Лента Instagram (Шорткод)",
+    home_instagram_follow_desc: "Следите за нами в Instagram — последние поступления, истории и вдохновение.",
+    home_instagram_follow_btn: "Подписаться в Instagram",
     scroll_text: "ПРОКРУТКА &rarr;",
     brand_nova: "NOVA",
     brand_le_labo: "Le Labo",
@@ -1071,6 +1077,7 @@ const TRANSLATIONS = {
     checkout_first_name: "First Name *",
     checkout_last_name: "Last Name *",
     checkout_email: "Email Address *",
+    checkout_phone: "Phone Number *",
     checkout_street: "Street Address *",
     checkout_city: "City *",
     checkout_zip: "ZIP / Postal Code *",
@@ -1113,6 +1120,8 @@ const TRANSLATIONS = {
     home_reviews_subtitle: "4.8 average · 126 reviews",
     home_instagram_title: "Follow Us @NovaFragrances",
     home_instagram_shortcode_title: "Instagram Feed (Shortcode)",
+    home_instagram_follow_desc: "Follow us on Instagram for the latest arrivals, stories, and fragrance inspiration.",
+    home_instagram_follow_btn: "Follow on Instagram",
     scroll_text: "SCROLL &rarr;",
     brand_nova: "NOVA",
     brand_le_labo: "Le Labo",
@@ -7194,6 +7203,12 @@ function renderBrandSlider() {
   list2.innerHTML = '';
   buildItems().forEach(el => list1.appendChild(el));
   buildItems().forEach(el => list2.appendChild(el));
+
+  // Show/hide the brand slider section based on whether brands exist
+  const section = document.getElementById('brand-slider-section');
+  if (section) {
+    section.style.display = brands.length > 0 ? 'block' : 'none';
+  }
 }
 
 function saveBrands(brands) {
