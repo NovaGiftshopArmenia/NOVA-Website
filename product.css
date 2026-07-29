@@ -589,3 +589,74 @@ body:has(#product-page-body) {
   .pp-ritual,
   .pp-faq-grid { padding-left: 20px; padding-right: 20px }
 }
+
+/* ===== STICKY MOBILE ADD TO CART BAR ===== */
+.pp-sticky-bar {
+  display: none; /* hidden on desktop */
+}
+
+@media (max-width: 768px) {
+  .pp-sticky-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 999;
+    background: #ffffff;
+    border-top: 1px solid var(--pp-line);
+    padding: 12px 20px calc(12px + env(safe-area-inset-bottom));
+    box-shadow: 0 -4px 24px rgba(0,0,0,0.10);
+    transform: translateY(100%);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    pointer-events: none;
+  }
+  .pp-sticky-bar--visible {
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+  .pp-sticky-bar-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+    flex: 1;
+    overflow: hidden;
+  }
+  .pp-sticky-bar-name {
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--pp-ink);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    letter-spacing: 0.01em;
+  }
+  .pp-sticky-bar-price {
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: var(--pp-copper);
+    letter-spacing: 0.01em;
+  }
+  .pp-sticky-bar-btn {
+    flex-shrink: 0;
+    background: #1A1A1A;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 12px 22px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.2s ease;
+    white-space: nowrap;
+  }
+  .pp-sticky-bar-btn:active {
+    background: #333;
+  }
+}

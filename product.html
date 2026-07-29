@@ -992,5 +992,56 @@
     initReviewDots('about-reviews-slider', 'about-review-dots', 'about-review-prev', 'about-review-next');
   });
   </script>
+
+  <!-- ===== STICKY MOBILE ADD TO CART BAR ===== -->
+  <div id="pp-sticky-bar" class="pp-sticky-bar">
+    <div class="pp-sticky-bar-info">
+      <span class="pp-sticky-bar-name" id="pp-sticky-name"></span>
+      <span class="pp-sticky-bar-price" id="pp-sticky-price"></span>
+    </div>
+    <button class="pp-sticky-bar-btn" id="pp-sticky-add-btn" data-trans="modal_add_to_cart">Add to Cart</button>
+  </div>
+
+  <script>
+  (function() {
+    // Show sticky bar when main ATC button scrolls out of view
+    var mainBtn = document.getElementById('pp-add-btn');
+    var stickyBar = document.getElementById('pp-sticky-bar');
+    var stickyBtn = document.getElementById('pp-sticky-add-btn');
+    if (!mainBtn || !stickyBar || !stickyBtn) return;
+
+    function checkVisibility() {
+      var rect = mainBtn.getBoundingClientRect();
+      var isHidden = rect.bottom < 0 || rect.top > window.innerHeight;
+      stickyBar.classList.toggle('pp-sticky-bar--visible', isHidden);
+    }
+
+    window.addEventListener('scroll', checkVisibility, { passive: true });
+    checkVisibility();
+
+    // Mirror click to main ATC button
+    stickyBtn.addEventListener('click', function() {
+      if (mainBtn) mainBtn.click();
+    });
+
+    // Sync product name and price into sticky bar
+    function syncStickyInfo() {
+      var nameEl = document.getElementById('pp-name');
+      var priceEl = document.getElementById('pp-price');
+      var stickyName = document.getElementById('pp-sticky-name');
+      var stickyPrice = document.getElementById('pp-sticky-price');
+      if (nameEl && stickyName) stickyName.textContent = nameEl.textContent;
+      if (priceEl && stickyPrice) stickyPrice.textContent = priceEl.textContent;
+    }
+    // Observe changes (product loads asynchronously)
+    var observer = new MutationObserver(syncStickyInfo);
+    var nameEl = document.getElementById('pp-name');
+    var priceEl = document.getElementById('pp-price');
+    if (nameEl) observer.observe(nameEl, { childList: true, subtree: true, characterData: true });
+    if (priceEl) observer.observe(priceEl, { childList: true, subtree: true, characterData: true });
+    syncStickyInfo();
+    setTimeout(syncStickyInfo, 1200); // fallback after async load
+  })();
+  </script>
 </body>
 </html>
