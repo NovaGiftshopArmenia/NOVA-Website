@@ -1953,7 +1953,7 @@ h2.promise-card-title,
   --nv-line: #EBE8E3;
   display: block;
   background: #fff;
-  border: 1px solid var(--nv-line);
+  border: none;
   border-radius: 6px;
   padding: 14px 14px 20px;
   color: var(--nv-ink);
@@ -1961,10 +1961,9 @@ h2.promise-card-title,
   position: relative;
   z-index: 1;
   box-sizing: border-box;
-  transition: border-color .25s ease, box-shadow .25s ease, transform .25s cubic-bezier(.25,1,.5,1);
+  transition: box-shadow .25s ease, transform .25s cubic-bezier(.25,1,.5,1);
 }
 .nv-card:hover {
-  border-color: var(--nv-copper);
   box-shadow: 0 10px 30px rgba(20,19,17,.07);
   transform: translateY(-4px);
   text-decoration: none;
