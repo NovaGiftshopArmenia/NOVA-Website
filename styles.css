@@ -1941,6 +1941,8 @@ h2.promise-card-title,
 .product-card {
   position: relative;
   cursor: pointer;
+  overflow: visible !important;
+  border-radius: 0 !important;
 }
 
 /* ── Quiet-frame product card ──────────────────────────────────────── */
@@ -1958,6 +1960,7 @@ h2.promise-card-title,
   text-decoration: none;
   position: relative;
   z-index: 1;
+  box-sizing: border-box;
   transition: border-color .25s ease, box-shadow .25s ease, transform .25s cubic-bezier(.25,1,.5,1);
 }
 .nv-card:hover {
@@ -2238,12 +2241,12 @@ h2.promise-card-title,
   display: flex;
   gap: var(--spacing-md);
   overflow-x: auto;
-  padding-top: 16px;
-  margin-top: -12px;
+  padding-top: 24px;
+  margin-top: -20px;
   padding-bottom: 28px;
   margin-bottom: -16px;
   position: relative;
-  z-index: 2;
+  z-index: 5;
   scrollbar-width: none;
   /* Performance: GPU-accelerated scrolling */
   -webkit-overflow-scrolling: touch;
@@ -3777,7 +3780,6 @@ textarea,
 }
 
 /* Ensure child images or backgrounds don't overflow the rounded corners */
-.product-card,
 .gender-card,
 .icon-category-card,
 .modal-content,
