@@ -1,4 +1,4 @@
-﻿// Format price with comma separators (23000 → "23,000")
+// Format price with comma separators (23000 → "23,000")
 function formatPrice(num) {
   return Number(num).toLocaleString('en-US');
 }
@@ -2981,17 +2981,25 @@ function createSliderProductCard(product, badgeText) {
     ? product.sizes[0].label || product.sizes[0].size || ''
     : '';
 
+  const concLabel = product.concentration || 'Eau de Parfum';
+  const notesArr = product.notes?.top || [];
+  const scentFam = window.GLOBAL_ATTRIBUTES?.scent_families?.[product.scent_family];
+  const scentLabel = scentFam ? scentFam.label[AppState.language] || scentFam.label.en : '';
+  const notesLine = scentLabel || (notesArr.length ? notesArr.slice(0, 2).join(' · ') : '');
+
   card.innerHTML = `
     <div class="nv-card">
-      <img class="nv-card__img" src="${sanityImageUrl(product.image)}" alt="${product.name}" loading="lazy" width="400" height="528">
-      <div class="nv-card__scrim"></div>
-      <div class="nv-card__rating"><span>★</span>${product.rating || ''}</div>
-      <div class="nv-card__meta">
+      <figure class="nv-card__figure">
+        <img class="nv-card__img" src="${sanityImageUrl(product.image)}" alt="${product.name}" loading="lazy" width="400" height="448">
+      </figure>
+      <div class="nv-card__body">
         <div class="nv-card__brand">${product.brand || ''}</div>
-        <div class="nv-card__name">${product.name}</div>
+        <div class="nv-card__name">${product.name}${sizeLabel ? `<small>${concLabel} · ${sizeLabel}</small>` : `<small>${concLabel}</small>`}</div>
+        ${notesLine ? `<div class="nv-card__notes">${notesLine}</div>` : ''}
+        <div class="nv-card__rule"></div>
         <div class="nv-card__foot">
           <span class="nv-card__price">֏ ${formatPrice(product.price)}</span>
-          ${sizeLabel ? `<span class="nv-card__size">${sizeLabel}</span>` : ''}
+          <span class="nv-card__rating"><span>★</span>${product.rating || ''}</span>
         </div>
       </div>
     </div>
@@ -3591,17 +3599,25 @@ function createProductCard(product) {
     ? product.sizes[0].label || product.sizes[0].size || ''
     : '';
 
+  const concLabel = product.concentration || 'Eau de Parfum';
+  const notesArr = product.notes?.top || [];
+  const scentFam = window.GLOBAL_ATTRIBUTES?.scent_families?.[product.scent_family];
+  const scentLabel = scentFam ? scentFam.label[AppState.language] || scentFam.label.en : '';
+  const notesLine = scentLabel || (notesArr.length ? notesArr.slice(0, 2).join(' · ') : '');
+
   card.innerHTML = `
     <div class="nv-card">
-      <img class="nv-card__img" src="${sanityImageUrl(product.image)}" alt="${product.name}" loading="lazy" width="400" height="528">
-      <div class="nv-card__scrim"></div>
-      <div class="nv-card__rating"><span>★</span>${product.rating || ''}</div>
-      <div class="nv-card__meta">
+      <figure class="nv-card__figure">
+        <img class="nv-card__img" src="${sanityImageUrl(product.image)}" alt="${product.name}" loading="lazy" width="400" height="448">
+      </figure>
+      <div class="nv-card__body">
         <div class="nv-card__brand">${product.brand || ''}</div>
-        <div class="nv-card__name">${product.name}</div>
+        <div class="nv-card__name">${product.name}${sizeLabel ? `<small>${concLabel} · ${sizeLabel}</small>` : `<small>${concLabel}</small>`}</div>
+        ${notesLine ? `<div class="nv-card__notes">${notesLine}</div>` : ''}
+        <div class="nv-card__rule"></div>
         <div class="nv-card__foot">
           <span class="nv-card__price">֏ ${formatPrice(product.price)}</span>
-          ${sizeLabel ? `<span class="nv-card__size">${sizeLabel}</span>` : ''}
+          <span class="nv-card__rating"><span>★</span>${product.rating || ''}</span>
         </div>
       </div>
     </div>
