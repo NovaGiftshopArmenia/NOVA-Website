@@ -2987,10 +2987,21 @@ function createSliderProductCard(product, badgeText) {
   const scentLabel = scentFam ? scentFam.label[AppState.language] || scentFam.label.en : '';
   const notesLine = scentLabel || (notesArr.length ? notesArr.slice(0, 2).join(' · ') : '');
 
+  const isWishlisted = AppState.wishlist ? AppState.wishlist.includes(product.id) : false;
+  const btnText = (TRANSLATIONS[AppState.language] && TRANSLATIONS[AppState.language]['card_add_to_cart']) || 'Add to Cart';
+
   card.innerHTML = `
     <div class="nv-card">
       <figure class="nv-card__figure">
         <img class="nv-card__img" src="${sanityImageUrl(product.image)}" alt="${product.name}" loading="lazy" width="400" height="448">
+        <button class="nv-card__wishlist ${isWishlisted ? 'is-active' : ''}" onclick="toggleWishlistCard('${product.id}', event)" aria-label="Wishlist">
+          <svg viewBox="0 0 24 24" fill="${isWishlisted ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+          </svg>
+        </button>
+        <button class="nv-card__add-btn" onclick="quickAddToCart('${product.id}', event)">
+          <span>${btnText}</span>
+        </button>
       </figure>
       <div class="nv-card__body">
         <div class="nv-card__brand">${product.brand || ''}</div>
@@ -3605,10 +3616,21 @@ function createProductCard(product) {
   const scentLabel = scentFam ? scentFam.label[AppState.language] || scentFam.label.en : '';
   const notesLine = scentLabel || (notesArr.length ? notesArr.slice(0, 2).join(' · ') : '');
 
+  const isWishlisted = AppState.wishlist ? AppState.wishlist.includes(product.id) : false;
+  const btnText = (TRANSLATIONS[AppState.language] && TRANSLATIONS[AppState.language]['card_add_to_cart']) || 'Add to Cart';
+
   card.innerHTML = `
     <div class="nv-card">
       <figure class="nv-card__figure">
         <img class="nv-card__img" src="${sanityImageUrl(product.image)}" alt="${product.name}" loading="lazy" width="400" height="448">
+        <button class="nv-card__wishlist ${isWishlisted ? 'is-active' : ''}" onclick="toggleWishlistCard('${product.id}', event)" aria-label="Wishlist">
+          <svg viewBox="0 0 24 24" fill="${isWishlisted ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+          </svg>
+        </button>
+        <button class="nv-card__add-btn" onclick="quickAddToCart('${product.id}', event)">
+          <span>${btnText}</span>
+        </button>
       </figure>
       <div class="nv-card__body">
         <div class="nv-card__brand">${product.brand || ''}</div>
@@ -3622,6 +3644,11 @@ function createProductCard(product) {
       </div>
     </div>
   `;
+  card.onclick = (e) => {
+    if (!e.target.closest('button')) {
+      openProductModal(product.id);
+    }
+  };
   return card;
 }
 
@@ -4099,6 +4126,22 @@ window.toggleWishlist = function (productId) {
       }
     }
   }
+};
+
+window.toggleWishlistCard = function (productId, event) {
+  if (event) event.stopPropagation();
+  window.toggleWishlist(productId);
+};
+
+window.quickAddToCart = function (productId, event) {
+  if (event) event.stopPropagation();
+  const product = AppState.products.find(p => p.id === productId);
+  if (!product) return;
+  const sizeLabel = (product.sizes && product.sizes.length > 0)
+    ? product.sizes[0].size || product.sizes[0].label || '100ml'
+    : '100ml';
+  addToCart(product, sizeLabel, 1);
+  openCartDrawer();
 };
 
 function updateWishlistUI() {
