@@ -1956,9 +1956,17 @@ h2.promise-card-title,
   padding: 14px 14px 20px;
   color: var(--nv-ink);
   text-decoration: none;
-  transition: border-color .25s ease, box-shadow .25s ease, transform .35s cubic-bezier(.25,1,.5,1);
+  position: relative;
+  z-index: 1;
+  transition: border-color .25s ease, box-shadow .25s ease, transform .25s cubic-bezier(.25,1,.5,1);
 }
-.nv-card:hover { border-color: var(--nv-copper); box-shadow: 0 10px 30px rgba(20,19,17,.07); transform: translateY(-4px); text-decoration: none }
+.nv-card:hover {
+  border-color: var(--nv-copper);
+  box-shadow: 0 10px 30px rgba(20,19,17,.07);
+  transform: translateY(-4px);
+  text-decoration: none;
+  z-index: 2;
+}
 .nv-card:focus-visible { outline: 2px solid var(--nv-copper); outline-offset: 3px }
 
 .nv-card__figure {
@@ -2010,7 +2018,23 @@ h2.promise-card-title,
   color: var(--nv-faint);
 }
 
+@media (max-width: 768px) {
+  .nv-card__notes {
+    display: none !important;
+  }
+  .nv-card__name {
+    min-height: 38px;
+  }
+  .nv-card {
+    padding: 12px 12px 16px;
+  }
+}
+
 .nv-card__rule { height: 1px; background: #EFEDE9; margin: 16px 0 14px }
+
+@media (max-width: 768px) {
+  .nv-card__rule { margin: 12px 0 10px }
+}
 
 .nv-card__foot {
   display: flex; align-items: center;
@@ -2214,16 +2238,15 @@ h2.promise-card-title,
   display: flex;
   gap: var(--spacing-md);
   overflow-x: auto;
-  padding-top: 20px;
-  margin-top: -20px;
+  padding-top: 16px;
+  margin-top: -12px;
   padding-bottom: 28px;
   margin-bottom: -16px;
+  position: relative;
+  z-index: 2;
   scrollbar-width: none;
   /* Performance: GPU-accelerated scrolling */
   -webkit-overflow-scrolling: touch;
-  will-change: scroll-position;
-  transform: translateZ(0);
-  backface-visibility: hidden;
 }
 
 .slider-track::-webkit-scrollbar {
