@@ -17,7 +17,7 @@ body:has(#product-page-body) {
   background-color: #fff;
 }
 #product-page-body {
-  padding-top: calc(var(--header-height) + 40px);
+  padding-top: 32px;
   position: relative;
   z-index: 1;
 }
@@ -47,7 +47,7 @@ body:has(#product-page-body) {
   display: grid;
   grid-template-columns: 0.7fr 1fr;
   gap: 60px;
-  padding: 44px 0 96px;
+  padding: 24px 0 96px;
   align-items: start;
   max-width: 1440px;
   margin: 0 auto;
@@ -58,7 +58,7 @@ body:has(#product-page-body) {
 /* Gallery */
 .pp-gallery {
   position: sticky;
-  top: calc(var(--header-height) + 24px);
+  top: 32px;
   align-self: start;
   display: flex;
   flex-direction: column;

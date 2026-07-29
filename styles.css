@@ -268,7 +268,10 @@ header {
 
 /* Header dark mode (non-home pages) */
 .header-dark {
+  position: relative;
+  background-color: #ffffff;
   color: var(--color-black);
+  border-bottom: 1px solid var(--color-border);
 }
 
 .header-dark .nav-menu>li>a {
