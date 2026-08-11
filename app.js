@@ -4487,22 +4487,8 @@ function initProductInteractiveFeatures() {
     });
   }
 
-  // 2. Smooth FAQ Accordion Transitions
-  const faqItems = document.querySelectorAll('.faq-item');
-  faqItems.forEach(item => {
-    const summary = item.querySelector('summary');
-    if (summary) {
-      summary.addEventListener('click', (e) => {
-        e.preventDefault();
-        item.classList.toggle('is-open');
-        if (item.classList.contains('is-open')) {
-          item.setAttribute('open', '');
-        } else {
-          item.removeAttribute('open');
-        }
-      });
-    }
-  });
+  // NOTE: FAQ accordion listeners are attached in renderProductFAQ() after dynamic creation.
+  // Do NOT duplicate them here — double listeners cause toggle-then-untoggle on each click.
 }
 
 function renderProductPage(productId) {
