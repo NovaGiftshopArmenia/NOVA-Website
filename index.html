@@ -2391,6 +2391,8 @@
       var next = document.getElementById(nextId);
       if (!track || !dotsC) return;
       var cards = track.querySelectorAll('.nova-review-card');
+      if (!cards.length) return;
+      var gap = 20;
       var perPage = window.innerWidth > 1180 ? 3 : window.innerWidth > 768 ? 2 : 1;
       var pages = Math.ceil(cards.length / perPage);
       dotsC.innerHTML = '';
@@ -2400,25 +2402,55 @@
         d.dataset.page = i;
         d.addEventListener('click', function() {
           var p = +this.dataset.page;
-          var cardW = cards[0].offsetWidth + 24;
-          track.scrollTo({ left: p * perPage * cardW, behavior: 'smooth' });
+          var cardW = cards[0].offsetWidth + gap;
+          var maxScroll = track.scrollWidth - track.clientWidth;
+          var target = Math.min(p * perPage * cardW, maxScroll);
+          track.scrollTo({ left: target, behavior: 'smooth' });
         });
         dotsC.appendChild(d);
       }
-      track.addEventListener('scroll', function() {
-        var cardW = cards[0].offsetWidth + 24;
-        var idx = Math.round(track.scrollLeft / (perPage * cardW));
+      function updateDots() {
+        var cardW = cards[0].offsetWidth + gap;
+        var pageW = perPage * cardW;
+        var idx = Math.round(track.scrollLeft / pageW);
+        idx = Math.min(idx, pages - 1);
         dotsC.querySelectorAll('.dot').forEach(function(d, i) {
           d.classList.toggle('active', i === idx);
         });
-      });
+      }
+      track.addEventListener('scroll', updateDots);
       if (prev) prev.addEventListener('click', function() {
-        var cardW = cards[0].offsetWidth + 24;
+        var cardW = cards[0].offsetWidth + gap;
         track.scrollBy({ left: -perPage * cardW, behavior: 'smooth' });
       });
       if (next) next.addEventListener('click', function() {
-        var cardW = cards[0].offsetWidth + 24;
-        track.scrollBy({ left: perPage * cardW, behavior: 'smooth' });
+        var cardW = cards[0].offsetWidth + gap;
+        var maxScroll = track.scrollWidth - track.clientWidth;
+        var target = Math.min(track.scrollLeft + perPage * cardW, maxScroll);
+        track.scrollTo({ left: target, behavior: 'smooth' });
+      });
+      // Recalculate on resize
+      window.addEventListener('resize', function() {
+        perPage = window.innerWidth > 1180 ? 3 : window.innerWidth > 768 ? 2 : 1;
+        var newPages = Math.ceil(cards.length / perPage);
+        if (newPages !== pages) {
+          pages = newPages;
+          dotsC.innerHTML = '';
+          for (var i = 0; i < pages; i++) {
+            var d = document.createElement('span');
+            d.className = 'dot' + (i === 0 ? ' active' : '');
+            d.dataset.page = i;
+            d.addEventListener('click', function() {
+              var p = +this.dataset.page;
+              var cardW = cards[0].offsetWidth + gap;
+              var maxScroll = track.scrollWidth - track.clientWidth;
+              var target = Math.min(p * perPage * cardW, maxScroll);
+              track.scrollTo({ left: target, behavior: 'smooth' });
+            });
+            dotsC.appendChild(d);
+          }
+        }
+        updateDots();
       });
     }
     initReviewDots('reviews-slider', 'review-dots', 'review-prev', 'review-next');

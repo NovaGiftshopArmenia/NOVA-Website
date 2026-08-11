@@ -504,9 +504,12 @@ body:has(#product-page-body) {
   max-width: 66ch;
 }
 .faq-item-content {
-  display: grid;
-  grid-template-rows: 0fr;
-  transition: grid-template-rows .35s ease;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height .35s ease;
+}
+.faq-item[open] .faq-item-content {
+  max-height: 500px;
 }
 .faq-item-inner {
   overflow: hidden;

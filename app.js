@@ -4491,21 +4491,14 @@ function initProductInteractiveFeatures() {
   const faqItems = document.querySelectorAll('.faq-item');
   faqItems.forEach(item => {
     const summary = item.querySelector('summary');
-    const content = item.querySelector('.faq-item-content');
-    if (summary && content) {
+    if (summary) {
       summary.addEventListener('click', (e) => {
         e.preventDefault();
-        if (item.hasAttribute('open')) {
-          content.style.gridTemplateRows = '0fr';
-          content.addEventListener('transitionend', function handler() {
-            item.removeAttribute('open');
-            content.removeEventListener('transitionend', handler);
-          }, { once: true });
-        } else {
+        item.classList.toggle('is-open');
+        if (item.classList.contains('is-open')) {
           item.setAttribute('open', '');
-          // trigger reflow
-          content.offsetHeight;
-          content.style.gridTemplateRows = '1fr';
+        } else {
+          item.removeAttribute('open');
         }
       });
     }
@@ -4763,9 +4756,9 @@ function renderProductPage(productId) {
     const faqs = (p.faqs && p.faqs.length > 0) ? p.faqs : defaultFaqs;
 
     faqContainer.innerHTML = faqs.map((faq, i) => `
-      <details class="faq-item" ${i === 0 ? 'open' : ''}>
+      <details class="faq-item${i === 0 ? ' is-open' : ''}" ${i === 0 ? 'open' : ''}>
         <summary>${faq.q}</summary>
-        <div class="faq-item-content"${i === 0 ? ' style="grid-template-rows:1fr"' : ''}>
+        <div class="faq-item-content">
           <div class="faq-item-inner">
             <p>${faq.a}</p>
           </div>
@@ -4776,20 +4769,14 @@ function renderProductPage(productId) {
     // Re-init smooth accordion transitions for dynamically created items
     faqContainer.querySelectorAll('.faq-item').forEach(item => {
       const summary = item.querySelector('summary');
-      const content = item.querySelector('.faq-item-content');
-      if (summary && content) {
+      if (summary) {
         summary.addEventListener('click', (e) => {
           e.preventDefault();
-          if (item.hasAttribute('open')) {
-            content.style.gridTemplateRows = '0fr';
-            content.addEventListener('transitionend', function handler() {
-              item.removeAttribute('open');
-              content.removeEventListener('transitionend', handler);
-            }, { once: true });
-          } else {
+          item.classList.toggle('is-open');
+          if (item.classList.contains('is-open')) {
             item.setAttribute('open', '');
-            content.offsetHeight;
-            content.style.gridTemplateRows = '1fr';
+          } else {
+            item.removeAttribute('open');
           }
         });
       }
@@ -5484,33 +5471,8 @@ window.updateOrderState = async function (orderId, newStatus) {
 };
 
 // Reviews Slider Pagination Logic
-document.addEventListener('DOMContentLoaded', () => {
-  const nextBtn = document.getElementById('review-next');
-  const prevBtn = document.getElementById('review-prev');
-  const slider = document.getElementById('reviews-slider');
-
-  if (nextBtn && prevBtn && slider) {
-    nextBtn.addEventListener('click', () => {
-      slider.scrollBy({ left: 350, behavior: 'smooth' });
-    });
-    prevBtn.addEventListener('click', () => {
-      slider.scrollBy({ left: -350, behavior: 'smooth' });
-    });
-  }
-
-  const aboutNextBtn = document.getElementById('about-review-next');
-  const aboutPrevBtn = document.getElementById('about-review-prev');
-  const aboutSlider = document.getElementById('about-reviews-slider');
-
-  if (aboutNextBtn && aboutPrevBtn && aboutSlider) {
-    aboutNextBtn.addEventListener('click', () => {
-      aboutSlider.scrollBy({ left: 350, behavior: 'smooth' });
-    });
-    aboutPrevBtn.addEventListener('click', () => {
-      aboutSlider.scrollBy({ left: -350, behavior: 'smooth' });
-    });
-  }
-});
+// NOTE: prev/next button handlers are in initReviewDots() (inline script in HTML).
+// Do NOT add duplicate scrollBy handlers here — they cause double-scrolling.
 
 // Rotate scroll text SVG on scroll
 window.addEventListener('scroll', () => {
