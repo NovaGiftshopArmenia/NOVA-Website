@@ -482,7 +482,7 @@ body:has(#product-page-body) {
   border-bottom: 1px solid var(--pp-line-2);
 }
 .pp-faq-grid summary,
-.faq-item summary {
+.faq-header {
   padding: 24px 0;
   font: 400 17px/1.4 var(--font-sans);
   display: flex;
@@ -490,11 +490,15 @@ body:has(#product-page-body) {
   gap: 24px;
   cursor: pointer;
   list-style: none;
+  -webkit-user-select: none;
+  user-select: none;
 }
 .pp-faq-grid summary::-webkit-details-marker,
 .faq-item summary::-webkit-details-marker { display: none }
 .pp-faq-grid summary::after { content: "+"; color: var(--pp-copper) }
 .pp-faq-grid details[open] summary::after { content: "\2013" }
+.faq-header::after { content: "+"; color: var(--pp-copper); font-size: 20px; flex-shrink: 0 }
+.faq-item.is-open .faq-header::after { content: "\2013" }
 .pp-faq-grid details p,
 .faq-item p {
   margin: 0;
@@ -508,7 +512,7 @@ body:has(#product-page-body) {
   overflow: hidden;
   transition: max-height .35s ease;
 }
-.faq-item[open] .faq-item-content {
+.faq-item.is-open .faq-item-content {
   max-height: 500px;
 }
 .faq-item-inner {

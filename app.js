@@ -4742,28 +4742,22 @@ function renderProductPage(productId) {
     const faqs = (p.faqs && p.faqs.length > 0) ? p.faqs : defaultFaqs;
 
     faqContainer.innerHTML = faqs.map((faq, i) => `
-      <details class="faq-item${i === 0 ? ' is-open' : ''}" ${i === 0 ? 'open' : ''}>
-        <summary>${faq.q}</summary>
+      <div class="faq-item${i === 0 ? ' is-open' : ''}">
+        <div class="faq-header">${faq.q}</div>
         <div class="faq-item-content">
           <div class="faq-item-inner">
             <p>${faq.a}</p>
           </div>
         </div>
-      </details>
+      </div>
     `).join('');
 
-    // Re-init smooth accordion transitions for dynamically created items
+    // Attach accordion click handlers
     faqContainer.querySelectorAll('.faq-item').forEach(item => {
-      const summary = item.querySelector('summary');
-      if (summary) {
-        summary.addEventListener('click', (e) => {
-          e.preventDefault();
+      const header = item.querySelector('.faq-header');
+      if (header) {
+        header.addEventListener('click', () => {
           item.classList.toggle('is-open');
-          if (item.classList.contains('is-open')) {
-            item.setAttribute('open', '');
-          } else {
-            item.removeAttribute('open');
-          }
         });
       }
     });
